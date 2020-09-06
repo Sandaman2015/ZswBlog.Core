@@ -1,0 +1,67 @@
+
+.footer-wrap{
+  width: 100%;
+}
+.footer {
+  /* position: relative; */
+  overflow: hidden;
+  padding: 30px 0 10px 0;
+}
+.w1000 {
+  margin: 0 auto;
+  max-width: 1000px !important;
+}
+.copyright {
+  padding: 20px 0 20px 0;
+}
+.copyright .info {
+  /* position: relative; */
+  text-align: center;
+}
+.contact {
+  margin-bottom: 5px;
+}
+.copyright .contact a {
+  display: inline-block;
+  margin-right: 0;
+  margin-left: 15px;
+  width: 30px;
+  height: 30px;
+  border-radius: 100%;
+  background-color: rgba(255,255,255,.2);
+  color: rgba(255,255,255,.5);
+  text-align: center;
+  text-decoration: none;
+  text-shadow: 1px 1px 1px rgba(0,0,0,.5);
+  font-size: 14px;
+  line-height: 30px;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+}
+.copyright p {
+  color: #565755;
+  font-size: 13px;
+  font-family: "Microsoft YaHei";
+}
+.mt05 a {
+  color: #565755;
+}
+
+.copyright .contact .github:hover {
+  background-color: #b952c5
+}
+
+.copyright .contact .qq:hover {
+  background-color: #d25744
+}
+
+.copyright .contact .email:hover {
+  background-color: #668f20
+}
+
+.copyright .contact .weixin:hover {
+  background-color: #06a2c9
+}
+.copyright .contact a:hover {
+  color: #fff;
+}
