@@ -10,6 +10,23 @@
             </summary>
             <param name="builder"></param>
         </member>
+        <member name="T:ZswBlog.Core.Controllers.CommonController">
+            <summary>
+            通用控制器
+            </summary>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.CommonController.GetMusicList">
+            <summary>
+            获取歌曲列表
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.CommonController.GetAllMusicList">
+            <summary>
+            获取所有歌曲列表
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:ZswBlog.Web.Controllers.AboutController">
             <summary>
             关于页
