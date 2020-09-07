@@ -11,6 +11,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Dockerfile" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Autofac" Version="5.2.0" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="6.0.0" />
     <PackageReference Include="AutoMapper" Version="10.0.0" />
@@ -34,6 +38,10 @@
     <ProjectReference Include="..\ZswBlog.Services\ZswBlog.Services.csproj" />
     <ProjectReference Include="..\ZswBlog.ThirdParty\ZswBlog.ThirdParty.csproj" />
     <ProjectReference Include="..\ZswBlog.Util\ZswBlog.Util.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="..\.dockerignore" />
   </ItemGroup>
 
 
