@@ -7,8 +7,8 @@
       "sslPort": 0
     },
     "iisExpress": {
-      "applicationUrl": "http://localhost:51860",
-      "sslPort": 44325
+      "applicationUrl": "http://localhost:8004",
+      "sslPort": 0
     }
   },
   "$schema": "http://json.schemastore.org/launchsettings.json",
@@ -16,10 +16,11 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "index.html",
+      "launchUrl": "http://localhost:8004/Common/GetMusicList",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+      },
+      "nativeDebugging": false
     },
     "ZswBlog.Core": {
       "commandName": "Project",
@@ -33,7 +34,7 @@
     "Docker": {
       "commandName": "Docker",
       "launchBrowser": true,
-      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/index.html",
+      "launchUrl": "http://localhost:8004/Common/GetMusicList",
       "publishAllPorts": true,
       "useSSL": true
     }
