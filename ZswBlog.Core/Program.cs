@@ -16,7 +16,7 @@ namespace ZswBlog.Core
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>().UseUrls("http://localhost:8004");
+                    webBuilder.UseStartup<Startup>().UseUrls("http://*:8004");
                 }).UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
     }
