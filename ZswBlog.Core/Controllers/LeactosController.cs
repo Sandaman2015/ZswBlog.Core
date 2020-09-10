@@ -14,7 +14,7 @@ namespace ZswBlog.Web.Controllers
     /// <summary>
     /// 留言页
     /// </summary>
-    [Route("[controller]/[action]")]
+    [Route("/api/[controller]/[action]")]
     [ApiController]
     public class LeactosController : ControllerBase
     {

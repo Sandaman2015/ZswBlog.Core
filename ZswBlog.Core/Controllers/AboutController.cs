@@ -12,7 +12,7 @@ namespace ZswBlog.Web.Controllers
     /// <summary>
     /// นุำฺาณ
     /// </summary>
-    [Route("[controller]/[action]")]
+    [Route("/api/[controller]/[action]")]
     [ApiController]
     public class AboutController : ControllerBase
     {

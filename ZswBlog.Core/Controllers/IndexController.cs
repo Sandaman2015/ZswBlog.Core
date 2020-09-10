@@ -15,7 +15,7 @@ namespace ZswBlog.Web.Controllers
     /// <summary>
     /// 首页
     /// </summary>
-    [Route("[controller]/[action]")]
+    [Route("/api/[controller]/[action]")]
     [ApiController]
     public class IndexController : ControllerBase
     {

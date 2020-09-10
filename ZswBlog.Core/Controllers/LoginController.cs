@@ -10,7 +10,7 @@ namespace ZswBlog.Web.Controllers
     /// <summary>
     /// 登录
     /// </summary>
-    [Route("[controller]/[action]")]
+    [Route("/api/[controller]/[action]")]
     [ApiController]
     public class LoginController : ControllerBase
     {

@@ -12,7 +12,7 @@ namespace ZswBlog.Core.Controllers
     /// <summary>
     /// 通用控制器
     /// </summary>
-    [Route("[controller]/[action]")]
+    [Route("/api/[controller]/[action]")]
     [ApiController]
     public class CommonController : ControllerBase
     {

@@ -11,7 +11,7 @@ namespace ZswBlog.Web.Controllers
     /// <summary>
     /// 文章页
     /// </summary>
-    [Route("[controller]/[action]")]
+    [Route("/api/[controller]/[action]")]
     [ApiController]
     public class WhisperController : ControllerBase
     {
