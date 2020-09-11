@@ -13,11 +13,6 @@ namespace ZswBlog.Repository
         //private readonly DbContext _dbContext = DbContextFactory.Create();
         public SingleBlogContext _dbContext { get; set; }//采用属性注入的方式，共享单例操作上下文，而不通过DbFactory去创建
 
-        //protected BasicRepository(SingleBlogContext dbContext)
-        //{
-        //    _dbContext = dbContext;
-        //}
-
         public bool Add(T t)
         {
             this._dbContext.Set<T>().Add(t);
@@ -75,10 +70,9 @@ namespace ZswBlog.Repository
             return result.OrderByDescending(orderByLambda).Skip((pageIndex - 1) * pageSize).Take(pageSize);
         }
 
-        [Obsolete]
         public IQueryable<T> GetModelsBySql(string sql)
         {
-            return this._dbContext.Query<T>().FromSql(sql, new object[0]);
+            return this._dbContext.Set<T>().FromSqlRaw(sql, new object[0]);
         }
 
         //public DbRawSqlQuery<T> GetModelsBySqlPage<TType>(string sql, int pageSize, int pageIndex, out int total)
@@ -93,7 +87,4 @@ namespace ZswBlog.Repository
             return this._dbContext.Set<T>().Where(whereLambda).FirstOrDefault<T>();
         }
     }
-
-
-
 }

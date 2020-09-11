@@ -11,5 +11,12 @@ namespace ZswBlog.IServices
         /// </summary>
         /// <returns></returns>
         Task<List<Travel>> GetTravelsAsync();
+
+        /// <summary>
+        /// 根据id获取旅行信息
+        /// </summary>
+        /// <param name="tId">旅行id</param>
+        /// <returns></returns>
+        Task<Travel> GetTravel(int tId);
     }
 }

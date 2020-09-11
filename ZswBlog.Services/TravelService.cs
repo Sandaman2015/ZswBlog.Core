@@ -14,12 +14,15 @@ namespace Services
 
         public Task<bool> AddEntityAsync(Travel t)
         {
-            throw new NotImplementedException();
+            return Task.Run(() => { return _repository.Add(t); });
         }
 
         public Task<bool> AlterEntityAsync(Travel t)
         {
-            throw new NotImplementedException();
+            return Task.Run(() =>
+            {
+                return _repository.Update(t);
+            });
         }
 
         public Task<List<Travel>> GetTravelsAsync()
@@ -31,9 +34,21 @@ namespace Services
             });
         }
 
+        public Task<Travel> GetTravel(int tId)
+        {
+            return Task.Run(() =>
+            {
+                return _repository.GetSingleModel((Travel t) => t.TravelId == tId);
+            });
+        }
+
         public Task<bool> RemoveEntityAsync(int tId)
         {
-            throw new NotImplementedException();
+            return Task.Run(() =>
+            {
+                Travel t = new Travel() { TravelId = tId };
+                return _repository.Delete(t);
+            });
         }
     }
 }
