@@ -15,7 +15,7 @@ namespace ZswBlog.Web.Controllers
     /// <summary>
     /// 文章详情页
     /// </summary>
-    [Route("[controller]/[action]")]
+    [Route("/api/[controller]/[action]")]
     [ApiController]
     public class DetailsController : ControllerBase
     {

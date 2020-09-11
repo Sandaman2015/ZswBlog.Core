@@ -19,27 +19,31 @@ using ZswBlog.Util;
 
 namespace ZswBlog.Core
 {
-#pragma warning disable CS1591 // 缺少对公共可见类型或成员“Startup”的 XML 注释
+    /// <summary>
+    /// 项目启动类
+    /// </summary>
     public class Startup
-#pragma warning restore CS1591 // 缺少对公共可见类型或成员“Startup”的 XML 注释
     {
-#pragma warning disable CS1591 // 缺少对公共可见类型或成员“Startup.Startup(IConfiguration)”的 XML 注释
+        /// <summary>
+        /// 初始化Configuration文件
+        /// </summary>
+        /// <param name="configuration"></param>
         public Startup(IConfiguration configuration)
-#pragma warning restore CS1591 // 缺少对公共可见类型或成员“Startup.Startup(IConfiguration)”的 XML 注释
         {
             Configuration = configuration;
         }
 
-#pragma warning disable CS1591 // 缺少对公共可见类型或成员“Startup.Configuration”的 XML 注释
+        /// <summary>
+        /// 配置访问属性
+        /// </summary>
         public IConfiguration Configuration { get; }
-#pragma warning restore CS1591 // 缺少对公共可见类型或成员“Startup.Configuration”的 XML 注释
-
         readonly string MyAllowSpecificOrigins = "AllowAll";
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-#pragma warning disable CS1591 // 缺少对公共可见类型或成员“Startup.ConfigureServices(IServiceCollection)”的 XML 注释
+        /// <summary>
+        /// 中间件服务注册
+        /// </summary>
+        /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
-#pragma warning restore CS1591 // 缺少对公共可见类型或成员“Startup.ConfigureServices(IServiceCollection)”的 XML 注释
         {
             //跨域
             services.AddCors(options =>
@@ -90,10 +94,10 @@ namespace ZswBlog.Core
             services.AddSwaggerGen(c =>
             {
                 // 添加文档信息
-                c.SwaggerDoc("v1", new OpenApiInfo
+                c.SwaggerDoc("v2", new OpenApiInfo
                 {
                     Title = "ZswBlog",
-                    Version = "v1",
+                    Version = "v2",
                     Description = "ZswBlog WebSite ASP.NET CORE WebApi",
                     Contact = new OpenApiContact
                     {
@@ -104,18 +108,17 @@ namespace ZswBlog.Core
                 // 为 Swagger JSON and UI设置xml文档注释路径
                 var basePath = Path.GetDirectoryName(typeof(Program).Assembly.Location);//获取应用程序所在目录（绝对，不受工作目录影响，建议采用此方法获取路径）
                 var xmlPath = Path.Combine(basePath, "ZswBlog.Core.xml");
-                c.IncludeXmlComments(xmlPath, true);
+                c.IncludeXmlComments(xmlPath);
             });
-#pragma warning disable CS0618 // '“CompatibilityVersion.Version_2_2”已过时:“This CompatibilityVersion value is obsolete. The recommended alternatives are Version_3_0 or later.”
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-#pragma warning restore CS0618 // '“CompatibilityVersion.Version_2_2”已过时:“This CompatibilityVersion value is obsolete. The recommended alternatives are Version_3_0 or later.”
-
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest);
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-#pragma warning disable CS1591 // 缺少对公共可见类型或成员“Startup.Configure(IApplicationBuilder, IWebHostEnvironment)”的 XML 注释
+        /// <summary>
+        /// 设置配置
+        /// </summary>
+        /// <param name="app"></param>
+        /// <param name="env"></param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-#pragma warning restore CS1591 // 缺少对公共可见类型或成员“Startup.Configure(IApplicationBuilder, IWebHostEnvironment)”的 XML 注释
         {
             if (env.IsDevelopment())
             {
@@ -145,7 +148,7 @@ namespace ZswBlog.Core
             // 配置SwaggerUI
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "ApiDocument V1");
+                c.SwaggerEndpoint("/swagger/v2/swagger.json", "ZswBlog ApiDocument");
             });
 
             //.net core webapi 访问wwwroot文件夹的配置，开启静态文件

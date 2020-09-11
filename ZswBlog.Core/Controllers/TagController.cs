@@ -12,7 +12,7 @@ namespace ZswBlog.Web.Controllers
     /// <summary>
     /// 标签页
     /// </summary>
-    [Route("[controller]/[action]")]
+    [Route("/api/[controller]/[action]")]
     [ApiController]
     public class TagController : ControllerBase
     {
