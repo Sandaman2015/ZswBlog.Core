@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using ZswBlog.DTO;
 using ZswBlog.Entity;
 
-namespace ZswBlog.Core.Profiles
+namespace ZswBlog.Admin.Profiles
 {
 #pragma warning disable CS1591 // 缺少对公共可见类型或成员“TagProfile”的 XML 注释
     public class TagProfile : Profile

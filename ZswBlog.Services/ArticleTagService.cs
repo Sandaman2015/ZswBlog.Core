@@ -18,9 +18,9 @@ namespace Services
             _articleRepository = articleRepository;
             _tagRepository = tagRepository;
         }
-        private IArticleTagRepository _repository;
-        private IArticleRepository _articleRepository;
-        private ITagRepository _tagRepository;
+        private readonly IArticleTagRepository _repository;
+        private readonly IArticleRepository _articleRepository;
+        private readonly ITagRepository _tagRepository;
         public async Task<List<Article>> GetArticlesIdByTagId(int tagId)
         {
             return await Task.Run(() =>

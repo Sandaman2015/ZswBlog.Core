@@ -15,7 +15,6 @@ namespace ZswBlog.Util
         public static string StringTruncat(string oldStr, int maxLength, string endWith, out int lastLength)
         {
             string pattern = @"[\u4e00-\u9fa5]";
-
             int i = 0;
             oldStr = System.Web.HttpUtility.HtmlEncode(oldStr);
             Regex rx = new Regex(pattern);
@@ -44,7 +43,7 @@ namespace ZswBlog.Util
                 MatchCollection mc = rx.Matches(content);
                 foreach (var str in mc)
                 {
-                    string item = str.ToString().Substring(10, str.ToString().Length - 13).Substring(23, 36);
+                    string item = str.ToString()[10..^3].Substring(23, 36);
                     files.Add(item, null);
                 }
             }

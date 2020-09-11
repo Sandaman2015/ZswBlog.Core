@@ -10,18 +10,23 @@ namespace Services
 {
     public class TravelService : BaseService, ITravelService
     {
-        private ITravelRepository _repository { get; set; }
+        private readonly ITravelRepository repository;
+
+        public TravelService(ITravelRepository repository)
+        {
+            this.repository = repository;
+        }        
 
         public Task<bool> AddEntityAsync(Travel t)
         {
-            return Task.Run(() => { return _repository.Add(t); });
+            return Task.Run(() => { return repository.Add(t); });
         }
 
         public Task<bool> AlterEntityAsync(Travel t)
         {
             return Task.Run(() =>
             {
-                return _repository.Update(t);
+                return repository.Update(t);
             });
         }
 
@@ -29,7 +34,7 @@ namespace Services
         {
             return Task.Run(() =>
             {
-                List<Travel> travels = _repository.GetModels(a => a.TravelId != 0).ToList();
+                List<Travel> travels = repository.GetModels(a => a.TravelId != 0).ToList();
                 return travels;
             });
         }
@@ -38,7 +43,7 @@ namespace Services
         {
             return Task.Run(() =>
             {
-                return _repository.GetSingleModel((Travel t) => t.TravelId == tId);
+                return repository.GetSingleModel((Travel t) => t.TravelId == tId);
             });
         }
 
@@ -47,7 +52,7 @@ namespace Services
             return Task.Run(() =>
             {
                 Travel t = new Travel() { TravelId = tId };
-                return _repository.Delete(t);
+                return repository.Delete(t);
             });
         }
     }

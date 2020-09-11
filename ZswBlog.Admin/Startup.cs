@@ -1,4 +1,3 @@
-using Autofac;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
@@ -11,53 +10,25 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
-using ZswBlog.Core.Profiles;
 using System.IO;
-using ZswBlog.Core.config;
+using ZswBlog.Admin.Profiles;
 using ZswBlog.Entity;
 using ZswBlog.Util;
 
-namespace ZswBlog.Core
+namespace ZswBlog.Admin
 {
-    /// <summary>
-    /// 项目启动类
-    /// </summary>
     public class Startup
     {
-        /// <summary>
-        /// 初始化Configuration文件
-        /// </summary>
-        /// <param name="configuration"></param>
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
-        /// <summary>
-        /// 配置访问属性
-        /// </summary>
         public IConfiguration Configuration { get; }
-        readonly string MyAllowSpecificOrigins = "AllowAll";
 
-        /// <summary>
-        /// 中间件服务注册
-        /// </summary>
-        /// <param name="services"></param>
+        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //跨域
-            services.AddCors(options =>
-            {
-                options.AddPolicy(MyAllowSpecificOrigins,
-              builder => //builder.AllowAnyOrigin()
-                         //根据自己情况调整
-              builder.WithOrigins("http://localhost:8080")
-              .AllowAnyMethod()
-              .AllowAnyHeader()
-              .AllowCredentials());
-            });
-
-
             //AutoMapper映射文件
             services.AddSingleton((AutoMapper.IConfigurationProvider)new MapperConfiguration(cfg =>
             {
@@ -69,22 +40,10 @@ namespace ZswBlog.Core
                 cfg.AddProfile<AboutProfile>();
                 cfg.AddProfile<UserProfile>();
             }));
-
-            //日期转换
-            services.AddControllers(
-                 setup =>
-                 {
-                     setup.ReturnHttpNotAcceptable = true;//不允许其他格式的请求
-                 }
-              ).AddJsonOptions(configure =>
-              {
-                  configure.JsonSerializerOptions.Converters.Add(new DatetimeJsonConverter());
-              }).AddNewtonsoftJson(option => option.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
-
+          
             //Mysql连接池
             var connection = Configuration.GetConnectionString("MysqlConnection");
             IServiceCollection serviceCollections = services.AddDbContext<SingleBlogContext>(options => options.UseMySql(connection));
-
 
             //初始化 RedisHelper
             var redisConnection = Configuration.GetConnectionString("RedisConnectionString");
@@ -96,7 +55,7 @@ namespace ZswBlog.Core
                 // 添加文档信息
                 c.SwaggerDoc("v2", new OpenApiInfo
                 {
-                    Title = "ZswBlog",
+                    Title = "ZswBlog Admin",
                     Version = "v2",
                     Description = "ZswBlog WebSite ASP.NET CORE WebApi",
                     Contact = new OpenApiContact
@@ -110,14 +69,21 @@ namespace ZswBlog.Core
                 var xmlPath = Path.Combine(basePath, "ZswBlog.Core.xml");
                 c.IncludeXmlComments(xmlPath);
             });
+            //Swagger 页面
             services.AddControllers().SetCompatibilityVersion(CompatibilityVersion.Latest);
+            //日期转换
+            services.AddControllers(
+                 setup =>
+                 {
+                     setup.ReturnHttpNotAcceptable = true;//不允许其他格式的请求
+                 }
+              ).AddJsonOptions(configure =>
+              {
+                  configure.JsonSerializerOptions.Converters.Add(new DatetimeJsonConverter());
+              });
         }
 
-        /// <summary>
-        /// 设置配置
-        /// </summary>
-        /// <param name="app"></param>
-        /// <param name="env"></param>
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -138,38 +104,27 @@ namespace ZswBlog.Core
                     });
                 });
             }
-
-
-            app.UseHttpsRedirection();
-
             // 启用Swagger中间件
             app.UseSwagger();
 
             // 配置SwaggerUI
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v2/swagger.json", "ZswBlog ApiDocument");
+                c.SwaggerEndpoint("/swagger/v2/swagger.json", "ZswBlog Admin ApiDocument");
             });
 
-            //.net core webapi 访问wwwroot文件夹的配置，开启静态文件
-            app.UseStaticFiles();
+            app.UseHttpsRedirection();
+
             app.UseRouting();
-            //跨域请求
-            app.UseCors(MyAllowSpecificOrigins);
 
             app.UseAuthorization();
 
+            //.net core webapi 访问wwwroot文件夹的配置，开启静态文件
+            app.UseStaticFiles();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
-        }
-
-#pragma warning disable CS1591 // 缺少对公共可见类型或成员“Startup.ConfigureContainer(ContainerBuilder)”的 XML 注释
-        public void ConfigureContainer(ContainerBuilder containerBuilder)
-#pragma warning restore CS1591 // 缺少对公共可见类型或成员“Startup.ConfigureContainer(ContainerBuilder)”的 XML 注释
-        {
-            containerBuilder.RegisterModule<ConfigureAutofac>();
         }
     }
 }
