@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ZswBlog.Admin</name>
+    </assembly>
+    <members>
+        <member name="T:ZswBlog.Core.config.ConfigureAutofac">
+            <summary>
+            Autofac的控制反转
+            </summary>
+        </member>
+        <member name="M:ZswBlog.Core.config.ConfigureAutofac.Load(Autofac.ContainerBuilder)">
+            <summary>
+            控制反转
+            </summary>
+            <param name="builder"></param>
+        </member>
+        <member name="T:ZswBlog.Admin.Program">
+            <summary>
+            项目启动类
+            </summary>
+        </member>
+        <member name="M:ZswBlog.Admin.Program.Main(System.String[])">
+            <summary>
+            主启动入口方法
+            </summary>
+            <param name="args"></param>
+        </member>
+        <member name="M:ZswBlog.Admin.Program.CreateHostBuilder(System.String[])">
+            <summary>
+            设置初始化
+            </summary>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="T:ZswBlog.Admin.Startup">
+            <summary>
+            启动配置
+            </summary>
+        </member>
+        <member name="M:ZswBlog.Admin.Startup.#ctor(Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            构造函数
+            </summary>
+            <param name="configuration"></param>
+        </member>
+        <member name="P:ZswBlog.Admin.Startup.Configuration">
+            <summary>
+            配置类
+            </summary>
+        </member>
+        <member name="M:ZswBlog.Admin.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            配置服务注册
+            </summary>
+            <param name="services"></param>
+        </member>
+        <member name="M:ZswBlog.Admin.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
+            <summary>
+            配置申明
+            </summary>
+            <param name="app"></param>
+            <param name="env"></param>
+        </member>
+    </members>
+</doc>

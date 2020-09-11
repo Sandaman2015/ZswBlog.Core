@@ -27,6 +27,24 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="T:ZswBlog.Core.Program">
+            <summary>
+            项目启动类
+            </summary>
+        </member>
+        <member name="M:ZswBlog.Core.Program.Main(System.String[])">
+            <summary>
+            主启动入口方法
+            </summary>
+            <param name="args"></param>
+        </member>
+        <member name="M:ZswBlog.Core.Program.CreateHostBuilder(System.String[])">
+            <summary>
+            设置初始化
+            </summary>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
         <member name="T:ZswBlog.Core.Startup">
             <summary>
             项目启动类

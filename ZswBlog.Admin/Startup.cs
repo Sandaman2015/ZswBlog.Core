@@ -17,16 +17,28 @@ using ZswBlog.Util;
 
 namespace ZswBlog.Admin
 {
+    /// <summary>
+    /// 启动配置
+    /// </summary>
     public class Startup
     {
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="configuration"></param>
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
-
+        /// <summary>
+        /// 配置类
+        /// </summary>
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+        /// <summary>
+        /// 配置服务注册
+        /// </summary>
+        /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
             //AutoMapper映射文件
@@ -66,7 +78,7 @@ namespace ZswBlog.Admin
                 });
                 // 为 Swagger JSON and UI设置xml文档注释路径
                 var basePath = Path.GetDirectoryName(typeof(Program).Assembly.Location);//获取应用程序所在目录（绝对，不受工作目录影响，建议采用此方法获取路径）
-                var xmlPath = Path.Combine(basePath, "ZswBlog.Core.xml");
+                var xmlPath = Path.Combine(basePath, "ZswBlog.Admin.xml");
                 c.IncludeXmlComments(xmlPath);
             });
             //Swagger 页面
@@ -83,7 +95,11 @@ namespace ZswBlog.Admin
               });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// <summary>
+        /// 配置申明
+        /// </summary>
+        /// <param name="app"></param>
+        /// <param name="env"></param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())

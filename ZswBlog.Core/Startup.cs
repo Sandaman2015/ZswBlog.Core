@@ -16,6 +16,7 @@ using System.IO;
 using ZswBlog.Core.config;
 using ZswBlog.Entity;
 using ZswBlog.Util;
+using System;
 
 namespace ZswBlog.Core
 {
@@ -74,7 +75,7 @@ namespace ZswBlog.Core
             services.AddControllers(
                  setup =>
                  {
-                     setup.ReturnHttpNotAcceptable = true;//不允许其他格式的请求
+                     setup.ReturnHttpNotAcceptable = false;//不允许其他格式的请求
                  }
               ).AddJsonOptions(configure =>
               {
@@ -106,9 +107,12 @@ namespace ZswBlog.Core
                     }
                 });
                 // 为 Swagger JSON and UI设置xml文档注释路径
-                var basePath = Path.GetDirectoryName(typeof(Program).Assembly.Location);//获取应用程序所在目录（绝对，不受工作目录影响，建议采用此方法获取路径）
-                var xmlPath = Path.Combine(basePath, "ZswBlog.Core.xml");
-                c.IncludeXmlComments(xmlPath);
+                var coreXmlPath = Path.Combine(AppContext.BaseDirectory, "ZswBlog.Core.xml");
+                var EntityXmlPath = Path.Combine(AppContext.BaseDirectory, "ZswBlog.Entity.xml");
+                var DTOXmlPath = Path.Combine(AppContext.BaseDirectory, "ZswBlog.DTO.xml");
+                c.IncludeXmlComments(coreXmlPath);
+                c.IncludeXmlComments(EntityXmlPath);
+                c.IncludeXmlComments(DTOXmlPath);
             });
             services.AddControllers().SetCompatibilityVersion(CompatibilityVersion.Latest);
         }

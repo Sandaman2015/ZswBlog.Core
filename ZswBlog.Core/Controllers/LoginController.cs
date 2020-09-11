@@ -16,9 +16,7 @@ namespace ZswBlog.Web.Controllers
     {
         private readonly IUserService userService;
 
-#pragma warning disable CS1591 // 缺少对公共可见类型或成员“LoginController.LoginController(IUserService)”的 XML 注释
         public LoginController(IUserService userService)
-#pragma warning restore CS1591 // 缺少对公共可见类型或成员“LoginController.LoginController(IUserService)”的 XML 注释
         {
             this.userService = userService;
         }
