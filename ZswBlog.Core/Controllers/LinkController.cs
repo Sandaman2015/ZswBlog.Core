@@ -65,7 +65,7 @@ namespace ZswBlog.Web.Controllers
             param.FriendlinkIntroduce = System.Web.HttpUtility.HtmlEncode(param.FriendlinkIntroduce);
             param.FriendlinkTitle = System.Web.HttpUtility.HtmlEncode(param.FriendlinkTitle);
             param.FriendlinkCreateTime = DateTime.Now;
-            param.IsShow = 0;
+            param.IsShow = false;
             Code = await friendLinkSerivce.AddEntityAsync(param) ? 200 : 500;
             str = Code == 200 ? "申请成功" : "申请失败";
             return Ok(new { code = Code, msg = str });

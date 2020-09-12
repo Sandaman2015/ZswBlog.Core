@@ -82,7 +82,7 @@ namespace ZswBlog.Web.Controllers
         {
             int Code;
             prama.SitetagCreateTime = DateTime.Now;
-            prama.IsShow = 0;
+            prama.IsShow = false;
             prama.SitetagLikes = 0;
             prama.SitetagTitle = System.Web.HttpUtility.HtmlEncode(prama.SitetagTitle);
             Code = await siteTagService.AddEntityAsync(prama) ? 200 : 500;

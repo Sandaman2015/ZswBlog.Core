@@ -2,6 +2,9 @@
 
 namespace ZswBlog.DTO
 {
+    /// <summary>
+    /// 评论聚合DTO
+    /// </summary>
     public partial class CommentAggregationDTO
     {
         /// <summary>

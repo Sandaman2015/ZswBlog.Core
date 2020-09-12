@@ -4,5 +4,501 @@
         <name>ZswBlog.Entity</name>
     </assembly>
     <members>
+        <member name="T:ZswBlog.Entity.Article">
+            <summary>
+            文章表
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.Article.ArticleId">
+            <summary>
+            文章Id
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.Article.ArticleTitle">
+            <summary>
+            文章标题
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.Article.ArticleClass">
+            <summary>
+            文章类型
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.Article.ArticleContent">
+            <summary>
+            文章内容
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.Article.ArticleCreateTime">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.Article.ArticleLikes">
+            <summary>
+            文章满意度
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.Article.ArticleVisits">
+            <summary>
+            文章浏览次数
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.Article.IsShow">
+            <summary>
+            文章是否显示
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.Article.ArticleLastUpdate">
+            <summary>
+            文章上次更新时间
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.Article.ArticleImage">
+            <summary>
+            文章插图
+            </summary>
+        </member>
+        <member name="T:ZswBlog.Entity.ArticleTag">
+            <summary>
+            文章标签
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.ArticleTag.AtId">
+            <summary>
+            文章标签Id
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.ArticleTag.Article">
+            <summary>
+            文章实体
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.ArticleTag.ArticleId">
+            <summary>
+            文章Id
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.ArticleTag.Tag">
+            <summary>
+            标签实体
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.ArticleTag.TagId">
+            <summary>
+            标签Id
+            </summary>
+        </member>
+        <member name="T:ZswBlog.Entity.Comment">
+            <summary>
+            文章评论
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.Comment.CommentId">
+            <summary>
+            评论Id
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.Comment.Comment1">
+            <summary>
+            留言内容
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.Comment.CommentDate">
+            <summary>
+            评论日期
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.Comment.UserId">
+            <summary>
+            用户Id
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.Comment.TargetUserId">
+            <summary>
+            评论目标用户Id
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.Comment.TargetId">
+            <summary>
+            评论父Id:有默认值0
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.Comment.Location">
+            <summary>
+            用户位置
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.Comment.Browser">
+            <summary>
+            浏览器
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.Comment.ArticleId">
+            <summary>
+            所属文章Id
+            </summary>
+        </member>
+        <member name="T:ZswBlog.Entity.FileAttachment">
+            <summary>
+            附件类
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.FileAttachment.ID">
+            <summary>
+            附件id
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.FileAttachment.Path">
+            <summary>
+            上传路径
+            </summary>
+        </member>
+        <member name="T:ZswBlog.Entity.FriendLink">
+            <summary>
+            友情连接
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.FriendLink.FriendlinkId">
+            <summary>
+            友链Id
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.FriendLink.FriendlinkTitle">
+            <summary>
+            友链标题
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.FriendLink.FriendlinkCreateTime">
+            <summary>
+            友链创建时间
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.FriendLink.FriendlinkImage">
+            <summary>
+            友链的图片
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.FriendLink.Friendlink">
+            <summary>
+            友链链接
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.FriendLink.IsShow">
+            <summary>
+            是否显示友链
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.FriendLink.FriendlinkIntroduce">
+            <summary>
+            友链介绍
+            </summary>
+        </member>
+        <member name="T:ZswBlog.Entity.Message">
+            <summary>
+            留言
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.Message.MessageId">
+            <summary>
+            留言Id
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.Message.Message1">
+            <summary>
+            留言内容
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.Message.MessageDate">
+            <summary>
+            留言日期
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.Message.UserId">
+            <summary>
+            用户Id
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.Message.TargetUserId">
+            <summary>
+            留言目标用户Id
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.Message.TargetId">
+            <summary>
+            留言父Id:有默认值0
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.Message.Location">
+            <summary>
+            留言位置
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.Message.Browser">
+            <summary>
+            浏览器
+            </summary>
+        </member>
+        <member name="T:ZswBlog.Entity.SingleBlogContext">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:ZswBlog.Entity.SingleBlogContext.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:ZswBlog.Entity.SingleBlogContext.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions{ZswBlog.Entity.SingleBlogContext})">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.SingleBlogContext.Article">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.SingleBlogContext.ArticleTag">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.SingleBlogContext.Comment">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.SingleBlogContext.Friendlink">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.SingleBlogContext.Message">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.SingleBlogContext.SiteTag">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.SingleBlogContext.Tag">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.SingleBlogContext.Travel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.SingleBlogContext.User">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.SingleBlogContext.Timeline">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.SingleBlogContext.FileAttachments">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:ZswBlog.Entity.SingleBlogContext.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            
+            </summary>
+            <param name="modelBuilder"></param>
+        </member>
+        <member name="T:ZswBlog.Entity.SiteTag">
+            <summary>
+            站点标签
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.SiteTag.SitetagId">
+            <summary>
+            站点标签Id
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.SiteTag.SitetagTitle">
+            <summary>
+            站点标题
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.SiteTag.SitetagLikes">
+            <summary>
+            点赞数
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.SiteTag.SitetagCreateTime">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.SiteTag.UserId">
+            <summary>
+            用户Id
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.SiteTag.IsShow">
+            <summary>
+            是否显示
+            </summary>
+        </member>
+        <member name="T:ZswBlog.Entity.Tag">
+            <summary>
+            文章标签
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.Tag.TagId">
+            <summary>
+            文章标签Id
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.Tag.TagName">
+            <summary>
+            标签名称
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.Tag.TagCreateTime">
+            <summary>
+            标签创建时间
+            </summary>
+        </member>
+        <member name="T:ZswBlog.Entity.Timeline">
+            <summary>
+            时间线
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.Timeline.TimelineId">
+            <summary>
+            时间线Id
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.Timeline.TimelineCreateTime">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.Timeline.TimelineTitle">
+            <summary>
+            时间线标题
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.Timeline.TimtlineContent">
+            <summary>
+            时间线内容
+            </summary>
+        </member>
+        <member name="T:ZswBlog.Entity.Travel">
+            <summary>
+            旅行
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.Travel.TravelId">
+            <summary>
+            旅行Id
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.Travel.TravelTitle">
+            <summary>
+            旅行标题
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.Travel.TravelCreateTime">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.Travel.TravelLink">
+            <summary>
+            旅行外链
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.Travel.TravelImage">
+            <summary>
+            旅行插图
+            </summary>
+        </member>
+        <member name="T:ZswBlog.Entity.User">
+            <summary>
+            用户表
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.User.UserId">
+            <summary>
+            用户id
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.User.UserPassword">
+            <summary>
+            用户密码:默认12346
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.User.UserName">
+            <summary>
+            用户姓名
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.User.UserEmail">
+            <summary>
+            用户邮箱
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.User.ITCode">
+            <summary>
+            账户
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.User.UserAccessToken">
+            <summary>
+            第三方Token
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.User.UserLoginTime">
+            <summary>
+            用户登陆时间
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.User.UserPortrait">
+            <summary>
+            用户QQ头像默认16*16
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.User.UserCreateTime">
+            <summary>
+            用户创建时间
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.User.UserLastLoginTime">
+            <summary>
+            用户上次登录时间
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.User.UserLoginCount">
+            <summary>
+            用户登录次数
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.User.UserOpenId">
+            <summary>
+            用户的第三方OpenId
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.User.Discriminator">
+            <summary>
+            辨别者
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.User.IsValid">
+            <summary>
+            验证
+            </summary>
+        </member>
     </members>
 </doc>

@@ -14,7 +14,7 @@ namespace Services
         {
             _repository = repository;
         }
-        private IFriendLinkRepository _repository;
+        private readonly IFriendLinkRepository _repository;
         public async Task<List<FriendLink>> GetAllFriendLinksAsync()
         {
             return await Task.Run(() =>
@@ -29,7 +29,7 @@ namespace Services
             return await Task.Run(() =>
             {
                 List<FriendLink> friendLinks = _repository.GetModels(a => a.FriendlinkId != 0).ToList();
-                return isShow ? friendLinks.Where(a => a.IsShow == 1).ToList() : friendLinks.Where(a => a.IsShow == 0).ToList();
+                return isShow ? friendLinks.Where(a => a.IsShow).ToList() : friendLinks.Where(a => !a.IsShow).ToList();
             });
         }
 

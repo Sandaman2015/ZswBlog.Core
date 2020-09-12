@@ -23,7 +23,7 @@ namespace Services
 
             return await Task.Run(() =>
             {
-                List<Article> articles = _repository.GetModels(a => a.ArticleTitle.Contains(dimTitle)).Where(a => a.IsShow == 1).ToList();
+                List<Article> articles = _repository.GetModels(a => a.ArticleTitle.Contains(dimTitle)).Where(a => a.IsShow).ToList();
                 return articles;
             });
         }
@@ -43,7 +43,7 @@ namespace Services
             return await Task.Run(() =>
             {
                 IEnumerable<Article> articles = _repository.GetModelsByPage(limit, pageIndex, false, a => a.ArticleCreateTime, a => a.ArticleId != 0, out pageCount);
-                return isShow ? articles.Where(a => a.IsShow == 1).ToList() : articles.Where(a => a.IsShow == 0).ToList();
+                return isShow ? articles.Where(a => a.IsShow).ToList() : articles.Where(a => !a.IsShow).ToList();
             });
         }
 
@@ -53,7 +53,7 @@ namespace Services
             return await Task.Run(() =>
             {
                 IEnumerable<Article> articles = _repository.GetModelsByPage(limit, pageIndex, false, a => a.ArticleCreateTime, a => a.ArticleClass == articleClass, out pageClassCount);
-                return isShow ? articles.Where(a => a.IsShow == 1).ToList() : articles.Where(a => a.IsShow == 0).ToList();
+                return isShow ? articles.Where(a => a.IsShow).ToList() : articles.Where(a => !a.IsShow).ToList();
             });
         }
 
@@ -61,7 +61,7 @@ namespace Services
         {
             return await Task.Run(() =>
             {
-                List<Article> articles = _repository.GetModels(a => a.IsShow == 1).OrderByDescending(a => a.ArticleLikes).Take(5).ToList();
+                List<Article> articles = _repository.GetModels(a => a.IsShow).OrderByDescending(a => a.ArticleLikes).Take(5).ToList();
                 return articles;
             });
         }
@@ -70,7 +70,7 @@ namespace Services
         {
             return await Task.Run(() =>
             {
-                List<Article> articles = _repository.GetModels(a => a.IsShow == 1).OrderByDescending(a => a.ArticleVisits).Take(5).ToList();
+                List<Article> articles = _repository.GetModels(a => a.IsShow).OrderByDescending(a => a.ArticleVisits).Take(5).ToList();
                 return articles;
             });
         }
@@ -116,7 +116,7 @@ namespace Services
                 t.ArticleCreateTime = DateTime.Now;
                 t.ArticleLikes = 0;
                 t.ArticleVisits = 0;
-                t.IsShow = 1;
+                t.IsShow = true;
                 return _repository.Add(t);
             });
         }

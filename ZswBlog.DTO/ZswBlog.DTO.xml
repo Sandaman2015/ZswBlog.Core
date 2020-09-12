@@ -69,6 +69,11 @@
             文章配图
             </summary>
         </member>
+        <member name="T:ZswBlog.DTO.ArticleTagDTO">
+             <summary>
+            文章表标签
+             </summary>
+        </member>
         <member name="P:ZswBlog.DTO.ArticleTagDTO.TagName">
             <summary>
             标签名称
@@ -79,6 +84,11 @@
             文章列表
             </summary>
         </member>
+        <member name="T:ZswBlog.DTO.CommentAggregationDTO">
+            <summary>
+            评论聚合DTO
+            </summary>
+        </member>
         <member name="P:ZswBlog.DTO.CommentAggregationDTO.CommentParent">
             <summary>
             父级评论
@@ -87,6 +97,11 @@
         <member name="P:ZswBlog.DTO.CommentAggregationDTO.CommentChildren">
             <summary>
             子级评论
+            </summary>
+        </member>
+        <member name="T:ZswBlog.DTO.CommentDTO">
+            <summary>
+            评论DTO
             </summary>
         </member>
         <member name="P:ZswBlog.DTO.CommentDTO.CommentId">
@@ -132,6 +147,11 @@
         <member name="P:ZswBlog.DTO.CommentDTO.TargetUserName">
             <summary>
             评论目标用户名称
+            </summary>
+        </member>
+        <member name="T:ZswBlog.DTO.FriendLinkDTO">
+            <summary>
+            友情链接DTO
             </summary>
         </member>
         <member name="P:ZswBlog.DTO.FriendLinkDTO.LinkTitle">
@@ -197,6 +217,11 @@
         <member name="P:ZswBlog.DTO.CountData.TagsCount">
             <summary>
             标签总数
+            </summary>
+        </member>
+        <member name="T:ZswBlog.DTO.MessageAggregationDTO">
+            <summary>
+            留言聚合DTO
             </summary>
         </member>
         <member name="P:ZswBlog.DTO.MessageAggregationDTO.MessageParent">

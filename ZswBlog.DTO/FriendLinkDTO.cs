@@ -1,5 +1,8 @@
 ﻿namespace ZswBlog.DTO
 {
+    /// <summary>
+    /// 友情链接DTO
+    /// </summary>
     public partial class FriendLinkDTO
     {
         /// <summary>

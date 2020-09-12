@@ -10,7 +10,7 @@ namespace Services
 {
     public class SiteTagService : BaseService, ISiteTagService
     {
-        private ISiteTagRepository _repository;
+        private readonly ISiteTagRepository _repository;
         public SiteTagService(ISiteTagRepository repository)
         {
             _repository = repository;
@@ -20,7 +20,7 @@ namespace Services
             return await Task.Run(() =>
             {
                 List<SiteTag> siteTags = _repository.GetModels(a => a.SitetagId != 0).ToList();
-                return isShow ? siteTags.Where(a => a.IsShow == 1).ToList() : siteTags.Where(a => a.IsShow == 0).ToList();
+                return isShow ? siteTags.Where(a => a.IsShow).ToList() : siteTags.Where(a => !a.IsShow).ToList();
             });
         }
 

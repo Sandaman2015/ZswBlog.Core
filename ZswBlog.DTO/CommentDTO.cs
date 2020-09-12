@@ -2,6 +2,9 @@
 
 namespace ZswBlog.DTO
 {
+    /// <summary>
+    /// 评论DTO
+    /// </summary>
     public partial class CommentDTO
     {
         /// <summary>

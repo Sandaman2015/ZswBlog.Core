@@ -2,6 +2,9 @@
 
 namespace ZswBlog.DTO
 {
+    /// <summary>
+    ///文章表标签
+    /// </summary>
     public partial class ArticleTagDTO
     {
         /// <summary>
