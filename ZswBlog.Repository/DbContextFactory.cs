@@ -1,15 +1,20 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Concurrent;
 using System.Threading;
 using ZswBlog.Entity;
 
 namespace ZswBlog.Repository
 {
+    /// <summary>
+    /// 单例实体工厂，在.Net Core中由于可以使用单例依赖注入则该工厂已经被抛弃
+    /// </summary>    
     public class DbContextFactory
     {
         /// <summary>
         /// 创建实体
         /// </summary>
+        [Obsolete("单例实体工厂，在.Net Core中由于可以使用单例依赖注入，则该创建实体对象工厂已经被抛弃")]
         public static DbContext Create()
         {
             //CallContext：是线程内部唯一的独用的数据槽（一块内存空间）类似于方法调用线程本地存储的专用的集合对象，
@@ -18,7 +23,8 @@ namespace ZswBlog.Repository
             //传递DbContext进去获取实例的信息，在这里进行强制转换。
             if (!(CallContext.GetData("DbContext") is DbContext dbContext))
             {
-                dbContext = new SingleBlogContext();
+                //dbContext = new SingleBlogContext();
+                dbContext = new ZswBlogDbContext();
                 CallContext.SetData("DbContext", dbContext);
             }
             return dbContext;

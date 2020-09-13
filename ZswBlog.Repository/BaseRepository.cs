@@ -8,11 +8,12 @@ using ZswBlog.IRepository;
 
 namespace ZswBlog.Repository
 {
-    public abstract class BasicRepository<T> : IBaseRepository<T> where T : class, new()//泛型约束必须是实体
+    public abstract class BaseRepository<T> : IBaseRepository<T> where T : class, new()//泛型约束必须是实体
     {
         //private readonly DbContext _dbContext = DbContextFactory.Create();
-        public SingleBlogContext _dbContext { get; set; }//采用属性注入的方式，共享单例操作上下文，而不通过DbFactory去创建
+        //public SingleBlogContext _dbContext { get; set; }//采用属性注入的方式，共享单例操作上下文，而不通过DbFactory去创建
 
+        public ZswBlogDbContext _dbContext { get; set; }
         public bool Add(T t)
         {
             this._dbContext.Set<T>().Add(t);
@@ -75,11 +76,11 @@ namespace ZswBlog.Repository
             return this._dbContext.Set<T>().FromSqlRaw(sql, new object[0]);
         }
 
-        //public DbRawSqlQuery<T> GetModelsBySqlPage<TType>(string sql, int pageSize, int pageIndex, out int total)
+        //public dbrawsqlquery<t> getmodelsbysqlpage<ttype>(string sql, int pagesize, int pageindex, out int total)
         //{
-        //    DbRawSqlQuery<T> result = this._dbContext.Database.SqlQuery<T>(sql, new object[0]);
-        //    total = result.Count<T>();
-        //    return (DbRawSqlQuery<T>)result.Skip((pageIndex - 1) * pageSize).Take(pageSize);
+        //    dbrawsqlquery<t> result = this._dbcontext.database.sqlquery<t>(sql, new object[0]);
+        //    total = result.count<t>();
+        //    return (dbrawsqlquery<t>)result.skip((pageindex - 1) * pagesize).take(pagesize);
         //}
 
         public T GetSingleModel(Expression<Func<T, bool>> whereLambda)

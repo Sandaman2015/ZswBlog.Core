@@ -3,7 +3,7 @@ using ZswBlog.IRepository;
 
 namespace ZswBlog.Repository
 {
-    public class UserRepository : BasicRepository<User>, IUserRepository, IBaseRepository<User>
+    public class UserRepository : BaseRepository<UserEntity>, IUserRepository, IBaseRepository<UserEntity>
     {
 
     }

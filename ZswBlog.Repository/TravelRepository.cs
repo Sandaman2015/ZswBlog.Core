@@ -3,5 +3,5 @@ using ZswBlog.IRepository;
 
 namespace ZswBlog.Repository
 {
-    public class TravelRepository : BasicRepository<Travel>, ITravelRepository, IBaseRepository<Travel> { }
+    public class TravelRepository : BaseRepository<TravelEntity>, ITravelRepository, IBaseRepository<TravelEntity> { }
 }

@@ -3,7 +3,7 @@ using ZswBlog.IRepository;
 
 namespace ZswBlog.Repository
 {
-    public class FriendLinkRepository : BasicRepository<FriendLink>, IFriendLinkRepository, IBaseRepository<FriendLink>
+    public class FriendLinkRepository : BaseRepository<FriendLinkEntity>, IFriendLinkRepository, IBaseRepository<FriendLinkEntity>
     {
 
     }

@@ -3,7 +3,7 @@ using ZswBlog.IRepository;
 
 namespace ZswBlog.Repository
 {
-    public class CommentRepository : BasicRepository<Comment>, ICommentRepository, IBaseRepository<Comment>
+    public class CommentRepository : BaseRepository<CommentEntity>, ICommentRepository, IBaseRepository<CommentEntity>
     {
 
     }

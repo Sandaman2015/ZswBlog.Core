@@ -6,11 +6,18 @@ using ZswBlog.Entity;
 
 namespace ZswBlog.IServices
 {
-    public interface IUserService : IBaseService<User>
+    public interface IUserService : IBaseService<UserEntity>
     {
-        Task<User> GetUserByIdAsync(Guid id);
-        Task<User> GetUserByOpenIdAsync(string openId);
-        Task<List<User>> GetAllUsersAsync();
-        Task<List<User>> GetUsersNearVisit(int count);
+        /// <summary>
+        /// 获取所有用户
+        /// </summary>
+        /// <returns></returns>
+        Task<List<UserEntity>> GetAllUsersAsync();
+        /// <summary>
+        /// 获取最近登录的用户
+        /// </summary>
+        /// <param name="count">获取数量</param>
+        /// <returns></returns>
+        Task<List<UserEntity>> GetUsersNearVisit(int count);
     }
 }

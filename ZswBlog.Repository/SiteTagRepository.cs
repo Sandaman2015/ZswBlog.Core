@@ -3,7 +3,7 @@ using ZswBlog.IRepository;
 
 namespace ZswBlog.Repository
 {
-    public class SiteTagRepository : BasicRepository<SiteTag>, ISiteTagRepository, IBaseRepository<SiteTag>
+    public class SiteTagRepository : BaseRepository<SiteTagEntity>, ISiteTagRepository, IBaseRepository<SiteTagEntity>
     {
 
     }

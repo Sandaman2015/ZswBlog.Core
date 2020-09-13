@@ -3,5 +3,5 @@ using ZswBlog.IRepository;
 
 namespace ZswBlog.Repository
 {
-    public class FileAttachmentRepository : BasicRepository<FileAttachment>, IFileAttachmentRepository, IBaseRepository<FileAttachment> { }
+    public class FileAttachmentRepository : BaseRepository<FileAttachmentEntity>, IFileAttachmentRepository, IBaseRepository<FileAttachmentEntity> { }
 }

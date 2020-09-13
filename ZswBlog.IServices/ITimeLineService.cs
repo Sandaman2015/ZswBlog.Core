@@ -4,12 +4,12 @@ using ZswBlog.Entity;
 
 namespace ZswBlog.IServices
 {
-    public interface ITimeLineService : IBaseService<Timeline>
+    public interface ITimeLineService : IBaseService<TimeLineEntity>
     {
         /// <summary>
-        /// 获取所有的时间线
+        /// 获取所有的时间线按照时间排序
         /// </summary>
         /// <returns></returns>
-        Task<List<Timeline>> GetAllTimeLinesOrderByTimeAsync();
+        Task<List<TimeLineEntity>> GetAllTimeLinesOrderByTimeAsync();
     }
 }

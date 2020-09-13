@@ -3,5 +3,5 @@ using ZswBlog.IRepository;
 
 namespace ZswBlog.Repository
 {
-    public class ArticleTagRepository : BasicRepository<ArticleTag>, IArticleTagRepository, IBaseRepository<ArticleTag> { }
+    public class ArticleTagRepository : BaseRepository<ArticleTagEntity>, IArticleTagRepository, IBaseRepository<ArticleTagEntity> { }
 }
