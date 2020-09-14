@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace ZswBlog.Entity
@@ -7,11 +9,14 @@ namespace ZswBlog.Entity
     /// <summary>
     /// 文章实体对象
     /// </summary>
+    [Table("tab_article")]
     public class ArticleEntity
     {
         /// <summary>
         /// 文章id
         /// </summary>
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int id { get; set; }
         /// <summary>
         /// 创建时间
@@ -61,5 +66,15 @@ namespace ZswBlog.Entity
         /// 置顶排序
         /// </summary>
         public int topSort { get; set; }
+
+        /// <summary>
+        /// 阅读时间
+        /// </summary>
+        public int readTime { get; set; }
+
+        /// <summary>
+        /// 文章总字数
+        /// </summary>
+        public int textCount { get; set; }
     }
 }

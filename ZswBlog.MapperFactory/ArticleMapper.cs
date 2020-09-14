@@ -22,7 +22,7 @@ namespace ZswBlog.MapperFactory
         private readonly IArticleTagService _service;
         private readonly IFileAttachmentService _fileService;
 
-        public async Task<List<ArticleDTO>> MapperToDTOsAsync(List<Article> articles)
+        public async Task<List<ArticleDTO>> MapperToDTOsAsync(List<ArticleEntity> articles)
         {
             List<ArticleDTO> ArticleDTO = _mapper.Map<List<ArticleDTO>>(articles);
             foreach (var item in ArticleDTO)
@@ -50,7 +50,7 @@ namespace ZswBlog.MapperFactory
             return ArticleDTO;
         }
 
-        public async Task<List<ArticleDTO>> MapperToDTOsByLikeAsync(List<Article> articles)
+        public async Task<List<ArticleDTO>> MapperToDTOsByLikeAsync(List<ArticleEntity> articles)
         {
             return await Task.Run(() =>
             {
@@ -59,7 +59,7 @@ namespace ZswBlog.MapperFactory
             });
         }
 
-        public async Task<List<ArticleDTO>> MapperToDTOsByVisitAsync(List<Article> articles)
+        public async Task<List<ArticleDTO>> MapperToDTOsByVisitAsync(List<ArticleEntity> articles)
         {
             return await Task.Run(() =>
             {

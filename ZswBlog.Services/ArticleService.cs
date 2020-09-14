@@ -37,8 +37,6 @@ namespace Services
                 return article;
             });
         }
-
-        private static int pageCount;
         public async Task<List<ArticleEntity>> GetArticlesByPageAndIsShowAsync(int limit, int pageIndex, bool isShow)
         {
             return await Task.Run(() =>
@@ -47,8 +45,6 @@ namespace Services
                 return isShow ? articles.Where(a => a.isShow).ToList() : articles.Where(a => !a.isShow).ToList();
             });
         }
-
-        private static int pageClassCount;
         public async Task<List<ArticleEntity>> GetArticlesByPageClassAndIsShowAsync(int limit, int pageIndex, int articleClass, bool isShow)
         {
             return await Task.Run(() =>

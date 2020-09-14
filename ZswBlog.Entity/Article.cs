@@ -65,5 +65,7 @@ namespace ZswBlog.Entity
         [Display(Name = "文章插图")]
         [Column("ArticleImageID")]
         public Guid ArticleImage { get; set; }
+
+
     }
 }

@@ -3,57 +3,71 @@
 namespace ZswBlog.DTO
 {
     /// <summary>
-    /// 文章
+    /// 文章数据传输对象
     /// </summary>
     public class ArticleDTO
     {
         /// <summary>
         /// 文章id
         /// </summary>
-        public int ArticleId { get; set; }
+        public int id { get; set; }
+        /// <summary>
+        /// 创建时间
+        /// </summary>
+        public DateTime createDate { get; set; }
+        /// <summary>
+        /// 操作人
+        /// </summary>
+        public int operatorId { get; set; }
         /// <summary>
         /// 文章标题
         /// </summary>
-        public string ArticleTitle { get; set; }
-        /// <summary>
-        /// 文章分类
-        /// </summary>
-        public string ArticleClass { get; set; }
-        /// <summary>
-        /// 文章浏览人数
-        /// </summary>
-        public int ArticleVisits { get; set; }
-        /// <summary>
-        /// 文章喜爱数
-        /// </summary>
-        public int ArticleLikes { get; set; }
-        /// <summary>
-        /// 文章创建时间
-        /// </summary>
-        public DateTime ArticleTime { get; set; }
-        /// <summary>
-        /// 文章字数
-        /// </summary>
-        public int ArticleTextCount { get; set; }
-        /// <summary>
-        /// 文章阅读时间
-        /// </summary>
-        public int ArticleReadTime { get; set; }
-        /// <summary>
-        /// 文章创建
-        /// </summary>
-        public string ArticleCreatedBy { get; set; }
-        /// <summary>
-        /// 文章标签
-        /// </summary>
-        public string[] ArticleTags { get; set; }
+        public string title { get; set; }
         /// <summary>
         /// 文章内容
         /// </summary>
-        public string ArticleContent { get; set; }
+        public string content { get; set; }
         /// <summary>
-        /// 文章配图
+        /// 点赞数
         /// </summary>
-        public string ArticleImage { get; set; }
+        public int like { get; set; }
+        /// <summary>
+        /// 所属分类，默认为0是默认分类
+        /// </summary>
+        public int categoryId { get; set; }
+        /// <summary>
+        /// 浏览次数
+        /// </summary>
+        public int visits { get; set; }
+        /// <summary>
+        /// 是否显示1不显示,0显示
+        /// </summary>
+        public bool isShow { get; set; }
+        /// <summary>
+        /// 上次更新时间
+        /// </summary>
+        public DateTime lastUpdateDate { get; set; }
+        /// <summary>
+        /// 文章插图
+        /// </summary>
+        public int coverImageId { get; set; }
+        /// <summary>
+        /// 是否置顶1不置顶,0置顶
+        /// </summary>
+        public bool isTop { get; set; }
+        /// <summary>
+        /// 置顶排序
+        /// </summary>
+        public int topSort { get; set; }
+
+        /// <summary>
+        /// 阅读时间
+        /// </summary>
+        public int readTime { get; set; }
+
+        /// <summary>
+        /// 文章总字数
+        /// </summary>
+        public int textCount { get; set; }
     }
 }
