@@ -9,6 +9,10 @@ namespace ZswBlog.IServices
 {
     public interface ICategoryService:IBaseService<CategoryEntity>
     {
-        
+        /// <summary>
+        /// 获取所有文章分类
+        /// </summary>
+        /// <returns></returns>
+        List<CategoryDTO> GetALLCategories();
     }
 }

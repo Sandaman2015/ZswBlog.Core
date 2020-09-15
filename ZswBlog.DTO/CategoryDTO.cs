@@ -29,5 +29,10 @@ namespace ZswBlog.DTO
         /// 分类描述
         /// </summary>
         public string description { get; set; }
+
+        /// <summary>
+        /// 文章数量
+        /// </summary>
+        public int articleCount { get; set; }
     }
 }

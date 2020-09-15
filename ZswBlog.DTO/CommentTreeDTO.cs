@@ -1,11 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace ZswBlog.DTO
 {
     /// <summary>
-    /// 评论DTO
+    /// 评论树
     /// </summary>
-    public partial class CommentDTO
+    public partial class CommentTreeDTO
     {
         /// <summary>
         /// 评论id
@@ -64,5 +66,10 @@ namespace ZswBlog.DTO
         /// 目标用户头像
         /// </summary>
         public string targetUserPortrait { get; set; }
+
+        /// <summary>
+        /// 评论子集
+        /// </summary>
+        public List<CommentTreeDTO> children { get; set; }
     }
 }
