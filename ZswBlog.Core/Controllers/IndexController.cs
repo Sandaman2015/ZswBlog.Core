@@ -55,7 +55,7 @@ namespace ZswBlog.Web.Controllers
             else
             {
                 //首页的数据初始化数据
-                List<Article> articles = await articleService.GetArticlesByPageAndIsShowAsync(3, 1, true);
+                List<Article> articles = await articleService.GetArticlesByPageAndIsShow(3, 1, true);
                 List<ArticleDTO> articleDTOs = await articleMapper.MapperToDTOsAsync(articles);
 
                 List<Message> messages = (await messageService.GetMessagesOnNotReplyAsyncByPageAsync(10, 1)).ToList();

@@ -1,92 +1,75 @@
 ﻿
-using System;
+using AutoMapper;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using ZswBlog.DTO;
 using ZswBlog.Entity;
 using ZswBlog.IRepository;
 using ZswBlog.IServices;
-using ZswBlog.Util;
 
-namespace Services
+namespace ZswBlog.Services
 {
-    public class ArticleTagService : BaseService, IArticleTagService
+    public class ArticleTagService : BaseService<ArticleTagEntity, IArticleTagRepository>, IArticleTagService
     {
-        public ArticleTagService(IArticleTagRepository repository, IArticleRepository articleRepository, ITagRepository tagRepository)
+        private readonly IArticleTagRepository _articleTagRepository;
+        private readonly IArticleRepository _articleRepository;
+        private readonly ITagRepository _tagRepository;
+        private readonly IMapper _mapper;
+
+        public ArticleTagService(IArticleTagRepository repository, IArticleRepository articleRepository, ITagRepository tagRepository, IMapper mapper)
         {
             _repository = repository;
             _articleRepository = articleRepository;
             _tagRepository = tagRepository;
+            _mapper = mapper;
         }
-        private readonly IArticleTagRepository _repository;
-        private readonly IArticleRepository _articleRepository;
-        private readonly ITagRepository _tagRepository;
-        public async Task<List<Article>> GetArticlesIdByTagId(int tagId)
+
+        /// <summary>
+        /// 根据标签id获取
+        /// </summary>
+        /// <param name="tagId"></param>
+        /// <returns></returns>
+        public PageDTO<ArticleDTO> GetArticleListIdByTagId(int limit, int pageIndex, int tagId)
         {
-            return await Task.Run(() =>
+            int pageCount;
+            List<ArticleEntity> articles = new List<ArticleEntity>();
+            List<ArticleTagEntity> articleTags = _articleTagRepository.GetModelsByPage(limit, pageIndex, false, (ArticleTagEntity a) => a.id, a => a.id == tagId, out pageCount).ToList();
+            foreach (var item in articleTags)
             {
-                List<Article> articles = new List<Article>();
-                List<ArticleTag> articleTags = _repository.GetModels(a => a.TagId == tagId).ToList();
-                foreach (var item in articleTags)
-                {
-                    Article article = _articleRepository.GetSingleModel(a => a.ArticleId == item.ArticleId);
-                    article.ArticleContent = StringHelper.StringTruncat(article.ArticleContent, 10, "...", out int length).Substring(0, 25);
-                    articles.Add(article);
-                }
-                return articles;
-            });
+                ArticleEntity article = _articleRepository.GetSingleModel(a => a.id == item.articleId);
+                articles.Add(article);
+            }
+            List<ArticleDTO> articleDTOs = _mapper.Map<List<ArticleDTO>>(articles);
+            return new PageDTO<ArticleDTO>(pageIndex, limit, pageCount, articleDTOs);
         }
 
-        public async Task<List<List<Article>>> GetArticlesIdByTagIds(List<int> tagId)
+        /// <summary>
+        /// 根据文章id获取所有标签
+        /// </summary>
+        /// <param name="articleId"></param>
+        /// <returns></returns>
+        public List<TagDTO> GetTagListByArticleId(int articleId)
         {
-            return await Task.Run(() =>
+            List<TagEntity> tags = new List<TagEntity>();
+            List<ArticleTagEntity> articleTags = _articleTagRepository.GetModels(a => a.articleId == articleId).ToList();
+            foreach (var item in articleTags)
             {
-                List<List<Article>> articleLastList = new List<List<Article>>();//定义总列表
-                foreach (var item in tagId.ToList())//遍历所有的tagid
-                {
-                    //通过tagid获取到所有的文章标签表
-                    List<ArticleTag> articleTags = _repository.GetModels(a => a.TagId == item).ToList();
-                    List<Article> articles = new List<Article>();
-                    foreach (var that in articleTags)//遍历所有的文章标签表
-                    {
-                        Article article = _articleRepository.GetSingleModel(a => a.ArticleId == that.ArticleId);
-                        article.ArticleContent = StringHelper.StringTruncat(article.ArticleContent, 10, "...", out int length).Substring(0, 25) + "...";
-                        articles.Add(article);
-                    }
-                    articleLastList.Add(articles);
-                }
-                return articleLastList;
-            });
+                TagEntity tag = _tagRepository.GetSingleModel(a => a.id == item.tagId);
+                tags.Add(tag);
+            }
+            List<TagDTO> tagDTOs = _mapper.Map<List<TagDTO>>(tags);
+            return tagDTOs;
         }
-
-        public async Task<List<Tag>> GetTagsIdByArticleId(int articleId)
+        
+        /// <summary>
+        /// 删除实体对象
+        /// </summary>
+        /// <param name="tId"></param>
+        /// <returns></returns>
+        public bool RemoveEntityAsync(int tId)
         {
-            return await Task.Run(() =>
-            {
-                List<Tag> tags = new List<Tag>();
-                List<ArticleTag> articleTags = _repository.GetModels(a => a.ArticleId == articleId).ToList();
-                foreach (var item in articleTags)
-                {
-                    Tag tag = _tagRepository.GetSingleModel(a => a.TagId == item.TagId);
-                    tags.Add(tag);
-                }
-                return tags as List<Tag>;
-            });
-        }
-
-        Task<bool> IBaseService<ArticleTag>.AddEntityAsync(ArticleTag t)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<bool> IBaseService<ArticleTag>.RemoveEntityAsync(int tId)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<bool> IBaseService<ArticleTag>.AlterEntityAsync(ArticleTag t)
-        {
-            throw new NotImplementedException();
+            ArticleTagEntity entity = _articleTagRepository.GetSingleModel((ArticleTagEntity at) => at.id == tId);
+            return _articleTagRepository.Delete(entity);
         }
 
     }

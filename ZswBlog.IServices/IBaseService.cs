@@ -7,9 +7,9 @@ namespace ZswBlog.IServices
     {
         //Task<IEnumerable<T>> GetTaskEntitiesByPage(int limit, int pageIndex, out int total);
         //Task<T> GetEntityById(int id);
-        Task<bool> AddEntityAsync(T t);
+        bool AddEntityAsync(T t);
         //Task<bool> RemoveEntityByIdAsync(int tId);
-        Task<bool> UpdateEntityAsync(T t);
+        bool UpdateEntityAsync(T t);
         //Task<Boolean> EntityAsync(T t);
     }
 }

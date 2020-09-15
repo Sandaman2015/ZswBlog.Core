@@ -1,98 +1,142 @@
-﻿
-using System;
+﻿using AutoMapper;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using ZswBlog.DTO;
 using ZswBlog.Entity;
 using ZswBlog.IRepository;
 using ZswBlog.IServices;
-using ZswBlog.Services;
 
-namespace Services
+namespace ZswBlog.Services
 {
     public class ArticleService : BaseService<ArticleEntity, IArticleRepository>, IArticleService
     {
-        //private readonly IArticleRepository _repository;
-        //public ArticleService(IArticleRepository repository)
-        //{
-        //    _repository = repository;
-        //}
-        //private ILog log = LogManager.GetLogger(typeof(ArticleService));
+        private readonly IArticleRepository _articleRepository;
 
-        public async Task<List<ArticleEntity>> GetArticlesByDimTitleAsync(string dimTitle)
+        private readonly IMapper _mapper;
+
+        public ArticleService(IArticleRepository repository, IMapper mapper)
         {
-
-            return await Task.Run(() =>
-            {
-                List<ArticleEntity> articles = _repository.GetModels(a => a.title.Contains(dimTitle)).Where(a => a.isShow).ToList();
-                return articles;
-            });
+            _repository = repository;
+            _mapper = mapper;
         }
 
-        public async Task<ArticleEntity> GetArticleByIdAsync(int articleId)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="limit"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="categoryId"></param>
+        /// <returns></returns>
+        public PageDTO<ArticleDTO> GetArticleListByCategoryId(int limit, int pageIndex, int categoryId)
         {
-            return await Task.Run(() =>
-            {
-                ArticleEntity article = _repository.GetSingleModel(a => a.id == articleId);
-                return article;
-            });
-        }
-        public async Task<List<ArticleEntity>> GetArticlesByPageAndIsShowAsync(int limit, int pageIndex, bool isShow)
-        {
-            return await Task.Run(() =>
-            {
-                IEnumerable<ArticleEntity> articles = _repository.GetModelsByPage(limit, pageIndex, false, a => a.createDate, a => a.id != 0, out pageCount);
-                return isShow ? articles.Where(a => a.isShow).ToList() : articles.Where(a => !a.isShow).ToList();
-            });
-        }
-        public async Task<List<ArticleEntity>> GetArticlesByPageClassAndIsShowAsync(int limit, int pageIndex, int articleClass, bool isShow)
-        {
-            return await Task.Run(() =>
-            {
-                IEnumerable<ArticleEntity> articles = _repository.GetModelsByPage(limit, pageIndex, false, a => a.createDate, a => a.categoryId == articleClass, out pageClassCount);
-                return isShow ? articles.Where(a => a.isShow).ToList() : articles.Where(a => !a.isShow).ToList();
-            });
+            int pageCount;
+            List<ArticleEntity> articles = _articleRepository.GetModelsByPage(limit, pageIndex, false, (ArticleEntity a) => a.visits, (ArticleEntity ac) => ac.categoryId == categoryId, out pageCount).ToList();
+            List<ArticleDTO> articleDTOs = _mapper.Map<List<ArticleDTO>>(articles);
+            return new PageDTO<ArticleDTO>(limit,
+                                           pageIndex,
+                                           pageCount,
+                                           articleDTOs);
         }
 
-        public async Task<List<ArticleEntity>> GetArticlesByTop5LikeAsync()
+        /// <summary>
+        /// 根据文章标题模糊查询
+        /// </summary>
+        /// <param name="dimTitle"></param>
+        /// <returns></returns>
+        public List<ArticleDTO> GetArticlesByDimTitle(string dimTitle)
         {
-            return await Task.Run(() =>
-            {
-                List<ArticleEntity> articles = _repository.GetModels(a => a.isShow).OrderByDescending(a => a.like).Take(5).ToList();
-                return articles;
-            });
+            List<ArticleEntity> articles = _articleRepository.GetModels(a => a.title.Contains(dimTitle)).Where(a => a.isShow).ToList();
+            return _mapper.Map<List<ArticleDTO>>(articles);
         }
 
-        public async Task<List<ArticleEntity>> GetArticlesByTop5VisitAsync()
+        /// <summary>
+        /// 根据文章id获取文章DTO
+        /// </summary>
+        /// <param name="articleId"></param>
+        /// <returns></returns>
+        public ArticleDTO GetArticleById(int articleId)
         {
-            return await Task.Run(() =>
-            {
-                List<ArticleEntity> articles = _repository.GetModels(a => a.isShow).OrderByDescending(a => a.visits).Take(5).ToList();
-                return articles;
-            });
+            ArticleEntity article = _articleRepository.GetSingleModel(a => a.id == articleId);
+            ArticleDTO articleDTO = _mapper.Map<ArticleDTO>(article);
+            //TODO 需要根据文章获取类型和标签列表填充
+            return articleDTO;
         }
 
-        public async Task<List<ArticleEntity>> GetAllArticlesAsync()
+        /// <summary>
+        /// 分页获取文章DTO
+        /// </summary>
+        /// <param name="limit"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="isShow"></param>
+        /// <returns></returns>
+        public PageDTO<ArticleDTO> GetArticlesByPageAndIsShow(int limit, int pageIndex, bool isShow)
         {
-            return await Task.Run(() =>
-            {
-                List<ArticleEntity> articles = _repository.GetModels(a => a.id != 0).OrderByDescending(a => a.createDate).ToList();
-                return articles;
-            });
+            int pageCount;
+            List<ArticleEntity> articles = _articleRepository.GetModelsByPage(limit, pageIndex, false, a => a.createDate, a => a.id != 0, out pageCount).ToList();
+            articles = isShow ? articles.Where(a => a.isShow).ToList() : articles.Where(a => !a.isShow).ToList();
+            List<ArticleDTO> articleDTOs = _mapper.Map<List<ArticleDTO>>(articles);
+            return new PageDTO<ArticleDTO>(limit,
+                                           pageIndex,
+                                           pageCount,
+                                           articleDTOs);
         }
 
-        public async Task<List<int>> GetArticlesByAllClassType()
+        /// <summary>
+        /// 根据类型分页获取文章DTO列表
+        /// </summary>
+        /// <param name="limit"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="articleClass"></param>
+        /// <returns></returns>
+        public PageDTO<ArticleDTO> GetArticlesByPageClass(int limit, int pageIndex, int articleClass)
         {
-            return await Task.Run(() =>
-            {
-                List<int> classTypes = _repository.GetModels(a => a.id != 0).Select(p => p.categoryId).Distinct().ToList();
-                return classTypes;
-            });
+            int pageCount;
+            List<ArticleEntity> articles = _articleRepository.GetModelsByPage(limit, pageIndex, false, a => a.createDate, a => a.categoryId == articleClass, out pageCount).ToList();
+            List<ArticleDTO> articleDTOs = _mapper.Map<List<ArticleDTO>>(articles);
+            return new PageDTO<ArticleDTO>(limit,
+                                           pageIndex,
+                                           pageCount,
+                                           articleDTOs);
         }
 
-        public async Task<bool> RemoveEntityAsync(int tId)
+        /// <summary>
+        /// 获取最喜爱的文章列表
+        /// </summary>
+        /// <returns></returns>
+        public List<ArticleDTO> GetArticlesByLike(int likeCount)
         {
-            ArticleEntity article = await this.GetArticleByIdAsync(tId);
+            List<ArticleEntity> articles = _articleRepository.GetModels(a => a.isShow).OrderByDescending(a => a.like).Take(likeCount).ToList();
+            return _mapper.Map<List<ArticleDTO>>(articles);
+        }
+
+        /// <summary>
+        /// 获取浏览数最多的文章
+        /// </summary>
+        /// <returns></returns>
+        public List<ArticleDTO> GetArticlesByVisit(int visitCount)
+        {
+            List<ArticleEntity> articles = _articleRepository.GetModels(a => a.isShow).OrderByDescending(a => a.visits).Take(visitCount).ToList();
+            return _mapper.Map<List<ArticleDTO>>(articles);
+        }
+
+        /// <summary>
+        /// 获取所有文章
+        /// </summary>
+        /// <returns></returns>
+        public List<ArticleDTO> GetAllArticles()
+        {
+            List<ArticleEntity> articles = _articleRepository.GetModels(a => a.id != 0).OrderByDescending(a => a.createDate).ToList();
+            return _mapper.Map<List<ArticleDTO>>(articles);
+        }
+
+        /// <summary>
+        /// 删除文章列表
+        /// </summary>
+        /// <param name="tId"></param>
+        /// <returns></returns>
+        public bool RemoveEntity(int tId)
+        {
+            ArticleEntity article = _articleRepository.GetSingleModel((ArticleEntity a) => a.id == tId);
             article.isShow = false;
             return _repository.Update(article);
         }

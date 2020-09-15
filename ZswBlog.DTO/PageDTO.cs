@@ -11,6 +11,21 @@ namespace ZswBlog.DTO
     public class PageDTO<T> where T : class,new()
     {
         /// <summary>
+        /// 填充数据对象
+        /// </summary>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="count"></param>
+        /// <param name="data"></param>
+        public PageDTO(int pageIndex, int pageSize, int count, List<T> data)
+        {
+            this.pageIndex = pageIndex;
+            this.pageSize = pageSize;
+            this.count = count;
+            this.data = data;
+        }
+
+        /// <summary>
         /// 页数
         /// </summary>
         public int pageIndex { get; set; }
@@ -26,5 +41,6 @@ namespace ZswBlog.DTO
         /// 对象集合
         /// </summary>
         public List<T> data { get; set; }
+
     }
 }

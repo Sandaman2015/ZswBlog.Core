@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+using ZswBlog.DTO;
 using ZswBlog.Entity;
 
 namespace ZswBlog.IServices
@@ -11,13 +11,15 @@ namespace ZswBlog.IServices
         /// </summary>
         /// <param name="articleId"></param>
         /// <returns></returns>
-        Task<List<TagEntity>> GetTagsIdByArticleId(int articleId);
+        List<TagDTO> GetTagListByArticleId(int articleId);
 
         /// <summary>
-        /// 通过标签号获取所有属于他的文章
+        /// 通过标签号分页获取所有属于他的文章
         /// </summary>
-        /// <param name="tagId"></param>
+        /// <param name="limit">页码</param>
+        /// <param name="pageIndex">页数</param>
+        /// <param name="tagId">标签id</param>
         /// <returns></returns>
-        Task<List<ArticleEntity>> GetArticleListIdByTagId(int tagId);        
+        PageDTO<ArticleDTO> GetArticleListIdByTagId(int limit, int pageIndex, int tagId);
     }
 }

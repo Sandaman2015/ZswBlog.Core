@@ -6,67 +6,92 @@
     <members>
         <member name="T:ZswBlog.DTO.ArticleDTO">
             <summary>
-            文章
+            文章数据传输对象
             </summary>
         </member>
-        <member name="P:ZswBlog.DTO.ArticleDTO.ArticleId">
+        <member name="P:ZswBlog.DTO.ArticleDTO.id">
             <summary>
             文章id
             </summary>
         </member>
-        <member name="P:ZswBlog.DTO.ArticleDTO.ArticleTitle">
+        <member name="P:ZswBlog.DTO.ArticleDTO.createDate">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.ArticleDTO.operatorId">
+            <summary>
+            操作人
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.ArticleDTO.title">
             <summary>
             文章标题
             </summary>
         </member>
-        <member name="P:ZswBlog.DTO.ArticleDTO.ArticleClass">
-            <summary>
-            文章分类
-            </summary>
-        </member>
-        <member name="P:ZswBlog.DTO.ArticleDTO.ArticleVisits">
-            <summary>
-            文章浏览人数
-            </summary>
-        </member>
-        <member name="P:ZswBlog.DTO.ArticleDTO.ArticleLikes">
-            <summary>
-            文章喜爱数
-            </summary>
-        </member>
-        <member name="P:ZswBlog.DTO.ArticleDTO.ArticleTime">
-            <summary>
-            文章创建时间
-            </summary>
-        </member>
-        <member name="P:ZswBlog.DTO.ArticleDTO.ArticleTextCount">
-            <summary>
-            文章字数
-            </summary>
-        </member>
-        <member name="P:ZswBlog.DTO.ArticleDTO.ArticleReadTime">
-            <summary>
-            文章阅读时间
-            </summary>
-        </member>
-        <member name="P:ZswBlog.DTO.ArticleDTO.ArticleCreatedBy">
-            <summary>
-            文章创建
-            </summary>
-        </member>
-        <member name="P:ZswBlog.DTO.ArticleDTO.ArticleTags">
-            <summary>
-            文章标签
-            </summary>
-        </member>
-        <member name="P:ZswBlog.DTO.ArticleDTO.ArticleContent">
+        <member name="P:ZswBlog.DTO.ArticleDTO.content">
             <summary>
             文章内容
             </summary>
         </member>
-        <member name="P:ZswBlog.DTO.ArticleDTO.ArticleImage">
+        <member name="P:ZswBlog.DTO.ArticleDTO.like">
             <summary>
-            文章配图
+            点赞数
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.ArticleDTO.categoryId">
+            <summary>
+            所属分类，默认为0是默认分类
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.ArticleDTO.visits">
+            <summary>
+            浏览次数
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.ArticleDTO.isShow">
+            <summary>
+            是否显示1不显示,0显示
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.ArticleDTO.lastUpdateDate">
+            <summary>
+            上次更新时间
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.ArticleDTO.coverImageId">
+            <summary>
+            文章插图
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.ArticleDTO.isTop">
+            <summary>
+            是否置顶1不置顶,0置顶
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.ArticleDTO.topSort">
+            <summary>
+            置顶排序
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.ArticleDTO.readTime">
+            <summary>
+            阅读时间
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.ArticleDTO.textCount">
+            <summary>
+            文章总字数
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.ArticleDTO.category">
+            <summary>
+            文章分类对象
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.ArticleDTO.tags">
+            <summary>
+            文章标签
             </summary>
         </member>
         <member name="T:ZswBlog.DTO.ArticleTagDTO">
@@ -82,6 +107,41 @@
         <member name="P:ZswBlog.DTO.ArticleTagDTO.ArticleList">
             <summary>
             文章列表
+            </summary>
+        </member>
+        <member name="T:ZswBlog.DTO.BaseDTO">
+            <summary>
+            父类DTO 用与以后扩展
+            </summary>
+        </member>
+        <member name="T:ZswBlog.DTO.CategoryDTO">
+            <summary>
+            文章分类表
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CategoryDTO.id">
+            <summary>
+            分类主键
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CategoryDTO.name">
+            <summary>
+            分类名称
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CategoryDTO.operatorId">
+            <summary>
+            操作人
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CategoryDTO.createDate">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CategoryDTO.description">
+            <summary>
+            分类描述
             </summary>
         </member>
         <member name="T:ZswBlog.DTO.CommentAggregationDTO">
@@ -339,6 +399,41 @@
             音乐歌词
             </summary>
         </member>
+        <member name="T:ZswBlog.DTO.PageDTO`1">
+            <summary>
+            分页返回支持类
+            </summary>
+            <typeparam name="T">实体或DTO对象</typeparam>
+        </member>
+        <member name="M:ZswBlog.DTO.PageDTO`1.#ctor(System.Int32,System.Int32,System.Int32,System.Collections.Generic.List{`0})">
+            <summary>
+            填充数据对象
+            </summary>
+            <param name="pageIndex"></param>
+            <param name="pageSize"></param>
+            <param name="count"></param>
+            <param name="data"></param>
+        </member>
+        <member name="P:ZswBlog.DTO.PageDTO`1.pageIndex">
+            <summary>
+            页数
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.PageDTO`1.pageSize">
+            <summary>
+            页码
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.PageDTO`1.count">
+            <summary>
+            总数
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.PageDTO`1.data">
+            <summary>
+            对象集合
+            </summary>
+        </member>
         <member name="T:ZswBlog.DTO.SiteTagDTO">
             <summary>
             站点标签对象
@@ -352,6 +447,27 @@
         <member name="P:ZswBlog.DTO.SiteTagDTO.name">
             <summary>
             站点标签名称
+            </summary>
+        </member>
+        <member name="T:ZswBlog.DTO.TagDTO">
+            <summary>
+            标签数据传输对象
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "P:ZswBlog.DTO.TagDTO.id" -->
+        <member name="P:ZswBlog.DTO.TagDTO.createDate">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.TagDTO.operatorId">
+            <summary>
+            操作人
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.TagDTO.name">
+            <summary>
+            标签名称
             </summary>
         </member>
         <member name="T:ZswBlog.DTO.TimeLineDTO">

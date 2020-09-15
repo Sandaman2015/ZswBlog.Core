@@ -39,7 +39,7 @@ namespace ZswBlog.Web.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ArticleDTO>>> GetArticlesByPage([FromQuery] int limit, [FromQuery] int pageIndex)
         {
-            List<Article> articles = await articleService.GetArticlesByPageAndIsShowAsync(limit, pageIndex, true);
+            List<Article> articles = await articleService.GetArticlesByPageAndIsShow(limit, pageIndex, true);
             List<ArticleDTO> articleDTOs = await articleMapper.MapperToDTOsAsync(articles);
             return Ok(articleDTOs);
         }

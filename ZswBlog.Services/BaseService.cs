@@ -7,24 +7,18 @@ using ZswBlog.IServices;
 
 namespace ZswBlog.Services
 {
-    public class BaseService<T,D> : IBaseService<T> where T : class, new() where D : IBaseRepository<T>
+    public abstract class BaseService<T, D> : IBaseService<T> where T : class, new() where D : IBaseRepository<T>
     {
         public IBaseRepository<T> _repository { get; set; }
 
-        public Task<bool> AddEntityAsync(T t)
+        public bool AddEntityAsync(T t)
         {
-            return Task.Run(() =>
-            {
-                return _repository.Add(t);
-            });
+            return _repository.Add(t);
         }
 
-        public Task<bool> UpdateEntityAsync(T t)
+        public bool UpdateEntityAsync(T t)
         {
-            return Task.Run(() =>
-            {
-                return _repository.Update(t);
-            });
+            return _repository.Update(t);
         }
     }
 }
