@@ -1,51 +1,54 @@
-﻿using System;
+﻿using AutoMapper;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using ZswBlog.DTO;
 using ZswBlog.Entity;
 using ZswBlog.IRepository;
 using ZswBlog.IServices;
 
-namespace Services
+namespace ZswBlog.Services
 {
-    public class TagService : BaseService, ITagService
+    public class TagService : BaseService<TagEntity, ITagRepository>, ITagService
     {
-        public TagService(ITagRepository repository)
+        private readonly ITagRepository _tagRepository;
+        private readonly IMapper _mapper;
+
+        public TagService(ITagRepository tagRepository, IMapper mapper)
         {
-            _repository = repository;
-        }
-        private ITagRepository _repository;
-        public async Task<List<Tag>> GetAllTagsAsync()
-        {
-            return await Task.Run(() =>
-             {
-                 List<Tag> tags = _repository.GetModels(a => a.TagId != 0).ToList();
-                 return tags;
-             });
+            _tagRepository = tagRepository;
+            _mapper = mapper;
         }
 
-        public async Task<Tag> GetTagByIdAsync(int tagId)
+        /// <summary>
+        /// 获取所有标签
+        /// </summary>
+        /// <returns></returns>
+        public List<TagDTO> GetAllTag()
         {
-            return await Task.Run(() =>
-            {
-                Tag tags = _repository.GetSingleModel(a => a.TagId == tagId);
-                return tags;
-            });
+            List<TagEntity> tags = _tagRepository.GetModels(a => a.id != 0).ToList();
+            return _mapper.Map<List<TagDTO>>(tags);
         }
 
-        public Task<bool> AddEntityAsync(Tag t)
+        /// <summary>
+        /// 根据id获取标签
+        /// </summary>
+        /// <param name="tagId"></param>
+        /// <returns></returns>
+        public TagDTO GetTagById(int tagId)
         {
-            throw new NotImplementedException();
+            TagEntity tag = _tagRepository.GetSingleModel(a => a.id == tagId);
+            return _mapper.Map<TagDTO>(tag);
         }
 
-        public Task<bool> RemoveEntityAsync(int tId)
+        /// <summary>
+        /// 删除标签
+        /// </summary>
+        /// <param name="tId"></param>
+        /// <returns></returns>
+        public bool RemoveEntity(int tId)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> AlterEntityAsync(Tag t)
-        {
-            throw new NotImplementedException();
+            TagEntity tag = _tagRepository.GetSingleModel(a => a.id == tId);
+            return _tagRepository.Delete(tag);
         }
     }
 }

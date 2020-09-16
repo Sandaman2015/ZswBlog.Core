@@ -1,42 +1,44 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ZswBlog.DTO;
 using ZswBlog.Entity;
 using ZswBlog.IRepository;
 using ZswBlog.IServices;
 
-namespace Services
+namespace ZswBlog.Services
 {
-    public class TimeLineService : BaseService, ITimeLineService
+    public class TimeLineService : BaseService<TimeLineEntity, ITimeLineRepository>, ITimeLineService
     {
-        public TimeLineService(ITimeLineRepository repository)
+        private readonly ITimeLineRepository _timeLineRepository;
+        private readonly IMapper _mapper;
+
+        public TimeLineService(ITimeLineRepository timeLineRepository, IMapper mapper)
         {
-            _repository = repository;
+            _timeLineRepository = timeLineRepository;
+            _mapper = mapper;
         }
-        private readonly ITimeLineRepository _repository;
-        public Task<List<Timeline>> GetAllTimeLinesOrderByTimeAsync()
+        /// <summary>
+        /// 删除时间线
+        /// </summary>
+        /// <param name="tId"></param>
+        /// <returns></returns>
+        public bool RemoveEntity(int tId)
         {
-            return Task.Run(() =>
-            {
-                List<Timeline> timeLines = _repository.GetModels(a => a.TimelineId != 0).OrderByDescending(a => a.TimelineCreateTime).ToList();
-                return timeLines;
-            });
+            TimeLineEntity timeLine = _timeLineRepository.GetSingleModel(a => a.id == tId);
+            return _timeLineRepository.Delete(timeLine);
         }
 
-        public Task<bool> AddEntityAsync(Timeline t)
+        /// <summary>
+        /// 获取所有时间线列表
+        /// </summary>
+        /// <returns></returns>
+        public List<TimeLineDTO> GetTimeLineList()
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> RemoveEntityAsync(int tId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> AlterEntityAsync(Timeline t)
-        {
-            throw new NotImplementedException();
+            List<TimeLineEntity> timeLines = _timeLineRepository.GetModels(a => a.id != 0).OrderByDescending(a=>a.createDate).ToList();
+            return _mapper.Map<List<TimeLineDTO>>(timeLines);
         }
     }
 }

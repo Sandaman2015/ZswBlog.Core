@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using ZswBlog.DTO;
 using ZswBlog.Entity;
 
 namespace ZswBlog.IServices
@@ -11,11 +12,11 @@ namespace ZswBlog.IServices
         /// </summary>
         /// <param name="isShow"></param>
         /// <returns></returns>
-        Task<List<SiteTagEntity>> GetSiteTagsByIsShowAsync(bool isShow);
+        List<SiteTagDTO> GetSiteTagsByIsShow(bool isShow);
         /// <summary>
         /// 获取所有站点标签
         /// </summary>
         /// <returns></returns>
-        Task<List<SiteTagEntity>> GetAllSiteTagsAsync();
+        List<SiteTagDTO> GetAllSiteTags();
     }
 }

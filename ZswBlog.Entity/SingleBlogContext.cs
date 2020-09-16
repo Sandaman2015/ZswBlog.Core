@@ -48,10 +48,6 @@ namespace ZswBlog.Entity
         /// <summary>
         /// 
         /// </summary>
-        public virtual DbSet<Tag> Tag { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
         public virtual DbSet<Travel> Travel { get; set; }
         /// <summary>
         /// 

@@ -144,6 +144,11 @@
             分类描述
             </summary>
         </member>
+        <member name="P:ZswBlog.DTO.CategoryDTO.articleCount">
+            <summary>
+            文章数量
+            </summary>
+        </member>
         <member name="T:ZswBlog.DTO.CommentAggregationDTO">
             <summary>
             评论聚合DTO
@@ -164,49 +169,144 @@
             评论DTO
             </summary>
         </member>
-        <member name="P:ZswBlog.DTO.CommentDTO.CommentId">
+        <member name="P:ZswBlog.DTO.CommentDTO.id">
             <summary>
             评论id
             </summary>
         </member>
-        <member name="P:ZswBlog.DTO.CommentDTO.Comment">
+        <member name="P:ZswBlog.DTO.CommentDTO.createDate">
             <summary>
-            评论
+            创建时间
             </summary>
         </member>
-        <member name="P:ZswBlog.DTO.CommentDTO.UserId">
+        <member name="P:ZswBlog.DTO.CommentDTO.content">
+            <summary>
+            评论内容
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CommentDTO.userId">
             <summary>
             用户id
             </summary>
         </member>
-        <member name="P:ZswBlog.DTO.CommentDTO.CommentDate">
+        <member name="P:ZswBlog.DTO.CommentDTO.articleId">
             <summary>
-            评论时间
+            所属文章id
             </summary>
         </member>
-        <member name="P:ZswBlog.DTO.CommentDTO.Browser">
+        <member name="P:ZswBlog.DTO.CommentDTO.targetUserId">
             <summary>
-            用户浏览器
+            目标用户
             </summary>
         </member>
-        <member name="P:ZswBlog.DTO.CommentDTO.Location">
+        <member name="P:ZswBlog.DTO.CommentDTO.targetId">
             <summary>
-            用户定位
+            目标评论
             </summary>
         </member>
-        <member name="P:ZswBlog.DTO.CommentDTO.UserName">
+        <member name="P:ZswBlog.DTO.CommentDTO.location">
             <summary>
-            评论用户名称
+            评论位置
             </summary>
         </member>
-        <member name="P:ZswBlog.DTO.CommentDTO.UserPortrait">
+        <member name="P:ZswBlog.DTO.CommentDTO.browser">
             <summary>
-            评论用户头像
+            浏览器
             </summary>
         </member>
-        <member name="P:ZswBlog.DTO.CommentDTO.TargetUserName">
+        <member name="P:ZswBlog.DTO.CommentDTO.userName">
             <summary>
-            评论目标用户名称
+            用户名称
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CommentDTO.userPortrait">
+            <summary>
+            用户头像
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CommentDTO.targetUserName">
+            <summary>
+            目标用户名称
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CommentDTO.targetUserPortrait">
+            <summary>
+            目标用户头像
+            </summary>
+        </member>
+        <member name="T:ZswBlog.DTO.CommentTreeDTO">
+            <summary>
+            评论树
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CommentTreeDTO.id">
+            <summary>
+            评论id
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CommentTreeDTO.createDate">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CommentTreeDTO.content">
+            <summary>
+            评论内容
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CommentTreeDTO.userId">
+            <summary>
+            用户id
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CommentTreeDTO.articleId">
+            <summary>
+            所属文章id
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CommentTreeDTO.targetUserId">
+            <summary>
+            目标用户
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CommentTreeDTO.targetId">
+            <summary>
+            目标评论
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CommentTreeDTO.location">
+            <summary>
+            评论位置
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CommentTreeDTO.browser">
+            <summary>
+            浏览器
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CommentTreeDTO.userName">
+            <summary>
+            用户名称
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CommentTreeDTO.userPortrait">
+            <summary>
+            用户头像
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CommentTreeDTO.targetUserName">
+            <summary>
+            目标用户名称
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CommentTreeDTO.targetUserPortrait">
+            <summary>
+            目标用户头像
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CommentTreeDTO.children">
+            <summary>
+            评论子集
             </summary>
         </member>
         <member name="T:ZswBlog.DTO.FriendLinkDTO">

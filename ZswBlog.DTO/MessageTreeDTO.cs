@@ -1,11 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace ZswBlog.DTO
 {
     /// <summary>
-    /// 留言对象
+    /// 留言树DTO
     /// </summary>
-    public partial class MessageDTO
+    public partial class MessageTreeDTO
     {
         /// <summary>
         /// 留言id
@@ -39,6 +41,8 @@ namespace ZswBlog.DTO
         /// 浏览器
         /// </summary>
         public string browser { get; set; }
+
+        //-----------------------逻辑关联字段
         /// <summary>
         /// 用户名称
         /// </summary>
@@ -56,5 +60,10 @@ namespace ZswBlog.DTO
         /// 目标用户头像
         /// </summary>
         public string targetUserPortrait { get; set; }
+
+        /// <summary>
+        /// 留言子集
+        /// </summary>
+        public List<MessageTreeDTO> children { get; set; }
     }
 }

@@ -26,10 +26,6 @@ namespace ZswBlog.Entity
         [Display(Name = "文章Id")]
         public int ArticleId { get; set; }
         /// <summary>
-        /// 标签实体
-        /// </summary>
-        public Tag Tag { get; set; }
-        /// <summary>
         /// 标签Id
         /// </summary>
         [Display(Name = "标签Id")]

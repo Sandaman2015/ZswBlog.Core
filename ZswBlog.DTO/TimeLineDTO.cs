@@ -22,6 +22,6 @@ namespace ZswBlog.DTO
         /// <summary>
         /// 时间线时间
         /// </summary>
-        public DateTime time { get; set; }
+        public DateTime createDate { get; set; }
     }
 }

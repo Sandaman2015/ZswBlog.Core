@@ -28,11 +28,11 @@ namespace ZswBlog.Entity
         /// <summary>
         /// 目标留言用户
         /// </summary>
-        public int targetUserId { get; set; }
+        public int? targetUserId { get; set; }
         /// <summary>
         /// 目标留言id
         /// </summary>
-        public int targetId { get; set; }
+        public int? targetId { get; set; }
         /// <summary>
         /// 留言位置
         /// </summary>

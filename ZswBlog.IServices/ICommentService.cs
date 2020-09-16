@@ -54,7 +54,7 @@ namespace ZswBlog.IServices
         /// <param name="pageIndex"></param>
         /// <param name="targetId"></param>
         /// <returns></returns>
-        PageDTO<CommentTreeDTO> GetCommentsByRecursion(int limit, int pageIndex, int targetId);
+        PageDTO<CommentTreeDTO> GetCommentsByRecursion(int limit, int pageIndex);
 
     }
 }

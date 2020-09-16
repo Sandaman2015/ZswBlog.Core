@@ -9,7 +9,7 @@ namespace ZswBlog.DTO
     /// </summary>
     public class TagDTO
     {
-        // <summary>
+        /// <summary>
         /// 标签id
         /// </summary>
         public int id { get; set; }

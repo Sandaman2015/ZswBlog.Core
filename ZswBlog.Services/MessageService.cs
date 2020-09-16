@@ -1,133 +1,113 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using ZswBlog.DTO;
 using ZswBlog.Entity;
 using ZswBlog.IRepository;
 using ZswBlog.IServices;
 
-namespace Services
+namespace ZswBlog.Services
 {
-    public class MessageService : BaseService, IMessageService
+    public class MessageService : BaseService<MessageEntity, IMessageRepository>, IMessageService
     {
-        public MessageService(IMessageRepository repository)
-        {
-            _repository = repository;
-        }
-        private readonly IMessageRepository _repository;
+        private readonly IMessageRepository _messageRepository;
+        private readonly IMapper _mapper;
 
-        public async Task<List<Message>> GetAllMessagesAsync()
+        public MessageService(IMessageRepository messageRepository, IMapper mapper)
         {
-            return await Task.Run(() =>
+            _messageRepository = messageRepository;
+            _mapper = mapper;
+        }
+
+        /// <summary>
+        /// 获取留言详情
+        /// </summary>
+        /// <param name="messageId"></param>
+        /// <returns></returns>
+        public MessageDTO GetMessageById(int messageId)
+        {
+            MessageEntity message = _messageRepository.GetSingleModel(a => a.id == messageId);
+            return _mapper.Map<MessageDTO>(message);
+        }
+
+        /// <summary>
+        /// 用户上次留言时间
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public bool IsExistsMessageOnNewestByUserId(int userId)
+        {
+
+            List<MessageEntity> messages = _messageRepository.GetModels(a => a.userId == userId).OrderByDescending(a => a.createDate).ToList();
+            if (messages != null && messages.Count > 0)
             {
-                List<Message> messages = _repository.GetModels(a => a.MessageId != 0).ToList();
-                return messages;
-            });
+                TimeSpan timeSpan = DateTime.Now - messages[0].createDate;
+                return timeSpan.TotalMinutes > 1;
+            }
+            else return true;
         }
 
-        public async Task<Message> GetMessageByIdAsync(int messageId)
+        /// <summary>
+        /// 删除留言
+        /// </summary>
+        /// <param name="tId"></param>
+        /// <returns></returns>
+        public bool RemoveEntity(int tId)
         {
-            return await Task.Run(() =>
+            MessageEntity message = _messageRepository.GetSingleModel(a => a.id == tId);
+            return _messageRepository.Delete(message);
+        }
+
+        /// <summary>
+        /// 递归调用留言列表
+        /// </summary>
+        /// <param name="limit"></param>
+        /// <param name="pageIndex"></param>
+        /// <returns></returns>
+        public PageDTO<MessageTreeDTO> GetMessagesByRecursion(int limit, int pageIndex)
+        {
+            int pageCount;
+            List<MessageEntity> messages = _messageRepository.GetModelsByPage(limit, pageIndex, false, (a => a.createDate), (a => a.id != 0), out pageCount).ToList();
+            List<MessageTreeDTO> messageDTOs = _mapper.Map<List<MessageTreeDTO>>(messages);
+            foreach (MessageTreeDTO messageTree in messageDTOs) {
+                RecursionComments(messageTree, messageTree.id);
+            }
+            return new PageDTO<MessageTreeDTO>(pageIndex, limit, pageCount, messageDTOs);
+        }
+
+        /// <summary>
+        /// 清空列表
+        /// </summary>
+        /// <returns></returns>
+        private bool RecursionComments(MessageTreeDTO treeDTO, int targetId)
+        {
+            List<MessageEntity> messages = _messageRepository.GetModels((MessageEntity me) => me.targetId == targetId).ToList();
+            if (messages.Count > 0)
             {
-                Message message = _repository.GetSingleModel(a => a.MessageId == messageId);
-                return message;
-            });
-        }
-
-        public async Task<List<Message>> GetMessagesByPageAsync(int limit, int pageIndex)
-        {
-            return await Task.Run(() =>
-            {
-                List<Message> messages = _repository.GetModelsByPage(limit, pageIndex, false, (a => a.MessageDate), (a => a.MessageId != 0), out int total).ToList();
-                return messages;
-            });
-        }
-
-        public async Task<List<Message>> GetMessagesByTargetIdAsync(int targetId)
-        {
-            return await Task.Run(() =>
-            {
-                List<Message> messages = _repository.GetModels(a => a.TargetId == targetId).OrderBy(a => a.MessageDate).ToList();
-                return messages;
-            });
-        }
-
-        public async Task<List<Message>> GetMessagesOnNotReplyAsync()
-        {
-            return await Task.Run(() =>
-            {
-                List<Message> messages = _repository.GetModels(a => a.TargetId == 0).ToList();
-                return messages;
-            });
-        }
-
-        public async Task<List<Message>> GetMessagesOnNotReplyAsyncByPageAsync(int limit, int pageIndex)
-        {
-            recursionMessages.Clear();
-            return await Task.Run(() =>
-            {
-                List<Message> messages = _repository.GetModelsByPage(limit, pageIndex, false, (a => a.MessageId), (a => a.TargetId == 0), out int total).ToList();
-                return messages;
-            });
-        }
-        public async Task<bool> AddEntityAsync(Message t)
-        {
-            return await Task.Run(() =>
-            {
-                return _repository.Add(t);
-            });
-        }
-
-        public async Task<bool> RemoveEntityAsync(int tId)
-        {
-            return await Task.Run(() =>
-            {
-                Message message = _repository.GetSingleModel(a => a.MessageId == tId);
-                return _repository.Delete(message);
-            });
-        }
-
-        public Task<bool> AlterEntityAsync(Message t)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<bool> IsExistsMessageOnNewestByUserId(Guid userId)
-        {
-            return await Task.Run(() =>
-            {
-
-                List<Message> messages = _repository.GetModels(a => a.UserId == userId).OrderByDescending(a => a.MessageDate).ToList();
-                if (messages != null && messages.Count > 0)
+                List<MessageTreeDTO> messageTrees = _mapper.Map<List<MessageTreeDTO>>(messages);
+                foreach (MessageTreeDTO message in messageTrees)
                 {
-                    TimeSpan timeSpan = DateTime.Now - messages[0].MessageDate;
-                    return timeSpan.TotalMinutes > 1;
+                    treeDTO.children.Add(message);
+                    return RecursionComments(treeDTO, message.id);
                 }
-                else return true;
-            });
-        }
-        private List<Message> recursionMessages = new List<Message>();
-        public List<Message> GetMessagesByRecursion(int targetId)
-        {
-            List<Message> messages = _repository.GetModels(a => a.TargetId == targetId).ToList();
-            if (messages != null && messages.Count() > 0)
-            {
-                foreach (var item in messages)
-                {
-                    recursionMessages.Add(item);
-                }
-                return GetMessagesByRecursion(messages[0].MessageId);
+                return false;
             }
             else
             {
-                return recursionMessages;
+                return true;
             }
         }
 
-        public bool ClearRecursionMessages()
+        /// <summary>
+        /// 根据count获取顶级留言
+        /// </summary>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        public List<MessageDTO> GetMessageOnNoReplyAndCount(int count)
         {
-            recursionMessages.Clear();
-            return recursionMessages.Count() == 0;
+            List<MessageEntity> messages = _messageRepository.GetModels(a => a.targetId == null).Take(count).ToList();
+            return _mapper.Map<List<MessageDTO>>(messages);
         }
     }
 }

@@ -139,7 +139,7 @@
             点赞数
             </summary>
         </member>
-        <member name="P:ZswBlog.Entity.ArticleEntity.classId">
+        <member name="P:ZswBlog.Entity.ArticleEntity.categoryId">
             <summary>
             所属分类，默认为0是默认分类
             </summary>
@@ -174,6 +174,16 @@
             置顶排序
             </summary>
         </member>
+        <member name="P:ZswBlog.Entity.ArticleEntity.readTime">
+            <summary>
+            阅读时间
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.ArticleEntity.textCount">
+            <summary>
+            文章总字数
+            </summary>
+        </member>
         <member name="T:ZswBlog.Entity.ArticleTag">
             <summary>
             文章标签
@@ -192,11 +202,6 @@
         <member name="P:ZswBlog.Entity.ArticleTag.ArticleId">
             <summary>
             文章Id
-            </summary>
-        </member>
-        <member name="P:ZswBlog.Entity.ArticleTag.Tag">
-            <summary>
-            标签实体
             </summary>
         </member>
         <member name="P:ZswBlog.Entity.ArticleTag.TagId">
@@ -674,11 +679,6 @@
             
             </summary>
         </member>
-        <member name="P:ZswBlog.Entity.SingleBlogContext.Tag">
-            <summary>
-            
-            </summary>
-        </member>
         <member name="P:ZswBlog.Entity.SingleBlogContext.Travel">
             <summary>
             
@@ -773,26 +773,6 @@
         <member name="P:ZswBlog.Entity.SiteTagEntity.isShow">
             <summary>
             是否显示1不显示,0显示
-            </summary>
-        </member>
-        <member name="T:ZswBlog.Entity.Tag">
-            <summary>
-            文章标签
-            </summary>
-        </member>
-        <member name="P:ZswBlog.Entity.Tag.TagId">
-            <summary>
-            文章标签Id
-            </summary>
-        </member>
-        <member name="P:ZswBlog.Entity.Tag.TagName">
-            <summary>
-            标签名称
-            </summary>
-        </member>
-        <member name="P:ZswBlog.Entity.Tag.TagCreateTime">
-            <summary>
-            标签创建时间
             </summary>
         </member>
         <member name="T:ZswBlog.Entity.TagEntity">

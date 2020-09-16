@@ -37,7 +37,7 @@ namespace ZswBlog.Entity
         /// <summary>
         /// 目标评论
         /// </summary>
-        public int targetId { get; set; }
+        public int? targetId { get; set; }
         /// <summary>
         /// 评论位置
         /// </summary>

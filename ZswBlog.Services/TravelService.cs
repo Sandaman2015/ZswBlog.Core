@@ -6,16 +6,16 @@ using ZswBlog.Entity;
 using ZswBlog.IRepository;
 using ZswBlog.IServices;
 
-namespace Services
+namespace ZswBlog.Services
 {
-    public class TravelService : BaseService, ITravelService
+    public class TravelService : BaseService<TravelEntity, ITravelRepository>, ITravelService
     {
         private readonly ITravelRepository repository;
 
         public TravelService(ITravelRepository repository)
         {
             this.repository = repository;
-        }        
+        }
 
         public Task<bool> AddEntityAsync(Travel t)
         {

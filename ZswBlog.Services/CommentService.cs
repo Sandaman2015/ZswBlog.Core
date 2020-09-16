@@ -105,19 +105,14 @@ namespace ZswBlog.Services
         }
 
         /// <summary>
-        /// 每当进行分页查询时，都将该列表清空为了重新赋值
-        /// </summary>
-        private List<CommentEntity> recursionComments = new List<CommentEntity>();
-
-        /// <summary>
         /// 递归调用
         /// </summary>
         /// <param name="targetId"></param>
         /// <returns></returns>
-        public PageDTO<CommentTreeDTO> GetCommentsByRecursion(int limit, int pageIndex, int targetId)
+        public PageDTO<CommentTreeDTO> GetCommentsByRecursion(int limit, int pageIndex)
         {
             int pageCount;
-            List<CommentEntity> comments = _repository.GetModelsByPage(limit,pageIndex,false,a=>a.createDate,a => a.targetId == targetId,out pageCount).ToList();
+            List<CommentEntity> comments = _commentRepository.GetModelsByPage(limit,pageIndex,false,a=>a.createDate,a => a.targetId != null,out pageCount).ToList();
             List<CommentTreeDTO> commentDTOs = _mapper.Map<List<CommentTreeDTO>>(comments);
             foreach (CommentTreeDTO commentTree in commentDTOs) {
                 RecursionComments(commentTree,commentTree.id);

@@ -14,6 +14,6 @@ namespace ZswBlog.IServices
         /// </summary>
         /// <param name="openId"></param>
         /// <returns></returns>
-        Task<UserEntity> GetUserByOpenIdAsync(string openId);
+        QQUserInfoEntity GetQQUserInfoByOpenId(string openId);
     }
 }

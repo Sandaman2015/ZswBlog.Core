@@ -1,54 +1,56 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using ZswBlog.DTO;
 using ZswBlog.Entity;
 using ZswBlog.IRepository;
 using ZswBlog.IServices;
 
-namespace Services
+namespace ZswBlog.Services
 {
-    public class SiteTagService : BaseService, ISiteTagService
+    public class SiteTagService : BaseService<SiteTagEntity, ISiteTagRepository>, ISiteTagService
     {
-        private readonly ISiteTagRepository _repository;
-        public SiteTagService(ISiteTagRepository repository)
+        private readonly ISiteTagRepository _siteTagRepository;
+        private readonly IMapper _mapper;
+
+        public SiteTagService(ISiteTagRepository siteTagRepository, IMapper mapper)
         {
-            _repository = repository;
-        }
-        public async Task<List<SiteTag>> GetSiteTagsByIsShowAsync(bool isShow)
-        {
-            return await Task.Run(() =>
-            {
-                List<SiteTag> siteTags = _repository.GetModels(a => a.SitetagId != 0).ToList();
-                return isShow ? siteTags.Where(a => a.IsShow).ToList() : siteTags.Where(a => !a.IsShow).ToList();
-            });
+            _siteTagRepository = siteTagRepository;
+            _mapper = mapper;
         }
 
-        public async Task<List<SiteTag>> GetAllSiteTagsAsync()
+        /// <summary>
+        /// 根据禁用显示所有的站点标签
+        /// </summary>
+        /// <param name="isShow"></param>
+        /// <returns></returns>
+        public List<SiteTagDTO> GetSiteTagsByIsShow(bool isShow)
         {
-            return await Task.Run(() =>
-            {
-                List<SiteTag> siteTags = _repository.GetModels(a => a.SitetagId != 0).ToList();
-                return siteTags;
-            });
+            List<SiteTagEntity> siteTags = _siteTagRepository.GetModels(a => a.id != 0).ToList();
+            siteTags = isShow ? siteTags.Where(a => a.isShow).ToList() : siteTags.Where(a => !a.isShow).ToList();
+            return _mapper.Map<List<SiteTagDTO>>(siteTags);
         }
 
-        public async Task<bool> AddEntityAsync(SiteTag t)
+        /// <summary>
+        /// 获取所有的站点标签
+        /// </summary>
+        /// <returns></returns>
+        public List<SiteTagDTO> GetAllSiteTags()
         {
-            return await Task.Run(() =>
-            {
-                return _repository.Add(t);
-            });
+            List<SiteTagEntity> siteTags = _siteTagRepository.GetModels(a => a.id != 0).ToList();
+            return _mapper.Map<List<SiteTagDTO>>(siteTags);
         }
 
-        public Task<bool> RemoveEntityAsync(int tId)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tId"></param>
+        /// <returns></returns>
+        public bool RemoveEntity(int tId)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> AlterEntityAsync(SiteTag t)
-        {
-            throw new NotImplementedException();
+            SiteTagEntity siteTagEntity = _siteTagRepository.GetSingleModel(a => a.id == tId);
+            return _siteTagRepository.Delete(siteTagEntity);
         }
     }
 }

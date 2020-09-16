@@ -51,7 +51,7 @@ namespace ZswBlog.IServices
         /// <returns></returns>
         List<ArticleDTO> GetArticlesByVisit(int visitCount);
         /// <summary>
-        /// 
+        /// 根据文章分类获取文章列表
         /// </summary>
         /// <param name="limit"></param>
         /// <param name="pageIndex"></param>
