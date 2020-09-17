@@ -32,7 +32,7 @@ namespace ZswBlog.Entity
         /// <summary>
         /// 首次登录
         /// </summary>
-        public string loginTime { get; set; }
+        public DateTime loginTime { get; set; }
         /// <summary>
         /// 头像
         /// </summary>

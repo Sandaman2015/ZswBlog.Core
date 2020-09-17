@@ -71,6 +71,5 @@ namespace ZswBlog.Services
             ArticleTagEntity entity = _articleTagRepository.GetSingleModel((ArticleTagEntity at) => at.id == tId);
             return _articleTagRepository.Delete(entity);
         }
-
     }
 }

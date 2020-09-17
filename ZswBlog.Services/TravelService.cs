@@ -1,7 +1,8 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using ZswBlog.DTO;
 using ZswBlog.Entity;
 using ZswBlog.IRepository;
 using ZswBlog.IServices;
@@ -10,50 +11,31 @@ namespace ZswBlog.Services
 {
     public class TravelService : BaseService<TravelEntity, ITravelRepository>, ITravelService
     {
-        private readonly ITravelRepository repository;
+        private readonly ITravelRepository _travelRepository;
+        private readonly IMapper _mapper;
 
-        public TravelService(ITravelRepository repository)
+        public TravelService(ITravelRepository repository, IMapper mapper)
         {
-            this.repository = repository;
+            _travelRepository = repository;
+            _mapper = mapper;
         }
 
-        public Task<bool> AddEntityAsync(Travel t)
+        public List<TravelDTO> GetTravels()
         {
-            return Task.Run(() => { return repository.Add(t); });
+            List<TravelEntity> travels = _travelRepository.GetModels(a => a.id != 0).ToList();
+            return _mapper.Map<List<TravelDTO>>(travels);
         }
 
-        public Task<bool> AlterEntityAsync(Travel t)
+        public TravelDTO GetTravel(int tId)
         {
-            return Task.Run(() =>
-            {
-                return repository.Update(t);
-            });
+            TravelEntity travel = _travelRepository.GetSingleModel(t => t.id == tId);
+            return _mapper.Map<TravelDTO>(travel);
         }
 
-        public Task<List<Travel>> GetTravelsAsync()
+        public bool RemoveEntity(int tId)
         {
-            return Task.Run(() =>
-            {
-                List<Travel> travels = repository.GetModels(a => a.TravelId != 0).ToList();
-                return travels;
-            });
-        }
-
-        public Task<Travel> GetTravel(int tId)
-        {
-            return Task.Run(() =>
-            {
-                return repository.GetSingleModel((Travel t) => t.TravelId == tId);
-            });
-        }
-
-        public Task<bool> RemoveEntityAsync(int tId)
-        {
-            return Task.Run(() =>
-            {
-                Travel t = new Travel() { TravelId = tId };
-                return repository.Delete(t);
-            });
+            TravelEntity t = new TravelEntity() { id = tId };
+            return _travelRepository.Delete(t);
         }
     }
 }

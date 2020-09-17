@@ -1,120 +1,111 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ZswBlog.DTO;
 using ZswBlog.Entity;
 using ZswBlog.IRepository;
 using ZswBlog.IServices;
+using ZswBlog.Query;
 using ZswBlog.Util;
 
-namespace Services
+namespace ZswBlog.Services
 {
-    public class UserService : BaseService, IUserService
+    public class UserService : BaseService<UserEntity, IUserRepository>, IUserService
     {
-        public UserService(IUserRepository repository)
+
+        private readonly IUserRepository _userRepository;
+        private readonly IMapper _mapper;
+        private readonly IQQUserInfoService _userQQInfoService;
+        public UserService(IUserRepository repository, IQQUserInfoService userQQInfoService, IMapper mapper)
         {
-            _repository = repository;
+            _userRepository = repository;
+            _userQQInfoService = userQQInfoService;
+            _mapper = mapper;
         }
 
-        private IUserRepository _repository;
-
-        public async Task<List<User>> GetAllUsersAsync()
+        public List<UserDTO> GetAllUsers()
         {
-            return await Task.Run(() =>
-            {
-                List<User> users = _repository.GetModels(a => a.UserId != null).ToList();
-                return users;
-            });
+            List<UserEntity> users = _userRepository.GetModels(a => a.id != 0).ToList();
+            return _mapper.Map<List<UserDTO>>(users);
         }
 
-        public async Task<User> GetUserByOpenIdAsync(string openId)
+        public UserDTO GetUserByOpenId(string openId)
         {
-            return await Task.Run(() =>
+            QQUserInfoEntity infoEntity = _userQQInfoService.GetQQUserInfoByOpenId(openId);
+            if (infoEntity != null)
             {
-                User user = _repository.GetSingleModel(a => a.UserOpenId == openId);
-                return user;
-            });
+                UserEntity user = _repository.GetSingleModel(a => a.id == infoEntity.userId);
+                return _mapper.Map<UserDTO>(user);
+            }
+            else {
+                return null;
+            }
         }
 
-        public async Task<User> GetUserByIdAsync(Guid id)
+        public UserDTO GetUserById(int id)
         {
-            return await Task.Run(() =>
-            {
-                User user = _repository.GetSingleModel(a => a.UserId == id);
-                return user;
-            });
+            UserEntity user = _repository.GetSingleModel(a => a.id == id);
+            return _mapper.Map<UserDTO>(user);
         }
 
-        public async Task<bool> AddEntityAsync(User t)
+        public bool AddEntity(UserSaveQuery t)
         {
-            return await Task.Run(() =>
+            try
             {
-                try
+                bool isOk = false;
+                if (!string.IsNullOrEmpty(t.accessToken) && !string.IsNullOrEmpty(t.openId))
                 {
-                    bool isOk = false;
-                    if (!string.IsNullOrEmpty(t.UserAccessToken) && !string.IsNullOrEmpty(t.UserOpenId))
+
+                    UserEntity user = _mapper.Map<UserEntity>(t);
+                    QQUserInfoEntity infoEntity = _mapper.Map<QQUserInfoEntity>(t);
+                    if (user != null)
                     {
-
-                        User user = _repository.GetSingleModel(a => a.UserOpenId == t.UserOpenId);
-                        if (user != null)
-                        {
-                            //该用户已经登陆过了，只需要更新登录信息就行了
-                            user.UserAccessToken = t.UserAccessToken;
-                            user.UserLastLoginTime = user.UserLoginTime;
-                            user.UserLoginCount += 1;
-                            user.UserName = t.UserName;
-                            user.UserPortrait = t.UserPortrait;
-                            user.UserLoginTime = DateTime.Now;
-                            isOk = _repository.Update(user);
-                        }
-                        else
-                        {
-                            string defaultPwd = MD5Helper.GetMD5String("123456");//默认使用MD5加密密码         
-                            user = new User
-                            {
-                                //该用户未登录需要填入信息
-                                UserAccessToken = t.UserAccessToken,
-                                UserLastLoginTime = DateTime.Now,
-                                UserLoginCount = 1,
-                                UserName = t.UserName,
-                                UserPortrait = t.UserPortrait,
-                                UserLoginTime = DateTime.Now,
-                                UserCreateTime = DateTime.Now,
-                                UserOpenId = t.UserOpenId,
-                                UserPassword = defaultPwd,
-                                ITCode = t.UserName
-                            };
-                            isOk = _repository.Add(user);
-                        }
+                        //该用户已经登陆过了，只需要更新登录信息就行了
+                        user.lastLoginDate = DateTime.Now;
+                        user.loginCount += 1;
+                        user.nickName = t.nickName;
+                        user.portrait = t.portrait;
+                        infoEntity.userId = user.id;
+                        isOk = _userRepository.Update(user) && _userQQInfoService.UpdateEntityAsync(infoEntity);                        
                     }
-                    return isOk;
+                    else
+                    {
+                        string defaultPwd = MD5Helper.GetMD5String("123456");//默认使用MD5加密密码         
+                        user = new UserEntity
+                        {
+                            //该用户未登录需要填入信息
+                            lastLoginDate = DateTime.Now,
+                            loginCount = 1,
+                            loginTime = DateTime.Now,
+                            createDate = DateTime.Now,
+                            password = defaultPwd
+                        };
+                        infoEntity.accessToken = t.accessToken;
+                        infoEntity.openId = t.openId;
+                        infoEntity.nickName = t.nickName;
+                        infoEntity.figureurl_qq_1 = t.portrait;
+                        isOk = _userRepository.Add(user) && _userQQInfoService.UpdateEntityAsync(infoEntity);
+                    }
                 }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
-            });
-        }
-        public async Task<bool> AlterEntityAsync(User t)
-        {
-            return await Task.Run(() =>
+                return isOk;
+            }
+            catch (Exception ex)
             {
-                return _repository.Update(t);
-            });
+                throw ex;
+            }
         }
 
-        public async Task<List<User>> GetUsersNearVisit(int count)
+        public List<UserDTO> GetUsersNearVisit(int count)
         {
-            return await Task.Run(() =>
-            {
-                List<User> users = _repository.GetModels(a => a.UserId != Guid.Empty && a.Discriminator == "User").OrderByDescending(a => a.UserLoginTime).Take(count).ToList();
-                return users;
-            });
+            List<UserEntity> users = _repository.GetModels(a => a.id != 0).OrderByDescending(a => a.createDate).Take(count).ToList();
+            return _mapper.Map<List<UserDTO>>(users);
         }
 
-        public Task<bool> RemoveEntityAsync(int tId)
+        public bool RemoveEntity(int tId)
         {
-            throw new NotImplementedException();
+            return _userRepository.Delete(new UserEntity { id = tId });
         }
     }
 }
