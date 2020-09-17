@@ -4,9 +4,10 @@ using System.Reflection;
 
 namespace ZswBlog.Core.config
 {
-#pragma warning disable CS1591 // 缺少对公共可见类型或成员“ConfigureAutofac”的 XML 注释
+    /// <summary>
+    /// AutoFacIOC配置类
+    /// </summary>
     public class ConfigureAutofac : Autofac.Module
-#pragma warning restore CS1591 // 缺少对公共可见类型或成员“ConfigureAutofac”的 XML 注释
     {
         /// <summary>
         /// 控制反转

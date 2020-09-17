@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace ZswBlog.DTO
 {
@@ -8,12 +9,24 @@ namespace ZswBlog.DTO
     public partial class ArticleTagDTO
     {
         /// <summary>
-        /// 标签名称
+        /// 中间表id
         /// </summary>
-        public string TagName { get; set; }
+        public int id { get; set; }
         /// <summary>
-        /// 文章列表
+        /// 创建时间
         /// </summary>
-        public List<MiniArticleDTO> ArticleList { get; set; }
+        public DateTime createDate { get; set; }
+        /// <summary>
+        /// 操作人
+        /// </summary>
+        public int operatorId { get; set; }
+        /// <summary>
+        /// 文章id
+        /// </summary>
+        public int articleId { get; set; }
+        /// <summary>
+        /// 标签id
+        /// </summary>
+        public int tagId { get; set; }
     }
 }

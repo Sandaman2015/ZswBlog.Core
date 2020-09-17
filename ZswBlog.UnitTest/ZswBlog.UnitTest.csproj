@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ZswBlog.IServices\ZswBlog.IServices.csproj" />
+    <ProjectReference Include="..\ZswBlog.Repository\ZswBlog.Repository.csproj" />
     <ProjectReference Include="..\ZswBlog.Services\ZswBlog.Services.csproj" />
   </ItemGroup>
 

@@ -20,10 +20,14 @@ namespace ZswBlog.Web.Controllers
         private readonly ITimeLineService timeLineService;
         private readonly SiteTagMapper siteTagMapper;
         private readonly TimeLineMapper timeLineMapper;
-
-#pragma warning disable CS1591 // 缺少对公共可见类型或成员“AboutController.AboutController(ISiteTagService, ITimeLineService, SiteTagMapper, TimeLineMapper)”的 XML 注释
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="siteTagService"></param>
+        /// <param name="timeLineService"></param>
+        /// <param name="siteTagMapper"></param>
+        /// <param name="timeLineMapper"></param>
         public AboutController(ISiteTagService siteTagService, ITimeLineService timeLineService, SiteTagMapper siteTagMapper, TimeLineMapper timeLineMapper)
-#pragma warning restore CS1591 // 缺少对公共可见类型或成员“AboutController.AboutController(ISiteTagService, ITimeLineService, SiteTagMapper, TimeLineMapper)”的 XML 注释
         {
             this.siteTagService = siteTagService;
             this.timeLineService = timeLineService;

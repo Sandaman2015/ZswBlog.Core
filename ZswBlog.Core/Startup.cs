@@ -63,12 +63,6 @@ namespace ZswBlog.Core
             services.AddSingleton((AutoMapper.IConfigurationProvider)new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile<ArticleProfile>();
-                cfg.AddProfile<TagProfile>();
-                cfg.AddProfile<MessageProfile>();
-                cfg.AddProfile<CommentProfile>();
-                cfg.AddProfile<FriendLinkProfile>();
-                cfg.AddProfile<AboutProfile>();
-                cfg.AddProfile<UserProfile>();
             }));
 
             //ÈÕÆÚ×ª»»

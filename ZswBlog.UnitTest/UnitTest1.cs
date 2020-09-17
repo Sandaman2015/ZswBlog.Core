@@ -1,6 +1,8 @@
+using AutoMapper;
 using NUnit.Framework;
 using ZswBlog.DTO;
 using ZswBlog.IServices;
+using ZswBlog.Repository;
 using ZswBlog.Services;
 
 namespace ZswBlog.UnitTest
@@ -8,13 +10,8 @@ namespace ZswBlog.UnitTest
     public class Tests
     {
 
-        private readonly ICommentService commentService;
-
-        public Tests(ICommentService commentService)
-        {
-            this.commentService = commentService;
-        }
-
+        //public ICommentService commentService { get; set; }
+        
         [SetUp]
         public void Setup()
         {
@@ -23,12 +20,11 @@ namespace ZswBlog.UnitTest
         [Test]
         public void Test1()
         {
-            //ICommentService commentService = new CommentService();
-            PageDTO<CommentTreeDTO> pageDTO = commentService.GetCommentsByRecursion(3, 1);
-            System.Console.WriteLine(pageDTO.count);
-            System.Console.WriteLine(pageDTO.data);
-            System.Console.WriteLine(pageDTO.pageIndex);
-            System.Console.WriteLine(pageDTO.pageSize);
+            //PageDTO<CommentTreeDTO> pageDTO = commentService.GetCommentsByRecursion(3, 1);
+            //System.Console.WriteLine(pageDTO.count);
+            //System.Console.WriteLine(pageDTO.data);
+            //System.Console.WriteLine(pageDTO.pageIndex);
+            //System.Console.WriteLine(pageDTO.pageSize);
         }
     }
 }
