@@ -1,10 +1,10 @@
 ﻿using System.Net.Mail;
 using System.Text;
-using System.Threading.Tasks;
 using ZswBlog.Entity;
 using ZswBlog.IServices;
+using ZswBlog.Util;
 
-namespace ZswBlog.ThirdParty
+namespace ZswBlog.ThirdParty.Email
 {
     public enum SendEmailType
     {
@@ -16,13 +16,17 @@ namespace ZswBlog.ThirdParty
         private readonly IMessageService _messageService;
         private readonly ICommentService _commentService;
         private readonly IUserService _userService;
-
+        private string _sendEmailAddress;
+        private string _emailSecretKey;
         public EmailHelper(IMessageService messageService, ICommentService commentService, IUserService userService)
         {
             _messageService = messageService;
             _commentService = commentService;
             _userService = userService;
+            this._sendEmailAddress = ConfigHelper.GetValue("SendEmailAddress");
+            this._emailSecretKey = ConfigHelper.GetValue("EmailSecretKey");
         }
+        //TODO 发送邮件需要分离
         /// <summary>
         /// 1.0的发送邮件
         /// </summary>
@@ -30,11 +34,12 @@ namespace ZswBlog.ThirdParty
         /// <param name="user"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        public async Task<bool> ReplySendEmail(dynamic toUser, dynamic fromUser, SendEmailType sendEmailType)
+        public bool ReplySendEmail(dynamic toUser, dynamic fromUser, SendEmailType sendEmailType)
         {
-            MailAddress MessageFrom = new MailAddress("1761317983@qq.com"); //发件人邮箱地址 
-            User targetUser = await _userService.GetUserByIdAsync(toUser.UserId);
-            User user = await _userService.GetUserByIdAsync(fromUser.UserId);
+            
+            MailAddress MessageFrom = new MailAddress(_sendEmailAddress); //发件人邮箱地址 
+            User targetUser = _userService.GetUserById(toUser.UserId);
+            User user = _userService.GetUserById(fromUser.UserId);
             string MessageTo = targetUser.UserEmail; //收件人邮箱地址 
             string MessageSubject = "ZswBlog博客回复通知"; //邮件主题    
             string Content = null;//目标的内容
@@ -44,9 +49,9 @@ namespace ZswBlog.ThirdParty
             if (sendEmailType == SendEmailType.回复评论)
             {
                 //评论回复
-                var replyMessage = await _commentService.GetCommentByIdAsync(fromUser.CommentId);
+                var replyMessage = _commentService.GetCommentById(fromUser.CommentId);
                 ReplyContent = replyMessage.Comment1;
-                var message = await _commentService.GetCommentByIdAsync(toUser.CommentId);
+                var message = _commentService.GetCommentById(toUser.CommentId);
                 Content = message.Comment1;
                 int ArticleId = message.ArticleId;
                 url = "https://www.zswblog.xyz/details.html?ArticleDetails=" + ArticleId + "";
@@ -54,13 +59,13 @@ namespace ZswBlog.ThirdParty
             else
             {
                 //留言回复
-                var replyLeacots = await _messageService.GetMessageByIdAsync(fromUser.MessageId);
+                var replyLeacots = _messageService.GetMessageById(fromUser.MessageId);
                 ReplyContent = replyLeacots.Message1;
-                var leacots = await _messageService.GetMessageByIdAsync(toUser.MessageId);
+                var leacots = _messageService.GetMessageById(toUser.MessageId);
                 Content = leacots.Message1;
                 url = "https://www.zswblog.xyz/leacots.html";
             }
-            //邮件内容 （一般是一个网址链接，生成随机数加验证id参数，点击去网站验证。）//请把这个参数改成你自己的
+            //邮件内容
             string MessageBody = "<div id=\"contentDiv\" onmouseover=\"getTop().stopPropagation(event);\" onclick=\"getTop().preSwapLink(event, 'spam', 'ZC3011-yZb5lAAS2SKCSSF8palnY9a');";
             MessageBody += "style=\"position: relative; font - size:14px; height: auto; padding: 15px 15px 10px 15px; z - index:1; zoom: 1; line - height:1.7; \"";
             MessageBody += "class=\"body\"><div id=\"qm_con_body\"><div id=\"mailContentContainer\" class=\"qmbox qm_con_body_content qqmail_webmail_only\" >";
@@ -78,7 +83,8 @@ namespace ZswBlog.ThirdParty
             return SendMail(MessageFrom, MessageTo, MessageSubject, MessageBody);
 
         }
-        public static bool SendMail(MailAddress MessageFrom, string MessageTo, string MessageSubject, string MessageBody)   //发送验证邮件
+
+        public bool SendMail(MailAddress MessageFrom, string MessageTo, string MessageSubject, string MessageBody)   //发送验证邮件
         {
             MailMessage message = new MailMessage();
             message.To.Add(MessageTo);
@@ -93,7 +99,7 @@ namespace ZswBlog.ThirdParty
             sc.EnableSsl = true;//是否SSL加密
             sc.Host = "smtp.qq.com"; //指定发送邮件的服务器地址或IP 
             sc.Port = 587; //指定发送邮件端口 
-            sc.Credentials = new System.Net.NetworkCredential("1761317983@qq.com", "emqwtiqpmrpccbae"); //指定登录服务器的用户名和密码(注意：这里的密码是开通上面的pop3/smtp服务提供给你的授权密码，不是你的qq密码)
+            sc.Credentials = new System.Net.NetworkCredential(_sendEmailAddress, _emailSecretKey); 
             sc.Send(message); //发送邮件 
                               //_log.Debug("发送邮件到" + MessageTo + "成功");
             return true;

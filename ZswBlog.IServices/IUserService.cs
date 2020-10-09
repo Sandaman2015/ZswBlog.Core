@@ -20,5 +20,12 @@ namespace ZswBlog.IServices
         /// <param name="count">获取数量</param>
         /// <returns></returns>
         List<UserDTO> GetUsersNearVisit(int count);
+
+        /// <summary>
+        /// 根据id获取用户信息
+        /// </summary>
+        /// <param name="id">用户信息</param>
+        /// <returns></returns>
+        List<UserDTO> GetUserById(int id);
     }
 }
