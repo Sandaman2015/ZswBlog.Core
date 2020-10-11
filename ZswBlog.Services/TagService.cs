@@ -10,14 +10,8 @@ namespace ZswBlog.Services
 {
     public class TagService : BaseService<TagEntity, ITagRepository>, ITagService
     {
-        private readonly ITagRepository _tagRepository;
-        private readonly IMapper _mapper;
-
-        public TagService(ITagRepository tagRepository, IMapper mapper)
-        {
-            _tagRepository = tagRepository;
-            _mapper = mapper;
-        }
+        public ITagRepository _tagRepository { get; set; }
+        public IMapper _mapper { get; set; }
 
         /// <summary>
         /// 获取所有标签

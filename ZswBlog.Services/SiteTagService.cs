@@ -11,15 +11,8 @@ namespace ZswBlog.Services
 {
     public class SiteTagService : BaseService<SiteTagEntity, ISiteTagRepository>, ISiteTagService
     {
-        private readonly ISiteTagRepository _siteTagRepository;
-        private readonly IMapper _mapper;
-
-        public SiteTagService(ISiteTagRepository siteTagRepository, IMapper mapper)
-        {
-            _siteTagRepository = siteTagRepository;
-            _mapper = mapper;
-        }
-
+        public ISiteTagRepository _siteTagRepository { get; set; }
+        public IMapper _mapper { get; set; }
         /// <summary>
         /// 根据禁用显示所有的站点标签
         /// </summary>

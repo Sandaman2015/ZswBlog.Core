@@ -11,15 +11,8 @@ namespace ZswBlog.Services
 {
     public class MessageService : BaseService<MessageEntity, IMessageRepository>, IMessageService
     {
-        private readonly IMessageRepository _messageRepository;
-        private readonly IMapper _mapper;
-
-        public MessageService(IMessageRepository messageRepository, IMapper mapper)
-        {
-            _messageRepository = messageRepository;
-            _mapper = mapper;
-        }
-
+        public IMessageRepository _messageRepository { get; set; }
+        public IMapper _mapper { get; set; }
         /// <summary>
         /// 获取留言详情
         /// </summary>

@@ -11,18 +11,18 @@ namespace ZswBlog.Services
 {
     public class ArticleTagService : BaseService<ArticleTagEntity, IArticleTagRepository>, IArticleTagService
     {
-        private readonly IArticleTagRepository _articleTagRepository;
-        private readonly IArticleRepository _articleRepository;
-        private readonly ITagRepository _tagRepository;
-        private readonly IMapper _mapper;
+        public IArticleTagRepository _articleTagRepository { get; set; }
+        public IArticleRepository _articleRepository { get; set; }
+        public ITagRepository _tagRepository { get; set; }
+        public IMapper _mapper { get; set; }
 
-        public ArticleTagService(IArticleTagRepository repository, IArticleRepository articleRepository, ITagRepository tagRepository, IMapper mapper)
-        {
-            _repository = repository;
-            _articleRepository = articleRepository;
-            _tagRepository = tagRepository;
-            _mapper = mapper;
-        }
+        //public ArticleTagService(IArticleTagRepository repository, IArticleRepository articleRepository, ITagRepository tagRepository, IMapper mapper)
+        //{
+        //    _repository = repository;
+        //    _articleRepository = articleRepository;
+        //    _tagRepository = tagRepository;
+        //    _mapper = mapper;
+        //}
 
         /// <summary>
         /// 根据标签id获取

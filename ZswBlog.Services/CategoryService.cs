@@ -11,14 +11,8 @@ namespace ZswBlog.Services
 {
     public class CategoryService : BaseService<CategoryEntity, ICategoryRepoistory>, ICategoryService
     {
-        private readonly ICategoryRepoistory _categoryRepoistory;
-        private readonly IMapper _mapper;
-
-        public CategoryService(ICategoryRepoistory categoryRepoistory, IMapper mapper)
-        {
-            _categoryRepoistory = categoryRepoistory;
-            _mapper = mapper;
-        }
+        public ICategoryRepoistory _categoryRepoistory { get; set; }
+        public IMapper _mapper { get; set; }
 
         /// <summary>
         /// 获取所有分类以及文章数量

@@ -1,9 +1,8 @@
 ﻿using Newtonsoft.Json;
 using System.Text;
-using System.Threading.Tasks;
 using ZswBlog.Util;
 
-namespace ZswBlog.ThirdParty
+namespace ZswBlog.ThirdParty.Location
 {
     public class LocationHelper
     {
@@ -12,27 +11,24 @@ namespace ZswBlog.ThirdParty
         /// </summary>
         /// <param name="ip"></param>
         /// <returns></returns>
-        public static async Task<string> GetLocation(string ip)
+        public static string GetLocation(string ip)
         {
-            return await Task.Run(() =>
+            string tenctApi = ConfigHelper.GetValue("TecentLocationApi");
+            string locationKey = ConfigHelper.GetValue("LocationKey");
+            string url = tenctApi + "?ip=" + ip + "&key=" + locationKey + "";
+            string jsonResult = RequestHelper.HttpGet(url, Encoding.UTF8);
+            LocationModel location = JsonConvert.DeserializeObject<LocationModel>(jsonResult);
+            string address;
+            if (location.result == null)
             {
-                string tenctApi = ConfigHelper.GetValue("tecentLocationApi");
-                string locationKey = ConfigHelper.GetValue("locationKey");
-                string url = tenctApi + "?ip=" + ip + "&key=" + locationKey + "";
-                string jsonResult = RequestHelper.HttpGet(url, Encoding.UTF8);
-                LocationModel location = JsonConvert.DeserializeObject<LocationModel>(jsonResult);
-                string address;
-                if (location.result == null)
-                {
-                    address = "中国";
-                }
-                else
-                {
-                    AddressInfo addInfo = location.result.ad_info;
-                    address = addInfo.province + addInfo.city + addInfo.district;
-                }
-                return address;
-            });
+                address = "中国";
+            }
+            else
+            {
+                AddressInfo addInfo = location.result.ad_info;
+                address = addInfo.province + addInfo.city + addInfo.district;
+            }
+            return address;
         }
     }
 }

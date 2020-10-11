@@ -10,9 +10,17 @@ namespace ZswBlog.ThirdParty.Music
 {
     public class MusicHelper
     {
+
+        private static string _baseMusicUrl;
+
+        static MusicHelper()
+        {
+            _baseMusicUrl = ConfigHelper.GetValue("MusicBaseUrl");
+        }
+
         public static List<MusicDTO> GetMusicListByCount(int count) {
-            string url = ConfigHelper.GetValue("musicSite");
-            string jsonResult = RequestHelper.HttpGet(url, Encoding.UTF8);
+            string url = ConfigHelper.GetValue("MusicBaseSite");
+            string jsonResult = RequestHelper.HttpGet(_baseMusicUrl+url, Encoding.UTF8);
             MusicList musicList = JsonConvert.DeserializeObject<MusicList>(jsonResult);
 
             List<MusicDTO> musicDTOs = new List<MusicDTO>();
@@ -22,17 +30,17 @@ namespace ZswBlog.ThirdParty.Music
             {
                 count--;
                 //获取歌曲详情
-                var songsData =string.Format("http://121.36.93.244:3000/song/detail?ids={0}",tracks.id);
+                var songsData =string.Format(_baseMusicUrl+"/song/detail?ids={0}",tracks.id);
                 string dataResult = RequestHelper.HttpGet(songsData, Encoding.UTF8);
                 MusicSongs musicSongs = JsonConvert.DeserializeObject<MusicSongs>(dataResult);
 
                 //获取歌曲歌词
-                var songsLyric = string.Format("http://121.36.93.244:3000/lyric?id={0}", tracks.id);
+                var songsLyric = string.Format(_baseMusicUrl + "/lyric?id={0}", tracks.id);
                 string lyricResult = RequestHelper.HttpGet(songsLyric, Encoding.UTF8);
                 Musiclyric musiclyric = JsonConvert.DeserializeObject<Musiclyric>(lyricResult);
 
                 //获取歌曲连接
-                var songsUrl= string.Format("http://121.36.93.244:3000/song/url?id={0}", tracks.id);
+                var songsUrl= string.Format(_baseMusicUrl + "/song/url?id={0}", tracks.id);
                 string songsUrlResult = RequestHelper.HttpGet(songsUrl, Encoding.UTF8);
                 MusicUrlData musicUrl = JsonConvert.DeserializeObject<MusicUrlData>(songsUrlResult);
 

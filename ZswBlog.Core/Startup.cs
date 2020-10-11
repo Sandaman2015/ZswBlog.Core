@@ -17,6 +17,7 @@ using ZswBlog.Core.config;
 using ZswBlog.Entity;
 using ZswBlog.Util;
 using System;
+using ZswBlog.Core.Controllers;
 
 namespace ZswBlog.Core
 {
@@ -65,6 +66,14 @@ namespace ZswBlog.Core
                 cfg.AddProfile<ArticleProfile>();
             }));
 
+            //添加全局返回结果，异常处理，参数验证
+            services.AddControllers(options =>
+            {
+                //options.Filters.Add<ValidateModelAttribute>();
+                options.Filters.Add<ApiResultFilterAttribute>();
+                options.Filters.Add<BaseExceptionAttribute>();
+            });
+
             //日期转换
             services.AddControllers(
                  setup =>
@@ -78,7 +87,7 @@ namespace ZswBlog.Core
 
             //Mysql连接池
             var connection = Configuration.GetConnectionString("MysqlConnection");
-            IServiceCollection serviceCollections = services.AddDbContext<SingleBlogContext>(options => options.UseMySql(connection));
+            IServiceCollection serviceCollections = services.AddDbContext<ZswBlogDbContext>(options => options.UseMySql(connection));
 
 
             //初始化 RedisHelper

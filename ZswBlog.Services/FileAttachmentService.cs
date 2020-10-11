@@ -9,12 +9,7 @@ namespace ZswBlog.Services
 {
     public class FileAttachmentService : BaseService<FileAttachmentEntity, IFileAttachmentRepository>, IFileAttachmentService
     {
-        private readonly IFileAttachmentRepository _fileAttachmentRepository;
-
-        public FileAttachmentService(IFileAttachmentRepository repository)
-        {
-            _fileAttachmentRepository = repository;
-        }
+        public IFileAttachmentRepository _fileAttachmentRepository { get; set; }
 
         /// <summary>
         /// 根据id获取附件对象

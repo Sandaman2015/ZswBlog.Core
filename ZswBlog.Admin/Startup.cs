@@ -11,7 +11,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using System.IO;
-using ZswBlog.Admin.Profiles;
 using ZswBlog.Entity;
 using ZswBlog.Util;
 
@@ -41,17 +40,17 @@ namespace ZswBlog.Admin
         /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
-            //AutoMapper映射文件
-            services.AddSingleton((AutoMapper.IConfigurationProvider)new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile<ArticleProfile>();
-                cfg.AddProfile<TagProfile>();
-                cfg.AddProfile<MessageProfile>();
-                cfg.AddProfile<CommentProfile>();
-                cfg.AddProfile<FriendLinkProfile>();
-                cfg.AddProfile<AboutProfile>();
-                cfg.AddProfile<UserProfile>();
-            }));
+            ////AutoMapper映射文件
+            //services.AddSingleton((AutoMapper.IConfigurationProvider)new MapperConfiguration(cfg =>
+            //{
+            //    cfg.AddProfile<ArticleProfile>();
+            //    cfg.AddProfile<TagProfile>();
+            //    cfg.AddProfile<MessageProfile>();
+            //    cfg.AddProfile<CommentProfile>();
+            //    cfg.AddProfile<FriendLinkProfile>();
+            //    cfg.AddProfile<AboutProfile>();
+            //    cfg.AddProfile<UserProfile>();
+            //}));
           
             //Mysql连接池
             var connection = Configuration.GetConnectionString("MysqlConnection");

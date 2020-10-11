@@ -11,14 +11,8 @@ namespace ZswBlog.Services
 {
     public class TravelService : BaseService<TravelEntity, ITravelRepository>, ITravelService
     {
-        private readonly ITravelRepository _travelRepository;
-        private readonly IMapper _mapper;
-
-        public TravelService(ITravelRepository repository, IMapper mapper)
-        {
-            _travelRepository = repository;
-            _mapper = mapper;
-        }
+        public ITravelRepository _travelRepository { get; set; }
+        public IMapper _mapper { get; set; }
 
         public List<TravelDTO> GetTravels()
         {

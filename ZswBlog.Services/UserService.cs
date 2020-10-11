@@ -1,29 +1,21 @@
 ﻿using AutoMapper;
+using NETCore.Encrypt;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using ZswBlog.DTO;
 using ZswBlog.Entity;
 using ZswBlog.IRepository;
 using ZswBlog.IServices;
 using ZswBlog.Query;
-using ZswBlog.Util;
 
 namespace ZswBlog.Services
 {
     public class UserService : BaseService<UserEntity, IUserRepository>, IUserService
     {
-
-        private readonly IUserRepository _userRepository;
-        private readonly IMapper _mapper;
-        private readonly IQQUserInfoService _userQQInfoService;
-        public UserService(IUserRepository repository, IQQUserInfoService userQQInfoService, IMapper mapper)
-        {
-            _userRepository = repository;
-            _userQQInfoService = userQQInfoService;
-            _mapper = mapper;
-        }
+        public IUserRepository _userRepository { get; set; }
+        public IMapper _mapper { get; set; }
+        public IQQUserInfoService _userQQInfoService { get; set; }
 
         public List<UserDTO> GetAllUsers()
         {
@@ -50,6 +42,7 @@ namespace ZswBlog.Services
             return _mapper.Map<UserDTO>(user);
         }
 
+
         public bool AddEntity(UserSaveQuery t)
         {
             try
@@ -72,7 +65,7 @@ namespace ZswBlog.Services
                     }
                     else
                     {
-                        string defaultPwd = MD5Helper.GetMD5String("123456");//默认使用MD5加密密码         
+                        string defaultPwd = EncryptProvider.Md5("123456");//默认使用MD5加密密码         
                         user = new UserEntity
                         {
                             //该用户未登录需要填入信息
@@ -107,5 +100,7 @@ namespace ZswBlog.Services
         {
             return _userRepository.Delete(new UserEntity { id = tId });
         }
+
+       
     }
 }

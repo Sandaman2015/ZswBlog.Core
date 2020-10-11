@@ -12,11 +12,8 @@ namespace ZswBlog.Core.Profiles
         public ArticleProfile()
 #pragma warning restore CS1591 // 缺少对公共可见类型或成员“ArticleProfile.ArticleProfile()”的 XML 注释
         {
-            CreateMap<Article, ArticleDTO>()
-              .ForMember(dest => dest.ArticleReadTime, pro => pro.MapFrom(src => src.ArticleContent.Length / 250))
-              .ForMember(dept => dept.ArticleCreatedBy, pro => pro.UseDestinationValue())
-              .ForMember(dept => dept.ArticleTextCount, pro => pro.MapFrom(src => src.ArticleContent.Length))
-              .ForMember(dept => dept.ArticleTime, pro => pro.MapFrom(src => src.ArticleCreateTime));
+            CreateMap<ArticleEntity, ArticleDTO>()
+              .ForMember(dest => dest.readTime, pro => pro.MapFrom(src => src.textCount / 250));
         }
     }
 }

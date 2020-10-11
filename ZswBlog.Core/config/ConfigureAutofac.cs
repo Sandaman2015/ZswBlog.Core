@@ -27,6 +27,7 @@ namespace ZswBlog.Core.config
             Assembly IServices = Assembly.Load("ZswBlog.IServices");
             builder.RegisterAssemblyTypes(services, IServices)
                 .AsImplementedInterfaces().PropertiesAutowired().InstancePerLifetimeScope();
+
             //AutoMapper的注入
             builder.RegisterType<Mapper>().As<IMapper>().AsSelf().PropertiesAutowired().InstancePerDependency();
             Assembly mappers = Assembly.Load("ZswBlog.MapperFactory");
@@ -36,7 +37,6 @@ namespace ZswBlog.Core.config
             Assembly util = Assembly.Load("ZswBlog.Util");
             builder.RegisterAssemblyTypes(util)
                 .AsSelf().PropertiesAutowired().SingleInstance();
-
 
             Assembly thirdParty = Assembly.Load("ZswBlog.ThirdParty");
             builder.RegisterAssemblyTypes(thirdParty)

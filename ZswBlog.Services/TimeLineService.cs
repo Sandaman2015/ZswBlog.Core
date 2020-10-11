@@ -12,14 +12,8 @@ namespace ZswBlog.Services
 {
     public class TimeLineService : BaseService<TimeLineEntity, ITimeLineRepository>, ITimeLineService
     {
-        private readonly ITimeLineRepository _timeLineRepository;
-        private readonly IMapper _mapper;
-
-        public TimeLineService(ITimeLineRepository timeLineRepository, IMapper mapper)
-        {
-            _timeLineRepository = timeLineRepository;
-            _mapper = mapper;
-        }
+        public ITimeLineRepository _timeLineRepository { get; set; }
+        public IMapper _mapper { get; set; }
         /// <summary>
         /// 删除时间线
         /// </summary>

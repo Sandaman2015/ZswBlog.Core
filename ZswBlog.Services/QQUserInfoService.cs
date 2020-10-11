@@ -9,13 +9,7 @@ namespace ZswBlog.Services
 {
     public class QQUserInfoService : BaseService<QQUserInfoEntity, IQQUserInfoRepoistory>, IQQUserInfoService
     {
-        private readonly IQQUserInfoRepoistory _userInfoRepoistory;        
-
-        public QQUserInfoService(IQQUserInfoRepoistory userInfoRepoistory)
-        {
-            _userInfoRepoistory = userInfoRepoistory;
-        }
-
+        public IQQUserInfoRepoistory _userInfoRepoistory { get; set; }
         public QQUserInfoEntity GetQQUserInfoByOpenId(string openId)
         {
             return _userInfoRepoistory.GetSingleModel(a => a.openId == openId);

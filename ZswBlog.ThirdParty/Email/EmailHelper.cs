@@ -16,15 +16,17 @@ namespace ZswBlog.ThirdParty.Email
         private readonly IMessageService _messageService;
         private readonly ICommentService _commentService;
         private readonly IUserService _userService;
-        private string _sendEmailAddress;
-        private string _emailSecretKey;
+        private static string _sendEmailAddress;
+        private static string _emailSecretKey;
+        private static string _returnBackUrl;
         public EmailHelper(IMessageService messageService, ICommentService commentService, IUserService userService)
         {
             _messageService = messageService;
             _commentService = commentService;
             _userService = userService;
-            this._sendEmailAddress = ConfigHelper.GetValue("SendEmailAddress");
-            this._emailSecretKey = ConfigHelper.GetValue("EmailSecretKey");
+            _sendEmailAddress = ConfigHelper.GetValue("EmailSendAddress");
+            _emailSecretKey = ConfigHelper.GetValue("EmailSecretKey");
+            _returnBackUrl = ConfigHelper.GetValue("EmailReturnBackUrl");
         }
         //TODO 发送邮件需要分离
         /// <summary>
@@ -44,7 +46,7 @@ namespace ZswBlog.ThirdParty.Email
             string MessageSubject = "ZswBlog博客回复通知"; //邮件主题    
             string Content = null;//目标的内容
             string ReplyContent = null;//回复的内容
-            string url = null;//目标地址
+            string url = _returnBackUrl;//目标地址
 
             if (sendEmailType == SendEmailType.回复评论)
             {
@@ -54,7 +56,7 @@ namespace ZswBlog.ThirdParty.Email
                 var message = _commentService.GetCommentById(toUser.CommentId);
                 Content = message.Comment1;
                 int ArticleId = message.ArticleId;
-                url = "https://www.zswblog.xyz/details.html?ArticleDetails=" + ArticleId + "";
+                url += "/details/" + ArticleId + "";
             }
             else
             {
@@ -63,7 +65,7 @@ namespace ZswBlog.ThirdParty.Email
                 ReplyContent = replyLeacots.Message1;
                 var leacots = _messageService.GetMessageById(toUser.MessageId);
                 Content = leacots.Message1;
-                url = "https://www.zswblog.xyz/leacots.html";
+                url += "/leacots";
             }
             //邮件内容
             string MessageBody = "<div id=\"contentDiv\" onmouseover=\"getTop().stopPropagation(event);\" onclick=\"getTop().preSwapLink(event, 'spam', 'ZC3011-yZb5lAAS2SKCSSF8palnY9a');";
@@ -84,7 +86,7 @@ namespace ZswBlog.ThirdParty.Email
 
         }
 
-        public bool SendMail(MailAddress MessageFrom, string MessageTo, string MessageSubject, string MessageBody)   //发送验证邮件
+        public static bool SendMail(MailAddress MessageFrom, string MessageTo, string MessageSubject, string MessageBody)   //发送验证邮件
         {
             MailMessage message = new MailMessage();
             message.To.Add(MessageTo);
@@ -101,9 +103,7 @@ namespace ZswBlog.ThirdParty.Email
             sc.Port = 587; //指定发送邮件端口 
             sc.Credentials = new System.Net.NetworkCredential(_sendEmailAddress, _emailSecretKey); 
             sc.Send(message); //发送邮件 
-                              //_log.Debug("发送邮件到" + MessageTo + "成功");
             return true;
-
         }
     }
 }

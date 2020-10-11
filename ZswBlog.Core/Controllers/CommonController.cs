@@ -21,11 +21,13 @@ namespace ZswBlog.Core.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<List<MusicDTO>>> GetMusicList() {
-            List<MusicDTO> musicDTOs =await RedisHelper.GetAsync<List<MusicDTO>>("ZswBlog:Common:MusicList");
-            if (musicDTOs == null) {
-                musicDTOs= MusicHelper.GetMusicListByCount(30);
-                RedisHelper.SetAsync("ZswBlog:Common:MusicList", musicDTOs, 60*60*12);
+        public async Task<ActionResult<List<MusicDTO>>> GetMusicList()
+        {
+            List<MusicDTO> musicDTOs = await RedisHelper.GetAsync<List<MusicDTO>>("ZswBlog:Common:MusicList");
+            if (musicDTOs == null)
+            {
+                musicDTOs = MusicHelper.GetMusicListByCount(30);
+                RedisHelper.SetAsync("ZswBlog:Common:MusicList", musicDTOs, 60 * 60 * 12);
             }
             return Ok(musicDTOs);
         }

@@ -26,6 +26,6 @@ namespace ZswBlog.IServices
         /// </summary>
         /// <param name="id">用户信息</param>
         /// <returns></returns>
-        List<UserDTO> GetUserById(int id);
+        UserDTO GetUserById(int id);
     }
 }

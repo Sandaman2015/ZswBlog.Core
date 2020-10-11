@@ -12,13 +12,9 @@ namespace ZswBlog.Services
 {
     public class CommentService : BaseService<CommentEntity, ICommentRepository>, ICommentService
     {
-        private readonly ICommentRepository _commentRepository;
-        private readonly IMapper _mapper;
-        public CommentService(ICommentRepository repository, IMapper mapper)
-        {
-            _repository = repository;
-            _mapper = mapper;
-        }
+        public ICommentRepository _commentRepository { get; set; }
+        public IMapper _mapper { get; set; }
+
         /// <summary>
         /// 获取评论详情
         /// </summary>

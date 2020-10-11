@@ -11,13 +11,8 @@ namespace ZswBlog.Services
 {
     public class FriendLinkService : BaseService<FriendLinkEntity, IFriendLinkRepository>, IFriendLinkService
     {
-        private readonly IFriendLinkRepository _friendLinkRepository;
-        private readonly IMapper _mapper;
-        public FriendLinkService(IFriendLinkRepository repository, IMapper mapper)
-        {
-            _friendLinkRepository = repository;
-            _mapper = mapper;
-        }
+        public IFriendLinkRepository _friendLinkRepository { get; set; }
+        public IMapper _mapper { get; set; }
         /// <summary>
         /// 获取所有友情链接
         /// </summary>
