@@ -13,21 +13,27 @@ namespace ZswBlog.ThirdParty.AliyunOss
         /// <summary>
         /// 登录OSS控制台必须的key
         /// </summary>
-        public static string accessKeyId = ConfigHelper.GetValue("accessKeyId");
+        private static string accessKeyId;
         /// <summary>
         /// 登录OSS控制台必须的value
         /// </summary>
-        public static string accessKeySecret = ConfigHelper.GetValue("accessKeySecret"); 
+        private static string accessKeySecret;
         /// <summary>
         /// 域名,OSS控制台里能绑定自己的域名,没有自己的域名也无妨,默认是阿里云提供的域名地址
         /// </summary>
-        public static string endpoint = ConfigHelper.GetValue("endpoint");
+        private static string endpoint;
         /// <summary>
         /// OSS存储空间的名称
         /// </summary>
-        public static string bucketName = ConfigHelper.GetValue("bucketName");
+        private static string bucketName;
 
-
+        static MultipartUploadHelper()
+        {
+            accessKeyId = ConfigHelper.GetValue("accessKeyId");
+            accessKeySecret = ConfigHelper.GetValue("accessKeySecret");
+            endpoint = ConfigHelper.GetValue("endpoint");
+            bucketName = ConfigHelper.GetValue("bucketName");
+        }
         /// <summary>
         /// 初始化阿里云存储空间对象
         /// </summary>
@@ -357,11 +363,11 @@ namespace ZswBlog.ThirdParty.AliyunOss
         /// <summary>
         /// 上传一个新文件
         /// </summary>
-        public static void PutObject(string _bucketName, string _key, string _fileToUpload)
+        public static void PutObject(string _key, string _fileToUpload)
         {
             try
             {
-                client.PutObject(_bucketName, _key, _fileToUpload);
+                client.PutObject(bucketName, _key, _fileToUpload);
                 // Console.WriteLine("上传文件成功");
             }
             catch (Exception ex)
@@ -375,12 +381,12 @@ namespace ZswBlog.ThirdParty.AliyunOss
         /// </summary>
         /// <param name="base64Code">图片经过base64加密后的结果</param>
         /// <param name="fileName">文件名,例如:Emplyoee/dzzBack.jpg</param>
-        public bool PushImg(string _bucketName, string base64Code, string fileName)
+        public bool PushImg(string base64Code, string fileName)
         {
             try
             {
                 MemoryStream stream = new MemoryStream(Convert.FromBase64String(base64Code));
-                return client.PutObject(_bucketName, fileName, stream).HttpStatusCode == System.Net.HttpStatusCode.OK;
+                return client.PutObject(bucketName, fileName, stream).HttpStatusCode == System.Net.HttpStatusCode.OK;
             }
             catch (Exception)
             { }
@@ -391,12 +397,12 @@ namespace ZswBlog.ThirdParty.AliyunOss
         /// </summary>
         /// <param name="filebyte">图片字节 </param>
         /// <param name="fileName">文件名,例如:Emplyoee/dzzBack.jpg</param>
-        public bool PushFile(string _bucketName, byte[] filebyte, string fileName)
+        public bool PushFile(byte[] filebyte, string fileName)
         {
             try
             {
                 MemoryStream stream = new MemoryStream(filebyte, 0, filebyte.Length);
-                return client.PutObject(_bucketName, fileName, stream).HttpStatusCode == System.Net.HttpStatusCode.OK;
+                return client.PutObject(bucketName, fileName, stream).HttpStatusCode == System.Net.HttpStatusCode.OK;
             }
             catch (Exception)
             { }
@@ -407,10 +413,10 @@ namespace ZswBlog.ThirdParty.AliyunOss
         /// </summary>
         /// <param name="fileName">文件名,例如:Emplyoee/dzzBack.jpg</param>
         /// <returns></returns>
-        public string GetFileUrl(string _bucketName, string fileName)
+        public string GetFileUrl(string fileName)
         {
             var key = fileName;
-            var req = new GeneratePresignedUriRequest(_bucketName, key, SignHttpMethod.Get)
+            var req = new GeneratePresignedUriRequest(bucketName, key, SignHttpMethod.Get)
             {
                 Expiration = DateTime.Now.AddYears(100)
             };
@@ -422,10 +428,10 @@ namespace ZswBlog.ThirdParty.AliyunOss
         /// <param name="fileName">文件名,例如:Emplyoee/dzzBack.jpg</param>
         /// <param name="expiration">URL有效日期,例如:DateTime.Now.AddHours(1) </param>
         /// <returns></returns>
-        public string GetFileUrl(string _bucketName, string fileName, DateTime expiration)
+        public string GetFileUrl(string fileName, DateTime expiration)
         {
             var key = fileName;
-            var req = new GeneratePresignedUriRequest(_bucketName, key, SignHttpMethod.Get)
+            var req = new GeneratePresignedUriRequest(bucketName, key, SignHttpMethod.Get)
             {
                 Expiration = expiration
             };

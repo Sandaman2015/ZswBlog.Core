@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace ZswBlog.Entity
@@ -7,11 +9,14 @@ namespace ZswBlog.Entity
     /// <summary>
     /// QQ互联用户信息
     /// </summary>
+    [Table("tab_qq_userinfo")]
     public class QQUserInfoEntity
     {
         /// <summary>
         /// 自增主键
         /// </summary>
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int id { get; set; }
         /// <summary>
         /// QQ开放id

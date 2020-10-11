@@ -9,13 +9,14 @@ namespace ZswBlog.Entity
     /// <summary>
     /// 用户实体对象
     /// </summary>
-    [Table("tab_users")]
+    [Table("tab_user")]
     public class UserEntity
     {
         /// <summary>
         /// 用户id
         /// </summary>
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int id { get; set; }
         /// <summary>
         /// 密码

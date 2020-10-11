@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace ZswBlog.Entity
@@ -7,11 +9,14 @@ namespace ZswBlog.Entity
     /// <summary>
     /// 分类实体对象
     /// </summary>
+    [Table("tab_category")]
     public class CategoryEntity
     {
         /// <summary>
         /// 分类主键
         /// </summary>
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int id { get; set; }
         /// <summary>
         /// 分类名称

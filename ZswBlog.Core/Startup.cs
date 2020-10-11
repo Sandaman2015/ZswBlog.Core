@@ -64,6 +64,8 @@ namespace ZswBlog.Core
             services.AddSingleton((AutoMapper.IConfigurationProvider)new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile<ArticleProfile>();
+                cfg.AddProfile<MessageProfile>();
+                cfg.AddProfile<UserProfile>();
             }));
 
             //添加全局返回结果，异常处理，参数验证
@@ -75,15 +77,10 @@ namespace ZswBlog.Core
             });
 
             //日期转换
-            services.AddControllers(
-                 setup =>
-                 {
-                     setup.ReturnHttpNotAcceptable = false;//不允许其他格式的请求
-                 }
-              ).AddJsonOptions(configure =>
-              {
-                  configure.JsonSerializerOptions.Converters.Add(new DatetimeJsonConverter());
-              }).AddNewtonsoftJson(option => option.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
+            services.AddMvc().AddJsonOptions(configure =>
+             {
+                 configure.JsonSerializerOptions.Converters.Add(new DatetimeJsonConverter());
+             }).AddNewtonsoftJson(option => option.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
 
             //Mysql连接池
             var connection = Configuration.GetConnectionString("MysqlConnection");

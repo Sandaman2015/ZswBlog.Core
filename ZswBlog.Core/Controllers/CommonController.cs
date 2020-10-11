@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ZswBlog.DTO;
 using ZswBlog.ThirdParty.Music;
@@ -12,7 +10,7 @@ namespace ZswBlog.Core.Controllers
     /// <summary>
     /// 通用控制器
     /// </summary>
-    [Route("/api/[controller]/[action]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class CommonController : ControllerBase
     {
@@ -20,6 +18,7 @@ namespace ZswBlog.Core.Controllers
         /// 获取歌曲列表
         /// </summary>
         /// <returns></returns>
+        [Route("/get/music/top")]
         [HttpGet]
         public async Task<ActionResult<List<MusicDTO>>> GetMusicList()
         {
@@ -36,6 +35,7 @@ namespace ZswBlog.Core.Controllers
         /// 获取所有歌曲列表
         /// </summary>
         /// <returns></returns>
+        [Route("/get/music/all")]
         [HttpGet]
         public async Task<ActionResult<List<MusicDTO>>> GetAllMusicList()
         {

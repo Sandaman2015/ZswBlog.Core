@@ -61,7 +61,7 @@ namespace ZswBlog.Services
                         user.nickName = t.nickName;
                         user.portrait = t.portrait;
                         infoEntity.userId = user.id;
-                        isOk = _userRepository.Update(user) && _userQQInfoService.UpdateEntityAsync(infoEntity);                        
+                        isOk = _userRepository.Update(user) && _userQQInfoService.UpdateEntity(infoEntity);                        
                     }
                     else
                     {
@@ -79,7 +79,7 @@ namespace ZswBlog.Services
                         infoEntity.openId = t.openId;
                         infoEntity.nickName = t.nickName;
                         infoEntity.figureurl_qq_1 = t.portrait;
-                        isOk = _userRepository.Add(user) && _userQQInfoService.UpdateEntityAsync(infoEntity);
+                        isOk = _userRepository.Add(user) && _userQQInfoService.UpdateEntity(infoEntity);
                     }
                 }
                 return isOk;

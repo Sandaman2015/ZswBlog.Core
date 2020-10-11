@@ -7,7 +7,7 @@ using ZswBlog.IServices;
 
 namespace ZswBlog.Core.Controllers
 {
-    [Route("api/[article]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class ArticleController : ControllerBase
     {
@@ -23,7 +23,7 @@ namespace ZswBlog.Core.Controllers
         /// </summary>
         /// <param name="id">文章Id</param>
         /// <returns></returns>
-        [Route(template: "/get/{id}")]
+        [Route(template: "/article/get/{id}")]
         [HttpGet]
         public async Task<ActionResult<ArticleDTO>> GetArticleById(int id)
         {
@@ -40,7 +40,7 @@ namespace ZswBlog.Core.Controllers
         /// <param name="limit"></param>
         /// <param name="pageIndex"></param>
         /// <returns></returns>
-        [Route(template: "/get/page")]
+        [Route(template: "/article/get/page")]
         [HttpGet]
         public async Task<ActionResult<PageDTO<ArticleDTO>>> GetArticleListByPage([FromQuery] int limit, [FromQuery] int pageIndex)
         {
@@ -55,7 +55,7 @@ namespace ZswBlog.Core.Controllers
         /// 根据喜好获取文章
         /// </summary>
         /// <returns></returns>
-        [Route(template: "/get/list/like")]
+        [Route(template: "/article/get/list/like")]
         [HttpGet]
         public async Task<ActionResult<List<ArticleDTO>>> GetArticleListByLikes()
         {
@@ -70,7 +70,7 @@ namespace ZswBlog.Core.Controllers
         /// 根据浏览数获取文章
         /// </summary>
         /// <returns></returns>
-        [Route(template: "/get/list/visit")]
+        [Route(template: "/article/get/list/visit")]
         [HttpGet]
         public async Task<ActionResult<List<ArticleDTO>>> GetArticleListByVisit()
         {
@@ -85,7 +85,7 @@ namespace ZswBlog.Core.Controllers
         /// 模糊查询获取文章
         /// </summary>
         /// <returns></returns>
-        [Route(template: "/get/fuzzy")]
+        [Route(template: "/article/get/fuzzy")]
         [HttpGet]
         public async Task<ActionResult<List<ArticleDTO>>> GetArticleListByFuzzyTitle(string fuzzyTitle)
         {
@@ -100,7 +100,7 @@ namespace ZswBlog.Core.Controllers
         /// 根据文章类型分页获取文章列表
         /// </summary>
         /// <returns></returns>
-        [Route(template: "/get/page/category")]
+        [Route(template: "/article/get/page/category")]
         [HttpGet]
         public async Task<ActionResult<PageDTO<ArticleDTO>>> GetArticleListByCategory([FromQuery] int limit, [FromQuery] int pageIndex, [FromQuery] int categoryId)
         {

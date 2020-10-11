@@ -60,6 +60,21 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:ZswBlog.Core.Controllers.MessageController.GetMessageListByPage(System.Int32,System.Int32)">
+            <summary>
+            分页获取留言列表
+            </summary>
+            <param name="limit"></param>
+            <param name="pageIndex"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.MessageController.SaveMessage(ZswBlog.Entity.MessageEntity)">
+            <summary>
+            添加留言
+            </summary>
+            <param name="param"></param>
+            <returns></returns>
+        </member>
         <member name="T:ZswBlog.Core.config.ConfigureAutofac">
             <summary>
             AutoFacIOC配置类
@@ -70,6 +85,36 @@
             控制反转
             </summary>
             <param name="builder"></param>
+        </member>
+        <member name="T:ZswBlog.Core.Profiles.ArticleProfile">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:ZswBlog.Core.Profiles.ArticleProfile.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:ZswBlog.Core.Profiles.MessageProfile">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:ZswBlog.Core.Profiles.MessageProfile.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:ZswBlog.Core.Profiles.UserProfile">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:ZswBlog.Core.Profiles.UserProfile.#ctor">
+            <summary>
+            
+            </summary>
         </member>
         <member name="T:ZswBlog.Core.Program">
             <summary>

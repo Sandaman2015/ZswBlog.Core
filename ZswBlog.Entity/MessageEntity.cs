@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace ZswBlog.Entity
@@ -7,11 +9,14 @@ namespace ZswBlog.Entity
     /// <summary>
     /// 留言实体对象
     /// </summary>
+    [Table("tab_message")]
     public class MessageEntity
     {
         /// <summary>
         /// 留言id
         /// </summary>
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int id { get; set; }
         /// <summary>
         /// 留言内容

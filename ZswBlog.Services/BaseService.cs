@@ -11,12 +11,12 @@ namespace ZswBlog.Services
     {
         public IBaseRepository<T> _repository { get; set; }
 
-        public bool AddEntityAsync(T t)
+        public virtual bool AddEntity(T t)
         {
             return _repository.Add(t);
         }
 
-        public bool UpdateEntityAsync(T t)
+        public virtual bool UpdateEntity(T t)
         {
             return _repository.Update(t);
         }

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace ZswBlog.Entity
@@ -7,11 +9,14 @@ namespace ZswBlog.Entity
     /// <summary>
     /// 时间线实体
     /// </summary>
+    [Table("tab_timeline")]
     public class TimeLineEntity
     {
         /// <summary>
         /// 时间线id
         /// </summary>
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int id { get; set; }
         /// <summary>
         /// 创建时间

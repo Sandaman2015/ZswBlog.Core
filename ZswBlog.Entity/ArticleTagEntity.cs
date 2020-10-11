@@ -1,17 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace ZswBlog.Entity
 {
     /// <summary>
-    /// 
+    /// 文章标签表
     /// </summary>
-   public class ArticleTagEntity
+    [Table("tab_middle_article_tag")]
+    public class ArticleTagEntity
     {
         /// <summary>
         /// 中间表id
         /// </summary>
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int id { get; set; }
         /// <summary>
         /// 创建时间

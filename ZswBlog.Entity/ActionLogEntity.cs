@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace ZswBlog.Entity
@@ -12,6 +13,7 @@ namespace ZswBlog.Entity
         /// <summary>
         /// 操作id
         /// </summary>
+        [Key]
         public int id { get; set; }
         /// <summary>
         /// 创建时间

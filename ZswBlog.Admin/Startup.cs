@@ -54,7 +54,7 @@ namespace ZswBlog.Admin
           
             //Mysql连接池
             var connection = Configuration.GetConnectionString("MysqlConnection");
-            IServiceCollection serviceCollections = services.AddDbContext<SingleBlogContext>(options => options.UseMySql(connection));
+            IServiceCollection serviceCollections = services.AddDbContext<ZswBlogDbContext>(options => options.UseMySql(connection));
 
             //初始化 RedisHelper
             var redisConnection = Configuration.GetConnectionString("RedisConnectionString");
