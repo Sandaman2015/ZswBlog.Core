@@ -59,5 +59,12 @@ namespace ZswBlog.IServices
         /// <returns></returns>
         PageDTO<ArticleDTO> GetArticleListByCategoryId(int limit, int pageIndex, int categoryId);
 
+        /// <summary>
+        /// 根据类型获取文章条数
+        /// </summary>
+        /// <param name="categoryId"></param>
+        /// <returns></returns>
+        int GetArticleCountByCategoryId(int categoryId);
+
     }
 }

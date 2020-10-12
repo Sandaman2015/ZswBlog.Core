@@ -145,7 +145,7 @@ namespace ZswBlog.Services
                 UserDTO targetUser = RedisHelper.Get<UserDTO>("ZswBlog:UserInfo:" + treeDTO.targetUserId);
                 if (targetUser == null) { 
                     targetUser = _userService.GetUserById(treeDTO.targetUserId);
-                    RedisHelper.Set("ZswBlog:UserInfo:" + treeDTO.targetUserId, targetUser, 2400);
+                    RedisHelper.Set("ZswBlog:UserInfo:" + treeDTO.targetUserId, targetUser, 60 * 60 * 6);
                 }
                 treeDTO.targetUserPortrait = targetUser.portrait;
                 treeDTO.targetUserName = targetUser.nickName;
@@ -154,7 +154,7 @@ namespace ZswBlog.Services
             if (user == null)
             {
                 user= _userService.GetUserById(treeDTO.userId);
-                RedisHelper.Set("ZswBlog:UserInfo:" + treeDTO.userId, user, 2400);
+                RedisHelper.Set("ZswBlog:UserInfo:" + treeDTO.userId, user, 60*60*6);
             }
             treeDTO.userPortrait = user.portrait;
             treeDTO.userName = user.nickName;

@@ -18,7 +18,7 @@ namespace ZswBlog.Core.Controllers
         /// 获取歌曲列表
         /// </summary>
         /// <returns></returns>
-        [Route("/get/music/top")]
+        [Route("/music/get/top")]
         [HttpGet]
         public async Task<ActionResult<List<MusicDTO>>> GetMusicList()
         {
@@ -35,7 +35,7 @@ namespace ZswBlog.Core.Controllers
         /// 获取所有歌曲列表
         /// </summary>
         /// <returns></returns>
-        [Route("/get/music/all")]
+        [Route("/music/get/all")]
         [HttpGet]
         public async Task<ActionResult<List<MusicDTO>>> GetAllMusicList()
         {

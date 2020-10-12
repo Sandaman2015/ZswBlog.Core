@@ -10,8 +10,13 @@ namespace ZswBlog.UnitTest
     public class Tests
     {
 
-        //public ICommentService commentService { get; set; }
-        
+        private readonly IMessageService messageService;
+
+        public Tests(IMessageService messageService)
+        {
+            this.messageService = messageService;
+        }
+
         [SetUp]
         public void Setup()
         {
@@ -20,11 +25,11 @@ namespace ZswBlog.UnitTest
         [Test]
         public void Test1()
         {
-            //PageDTO<CommentTreeDTO> pageDTO = commentService.GetCommentsByRecursion(3, 1);
-            //System.Console.WriteLine(pageDTO.count);
-            //System.Console.WriteLine(pageDTO.data);
-            //System.Console.WriteLine(pageDTO.pageIndex);
-            //System.Console.WriteLine(pageDTO.pageSize);
+            PageDTO<MessageTreeDTO> pageDTO = messageService.GetMessagesByRecursion(3, 1);
+            System.Console.WriteLine(pageDTO.count);
+            System.Console.WriteLine(pageDTO.data);
+            System.Console.WriteLine(pageDTO.pageIndex);
+            System.Console.WriteLine(pageDTO.pageSize);
         }
     }
 }

@@ -2,11 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using ZswBlog.DTO;
 using ZswBlog.Entity;
 using ZswBlog.IRepository;
 using ZswBlog.IServices;
+using ZswBlog.ThirdParty.Location;
 
 namespace ZswBlog.Services
 {
@@ -14,6 +14,7 @@ namespace ZswBlog.Services
     {
         public ICommentRepository _commentRepository { get; set; }
         public IMapper _mapper { get; set; }
+        public IUserService _userService { get; set; }
 
         /// <summary>
         /// 获取评论详情
@@ -56,8 +57,7 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public PageDTO<CommentDTO> GetCommentsOnNotReplyByPage(int articleId, int limit, int pageIndex)
         {
-            int pageCount;
-            List<CommentEntity> comments = _repository.GetModelsByPage(limit, pageIndex, false, (a => a.id), (a => a.targetId == 0 && a.articleId == articleId), out pageCount).ToList();
+            List<CommentEntity> comments = _repository.GetModelsByPage(limit, pageIndex, false, (a => a.id), (a => a.targetId == 0 && a.articleId == articleId), out int pageCount).ToList();
             List<CommentDTO> commentDTOs = _mapper.Map<List<CommentDTO>>(comments);
             return new PageDTO<CommentDTO>(pageIndex, limit, pageCount, commentDTOs);
         }
@@ -68,8 +68,7 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public bool RemoveEntity(int tId)
         {
-            CommentEntity comment = _repository.GetSingleModel(a => a.id == tId);
-            return _repository.Delete(comment);
+            return _repository.Delete(new CommentEntity { id = tId });
         }
 
         /// <summary>
@@ -81,6 +80,31 @@ namespace ZswBlog.Services
         {
             List<CommentEntity> comments = _repository.GetModels(a => a.id == 0 && a.articleId == articleId).ToList();
             return _mapper.Map<List<CommentDTO>>(comments);
+        }
+
+        /// <summary>
+        /// 添加评论
+        /// </summary>
+        /// <param name="t"></param>
+        /// <returns></returns>
+        public override bool AddEntity(CommentEntity t)
+        {
+            bool flag = false;
+            UserDTO user = _userService.GetUserById(t.userId);
+            if (IsExistsCommentOnNewestByUserId(t.userId))
+            {
+                // 判断用户是否为空
+                if (user != null)
+                {
+                    t.location = LocationHelper.GetLocation(t.location);
+                    flag = _commentRepository.Add(t);
+                }
+            }
+            else
+            {
+                throw new Exception("你已经在一分钟前提交过一次了");
+            }
+            return flag;
         }
 
         /// <summary>
@@ -105,13 +129,15 @@ namespace ZswBlog.Services
         /// </summary>
         /// <param name="targetId"></param>
         /// <returns></returns>
-        public PageDTO<CommentTreeDTO> GetCommentsByRecursion(int limit, int pageIndex)
+        public PageDTO<CommentTreeDTO> GetCommentsByRecursion(int limit, int pageIndex, int articleId)
         {
-            int pageCount;
-            List<CommentEntity> comments = _commentRepository.GetModelsByPage(limit,pageIndex,false,a=>a.createDate,a => a.targetId != null,out pageCount).ToList();
+            List<CommentEntity> comments = _commentRepository.GetModelsByPage(limit, pageIndex, false, a => a.createDate, a => a.targetId != 0 && a.articleId == articleId, out int pageCount).ToList();
             List<CommentTreeDTO> commentDTOs = _mapper.Map<List<CommentTreeDTO>>(comments);
-            foreach (CommentTreeDTO commentTree in commentDTOs) {
-                RecursionComments(commentTree,commentTree.id);
+            foreach (CommentTreeDTO commentTree in commentDTOs)
+            {
+                ConvertCommentTree(commentTree);
+                commentTree.children = new List<CommentTreeDTO>();
+                RecursionComments(commentTree, commentTree.id, new List<CommentTreeDTO>());
             }
             return new PageDTO<CommentTreeDTO>(pageIndex, limit, pageCount, commentDTOs);
         }
@@ -120,21 +146,51 @@ namespace ZswBlog.Services
         /// 清空列表
         /// </summary>
         /// <returns></returns>
-        private bool RecursionComments(CommentTreeDTO treeDTO , int targetId)
+        private bool RecursionComments(CommentTreeDTO treeDTO, int targetId, List<CommentTreeDTO> commentTrees)
         {
             List<CommentEntity> comments = _commentRepository.GetModels((CommentEntity ce) => ce.targetId == targetId).ToList();
-            if (comments.Count > 0) {
+            if (comments.Count > 0)
+            {
                 List<CommentTreeDTO> commentTree = _mapper.Map<List<CommentTreeDTO>>(comments);
-                foreach (CommentTreeDTO comment in commentTree) {                    
-                    treeDTO.children.Add(comment);
-                    return RecursionComments(treeDTO, comment.id);
+                foreach (CommentTreeDTO comment in commentTree)
+                {
+                    ConvertCommentTree(comment);
+                    commentTrees.Add(comment);
                 }
-                return false;
+                return RecursionComments(treeDTO, commentTree[0].id, commentTrees);
             }
-            else {
+            else
+            {
+                commentTrees = commentTrees.OrderBy(e => e.createDate).ToList();
+                treeDTO.children.AddRange(commentTrees);
                 return true;
             }
         }
-
+        /// <summary>
+        /// 用户信息填充
+        /// </summary>
+        /// <param name="treeDTO"></param>
+        public void ConvertCommentTree(CommentTreeDTO treeDTO)
+        {
+            if (treeDTO.targetId != 0)
+            {
+                UserDTO targetUser = RedisHelper.Get<UserDTO>("ZswBlog:UserInfo:" + treeDTO.targetUserId);
+                if (targetUser == null)
+                {
+                    targetUser = _userService.GetUserById(treeDTO.targetUserId);
+                    RedisHelper.Set("ZswBlog:UserInfo:" + treeDTO.targetUserId, targetUser, 60 * 60 * 6);
+                }
+                treeDTO.targetUserPortrait = targetUser.portrait;
+                treeDTO.targetUserName = targetUser.nickName;
+            }
+            UserDTO user = RedisHelper.Get<UserDTO>("ZswBlog:UserInfo:" + treeDTO.userId);
+            if (user == null)
+            {
+                user = _userService.GetUserById(treeDTO.userId);
+                RedisHelper.Set("ZswBlog:UserInfo:" + treeDTO.userId, user, 60 * 60 * 6);
+            }
+            treeDTO.userPortrait = user.portrait;
+            treeDTO.userName = user.nickName;
+        }
     }
 }

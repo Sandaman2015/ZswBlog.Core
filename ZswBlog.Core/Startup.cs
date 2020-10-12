@@ -66,6 +66,11 @@ namespace ZswBlog.Core
                 cfg.AddProfile<ArticleProfile>();
                 cfg.AddProfile<MessageProfile>();
                 cfg.AddProfile<UserProfile>();
+                cfg.AddProfile<CommentProfile>();
+                cfg.AddProfile<CategoryProfile>();
+                cfg.AddProfile<SiteTagProfile>();
+                cfg.AddProfile<TimeLineProfile>();
+                
             }));
 
             //添加全局返回结果，异常处理，参数验证

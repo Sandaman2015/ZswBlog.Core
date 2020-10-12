@@ -131,5 +131,15 @@ namespace ZswBlog.Services
             article.isShow = false;
             return _repository.Update(article);
         }
+
+        /// <summary>
+        /// 根据类型Id获取文章数量
+        /// </summary>
+        /// <param name="categoryId"></param>
+        /// <returns></returns>
+        public int GetArticleCountByCategoryId(int categoryId)
+        {
+            return _articleRepository.GetModelsCountByCondition(a => a.categoryId == categoryId);
+        }
     }
 }

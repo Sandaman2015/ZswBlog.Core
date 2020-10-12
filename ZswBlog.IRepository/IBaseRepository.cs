@@ -86,16 +86,12 @@ namespace ZswBlog.IRepository
         /// <param name="total"></param>
         /// <returns>返回一个排序后查询的列表和总计</returns>
         IQueryable<T> GetModelsByPage<TType>(int pageSize, int pageIndex, bool isAsc, Expression<Func<T, TType>> orderByLambda, Expression<Func<T, bool>> whereLambda, out int total);
-
+       
         /// <summary>
-        /// 返回实体
+        /// 根据条件获取实体数量
         /// </summary>
-        /// <typeparam name="TType"></typeparam>
-        /// <param name="sql"></param>
-        /// <param name="pageSize"></param>
-        /// <param name="pageIndex"></param>
-        /// <param name="total"></param>
-        /// <returns>返回实体和总计</returns>
-        //DbRawSqlQuery<T> GetModelsBySqlPage<TType>(string sql, int pageSize, int pageIndex, out int total);
+        /// <param name="whereLambda"></param>
+        /// <returns></returns>
+        int GetModelsCountByCondition(Expression<Func<T, bool>> whereLambda);
     }
 }

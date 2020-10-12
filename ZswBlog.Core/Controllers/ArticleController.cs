@@ -7,6 +7,9 @@ using ZswBlog.IServices;
 
 namespace ZswBlog.Core.Controllers
 {
+    /// <summary>
+    /// 文章控制器
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class ArticleController : ControllerBase

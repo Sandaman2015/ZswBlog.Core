@@ -14,5 +14,10 @@ namespace ZswBlog.IServices
         /// </summary>
         /// <returns></returns>
         List<CategoryDTO> GetALLCategories();
+        /// <summary>
+        /// 根据Id获取单个分类
+        /// </summary>
+        /// <returns></returns>
+        CategoryDTO GetCategoryById(int tId);       
     }
 }

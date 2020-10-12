@@ -4,6 +4,11 @@
         <name>ZswBlog.Core</name>
     </assembly>
     <members>
+        <member name="T:ZswBlog.Core.Controllers.ArticleController">
+            <summary>
+            文章控制器
+            </summary>
+        </member>
         <member name="M:ZswBlog.Core.Controllers.ArticleController.GetArticleById(System.Int32)">
             <summary>
             获取文章详情
@@ -43,6 +48,44 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="T:ZswBlog.Core.Controllers.CategoryController">
+            <summary>
+            文章分类控制器
+            </summary>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.CategoryController.GetCategoryById(System.Int32)">
+            <summary>
+            根据类型Id获取类型详情
+            </summary>
+            <param name="id"></param>
+            <returns></returns> 
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.CategoryController.GetAllCategory">
+            <summary>
+            获取所有文章类型
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:ZswBlog.Core.Controllers.CommentController">
+            <summary>
+            评论控制器
+            </summary>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.CommentController.GetCommentTreeListByPage(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            分页获取文章评论列表
+            </summary>
+            <param name="limit"></param>
+            <param name="pageIndex"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.CommentController.SaveMessage(ZswBlog.Entity.CommentEntity)">
+            <summary>
+            添加评论
+            </summary>
+            <param name="param"></param>
+            <returns></returns>
+        </member>
         <member name="T:ZswBlog.Core.Controllers.CommonController">
             <summary>
             通用控制器
@@ -60,7 +103,12 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:ZswBlog.Core.Controllers.MessageController.GetMessageListByPage(System.Int32,System.Int32)">
+        <member name="T:ZswBlog.Core.Controllers.MessageController">
+            <summary>
+            留言控制器
+            </summary>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.MessageController.GetMessageTreeListByPage(System.Int32,System.Int32)">
             <summary>
             分页获取留言列表
             </summary>
@@ -73,6 +121,25 @@
             添加留言
             </summary>
             <param name="param"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.SiteTagController.GetAllSiteTagAsync">
+            <summary>
+            获取所有站点标签
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.SiteTagController.SaveSiteTag(ZswBlog.Entity.SiteTagEntity)">
+            <summary>
+            添加站点标签
+            </summary>
+            <param name="prama"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.TimeLineController.GetAllTimeLineAsync">
+            <summary>
+            获取所有时间线文章
+            </summary>
             <returns></returns>
         </member>
         <member name="T:ZswBlog.Core.config.ConfigureAutofac">
@@ -96,12 +163,52 @@
             
             </summary>
         </member>
+        <member name="T:ZswBlog.Core.Profiles.CategoryProfile">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:ZswBlog.Core.Profiles.CategoryProfile.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:ZswBlog.Core.Profiles.CommentProfile">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:ZswBlog.Core.Profiles.CommentProfile.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="T:ZswBlog.Core.Profiles.MessageProfile">
             <summary>
             
             </summary>
         </member>
         <member name="M:ZswBlog.Core.Profiles.MessageProfile.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:ZswBlog.Core.Profiles.SiteTagProfile">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:ZswBlog.Core.Profiles.SiteTagProfile.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:ZswBlog.Core.Profiles.TimeLineProfile">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:ZswBlog.Core.Profiles.TimeLineProfile.#ctor">
             <summary>
             
             </summary>
