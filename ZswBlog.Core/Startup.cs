@@ -70,6 +70,7 @@ namespace ZswBlog.Core
                 cfg.AddProfile<CategoryProfile>();
                 cfg.AddProfile<SiteTagProfile>();
                 cfg.AddProfile<TimeLineProfile>();
+                cfg.AddProfile<FriendLinkProfile>();
                 
             }));
 

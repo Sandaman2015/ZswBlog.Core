@@ -28,7 +28,7 @@ namespace ZswBlog.Core.Controllers
         [HttpGet]
         public async Task<ActionResult<List<TimeLineDTO>>> GetAllTimeLineAsync()
         {
-            List<TimeLineDTO> timelinesDTOList = new List<TimeLineDTO>();
+            List<TimeLineDTO> timelinesDTOList;
             timelinesDTOList = await RedisHelper.GetAsync<List<TimeLineDTO>>("ZswBlog:TimeLine:TimeLineList");
             if (timelinesDTOList==null)
             {

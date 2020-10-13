@@ -4,6 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ZswBlog.DTO;
+using ZswBlog.Entity;
+using ZswBlog.Services;
 
 namespace ZswBlog.Core.Controllers
 {
@@ -11,5 +14,53 @@ namespace ZswBlog.Core.Controllers
     [ApiController]
     public class FriendLinkController : ControllerBase
     {
+        private readonly FriendLinkService _friendLinkSerivce;
+
+        public FriendLinkController(FriendLinkService friendLinkSerivce)
+        {
+            _friendLinkSerivce = friendLinkSerivce;
+        }
+
+        /// <summary>
+        /// 获取所有友情链接
+        /// </summary>
+        /// <returns></returns>
+        [Route("/friendlink/get/all")]
+        [HttpGet]
+        public async Task<ActionResult<List<FriendLinkDTO>>> GetFriendLinks()
+        {
+            List<FriendLinkDTO> friendLinkDTOs;
+            //读取缓存
+            friendLinkDTOs = await RedisHelper.GetAsync<List<FriendLinkDTO>>("ZswBlog:FriendLink:FriendLinkDTOList");
+            if (friendLinkDTOs == null)
+            {
+                // 开启缓存
+                friendLinkDTOs = _friendLinkSerivce.GetFriendLinksByIsShow(true);
+                await RedisHelper.SetAsync("ZswBlog:FriendLink:FriendLinkList", friendLinkDTOs, 1200);
+            }
+            return Ok(friendLinkDTOs);
+        }
+
+        /// <summary>
+        /// 申请友情链接
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        [Route("/friendlink/save")]
+        [HttpPost]
+        public async Task<ActionResult> SaveFriendLink([FromBody]FriendLinkEntity param)
+        {
+            return await Task.Run(() =>
+            {
+                param.src = System.Web.HttpUtility.HtmlEncode(param.src);
+                param.portrait = System.Web.HttpUtility.HtmlEncode(param.portrait);
+                param.description = System.Web.HttpUtility.HtmlEncode(param.description);
+                param.title = System.Web.HttpUtility.HtmlEncode(param.title);
+                param.createDate = DateTime.Now;
+                param.isShow = false;
+                bool flag = _friendLinkSerivce.AddEntity(param);
+                return Ok(flag);
+            });            
+        }
     }
 }

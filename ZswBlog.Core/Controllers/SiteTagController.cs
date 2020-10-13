@@ -27,7 +27,7 @@ namespace ZswBlog.Core.Controllers
         [HttpGet]
         public async Task<ActionResult<List<SiteTagDTO>>> GetAllSiteTagAsync()
         {
-            List<SiteTagDTO> siteTagDTOList = new List<SiteTagDTO>();
+            List<SiteTagDTO> siteTagDTOList;
             siteTagDTOList = await RedisHelper.GetAsync<List<SiteTagDTO>>("ZswBlog:SiteTag:SiteTagList");
             if (siteTagDTOList == null)
             {

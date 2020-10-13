@@ -103,6 +103,19 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:ZswBlog.Core.Controllers.FriendLinkController.GetFriendLinks">
+            <summary>
+            获取所有友情链接
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.FriendLinkController.SaveFriendLink(ZswBlog.Entity.FriendLinkEntity)">
+            <summary>
+            申请友情链接
+            </summary>
+            <param name="param"></param>
+            <returns></returns>
+        </member>
         <member name="T:ZswBlog.Core.Controllers.MessageController">
             <summary>
             留言控制器
@@ -179,6 +192,16 @@
             </summary>
         </member>
         <member name="M:ZswBlog.Core.Profiles.CommentProfile.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:ZswBlog.Core.Profiles.FriendLinkProfile">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:ZswBlog.Core.Profiles.FriendLinkProfile.#ctor">
             <summary>
             
             </summary>
