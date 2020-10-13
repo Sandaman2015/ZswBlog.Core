@@ -29,7 +29,6 @@
     <ProjectReference Include="..\ZswBlog.Entity\ZswBlog.Entity.csproj" />
     <ProjectReference Include="..\ZswBlog.IRepository\ZswBlog.IRepository.csproj" />
     <ProjectReference Include="..\ZswBlog.IServices\ZswBlog.IServices.csproj" />
-    <ProjectReference Include="..\ZswBlog.MapperFactory\ZswBlog.MapperFactory.csproj" />
     <ProjectReference Include="..\ZswBlog.Repository\ZswBlog.Repository.csproj" />
     <ProjectReference Include="..\ZswBlog.Services\ZswBlog.Services.csproj" />
     <ProjectReference Include="..\ZswBlog.ThirdParty\ZswBlog.ThirdParty.csproj" />
