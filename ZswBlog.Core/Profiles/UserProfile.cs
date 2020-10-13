@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ZswBlog.DTO;
 using ZswBlog.Entity;
+using ZswBlog.Query;
 
 namespace ZswBlog.Core.Profiles
 {
@@ -19,6 +20,7 @@ namespace ZswBlog.Core.Profiles
         public UserProfile()
         {
             CreateMap<UserEntity,UserDTO>();
+            CreateMap<UserEntity, UserSaveQuery>();
         }
     }
 }

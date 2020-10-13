@@ -8,6 +8,7 @@ using ZswBlog.Entity;
 using ZswBlog.IRepository;
 using ZswBlog.IServices;
 using ZswBlog.Query;
+using ZswBlog.ThirdParty;
 
 namespace ZswBlog.Services
 {
@@ -31,7 +32,8 @@ namespace ZswBlog.Services
                 UserEntity user = _repository.GetSingleModel(a => a.id == infoEntity.userId);
                 return _mapper.Map<UserDTO>(user);
             }
-            else {
+            else
+            {
                 return null;
             }
         }
@@ -42,7 +44,11 @@ namespace ZswBlog.Services
             return _mapper.Map<UserDTO>(user);
         }
 
-
+        /// <summary>
+        /// 添加用户
+        /// </summary>
+        /// <param name="t"></param>
+        /// <returns></returns>
         public bool AddEntity(UserSaveQuery t)
         {
             try
@@ -61,7 +67,7 @@ namespace ZswBlog.Services
                         user.nickName = t.nickName;
                         user.portrait = t.portrait;
                         infoEntity.userId = user.id;
-                        isOk = _userRepository.Update(user) && _userQQInfoService.UpdateEntity(infoEntity);                        
+                        isOk = _userRepository.Update(user) && _userQQInfoService.UpdateEntity(infoEntity);
                     }
                     else
                     {
@@ -101,6 +107,57 @@ namespace ZswBlog.Services
             return _userRepository.Delete(new UserEntity { id = tId });
         }
 
-       
+        /// <summary>
+        /// 根据AccessToken获取新用户
+        /// </summary>
+        /// <param name="accessToken"></param>
+        /// <returns></returns>
+        public UserDTO GetUserByAccessToken(string accessToken)
+        {
+            QQLogin login = new QQLogin();
+            string openId = login.GetOpenID(accessToken);
+            QQUserInfo qqUserInfo = login.GetQQUserInfo(accessToken, openId);
+            if (qqUserInfo.Ret == 0 && string.IsNullOrWhiteSpace(qqUserInfo.Msg)) //成功
+            {
+                UserEntity user;
+                QQUserInfoEntity alreadLoginUser = _userQQInfoService.GetQQUserInfoByOpenId(openId);
+                //判断是否存在重复登陆且已经注册的用户
+                if (alreadLoginUser == null)
+                {
+                    user = new UserEntity()
+                    {
+                        portrait = qqUserInfo.Figureurl_qq_1,
+                        nickName = qqUserInfo.Nickname,
+                        loginTime = DateTime.Now,
+                        lastLoginDate = DateTime.Now,
+                        loginCount = 1
+                    };
+                    if (_userRepository.Add(user))
+                    {
+                        QQUserInfoEntity entity = new QQUserInfoEntity()
+                        {
+                            openId = openId,
+                            accessToken = accessToken,
+                            userId = user.id,
+                            gender = qqUserInfo.Gender,
+                            figureurl_qq_1 = qqUserInfo.Figureurl_qq_1
+                        };
+                        if (_userQQInfoService.AddEntity(entity))
+                        {
+                            return _mapper.Map<UserDTO>(user);
+                        }
+                    }
+                }
+                else
+                {
+                    user = _userRepository.GetSingleModel(a => a.id == alreadLoginUser.userId);
+                    user.lastLoginDate = DateTime.Now;
+                    user.loginCount = 1;
+                    _userRepository.Update(user);
+                    return _mapper.Map<UserDTO>(user);
+                }
+            }
+            return null;
+        }
     }
 }

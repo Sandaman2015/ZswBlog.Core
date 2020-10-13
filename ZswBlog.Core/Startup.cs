@@ -71,7 +71,7 @@ namespace ZswBlog.Core
                 cfg.AddProfile<SiteTagProfile>();
                 cfg.AddProfile<TimeLineProfile>();
                 cfg.AddProfile<FriendLinkProfile>();
-                
+                cfg.AddProfile<UserProfile>();
             }));
 
             //添加全局返回结果，异常处理，参数验证

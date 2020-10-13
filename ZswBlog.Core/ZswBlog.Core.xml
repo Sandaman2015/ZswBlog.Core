@@ -155,6 +155,26 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:ZswBlog.Core.Controllers.UserController.GetUserOnNearLogin">
+            <summary>
+            获取最近登录用户
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.UserController.SaveEmail(ZswBlog.Entity.UserEntity)">
+            <summary>
+            保存邮箱
+            </summary>
+            <param name="user"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.UserController.QQLoginByAccessToken(System.String)">
+            <summary>
+            获取QQ登录用户信息
+            </summary>
+            <param name="accessToken"></param>
+            <returns></returns>
+        </member>
         <member name="T:ZswBlog.Core.config.ConfigureAutofac">
             <summary>
             AutoFacIOC配置类

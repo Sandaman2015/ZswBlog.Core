@@ -27,5 +27,11 @@ namespace ZswBlog.IServices
         /// <param name="id">用户信息</param>
         /// <returns></returns>
         UserDTO GetUserById(int id);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        UserDTO GetUserByAccessToken(string accessToken);
     }
 }
