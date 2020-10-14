@@ -1,6 +1,7 @@
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using NLog.Web;
 using System.IO;
 
 namespace ZswBlog.Core
@@ -28,7 +29,7 @@ namespace ZswBlog.Core
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>().UseUrls("http://*:8004");
-                }).UseServiceProviderFactory(new AutofacServiceProviderFactory());
+                }).UseServiceProviderFactory(new AutofacServiceProviderFactory()).UseNLog();
 
     }
 }

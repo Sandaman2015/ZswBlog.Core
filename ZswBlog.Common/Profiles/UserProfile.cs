@@ -20,7 +20,7 @@ namespace ZswBlog.Core.Profiles
         public UserProfile()
         {
             CreateMap<UserEntity,UserDTO>();
-            CreateMap<UserEntity, UserSaveQuery>();
+            CreateMap<UserSaveQuery, UserEntity>();
         }
     }
 }

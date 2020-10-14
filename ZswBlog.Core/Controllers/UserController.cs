@@ -81,13 +81,17 @@ namespace ZswBlog.Core.Controllers
                 if (userDTO == null)
                 {
                     jsonResult = "本次登录没有找到您的信息，不如刷新试试重新登录吧";
-                    returnData = new { msg = jsonResult, userId = userDTO, userEmail = userDTO.email };
+                    returnData = new { msg = jsonResult };
                 }
                 else
-                {
-                    RedisHelper.Set("ZswBlog:UserInfo:" + userDTO.id, userDTO, 60 * 60 * 6);
+            {
+                    UserDTO user = RedisHelper.Get<UserDTO>("ZswBlog:UserInfo:" + userDTO.id);
+                    if (user == null)
+                    {
+                        RedisHelper.Set("ZswBlog:UserInfo:" + userDTO.id, userDTO, 60 * 60 * 6);
+                    }
                     jsonResult = "登录成功！欢迎您：" + userDTO.nickName;
-                    returnData = new { msg = jsonResult };
+                    returnData = new { msg = jsonResult, userId = userDTO, userEmail = userDTO.email };
                 }
                 return Ok(returnData);
             });

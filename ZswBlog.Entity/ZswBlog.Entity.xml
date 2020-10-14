@@ -609,7 +609,17 @@
             登录次数
             </summary>
         </member>
+        <member name="P:ZswBlog.Entity.UserEntity.disabled">
+            <summary>
+            是否禁用
+            </summary>
+        </member>
         <member name="T:ZswBlog.Entity.ZswBlogDbContext">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:ZswBlog.Entity.ZswBlogDbContext.#ctor">
             <summary>
             
             </summary>

@@ -50,5 +50,9 @@ namespace ZswBlog.Entity
         /// 登录次数
         /// </summary>
         public int loginCount { get; set; }
+        /// <summary>
+        /// 是否禁用
+        /// </summary>
+        public bool disabled { get; set; }
     }
 }

@@ -186,86 +186,6 @@
             </summary>
             <param name="builder"></param>
         </member>
-        <member name="T:ZswBlog.Core.Profiles.ArticleProfile">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="M:ZswBlog.Core.Profiles.ArticleProfile.#ctor">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="T:ZswBlog.Core.Profiles.CategoryProfile">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="M:ZswBlog.Core.Profiles.CategoryProfile.#ctor">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="T:ZswBlog.Core.Profiles.CommentProfile">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="M:ZswBlog.Core.Profiles.CommentProfile.#ctor">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="T:ZswBlog.Core.Profiles.FriendLinkProfile">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="M:ZswBlog.Core.Profiles.FriendLinkProfile.#ctor">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="T:ZswBlog.Core.Profiles.MessageProfile">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="M:ZswBlog.Core.Profiles.MessageProfile.#ctor">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="T:ZswBlog.Core.Profiles.SiteTagProfile">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="M:ZswBlog.Core.Profiles.SiteTagProfile.#ctor">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="T:ZswBlog.Core.Profiles.TimeLineProfile">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="M:ZswBlog.Core.Profiles.TimeLineProfile.#ctor">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="T:ZswBlog.Core.Profiles.UserProfile">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="M:ZswBlog.Core.Profiles.UserProfile.#ctor">
-            <summary>
-            
-            </summary>
-        </member>
         <member name="T:ZswBlog.Core.Program">
             <summary>
             项目启动类
@@ -312,6 +232,12 @@
             </summary>
             <param name="app"></param>
             <param name="env"></param>
+        </member>
+        <member name="M:ZswBlog.Core.Startup.ConfigureContainer(Autofac.ContainerBuilder)">
+            <summary>
+            
+            </summary>
+            <param name="containerBuilder"></param>
         </member>
     </members>
 </doc>

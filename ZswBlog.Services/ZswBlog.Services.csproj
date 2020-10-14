@@ -5,6 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Autofac.Extras.DynamicProxy" Version="6.0.0" />
+    <PackageReference Include="AutoMapper" Version="10.0.0" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ZswBlog.Common\ZswBlog.Common.csproj" />
     <ProjectReference Include="..\ZswBlog.IRepository\ZswBlog.IRepository.csproj" />
     <ProjectReference Include="..\ZswBlog.IServices\ZswBlog.IServices.csproj" />
     <ProjectReference Include="..\ZswBlog.Query\ZswBlog.Query.csproj" />

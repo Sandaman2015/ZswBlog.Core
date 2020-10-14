@@ -1,6 +1,8 @@
-﻿using AutoMapper;
+﻿using Autofac.Extras.DynamicProxy;
+using AutoMapper;
 using System.Collections.Generic;
 using System.Linq;
+using ZswBlog.Common.config;
 using ZswBlog.DTO;
 using ZswBlog.Entity;
 using ZswBlog.IRepository;

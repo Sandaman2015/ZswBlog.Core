@@ -86,7 +86,10 @@ namespace ZswBlog.Core
             services.AddMvc().AddJsonOptions(configure =>
              {
                  configure.JsonSerializerOptions.Converters.Add(new DatetimeJsonConverter());
-             }).AddNewtonsoftJson(option => option.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
+             }).AddNewtonsoftJson(
+                // 
+                option => option.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                );
 
             //Mysql连接池
             var connection = Configuration.GetConnectionString("MysqlConnection");
@@ -174,10 +177,11 @@ namespace ZswBlog.Core
                 endpoints.MapControllers();
             });
         }
-
-#pragma warning disable CS1591 // 缺少对公共可见类型或成员“Startup.ConfigureContainer(ContainerBuilder)”的 XML 注释
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="containerBuilder"></param>
         public void ConfigureContainer(ContainerBuilder containerBuilder)
-#pragma warning restore CS1591 // 缺少对公共可见类型或成员“Startup.ConfigureContainer(ContainerBuilder)”的 XML 注释
         {
             containerBuilder.RegisterModule<ConfigureAutofac>();
         }

@@ -4,4 +4,17 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Autofac.Extras.DynamicProxy" Version="6.0.0" />
+    <PackageReference Include="AutoMapper" Version="10.0.0" />
+    <PackageReference Include="NLog.Web.AspNetCore" Version="4.9.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ZswBlog.DTO\ZswBlog.DTO.csproj" />
+    <ProjectReference Include="..\ZswBlog.Entity\ZswBlog.Entity.csproj" />
+    <ProjectReference Include="..\ZswBlog.Query\ZswBlog.Query.csproj" />
+    <ProjectReference Include="..\ZswBlog.Util\ZswBlog.Util.csproj" />
+  </ItemGroup>
+
 </Project>

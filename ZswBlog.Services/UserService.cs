@@ -74,11 +74,13 @@ namespace ZswBlog.Services
                         string defaultPwd = EncryptProvider.Md5("123456");//默认使用MD5加密密码         
                         user = new UserEntity
                         {
-                            //该用户未登录需要填入信息
+                            createDate = DateTime.Now,
+                            portrait = t.portrait,
+                            nickName = t.nickName,
+                            loginTime = DateTime.Now,
                             lastLoginDate = DateTime.Now,
                             loginCount = 1,
-                            loginTime = DateTime.Now,
-                            createDate = DateTime.Now,
+                            disabled = false,
                             password = defaultPwd
                         };
                         infoEntity.accessToken = t.accessToken;
@@ -124,13 +126,17 @@ namespace ZswBlog.Services
                 //判断是否存在重复登陆且已经注册的用户
                 if (alreadLoginUser == null)
                 {
+                    string defaultPwd = EncryptProvider.Md5("123456");//默认使用MD5加密密码         
                     user = new UserEntity()
                     {
+                        createDate = DateTime.Now,
                         portrait = qqUserInfo.Figureurl_qq_1,
                         nickName = qqUserInfo.Nickname,
                         loginTime = DateTime.Now,
                         lastLoginDate = DateTime.Now,
-                        loginCount = 1
+                        loginCount = 1,
+                        disabled = false,
+                        password= defaultPwd
                     };
                     if (_userRepository.Add(user))
                     {
@@ -140,7 +146,8 @@ namespace ZswBlog.Services
                             accessToken = accessToken,
                             userId = user.id,
                             gender = qqUserInfo.Gender,
-                            figureurl_qq_1 = qqUserInfo.Figureurl_qq_1
+                            figureurl_qq_1 = qqUserInfo.Figureurl_qq_1,
+                            nickName = qqUserInfo.Nickname
                         };
                         if (_userQQInfoService.AddEntity(entity))
                         {

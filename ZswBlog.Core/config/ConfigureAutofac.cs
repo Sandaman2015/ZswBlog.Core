@@ -1,6 +1,9 @@
 ﻿using Autofac;
+using Autofac.Extras.DynamicProxy;
 using AutoMapper;
+using NLog;
 using System.Reflection;
+using ZswBlog.Common.config;
 
 namespace ZswBlog.Core.config
 {
@@ -21,18 +24,15 @@ namespace ZswBlog.Core.config
             Assembly IRepository = Assembly.Load("ZswBlog.IRepository");
             //自动注入
             builder.RegisterAssemblyTypes(Repository, IRepository)
-                .AsImplementedInterfaces().PropertiesAutowired().InstancePerDependency();
+                .AsImplementedInterfaces().PropertiesAutowired().InstancePerDependency().EnableClassInterceptors();
 
             Assembly services = Assembly.Load("ZswBlog.Services");
             Assembly IServices = Assembly.Load("ZswBlog.IServices");
             builder.RegisterAssemblyTypes(services, IServices)
-                .AsImplementedInterfaces().PropertiesAutowired().InstancePerLifetimeScope();
+                .AsImplementedInterfaces().PropertiesAutowired().InstancePerLifetimeScope().EnableClassInterceptors();
 
             //AutoMapper的注入
             builder.RegisterType<Mapper>().As<IMapper>().AsSelf().PropertiesAutowired().InstancePerDependency();
-            Assembly mappers = Assembly.Load("ZswBlog.MapperFactory");
-            builder.RegisterAssemblyTypes(mappers)
-                .AsSelf().PropertiesAutowired().SingleInstance();
 
             Assembly util = Assembly.Load("ZswBlog.Util");
             builder.RegisterAssemblyTypes(util)
@@ -45,6 +45,7 @@ namespace ZswBlog.Core.config
             //builder.RegisterGeneric(typeof(Repository))
             //    //InstancePerDependency：默认模式，每次调用，都会重新实例化对象；每次请求都创建一个新的对象；
             //    .As(typeof(IRepository)).InstancePerDependency();
+            builder.Register(c => new EnableTransactionScope());
         }
     }
 }

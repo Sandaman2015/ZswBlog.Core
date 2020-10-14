@@ -10,6 +10,9 @@ namespace ZswBlog.Entity
     /// </summary>
     public partial class ZswBlogDbContext : DbContext
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public ZswBlogDbContext()
         {
         }
