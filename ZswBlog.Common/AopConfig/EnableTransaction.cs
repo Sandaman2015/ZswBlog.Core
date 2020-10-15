@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Logging;
 using System;
 using System.Transactions;
-using ZswBlog.Util;
 
 namespace ZswBlog.Common.AopConfig
 {
@@ -30,18 +29,18 @@ namespace ZswBlog.Common.AopConfig
         /// <param name="invocation"></param>
         public void Intercept(IInvocation invocation)
         {
-            string className = invocation.Proxy.ToString().Replace("Proxy", "类");
+            string className = invocation.Proxy.ToString().Replace("Proxy", "").Replace("Castle.Proxies.", "");
             string methodName = invocation.Method.Name;
             try
             {
                 using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
-                logger.LogInformation(className + "中" + methodName + "方法开启事务提交");
+                logger.LogInformation(className + "类中" + methodName + "方法开启事务提交");
                 invocation.Proceed();
                 scope.Complete();
             }
             catch (Exception ex)
             {
-                logger.LogError("记录错误日志：类名：" + className + "方法名：" + methodName + "错误信息：" + ex.Message);
+                logger.LogError("记录错误日志：类名：" + className + "，方法名：" + methodName + "，错误信息：" + ex.Message);
             }
         }
     }

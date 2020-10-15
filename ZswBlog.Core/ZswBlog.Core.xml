@@ -4,6 +4,11 @@
         <name>ZswBlog.Core</name>
     </assembly>
     <members>
+        <member name="T:ZswBlog.Core.Controllers.ApiResultFilter">
+            <summary>
+            API接口返回类型
+            </summary>
+        </member>
         <member name="T:ZswBlog.Core.Controllers.ArticleController">
             <summary>
             文章控制器
@@ -174,6 +179,12 @@
             </summary>
             <param name="accessToken"></param>
             <returns></returns>
+        </member>
+        <member name="M:ZswBlog.Core.config.BaseExceptionFilter.OnException(Microsoft.AspNetCore.Mvc.Filters.ExceptionContext)">
+            <summary>
+            触发异常捕获
+            </summary>
+            <param name="context"></param>
         </member>
         <member name="T:ZswBlog.Core.config.ConfigureAutofac">
             <summary>
