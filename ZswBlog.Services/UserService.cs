@@ -160,7 +160,10 @@ namespace ZswBlog.Services
                 }
                 else
                 {
-                    user = _userRepository.GetSingleModel(a => a.id == alreadLoginUser.userId);
+                    user = _userRepository.GetSingleModel(a => a.id == alreadLoginUser.userId && a.disabled == false);
+                    if (user == null) {
+                        throw new Exception("该用户被禁止登陆！");
+                    }
                     user.lastLoginDate = DateTime.Now;
                     user.loginCount = 1;
                     _userRepository.Update(user);

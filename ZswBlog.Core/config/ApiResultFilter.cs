@@ -8,7 +8,10 @@ using ZswBlog.Common;
 
 namespace ZswBlog.Core.Controllers
 {
-    public class ApiResultFilterAttribute : ActionFilterAttribute
+    /// <summary>
+    /// API接口返回类型
+    /// </summary>
+    public class ApiResultFilter : ActionFilterAttribute
     {
         public override void OnActionExecuting(ActionExecutingContext context)
         {

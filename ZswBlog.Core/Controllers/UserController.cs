@@ -84,7 +84,7 @@ namespace ZswBlog.Core.Controllers
                     returnData = new { msg = jsonResult };
                 }
                 else
-            {
+                {
                     UserDTO user = RedisHelper.Get<UserDTO>("ZswBlog:UserInfo:" + userDTO.id);
                     if (user == null)
                     {

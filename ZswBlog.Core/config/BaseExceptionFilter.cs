@@ -7,8 +7,12 @@ using System.Threading.Tasks;
 
 namespace ZswBlog.Core.config
 {
-    public class BaseExceptionAttribute : IExceptionFilter
+    public class BaseExceptionFilter : IExceptionFilter
     {
+        /// <summary>
+        /// 触发异常捕获
+        /// </summary>
+        /// <param name="context"></param>
         public void OnException(ExceptionContext context)
         {
             HttpStatusCode status = HttpStatusCode.InternalServerError;

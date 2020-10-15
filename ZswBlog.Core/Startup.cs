@@ -87,8 +87,8 @@ namespace ZswBlog.Core
             services.AddControllers(options =>
             {
                 //options.Filters.Add<ValidateModelAttribute>();
-                options.Filters.Add<ApiResultFilterAttribute>();
-                options.Filters.Add<BaseExceptionAttribute>();
+                options.Filters.Add<ApiResultFilter>();
+                options.Filters.Add<BaseExceptionFilter>();
             });
 
             //ÈÕÆÚ×ª»»
