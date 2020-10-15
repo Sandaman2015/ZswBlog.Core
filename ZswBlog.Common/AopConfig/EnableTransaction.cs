@@ -1,4 +1,5 @@
 ﻿using Castle.DynamicProxy;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Transactions;
 using ZswBlog.Util;
@@ -17,6 +18,12 @@ namespace ZswBlog.Common.AopConfig
         {
         }
 
+        private static readonly ILogger logger = LoggerFactory.Create(build =>
+        {
+            build.AddConsole();  // 用于控制台程序的输出
+            build.AddDebug();    // 用于VS调试，输出窗口的输出
+        }).CreateLogger("TRANSACTION_LOG");
+
         /// <summary>
         /// AOP开启事务控制
         /// </summary>
@@ -28,13 +35,13 @@ namespace ZswBlog.Common.AopConfig
             try
             {
                 using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
-                NLogHelper.Default.Info(className + "中" + methodName + "方法开启事务提交");
+                logger.LogInformation(className + "中" + methodName + "方法开启事务提交");
                 invocation.Proceed();
                 scope.Complete();
             }
             catch (Exception ex)
             {
-                NLogHelper.Default.Error("记录错误日志：类名：" + className + "方法名：" + methodName + "错误信息：" + ex.Message);
+                logger.LogError("记录错误日志：类名：" + className + "方法名：" + methodName + "错误信息：" + ex.Message);
             }
         }
     }

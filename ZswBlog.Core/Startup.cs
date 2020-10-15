@@ -19,10 +19,6 @@ using ZswBlog.Util;
 using System;
 using ZswBlog.Core.Controllers;
 using Microsoft.Extensions.Logging;
-using NLog;
-using Microsoft.Extensions.Logging.Console;
-using Microsoft.Extensions.Logging.Debug;
-using Microsoft.Extensions.Options;
 
 namespace ZswBlog.Core
 {
@@ -48,9 +44,10 @@ namespace ZswBlog.Core
         /// <summary>
         /// 日志工厂
         /// </summary>
-        public static readonly LoggerFactory _logFactory = new LoggerFactory(new[] {
-            new DebugLoggerProvider()
-            //new ConsoleLoggerProvider(IOptionsMonitor<new ConsoleLoggerOptions()>)
+        private static readonly ILoggerFactory _logFactory = LoggerFactory.Create(build =>
+        {
+            build.AddConsole();  // 用于控制台程序的输出
+            build.AddDebug();    // 用于VS调试，输出窗口的输出
         });
 
         /// <summary>
@@ -104,8 +101,10 @@ namespace ZswBlog.Core
                 );
 
             //Mysql连接池
-            var connection = Configuration.GetConnectionString("MysqlConnection");
-            IServiceCollection serviceCollections = services.AddDbContext<ZswBlogDbContext>(options => options.UseMySql(connection)
+            var readConnection = Configuration.GetConnectionString("ClusterMysqlConnection");
+            var writleConnection = Configuration.GetConnectionString("MasterMysqlConnection");
+            services.AddDbContext<WritleDbContext>(options => options.UseMySql(writleConnection));
+            services.AddDbContext<ReadDbContext>(options => options.UseMySql(readConnection)
             .EnableSensitiveDataLogging(true)
             .UseLoggerFactory(_logFactory)
             );

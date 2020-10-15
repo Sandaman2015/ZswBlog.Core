@@ -16,12 +16,11 @@ namespace ZswBlog.Entity
         public ZswBlogDbContext()
         {
         }
-
         /// <summary>
         /// 
         /// </summary>
-        public ZswBlogDbContext(DbContextOptions<ZswBlogDbContext> options)
-            : base(options)
+        /// <param name="options"></param>
+        public ZswBlogDbContext(DbContextOptions options) : base(options)
         {
         }
 
@@ -94,7 +93,6 @@ namespace ZswBlog.Entity
         /// 
         /// </summary>
         public virtual DbSet<CategoryEntity> CategoryEntities { get; set; }
-
         /// <summary>
         /// 
         /// </summary>
@@ -106,6 +104,5 @@ namespace ZswBlog.Entity
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
-
 
 }

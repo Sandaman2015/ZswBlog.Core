@@ -117,7 +117,7 @@ namespace ZswBlog.Services
         /// </summary>
         /// <param name="accessToken"></param>
         /// <returns></returns>
-        public UserDTO GetUserByAccessToken(string accessToken)
+        public virtual UserDTO GetUserByAccessToken(string accessToken)
         {
             QQLogin login = new QQLogin();
             string openId = login.GetOpenID(accessToken);

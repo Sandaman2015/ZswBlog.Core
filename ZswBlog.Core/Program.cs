@@ -1,6 +1,7 @@
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using NLog.Web;
 using System.IO;
 
@@ -29,7 +30,15 @@ namespace ZswBlog.Core
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>().UseUrls("http://*:8004");
-                }).UseServiceProviderFactory(new AutofacServiceProviderFactory()).UseNLog();
+                }).UseServiceProviderFactory(new AutofacServiceProviderFactory()).ConfigureLogging((hostingContext, logging) =>
+                {
+                    logging.ClearProviders(); //去掉默认添加的日志提供程序
+                                              //添加控制台输出
+                    logging.AddConsole();
+                    //添加调试输出
+                    //logging.AddDebug();
+                });
+            //.UseNLog();
 
     }
 }

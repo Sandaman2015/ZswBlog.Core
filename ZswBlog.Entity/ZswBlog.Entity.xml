@@ -404,6 +404,22 @@
             绑定用户id
             </summary>
         </member>
+        <member name="T:ZswBlog.Entity.ReadDbContext">
+            <summary>
+            读取数据库
+            </summary>
+        </member>
+        <member name="M:ZswBlog.Entity.ReadDbContext.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:ZswBlog.Entity.ReadDbContext.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions)">
+            <summary>
+            
+            </summary>
+            <param name="options"></param>
+        </member>
         <member name="T:ZswBlog.Entity.SiteTagEntity">
             <summary>
             站点标签实体对象
@@ -614,6 +630,21 @@
             是否禁用
             </summary>
         </member>
+        <member name="T:ZswBlog.Entity.WritleDbContext">
+            <summary>
+            写入数据库
+            </summary>
+        </member>
+        <member name="M:ZswBlog.Entity.WritleDbContext.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:ZswBlog.Entity.WritleDbContext.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions{ZswBlog.Entity.WritleDbContext})">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="T:ZswBlog.Entity.ZswBlogDbContext">
             <summary>
             
@@ -624,10 +655,11 @@
             
             </summary>
         </member>
-        <member name="M:ZswBlog.Entity.ZswBlogDbContext.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions{ZswBlog.Entity.ZswBlogDbContext})">
+        <member name="M:ZswBlog.Entity.ZswBlogDbContext.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions)">
             <summary>
             
             </summary>
+            <param name="options"></param>
         </member>
         <member name="P:ZswBlog.Entity.ZswBlogDbContext.Article">
             <summary>
