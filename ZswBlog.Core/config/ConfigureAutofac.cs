@@ -1,9 +1,9 @@
 ﻿using Autofac;
 using Autofac.Extras.DynamicProxy;
 using AutoMapper;
-using NLog;
+using Microsoft.Extensions.Logging;
 using System.Reflection;
-using ZswBlog.Common.config;
+using ZswBlog.Common.AopConfig;
 
 namespace ZswBlog.Core.config
 {
@@ -45,7 +45,7 @@ namespace ZswBlog.Core.config
             //builder.RegisterGeneric(typeof(Repository))
             //    //InstancePerDependency：默认模式，每次调用，都会重新实例化对象；每次请求都创建一个新的对象；
             //    .As(typeof(IRepository)).InstancePerDependency();
-            builder.Register(c => new EnableTransactionScope());
+            builder.Register(c => new EnableTransaction());
         }
     }
 }

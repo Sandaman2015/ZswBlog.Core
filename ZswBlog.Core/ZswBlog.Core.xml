@@ -220,6 +220,11 @@
             配置访问属性
             </summary>
         </member>
+        <member name="F:ZswBlog.Core.Startup._logFactory">
+            <summary>
+            日志工厂
+            </summary>
+        </member>
         <member name="M:ZswBlog.Core.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
             <summary>
             中间件服务注册

@@ -1,8 +1,10 @@
-﻿using AutoMapper;
+﻿using Autofac.Extras.DynamicProxy;
+using AutoMapper;
 using NETCore.Encrypt;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ZswBlog.Common.AopConfig;
 using ZswBlog.DTO;
 using ZswBlog.Entity;
 using ZswBlog.IRepository;
@@ -12,6 +14,7 @@ using ZswBlog.ThirdParty;
 
 namespace ZswBlog.Services
 {
+    [Intercept(typeof(EnableTransaction))]
     public class UserService : BaseService<UserEntity, IUserRepository>, IUserService
     {
         public IUserRepository _userRepository { get; set; }
@@ -49,7 +52,7 @@ namespace ZswBlog.Services
         /// </summary>
         /// <param name="t"></param>
         /// <returns></returns>
-        public bool AddEntity(UserSaveQuery t)
+        public virtual bool AddEntity(UserSaveQuery t)
         {
             try
             {
@@ -104,7 +107,7 @@ namespace ZswBlog.Services
             return _mapper.Map<List<UserDTO>>(users);
         }
 
-        public bool RemoveEntity(int tId)
+        public virtual bool RemoveEntity(int tId)
         {
             return _userRepository.Delete(new UserEntity { id = tId });
         }

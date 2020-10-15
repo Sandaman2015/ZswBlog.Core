@@ -18,6 +18,11 @@ using ZswBlog.Entity;
 using ZswBlog.Util;
 using System;
 using ZswBlog.Core.Controllers;
+using Microsoft.Extensions.Logging;
+using NLog;
+using Microsoft.Extensions.Logging.Console;
+using Microsoft.Extensions.Logging.Debug;
+using Microsoft.Extensions.Options;
 
 namespace ZswBlog.Core
 {
@@ -40,6 +45,13 @@ namespace ZswBlog.Core
         /// </summary>
         public IConfiguration Configuration { get; }
         readonly string MyAllowSpecificOrigins = "AllowAll";
+        /// <summary>
+        /// 日志工厂
+        /// </summary>
+        public static readonly LoggerFactory _logFactory = new LoggerFactory(new[] {
+            new DebugLoggerProvider()
+            //new ConsoleLoggerProvider(IOptionsMonitor<new ConsoleLoggerOptions()>)
+        });
 
         /// <summary>
         /// 中间件服务注册
@@ -93,7 +105,10 @@ namespace ZswBlog.Core
 
             //Mysql连接池
             var connection = Configuration.GetConnectionString("MysqlConnection");
-            IServiceCollection serviceCollections = services.AddDbContext<ZswBlogDbContext>(options => options.UseMySql(connection));
+            IServiceCollection serviceCollections = services.AddDbContext<ZswBlogDbContext>(options => options.UseMySql(connection)
+            .EnableSensitiveDataLogging(true)
+            .UseLoggerFactory(_logFactory)
+            );
 
 
             //初始化 RedisHelper

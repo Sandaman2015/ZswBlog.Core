@@ -1,35 +1,34 @@
 ﻿using Castle.DynamicProxy;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Transactions;
 using ZswBlog.Util;
 
-namespace ZswBlog.Common.config
+namespace ZswBlog.Common.AopConfig
 {
     /// <summary>
     /// AOP切面配置
     /// </summary>
-    public class EnableTransactionScope : IInterceptor
+    public class EnableTransaction : IInterceptor
     {
         /// <summary>
         /// 
         /// </summary>
-        public EnableTransactionScope()
+        public EnableTransaction()
         {
         }
 
         /// <summary>
-        /// 
+        /// AOP开启事务控制
         /// </summary>
         /// <param name="invocation"></param>
         public void Intercept(IInvocation invocation)
         {
-            string className = invocation.Proxy.ToString().Replace("RepositoryProxy","仓储");
+            string className = invocation.Proxy.ToString().Replace("Proxy", "类");
             string methodName = invocation.Method.Name;
             try
             {
                 using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
-                NLogHelper.Default.Info(className+"类中"+methodName + "方法被调用了");
+                NLogHelper.Default.Info(className + "中" + methodName + "方法开启事务提交");
                 invocation.Proceed();
                 scope.Complete();
             }
