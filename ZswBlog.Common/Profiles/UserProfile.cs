@@ -21,6 +21,7 @@ namespace ZswBlog.Core.Profiles
         {
             CreateMap<UserEntity,UserDTO>();
             CreateMap<UserSaveQuery, UserEntity>();
+            CreateMap<UserDTO, UserEntity>();
         }
     }
 }

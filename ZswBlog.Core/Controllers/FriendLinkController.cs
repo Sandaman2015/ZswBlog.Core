@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ZswBlog.DTO;
 using ZswBlog.Entity;
-using ZswBlog.Services;
+using ZswBlog.IServices;
 
 namespace ZswBlog.Core.Controllers
 {
@@ -14,9 +14,9 @@ namespace ZswBlog.Core.Controllers
     [ApiController]
     public class FriendLinkController : ControllerBase
     {
-        private readonly FriendLinkService _friendLinkSerivce;
+        private readonly IFriendLinkService _friendLinkSerivce;
 
-        public FriendLinkController(FriendLinkService friendLinkSerivce)
+        public FriendLinkController(IFriendLinkService friendLinkSerivce)
         {
             _friendLinkSerivce = friendLinkSerivce;
         }
