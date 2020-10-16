@@ -34,6 +34,7 @@ namespace ZswBlog.Core.Controllers
         /// </summary>
         /// <param name="limit"></param>
         /// <param name="pageIndex"></param>
+        /// <param name="articleId"></param>
         /// <returns></returns>
         [Route(template: "/comment/get/page")]
         [HttpGet]
