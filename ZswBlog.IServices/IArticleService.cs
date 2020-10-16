@@ -65,6 +65,5 @@ namespace ZswBlog.IServices
         /// <param name="categoryId"></param>
         /// <returns></returns>
         int GetArticleCountByCategoryId(int categoryId);
-
     }
 }

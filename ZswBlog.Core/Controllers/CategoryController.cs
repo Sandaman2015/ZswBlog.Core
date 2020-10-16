@@ -48,7 +48,7 @@ namespace ZswBlog.Core.Controllers
         {
             return await Task.Run(() =>
             {
-                return _categoryService.GetALLCategories();
+                return _categoryService.GetAllCategories();
             });
         }
     }

@@ -7,7 +7,7 @@ using ZswBlog.DTO;
 using ZswBlog.Entity;
 using ZswBlog.Query;
 
-namespace ZswBlog.Core.Profiles
+namespace ZswBlog.Common.Profiles
 {
     /// <summary>
     /// 

@@ -29,7 +29,7 @@ namespace ZswBlog.Core.config
             Assembly services = Assembly.Load("ZswBlog.Services");
             Assembly IServices = Assembly.Load("ZswBlog.IServices");
             builder.RegisterAssemblyTypes(services, IServices)
-                .AsImplementedInterfaces().PropertiesAutowired().InstancePerLifetimeScope().EnableClassInterceptors();
+                .AsImplementedInterfaces().PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies).InstancePerLifetimeScope().EnableClassInterceptors();
 
             //AutoMapper的注入
             builder.RegisterType<Mapper>().As<IMapper>().AsSelf().PropertiesAutowired().InstancePerDependency();

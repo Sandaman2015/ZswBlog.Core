@@ -13,6 +13,9 @@ namespace ZswBlog.Services
     {
         public IArticleRepository _articleRepository { get; set; }
 
+        public ICategoryService _categoryService { get; set; }
+
+        public IArticleTagService _articleTagService { get; set; }
         public IMapper _mapper { get; set; }
 
         /// <summary>
@@ -50,9 +53,14 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public ArticleDTO GetArticleById(int articleId)
         {
+            ArticleDTO articleDTO = null;
             ArticleEntity article = _articleRepository.GetSingleModel(a => a.id == articleId);
-            ArticleDTO articleDTO = _mapper.Map<ArticleDTO>(article);
-            //TODO 需要根据文章获取类型和标签列表填充
+            if (article == null)
+            {
+                articleDTO = _mapper.Map<ArticleDTO>(article);
+                articleDTO.category = _categoryService.GetCategoryById(articleDTO.categoryId);
+                articleDTO.tags = _articleTagService.GetTagListByArticleId(articleId);
+            }
             return articleDTO;
         }
 

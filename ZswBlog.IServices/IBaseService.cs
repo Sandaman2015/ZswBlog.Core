@@ -10,6 +10,7 @@ namespace ZswBlog.IServices
         bool AddEntity(T t);
         //Task<bool> RemoveEntityByIdAsync(int tId);
         bool UpdateEntity(T t);
+        int GetEntitiesCount();
         //Task<Boolean> EntityAsync(T t);
     }
 }

@@ -49,6 +49,46 @@
             日志类型
             </summary>
         </member>
+        <member name="T:ZswBlog.Entity.AnnouncementEntity">
+            <summary>
+            通知公告
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.AnnouncementEntity.id">
+            <summary>
+            操作id
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.AnnouncementEntity.createDate">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.AnnouncementEntity.operatorId">
+            <summary>
+            操作人
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.AnnouncementEntity.content">
+            <summary>
+            公告内容
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.AnnouncementEntity.isTop">
+            <summary>
+            是否置顶
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.AnnouncementEntity.sort">
+            <summary>
+            排序
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.AnnouncementEntity.endPushDate">
+            <summary>
+            结束推送时间
+            </summary>
+        </member>
         <member name="T:ZswBlog.Entity.ArticleEntity">
             <summary>
             文章实体对象
@@ -352,6 +392,11 @@
             </summary>
         </member>
         <member name="P:ZswBlog.Entity.ZswBlogDbContext.CategoryEntities">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.ZswBlogDbContext.AnnouncementEntities">
             <summary>
             
             </summary>

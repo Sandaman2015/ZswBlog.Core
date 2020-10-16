@@ -93,6 +93,11 @@ namespace ZswBlog.Entity
         /// 
         /// </summary>
         public virtual DbSet<CategoryEntity> CategoryEntities { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public virtual DbSet<AnnouncementEntity> AnnouncementEntities { get; set; }
         /// <summary>
         /// 
         /// </summary>

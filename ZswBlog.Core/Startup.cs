@@ -11,7 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
-using ZswBlog.Core.Profiles;
+using ZswBlog.Common.Profiles;
 using System.IO;
 using ZswBlog.Core.config;
 using ZswBlog.Entity;
@@ -81,6 +81,7 @@ namespace ZswBlog.Core
                 cfg.AddProfile<TimeLineProfile>();
                 cfg.AddProfile<FriendLinkProfile>();
                 cfg.AddProfile<UserProfile>();
+                cfg.AddProfile<AnnouncementProfile>();                
             }));
 
             //添加全局返回结果，异常处理，参数验证

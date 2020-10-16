@@ -9,6 +9,32 @@
             API接口返回类型
             </summary>
         </member>
+        <member name="T:ZswBlog.Core.Controllers.AnnouncementController">
+            <summary>
+            通知公告
+            </summary>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.AnnouncementController.GetAnnouncementsOnTop">
+            <summary>
+            获取指定置顶的通知公告
+            </summary>
+            <param name="top"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.AnnouncementController.GetPushAnnouncements">
+            <summary>
+            获取正在推送的通知公告
+            </summary>
+            <param name="top"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.AnnouncementController.GetAllAnnouncements">
+            <summary>
+            获取所有的通知公告
+            </summary>
+            <param name="top"></param>
+            <returns></returns>
+        </member>
         <member name="T:ZswBlog.Core.Controllers.ArticleController">
             <summary>
             文章控制器
@@ -76,12 +102,20 @@
             评论控制器
             </summary>
         </member>
+        <member name="M:ZswBlog.Core.Controllers.CommentController.#ctor(ZswBlog.IServices.ICommentService,ZswBlog.ThirdParty.Email.EmailHelper)">
+            <summary>
+            
+            </summary>
+            <param name="commentService"></param>
+            <param name="emailHelper"></param>
+        </member>
         <member name="M:ZswBlog.Core.Controllers.CommentController.GetCommentTreeListByPage(System.Int32,System.Int32,System.Int32)">
             <summary>
             分页获取文章评论列表
             </summary>
             <param name="limit"></param>
             <param name="pageIndex"></param>
+            <param name="articleId"></param>
             <returns></returns>
         </member>
         <member name="M:ZswBlog.Core.Controllers.CommentController.SaveMessage(ZswBlog.Entity.CommentEntity)">
@@ -105,6 +139,12 @@
         <member name="M:ZswBlog.Core.Controllers.CommonController.GetAllMusicList">
             <summary>
             获取所有歌曲列表
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.CommonController.GetInitData">
+            <summary>
+            获取初始化页面数据
             </summary>
             <returns></returns>
         </member>
@@ -254,6 +294,33 @@
             
             </summary>
             <param name="containerBuilder"></param>
+        </member>
+        <member name="T:ZswBlog.Web.Controllers.TagController">
+            <summary>
+            标签页
+            </summary>
+        </member>
+        <member name="M:ZswBlog.Web.Controllers.TagController.#ctor(ZswBlog.IServices.IArticleTagService,ZswBlog.IServices.ITagService)">
+            <summary>
+            
+            </summary>
+            <param name="articleTagService"></param>
+            <param name="tagService"></param>
+        </member>
+        <member name="M:ZswBlog.Web.Controllers.TagController.GetTagList">
+            <summary>
+            获取所有的文章标签
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ZswBlog.Web.Controllers.TagController.GetArticleListByPageAndTagId(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            获取根据Id单个标签下的文章
+            </summary>
+            <param name="limit"></param>
+            <param name="pageIndex"></param>
+            <param name="tagId"></param>
+            <returns></returns>
         </member>
     </members>
 </doc>

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using ZswBlog.DTO;
 using ZswBlog.Entity;
 
-namespace ZswBlog.Core.Profiles
+namespace ZswBlog.Common.Profiles
 {
     /// <summary>
     /// 

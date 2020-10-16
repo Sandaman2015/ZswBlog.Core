@@ -40,7 +40,7 @@ namespace ZswBlog.Common.AopConfig
             }
             catch (Exception ex)
             {
-                logger.LogError("记录错误日志：类名：" + className + "，方法名：" + methodName + "，错误信息：" + ex.Message);
+                logger.LogError("记录事务错误日志：类名：" + className + "，方法名：" + methodName + "，错误信息：" + ex.Message);
             }
         }
     }

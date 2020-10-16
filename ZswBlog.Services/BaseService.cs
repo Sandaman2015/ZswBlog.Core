@@ -19,6 +19,11 @@ namespace ZswBlog.Services
             return _repository.Add(t);
         }
 
+        public int GetEntitiesCount()
+        {
+            return _repository.GetModelsCountByCondition(null);
+        }
+
         public virtual bool UpdateEntity(T t)
         {
             return _repository.Update(t);

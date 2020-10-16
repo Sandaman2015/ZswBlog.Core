@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Text;
 using ZswBlog.DTO;
 using ZswBlog.Entity;
 
@@ -11,14 +10,14 @@ namespace ZswBlog.Common.Profiles
     /// <summary>
     /// 
     /// </summary>
-    public class FriendLinkProfile : Profile
+    public class AnnouncementProfile:Profile
     {
         /// <summary>
         /// 
         /// </summary>
-        public FriendLinkProfile()
+        public AnnouncementProfile()
         {
-            CreateMap<FriendLinkEntity, FriendLinkDTO>();
+            CreateMap<AnnouncementEntity, AnnouncementDTO>();
         }
     }
 }

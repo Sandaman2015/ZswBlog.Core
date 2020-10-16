@@ -30,11 +30,14 @@ namespace ZswBlog.Core.Controllers
         [HttpGet]
         public async Task<ActionResult<ArticleDTO>> GetArticleById(int id)
         {
-            return await Task.Run(() =>
+            ArticleDTO article;
+            article = await RedisHelper.GetAsync<ArticleDTO>("ZswBlog:Article:Article-" + id);
+            if (article == null)
             {
-                ArticleDTO article = _articleService.GetArticleById(id);
-                return Ok(article);
-            });
+                article = _articleService.GetArticleById(id);
+                await RedisHelper.SetAsync("ZswBlog:Article:Article-" + article.id, article, 60 * 60 * 6);
+            }
+            return Ok(article);
         }
 
         /// <summary>

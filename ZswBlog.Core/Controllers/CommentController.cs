@@ -22,6 +22,11 @@ namespace ZswBlog.Core.Controllers
         private readonly ICommentService _commentService;
         private readonly EmailHelper _emailHelper;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="commentService"></param>
+        /// <param name="emailHelper"></param>
         public CommentController(ICommentService commentService, EmailHelper emailHelper)
         {
             _commentService = commentService;

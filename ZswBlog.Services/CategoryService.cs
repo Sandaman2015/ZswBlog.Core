@@ -19,7 +19,7 @@ namespace ZswBlog.Services
         /// 获取所有分类以及文章数量
         /// </summary>
         /// <returns></returns>
-        public List<CategoryDTO> GetALLCategories()
+        public List<CategoryDTO> GetAllCategories()
         {
             List<CategoryEntity> categories = _categoryRepoistory.GetModels((CategoryEntity c) => c.id != 0).ToList();
             List<CategoryDTO> dTOList= _mapper.Map<List<CategoryDTO>>(categories);

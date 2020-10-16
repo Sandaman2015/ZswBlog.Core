@@ -13,7 +13,7 @@ namespace ZswBlog.IServices
         /// 获取所有文章分类
         /// </summary>
         /// <returns></returns>
-        List<CategoryDTO> GetALLCategories();
+        List<CategoryDTO> GetAllCategories();
         /// <summary>
         /// 根据Id获取单个分类
         /// </summary>

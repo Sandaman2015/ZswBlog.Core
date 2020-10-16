@@ -90,6 +90,10 @@ namespace ZswBlog.Repository
 
         public int GetModelsCountByCondition(Expression<Func<T, bool>> whereLambda)
         {
+            if (whereLambda == null)
+            {
+                return this._readDbContext.Set<T>().Count();
+            }
             return this._readDbContext.Set<T>().Where(whereLambda).Count();
         }
     }
