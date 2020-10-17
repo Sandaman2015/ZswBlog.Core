@@ -79,6 +79,18 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="T:ZswBlog.Core.Controllers.AuthorizeController">
+            <summary>
+            Token分发
+            </summary>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.AuthorizeController.GetToken(ZswBlog.Query.UserVerifyQuery)">
+            <summary>
+             获取 token
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
         <member name="T:ZswBlog.Core.Controllers.CategoryController">
             <summary>
             文章分类控制器

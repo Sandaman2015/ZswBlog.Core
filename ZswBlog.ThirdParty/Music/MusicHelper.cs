@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using ZswBlog.Util;
 using ZswBlog.DTO;
 using Newtonsoft.Json;
 using System.Linq;
+using ZswBlog.Common.Util;
 
 namespace ZswBlog.ThirdParty.Music
 {

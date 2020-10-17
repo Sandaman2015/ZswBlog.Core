@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using ZswBlog.DTO;
 using ZswBlog.Entity;
@@ -29,9 +30,18 @@ namespace ZswBlog.IServices
         UserDTO GetUserById(int id);
 
         /// <summary>
-        /// 
+        /// 根据条件获取用户
         /// </summary>
+        /// <param name="whereLambda"></param>
         /// <returns></returns>
-        UserDTO GetUserByAccessToken(string accessToken);
+        UserEntity GetUserByCondition(Expression<Func<UserEntity, bool>> whereLambda);
+
+        /// <summary>
+        /// 验证用户名和密码
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        UserEntity ValidatePassword(string userName, string password);
     }
 }

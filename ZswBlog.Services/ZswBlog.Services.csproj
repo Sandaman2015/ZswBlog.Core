@@ -16,7 +16,6 @@
     <ProjectReference Include="..\ZswBlog.IServices\ZswBlog.IServices.csproj" />
     <ProjectReference Include="..\ZswBlog.Query\ZswBlog.Query.csproj" />
     <ProjectReference Include="..\ZswBlog.ThirdParty\ZswBlog.ThirdParty.csproj" />
-    <ProjectReference Include="..\ZswBlog.Util\ZswBlog.Util.csproj" />
   </ItemGroup>
 
 </Project>

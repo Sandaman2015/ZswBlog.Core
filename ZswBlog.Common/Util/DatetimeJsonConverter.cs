@@ -2,7 +2,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace ZswBlog.Util
+namespace ZswBlog.Common.Util
 {
     public class DatetimeJsonConverter : JsonConverter<DateTime>
     {

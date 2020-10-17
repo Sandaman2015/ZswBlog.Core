@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
-using ZswBlog.Util;
+using ZswBlog.Common.Util;
 
 namespace ZswBlog.ThirdParty.AliyunOss
 {

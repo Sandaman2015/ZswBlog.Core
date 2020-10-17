@@ -1,0 +1,70 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Security.Claims;
+using System.Text;
+using System.Threading.Tasks;
+using AutoMapper;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using ZswBlog.Common.Jwt;
+using ZswBlog.Entity;
+using ZswBlog.IServices;
+using ZswBlog.Query;
+
+namespace ZswBlog.Core.Controllers
+{
+    /// <summary>
+    /// Token分发
+    /// </summary>
+    [Route("api/[controller]")]
+    [ApiController]
+    public class AuthorizeController : ControllerBase
+    {
+        private readonly IUserService _userService;
+        private readonly JwtSettings _jwtSettings;
+
+        public AuthorizeController(
+            IUserService userService,
+            IOptions<JwtSettings> options)
+        {
+            _userService = userService;
+            _jwtSettings = options.Value;
+        }
+
+        /// <summary>
+        ///  获取 token
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [Route("/authorize/get/token")]
+        [HttpPost]
+        public async Task<ActionResult> GetToken(UserVerifyQuery request)
+        {
+            dynamic respData;
+            return await Task.Run(() =>
+            {
+                UserEntity isValidate = _userService.ValidatePassword(request.userName, request.password);
+                if (isValidate == null) respData = new { code = 401, msg = "用户名或密码错误" };
+                //可扩展自定义返回参数
+                var claims = new Claim[] {
+                    new Claim(ClaimTypes.Name, request.userName)
+                };
+                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.SecretKey));
+                var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+                var token = new JwtSecurityToken(_jwtSettings.Issuer,
+                    _jwtSettings.Audience,
+                    claims,
+                    DateTime.Now,
+                    DateTime.Now.AddSeconds(10),
+                    creds);
+                //获取JWT生成的Token
+                respData = new { code = 200, token = new JwtSecurityTokenHandler().WriteToken(token) };
+                return Ok(respData);
+            });
+        }
+    }
+}

@@ -3,7 +3,7 @@ using System.IO;
 using System.Net;
 using System.Text;
 
-namespace ZswBlog.Util
+namespace ZswBlog.Common.Util
 {
     /// <summary>
     /// 简易HttpHelper类

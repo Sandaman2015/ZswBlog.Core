@@ -2,7 +2,7 @@
 using System.Text;
 using ZswBlog.DTO;
 using ZswBlog.IServices;
-using ZswBlog.Util;
+using ZswBlog.Common.Util;
 
 namespace ZswBlog.ThirdParty.Email
 {

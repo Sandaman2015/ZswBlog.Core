@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ZswBlog.Util
+namespace ZswBlog.Common.Util
 {
     /// <summary>
     /// Nlog日志帮助类

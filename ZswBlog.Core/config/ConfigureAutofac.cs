@@ -34,7 +34,7 @@ namespace ZswBlog.Core.config
             //AutoMapper的注入
             builder.RegisterType<Mapper>().As<IMapper>().AsSelf().PropertiesAutowired().InstancePerDependency();
 
-            Assembly util = Assembly.Load("ZswBlog.Util");
+            Assembly util = Assembly.Load("ZswBlog.Common");
             builder.RegisterAssemblyTypes(util)
                 .AsSelf().PropertiesAutowired().SingleInstance();
 

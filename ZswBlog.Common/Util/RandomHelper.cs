@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Text;
 
-namespace ZswBlog.Util
+namespace ZswBlog.Common.Util
 {
     /// <summary>
     /// 随机数辅助类

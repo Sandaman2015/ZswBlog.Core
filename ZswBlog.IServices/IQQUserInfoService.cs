@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using ZswBlog.DTO;
 using ZswBlog.Entity;
 
 namespace ZswBlog.IServices
@@ -15,5 +16,11 @@ namespace ZswBlog.IServices
         /// <param name="openId"></param>
         /// <returns></returns>
         QQUserInfoEntity GetQQUserInfoByOpenId(string openId);
+
+        /// <summary>
+        /// 根据第三方Token获取用户信息
+        /// </summary>
+        /// <returns></returns>
+        UserDTO GetUserByAccessToken(string accessToken);
     }
 }

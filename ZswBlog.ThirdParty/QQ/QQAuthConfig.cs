@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using ZswBlog.Util;
+using ZswBlog.Common.Util;
 
 namespace ZswBlog.ThirdParty
 {

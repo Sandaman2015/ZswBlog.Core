@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Text;
 using System.Web;
-using ZswBlog.Util;
+using ZswBlog.Common.Util;
 
 namespace ZswBlog.ThirdParty
 {

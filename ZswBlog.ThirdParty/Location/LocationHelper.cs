@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System.Text;
-using ZswBlog.Util;
+using ZswBlog.Common.Util;
 
 namespace ZswBlog.ThirdParty.Location
 {

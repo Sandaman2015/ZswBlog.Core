@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-namespace ZswBlog.Util
+namespace ZswBlog.Common.Util
 {
     public class StringHelper
     {

@@ -18,6 +18,7 @@
     <PackageReference Include="Autofac" Version="6.0.0" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.0.2" />
     <PackageReference Include="AutoMapper" Version="10.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.9" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.7" />
     <PackageReference Include="Microsoft.DotNet.PlatformAbstractions" Version="3.1.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.7" />
@@ -37,7 +38,6 @@
     <ProjectReference Include="..\ZswBlog.Repository\ZswBlog.Repository.csproj" />
     <ProjectReference Include="..\ZswBlog.Services\ZswBlog.Services.csproj" />
     <ProjectReference Include="..\ZswBlog.ThirdParty\ZswBlog.ThirdParty.csproj" />
-    <ProjectReference Include="..\ZswBlog.Util\ZswBlog.Util.csproj" />
   </ItemGroup>
 
   <ItemGroup>

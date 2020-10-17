@@ -18,6 +18,8 @@ namespace ZswBlog.Core.Controllers
     {
         private readonly IUserService _userService;
 
+        private readonly IQQUserInfoService _userInfoService;
+
         private readonly IMapper _mapper;
 
         public UserController(IUserService userService, IMapper mapper)
@@ -77,7 +79,7 @@ namespace ZswBlog.Core.Controllers
             {
                 dynamic returnData;
                 string jsonResult = "登录失败";
-                UserDTO userDTO = _userService.GetUserByAccessToken(accessToken);
+                UserDTO userDTO = _userInfoService.GetUserByAccessToken(accessToken);
                 if (userDTO == null)
                 {
                     jsonResult = "本次登录没有找到您的信息，不如刷新试试重新登录吧";

@@ -15,10 +15,14 @@ using ZswBlog.Common.Profiles;
 using System.IO;
 using ZswBlog.Core.config;
 using ZswBlog.Entity;
-using ZswBlog.Util;
+using ZswBlog.Common.Util;
 using System;
 using ZswBlog.Core.Controllers;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using ZswBlog.Common.Jwt;
 
 namespace ZswBlog.Core
 {
@@ -81,7 +85,7 @@ namespace ZswBlog.Core
                 cfg.AddProfile<TimeLineProfile>();
                 cfg.AddProfile<FriendLinkProfile>();
                 cfg.AddProfile<UserProfile>();
-                cfg.AddProfile<AnnouncementProfile>();                
+                cfg.AddProfile<AnnouncementProfile>();
             }));
 
             //添加全局返回结果，异常处理，参数验证
@@ -137,8 +141,58 @@ namespace ZswBlog.Core
                 c.IncludeXmlComments(coreXmlPath);
                 c.IncludeXmlComments(EntityXmlPath);
                 c.IncludeXmlComments(DTOXmlPath);
+
+                //Bearer 的scheme定义
+                var securityScheme = new OpenApiSecurityScheme()
+                {
+                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                    Name = "Authorization",
+                    //参数添加在头部
+                    In = ParameterLocation.Header,
+                    //使用Authorize头部
+                    Type = SecuritySchemeType.Http,
+                    //内容为以 bearer开头
+                    Scheme = "bearer",
+                    BearerFormat = "JWT"
+                };
+                //把所有方法配置为增加bearer头部信息
+                //var securityRequirement = new OpenApiSecurityRequirement
+                //{
+                //    {
+                //        new OpenApiSecurityScheme
+                //        {
+                //            Reference = new OpenApiReference
+                //            {
+                //                Type = ReferenceType.SecurityScheme,
+                //                Id = "bearerAuth"
+                //            }
+                //        },
+                //        new string[] {}
+                //    }
+                //};
+                //注册到swagger中
+                c.AddSecurityDefinition("bearerAuth", securityScheme);
+                //c.AddSecurityRequirement(securityRequirement);
             });
             services.AddControllers().SetCompatibilityVersion(CompatibilityVersion.Latest);
+            // jwt 认证
+            JwtSettings jwtSettings = new JwtSettings();
+            services.Configure<JwtSettings>(Configuration.GetSection("JwtSettings"));
+            Configuration.GetSection("JwtSettings").Bind(jwtSettings);
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(o =>
+            {
+                o.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = jwtSettings.Issuer,
+                    ValidAudience = jwtSettings.Audience,
+                    //用于签名验证
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtSettings.SecretKey)),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
         }
 
         /// <summary>
@@ -167,7 +221,7 @@ namespace ZswBlog.Core
                 });
             }
 
-
+            //开启Http重定向
             app.UseHttpsRedirection();
 
             // 启用Swagger中间件
@@ -179,14 +233,15 @@ namespace ZswBlog.Core
                 c.SwaggerEndpoint("/swagger/v2/swagger.json", "ZswBlog ApiDocument");
             });
 
-            //.net core webapi 访问wwwroot文件夹的配置，开启静态文件
+            //访问wwwroot文件夹的配置，开启静态文件
             app.UseStaticFiles();
             app.UseRouting();
             //跨域请求
             app.UseCors(MyAllowSpecificOrigins);
-
+            //开启JWT认证服务
+            app.UseAuthentication();
             app.UseAuthorization();
-
+            //
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

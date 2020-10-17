@@ -2,7 +2,7 @@
 using System;
 using System.IO;
 
-namespace ZswBlog.Util
+namespace ZswBlog.Common.Util
 {
     public static class ConfigHelper
     {
