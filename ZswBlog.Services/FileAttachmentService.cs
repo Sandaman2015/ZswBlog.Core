@@ -27,7 +27,7 @@ namespace ZswBlog.Services
         /// <param name="id"></param>
         /// <returns></returns>
         public string GetFilePathById(int id)
-        {             
+        {
             return _fileAttachmentRepository.GetSingleModel(a => a.id == id).path;
         }
     }

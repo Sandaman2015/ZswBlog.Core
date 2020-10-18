@@ -127,7 +127,8 @@ namespace ZswBlog.Services
         {
             try
             {
-                password = EncryptProvider.Base64Decrypt(password);
+                password = EncryptProvider.Base64Encrypt(password);
+                password = EncryptProvider.Md5(password);
                 UserEntity userEntity = _userRepository.GetSingleModel(a => a.nickName == userName && a.password == password);
                 return userEntity;
             }

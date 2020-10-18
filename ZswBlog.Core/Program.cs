@@ -2,7 +2,6 @@ using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using NLog.Web;
 using System.IO;
 
 namespace ZswBlog.Core
@@ -38,7 +37,6 @@ namespace ZswBlog.Core
                     //Ìí¼Óµ÷ÊÔÊä³ö
                     //logging.AddDebug();
                 });
-            //.UseNLog();
 
     }
 }

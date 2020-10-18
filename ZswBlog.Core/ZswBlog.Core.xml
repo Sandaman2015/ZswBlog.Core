@@ -160,6 +160,19 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="T:ZswBlog.Core.Controllers.FileAttachmentController">
+            <summary>
+            附件控制器
+            </summary>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.FileAttachmentController.UploadImageList(System.Collections.Generic.List{Microsoft.AspNetCore.Http.IFormFile},System.Int32)">
+            <summary>
+            上传文件
+            </summary>
+            <param name="files"></param>
+            <param name="operatorId"></param>
+            <returns></returns>
+        </member>
         <member name="M:ZswBlog.Core.Controllers.FriendLinkController.GetFriendLinks">
             <summary>
             获取所有友情链接
@@ -225,11 +238,17 @@
             <param name="user"></param>
             <returns></returns>
         </member>
-        <member name="M:ZswBlog.Core.Controllers.UserController.QQLoginByAccessToken(System.String)">
+        <member name="M:ZswBlog.Core.Controllers.UserController.QQLoginByAccessToken(System.String,System.String)">
             <summary>
             获取QQ登录用户信息
             </summary>
             <param name="accessToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.UserController.GetUserInfoByAccessToken">
+            <summary>
+            根据Token获取用户信息
+            </summary>
             <returns></returns>
         </member>
         <member name="M:ZswBlog.Core.config.BaseExceptionFilter.OnException(Microsoft.AspNetCore.Mvc.Filters.ExceptionContext)">
@@ -237,6 +256,11 @@
             触发异常捕获
             </summary>
             <param name="context"></param>
+        </member>
+        <member name="T:ZswBlog.Core.config.BaseResponseMiddlerware">
+            <summary>
+            错误反馈中间件
+            </summary>
         </member>
         <member name="T:ZswBlog.Core.config.ConfigureAutofac">
             <summary>
@@ -303,7 +327,7 @@
         </member>
         <member name="M:ZswBlog.Core.Startup.ConfigureContainer(Autofac.ContainerBuilder)">
             <summary>
-            
+            依赖注入
             </summary>
             <param name="containerBuilder"></param>
         </member>

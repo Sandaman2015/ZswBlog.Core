@@ -11,13 +11,14 @@ namespace ZswBlog.IServices
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public string GetFilePathById(int id);
+        string GetFilePathById(int id);
 
         /// <summary>
         /// 根据主键获取附件信息
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public FileAttachmentEntity GetAttachmentById(int id);
+        FileAttachmentEntity GetAttachmentById(int id);
+        
     }
 }

@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ZswBlog.DTO;
@@ -71,9 +74,9 @@ namespace ZswBlog.Core.Controllers
         /// </summary>
         /// <param name="accessToken"></param>
         /// <returns></returns>
-        [Route("/user/login/QQ")]
+        [Route("/user/login/qq")]
         [HttpGet]
-        public async Task<ActionResult> QQLoginByAccessToken([FromQuery] string accessToken)//分页面跳转可以多带一个参数
+        public async Task<ActionResult> QQLoginByAccessToken([FromQuery] string accessToken, string returnUrl)//分页面跳转可以多带一个参数
         {
             return await Task.Run(() =>
             {
@@ -83,7 +86,7 @@ namespace ZswBlog.Core.Controllers
                 if (userDTO == null)
                 {
                     jsonResult = "本次登录没有找到您的信息，不如刷新试试重新登录吧";
-                    returnData = new { msg = jsonResult };
+                    returnData = new { msg = jsonResult, url = returnUrl };
                 }
                 else
                 {
@@ -93,9 +96,37 @@ namespace ZswBlog.Core.Controllers
                         RedisHelper.Set("ZswBlog:UserInfo:" + userDTO.id, userDTO, 60 * 60 * 6);
                     }
                     jsonResult = "登录成功！欢迎您：" + userDTO.nickName;
-                    returnData = new { msg = jsonResult, userId = userDTO, userEmail = userDTO.email };
+                    returnData = new { msg = jsonResult, userId = userDTO, userEmail = userDTO.email, url = returnUrl };
                 }
                 return Ok(returnData);
+            });
+        }
+
+        /// <summary>
+        /// 根据Token获取用户信息
+        /// </summary>
+        /// <returns></returns>
+        [Route("/user/admin/get/info")]
+        [Authorize]
+        [HttpGet]
+        public async Task<ActionResult<dynamic>> GetUserInfoByAccessToken()
+        {
+            return await Task.Run(() =>
+            {
+                dynamic returnValue = new { url = "/admin/login", msg = "请重新登录！" };
+                string bearer = HttpContext.Request.Headers["Authorization"].FirstOrDefault();
+                if (string.IsNullOrEmpty(bearer) || !bearer.Contains("Bearer"))
+                {
+                    return returnValue;
+                }
+                string[] jwt = bearer.Split(' ');
+                var tokenObj = new JwtSecurityToken(jwt[1]);
+
+                var claimsIdentity = new ClaimsIdentity(tokenObj.Claims);
+                var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+                int userId = int.Parse(claimsPrincipal.FindFirstValue("userId"));
+                UserDTO userDTO = _userService.GetUserById(userId);
+                return userDTO;
             });
         }
     }

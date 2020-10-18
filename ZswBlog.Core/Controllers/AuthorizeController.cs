@@ -42,16 +42,20 @@ namespace ZswBlog.Core.Controllers
         /// <returns></returns>
         [Route("/authorize/get/token")]
         [HttpPost]
-        public async Task<ActionResult> GetToken(UserVerifyQuery request)
+        public async Task<ActionResult<dynamic>> GetToken([FromForm] UserVerifyQuery request)
         {
             dynamic respData;
             return await Task.Run(() =>
             {
                 UserEntity isValidate = _userService.ValidatePassword(request.userName, request.password);
-                if (isValidate == null) respData = new { code = 401, msg = "用户名或密码错误" };
+                if (isValidate == null) {
+                    respData = new { flag = false, msg = "用户名或密码错误" };
+                    return respData;
+                }
                 //可扩展自定义返回参数
                 var claims = new Claim[] {
-                    new Claim(ClaimTypes.Name, request.userName)
+                    new Claim("userId", isValidate.id.ToString()),
+                    new Claim("userName", request.userName)
                 };
                 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.SecretKey));
                 var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -62,7 +66,7 @@ namespace ZswBlog.Core.Controllers
                     DateTime.Now.AddSeconds(10),
                     creds);
                 //获取JWT生成的Token
-                respData = new { code = 200, token = new JwtSecurityTokenHandler().WriteToken(token) };
+                respData = new { flag = true ,express = DateTime.Now.AddSeconds(10), access_token = new JwtSecurityTokenHandler().WriteToken(token) };
                 return Ok(respData);
             });
         }

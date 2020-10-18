@@ -7,7 +7,7 @@ using ZswBlog.Common.Util;
 
 namespace ZswBlog.ThirdParty.AliyunOss
 {
-    public class MultipartUploadHelper
+    public class FileUploadHelper
     {
 
         /// <summary>
@@ -27,17 +27,18 @@ namespace ZswBlog.ThirdParty.AliyunOss
         /// </summary>
         private static string bucketName;
 
-        static MultipartUploadHelper()
+        /// <summary>
+        /// 初始化阿里云存储空间对象
+        /// </summary>
+        private static OssClient client;
+        static FileUploadHelper()
         {
             accessKeyId = ConfigHelper.GetValue("accessKeyId");
             accessKeySecret = ConfigHelper.GetValue("accessKeySecret");
             endpoint = ConfigHelper.GetValue("endpoint");
             bucketName = ConfigHelper.GetValue("bucketName");
-        }
-        /// <summary>
-        /// 初始化阿里云存储空间对象
-        /// </summary>
-        static OssClient client = new OssClient(endpoint, accessKeyId, accessKeySecret);
+            client = new OssClient(endpoint, accessKeyId, accessKeySecret);
+        } 
         /// <summary>
         /// 设置分片上传的每一片的大小为50M
         /// </summary>
@@ -381,15 +382,16 @@ namespace ZswBlog.ThirdParty.AliyunOss
         /// </summary>
         /// <param name="base64Code">图片经过base64加密后的结果</param>
         /// <param name="fileName">文件名,例如:Emplyoee/dzzBack.jpg</param>
-        public bool PushImg(string base64Code, string fileName)
+        public static bool PushImg(Stream stream, string fileName)
         {
             try
             {
-                MemoryStream stream = new MemoryStream(Convert.FromBase64String(base64Code));
                 return client.PutObject(bucketName, fileName, stream).HttpStatusCode == System.Net.HttpStatusCode.OK;
             }
-            catch (Exception)
-            { }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
             return false;
         }
         /// <summary>
@@ -397,7 +399,7 @@ namespace ZswBlog.ThirdParty.AliyunOss
         /// </summary>
         /// <param name="filebyte">图片字节 </param>
         /// <param name="fileName">文件名,例如:Emplyoee/dzzBack.jpg</param>
-        public bool PushFile(byte[] filebyte, string fileName)
+        public static bool PushFile(byte[] filebyte, string fileName)
         {
             try
             {
@@ -413,7 +415,7 @@ namespace ZswBlog.ThirdParty.AliyunOss
         /// </summary>
         /// <param name="fileName">文件名,例如:Emplyoee/dzzBack.jpg</param>
         /// <returns></returns>
-        public string GetFileUrl(string fileName)
+        public static string GetFileUrl(string fileName)
         {
             var key = fileName;
             var req = new GeneratePresignedUriRequest(bucketName, key, SignHttpMethod.Get)
@@ -428,7 +430,7 @@ namespace ZswBlog.ThirdParty.AliyunOss
         /// <param name="fileName">文件名,例如:Emplyoee/dzzBack.jpg</param>
         /// <param name="expiration">URL有效日期,例如:DateTime.Now.AddHours(1) </param>
         /// <returns></returns>
-        public string GetFileUrl(string fileName, DateTime expiration)
+        public static string GetFileUrl(string fileName, DateTime expiration)
         {
             var key = fileName;
             var req = new GeneratePresignedUriRequest(bucketName, key, SignHttpMethod.Get)

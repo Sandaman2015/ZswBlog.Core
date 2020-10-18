@@ -23,9 +23,7 @@ namespace ZswBlog.Common.Util
                 filePath = $"{directory.Substring(0, length)}/{fileName}";
             }
 
-            var builder = new ConfigurationBuilder()
-                .AddJsonFile(
-                filePath, false, true);
+            var builder = new ConfigurationBuilder().AddJsonFile(filePath, false, true);
 
             _configuration = builder.Build();
         }

@@ -1,9 +1,7 @@
 using Autofac;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -155,24 +153,7 @@ namespace ZswBlog.Core
                     Scheme = "bearer",
                     BearerFormat = "JWT"
                 };
-                //把所有方法配置为增加bearer头部信息
-                //var securityRequirement = new OpenApiSecurityRequirement
-                //{
-                //    {
-                //        new OpenApiSecurityScheme
-                //        {
-                //            Reference = new OpenApiReference
-                //            {
-                //                Type = ReferenceType.SecurityScheme,
-                //                Id = "bearerAuth"
-                //            }
-                //        },
-                //        new string[] {}
-                //    }
-                //};
-                //注册到swagger中
                 c.AddSecurityDefinition("bearerAuth", securityScheme);
-                //c.AddSecurityRequirement(securityRequirement);
             });
             services.AddControllers().SetCompatibilityVersion(CompatibilityVersion.Latest);
             // jwt 认证
@@ -206,20 +187,9 @@ namespace ZswBlog.Core
             {
                 app.UseDeveloperExceptionPage();
             }
-            else
-            {
-                app.UseExceptionHandler(appBuilder =>
-                {
-                    appBuilder.Run(async context =>
-                    {
-                        var feature = context.Features.Get<IExceptionHandlerPathFeature>();
-                        var exception = feature.Error;
-                        var result = JsonConvert.SerializeObject(new { error = exception.Message });
-                        context.Response.ContentType = "application/json";
-                        await context.Response.WriteAsync(result);
-                    });
-                });
-            }
+
+            //自定义HTTP状态错误反馈中间件
+            app.UseErrorHandling();
 
             //开启Http重定向
             app.UseHttpsRedirection();
@@ -235,20 +205,21 @@ namespace ZswBlog.Core
 
             //访问wwwroot文件夹的配置，开启静态文件
             app.UseStaticFiles();
+            //开启路由
             app.UseRouting();
             //跨域请求
             app.UseCors(MyAllowSpecificOrigins);
             //开启JWT认证服务
             app.UseAuthentication();
             app.UseAuthorization();
-            //
+            //开启地址映射
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
         }
         /// <summary>
-        /// 
+        /// 依赖注入
         /// </summary>
         /// <param name="containerBuilder"></param>
         public void ConfigureContainer(ContainerBuilder containerBuilder)
