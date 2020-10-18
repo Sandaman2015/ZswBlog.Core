@@ -7,7 +7,7 @@ using ZswBlog.Common.Util;
 
 namespace ZswBlog.ThirdParty.AliyunOss
 {
-    public class FileUploadHelper
+    public class FileHelper
     {
 
         /// <summary>
@@ -31,14 +31,14 @@ namespace ZswBlog.ThirdParty.AliyunOss
         /// 初始化阿里云存储空间对象
         /// </summary>
         private static OssClient client;
-        static FileUploadHelper()
+        static FileHelper()
         {
             accessKeyId = ConfigHelper.GetValue("accessKeyId");
             accessKeySecret = ConfigHelper.GetValue("accessKeySecret");
             endpoint = ConfigHelper.GetValue("endpoint");
             bucketName = ConfigHelper.GetValue("bucketName");
             client = new OssClient(endpoint, accessKeyId, accessKeySecret);
-        } 
+        }
         /// <summary>
         /// 设置分片上传的每一片的大小为50M
         /// </summary>
@@ -359,22 +359,49 @@ namespace ZswBlog.ThirdParty.AliyunOss
 
             return client.CompleteMultipartUpload(completeMultipartUploadRequest);
         }
-
+        /// <summary>
+        /// 删除指定的文件
+        /// </summary>   
+        /// <param name="bucketName">文件所在存储空间的名称</param>
+        /// <param name="key">待删除的文件名称</param>
+        public static bool DeleteObject(List<string> keyList)
+        {
+            try
+            {
+                var count = 0;
+                //简单模式
+                var quietMode = false;
+                // DeleteObjectsRequest的第三个参数指定返回模式。
+                var request = new DeleteObjectsRequest(bucketName, keyList, quietMode);
+                // 删除多个文件。
+                var result = client.DeleteObjects(request);
+                if ((!quietMode) && (result.Keys != null))
+                {
+                    foreach (var obj in result.Keys)
+                    {
+                        count++;
+                    }
+                }
+                return keyList.Count == count;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
         /// <summary>
         /// 上传一个新文件
         /// </summary>
-        public static void PutObject(string _key, string _fileToUpload)
+        public static void PutObject(string key, string fileToUpload)
         {
             try
             {
-                client.PutObject(bucketName, _key, _fileToUpload);
-                // Console.WriteLine("上传文件成功");
+                client.PutObject(bucketName, key, fileToUpload);
             }
             catch (Exception ex)
             {
-                string msg = ex.Message;
-                //Console.WriteLine("上传文件失败.原因: {0}", ex.Message);
+                throw ex;
             }
         }
         /// <summary>
@@ -392,7 +419,6 @@ namespace ZswBlog.ThirdParty.AliyunOss
             {
                 throw ex;
             }
-            return false;
         }
         /// <summary>
         /// 上传一个文件
@@ -406,9 +432,10 @@ namespace ZswBlog.ThirdParty.AliyunOss
                 MemoryStream stream = new MemoryStream(filebyte, 0, filebyte.Length);
                 return client.PutObject(bucketName, fileName, stream).HttpStatusCode == System.Net.HttpStatusCode.OK;
             }
-            catch (Exception)
-            { }
-            return false;
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
         /// <summary>
         /// 获取鉴权后的URL,文件过期时间默认设置为100年

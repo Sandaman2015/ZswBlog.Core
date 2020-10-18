@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using NETCore.Encrypt;
-using ZswBlog.DTO;
 using ZswBlog.Entity;
 using ZswBlog.IServices;
 using ZswBlog.ThirdParty.AliyunOss;
@@ -44,11 +43,11 @@ namespace ZswBlog.Core.Controllers
         [Route("/attachment/upload/image")]
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> UploadImageList(List<IFormFile> files, [FromForm]int operatorId)
+        public async Task<ActionResult<List<FileAttachmentEntity>>> UploadImageList(List<IFormFile> files, [FromForm] int operatorId)
         {
             return await Task.Run(() =>
             {
-                long size = files.Sum(f => f.Length);
+                List<FileAttachmentEntity> fileAttachmentEntities = new List<FileAttachmentEntity>();
                 int successCount = 0;
                 foreach (var formFile in files)
                 {
@@ -59,7 +58,7 @@ namespace ZswBlog.Core.Controllers
                     if (extendFileName.Contains(fileType))
                     {
                         //加密文件同赋予新路径
-                        string filepath = "attachement/" + fileName + fileType;
+                        string filepath = "attachment/" + fileName + fileType;
                         FileAttachmentEntity attachmentEntity = new FileAttachmentEntity()
                         {
                             createDate = DateTime.Now,
@@ -71,13 +70,35 @@ namespace ZswBlog.Core.Controllers
                         };
                         if (_fileAttachmentService.AddEntity(attachmentEntity))
                         {
-                            if (FileUploadHelper.PushImg(stream, filepath)) successCount++;
+                            if (FileHelper.PushImg(stream, filepath))
+                            {
+                                successCount++;
+                                fileAttachmentEntities.Add(attachmentEntity);
+                            }
                         }
                     }
 
                 }
-                return Ok(new { count = successCount, size });
+                return Ok(new { count = successCount, result = fileAttachmentEntities });
             });
+        }
+
+        /// <summary>
+        /// 删除图片列表
+        /// </summary>
+        /// <returns></returns>
+        [Route("/attachment/delete/image")]
+        [HttpDelete]
+        [Authorize]
+        public async Task<ActionResult<bool>> DeleteImageList([FromForm] string[] fileNames)
+        {
+            return await Task.Run(() =>
+            {
+                //简单模式批量删除文件
+                bool flag = FileHelper.DeleteObject(fileNames.ToList());
+                dynamic rtValue = new { flag, msg = "删除成功" };
+                return Ok(rtValue);
+            });            
         }
     }
 }

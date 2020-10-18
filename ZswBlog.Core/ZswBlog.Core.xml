@@ -173,6 +173,12 @@
             <param name="operatorId"></param>
             <returns></returns>
         </member>
+        <member name="M:ZswBlog.Core.Controllers.FileAttachmentController.DeleteImageList(System.String[])">
+            <summary>
+            删除图片列表
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:ZswBlog.Core.Controllers.FriendLinkController.GetFriendLinks">
             <summary>
             获取所有友情链接
