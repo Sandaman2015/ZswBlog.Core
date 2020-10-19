@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ZswBlog.DTO\ZswBlog.DTO.csproj" />
     <ProjectReference Include="..\ZswBlog.Entity\ZswBlog.Entity.csproj" />
   </ItemGroup>
 

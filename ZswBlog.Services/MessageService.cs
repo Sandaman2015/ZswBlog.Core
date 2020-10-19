@@ -130,8 +130,8 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public List<MessageDTO> GetMessageOnNoReplyAndCount(int count)
         {
-            List<MessageEntity> messages = _messageRepository.GetModels(a => a.targetId == null).Take(count).ToList();
-            return _mapper.Map<List<MessageDTO>>(messages);
+            List<MessageDTO> messages = _messageRepository.GetMessageOnNoReply(count);
+            return messages;
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ZswBlog.DTO
 {
@@ -26,10 +27,12 @@ namespace ZswBlog.DTO
         /// <summary>
         /// 目标留言用户
         /// </summary>
+        [NotMapped]
         public int targetUserId { get; set; }
         /// <summary>
         /// 目标留言id
         /// </summary>
+        [NotMapped]
         public int targetId { get; set; }
         /// <summary>
         /// 留言位置
@@ -50,11 +53,13 @@ namespace ZswBlog.DTO
         /// <summary>
         /// 目标用户名称
         /// </summary>
+        [NotMapped]
         public string targetUserName { get; set; }
 
         /// <summary>
         /// 目标用户头像
         /// </summary>
+        [NotMapped]
         public string targetUserPortrait { get; set; }
     }
 }

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using ZswBlog.DTO;
 
 namespace ZswBlog.Entity
 {
@@ -98,6 +99,10 @@ namespace ZswBlog.Entity
         /// 
         /// </summary>
         public virtual DbSet<AnnouncementEntity> AnnouncementEntities { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public virtual DbSet<MessageDTO> MessageDTOList { get; set; }
         /// <summary>
         /// 
         /// </summary>

@@ -58,7 +58,7 @@ namespace ZswBlog.Core.Controllers
                 {
                     string ip = Request.HttpContext.Connection.RemoteIpAddress.ToString();
                     param.location = ip;
-                }
+                }                
                 msg = _messageService.AddEntity(param) ? "添加成功" : "添加失败";
                 // 发送邮件
                 if (param.targetId != 0 && param.targetUserId != null)
