@@ -1,8 +1,10 @@
-﻿using ZswBlog.Entity;
+﻿using System.Collections.Generic;
+using ZswBlog.DTO;
+using ZswBlog.Entity;
 
 namespace ZswBlog.IRepository
 {
-    //public interface IArticleRepository : IBaseRepository<Article> { }
-
-    public interface IArticleRepository : IBaseRepository<ArticleEntity> { }
+    public interface IArticleRepository : IBaseRepository<ArticleEntity> {
+        List<ArticleDTO> GetArticlesByNearSave(int count);
+    }
 }

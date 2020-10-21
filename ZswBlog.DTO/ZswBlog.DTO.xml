@@ -134,6 +134,11 @@
             文章标签
             </summary>
         </member>
+        <member name="P:ZswBlog.DTO.ArticleDTO.coverImage">
+            <summary>
+            文章背景图片
+            </summary>
+        </member>
         <member name="T:ZswBlog.DTO.ArticleTagDTO">
              <summary>
             文章表标签

@@ -401,7 +401,12 @@
             
             </summary>
         </member>
-        <member name="P:ZswBlog.Entity.ZswBlogDbContext.MessageDTOList">
+        <member name="P:ZswBlog.Entity.ZswBlogDbContext.MessageDTO">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.ZswBlogDbContext.ArticleDTO">
             <summary>
             
             </summary>

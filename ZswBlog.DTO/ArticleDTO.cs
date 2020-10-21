@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ZswBlog.DTO
 {
@@ -41,6 +42,7 @@ namespace ZswBlog.DTO
         /// <summary>
         /// 所属分类，默认为0是默认分类
         /// </summary>
+        [NotMapped]
         public int categoryId { get; set; }
 
         /// <summary>
@@ -51,6 +53,7 @@ namespace ZswBlog.DTO
         /// <summary>
         /// 是否显示1不显示,0显示
         /// </summary>
+        [NotMapped]
         public bool isShow { get; set; }
 
         /// <summary>
@@ -61,6 +64,7 @@ namespace ZswBlog.DTO
         /// <summary>
         /// 文章插图
         /// </summary>
+        [NotMapped]
         public int coverImageId { get; set; }
 
         /// <summary>
@@ -86,11 +90,18 @@ namespace ZswBlog.DTO
         /// <summary>
         /// 文章分类对象
         /// </summary>
+        [NotMapped]
         public CategoryDTO category { get; set; }
-        
+
         /// <summary>
         /// 文章标签
         /// </summary>
+        [NotMapped]
         public List<TagDTO> tags { get; set; }
+
+        /// <summary>
+        /// 文章背景图片
+        /// </summary>
+        public string coverImage { get;set;}
     }
 }

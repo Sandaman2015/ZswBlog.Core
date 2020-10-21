@@ -102,7 +102,11 @@ namespace ZswBlog.Entity
         /// <summary>
         /// 
         /// </summary>
-        public virtual DbSet<MessageDTO> MessageDTOList { get; set; }
+        public virtual DbSet<MessageDTO> MessageDTO { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public virtual DbSet<ArticleDTO> ArticleDTO { get; set; }
         /// <summary>
         /// 
         /// </summary>

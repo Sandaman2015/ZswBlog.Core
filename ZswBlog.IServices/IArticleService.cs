@@ -65,5 +65,11 @@ namespace ZswBlog.IServices
         /// <param name="categoryId"></param>
         /// <returns></returns>
         int GetArticleCountByCategoryId(int categoryId);
+        /// <summary>
+        /// 获取最近发布的文章
+        /// </summary>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        List<ArticleDTO> GetArticlesByNearSave(int count);
     }
 }

@@ -82,6 +82,15 @@ namespace ZswBlog.Services
         }
 
         /// <summary>
+        /// 获取最近发布的文章
+        /// </summary>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        public List<ArticleDTO> GetArticlesByNearSave(int count) {
+            return _articleRepository.GetArticlesByNearSave(count);
+        }
+
+        /// <summary>
         /// 根据类型分页获取文章DTO列表
         /// </summary>
         /// <param name="limit"></param>

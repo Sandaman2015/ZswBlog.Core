@@ -77,7 +77,7 @@ namespace ZswBlog.Core.Controllers
             initDataDTO = await RedisHelper.GetAsync<IndexInitDataDTO>("ZswBlog:Common:InitData");
             if (initDataDTO == null)
             {
-                List<ArticleDTO> articles = _articleService.GetArticlesByPageAndIsShow(3, 1, true).data;
+                List<ArticleDTO> articles = _articleService.GetArticlesByNearSave(3);
                 List<MessageDTO> messages = _messageService.GetMessageOnNoReplyAndCount(10);
                 DateTime date1 = DateTime.Parse("2019-10-08 00:00:00");
                 DateTime date2 = DateTime.Now;
