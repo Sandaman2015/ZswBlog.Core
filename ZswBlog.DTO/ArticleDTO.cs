@@ -62,12 +62,6 @@ namespace ZswBlog.DTO
         public DateTime lastUpdateDate { get; set; }
 
         /// <summary>
-        /// 文章插图
-        /// </summary>
-        [NotMapped]
-        public int coverImageId { get; set; }
-
-        /// <summary>
         /// 是否置顶1不置顶,0置顶
         /// </summary>
         public bool isTop { get; set; }

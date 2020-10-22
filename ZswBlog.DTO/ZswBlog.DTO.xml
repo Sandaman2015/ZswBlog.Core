@@ -99,11 +99,6 @@
             上次更新时间
             </summary>
         </member>
-        <member name="P:ZswBlog.DTO.ArticleDTO.coverImageId">
-            <summary>
-            文章插图
-            </summary>
-        </member>
         <member name="P:ZswBlog.DTO.ArticleDTO.isTop">
             <summary>
             是否置顶1不置顶,0置顶

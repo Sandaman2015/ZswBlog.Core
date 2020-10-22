@@ -144,7 +144,7 @@
             上次更新时间
             </summary>
         </member>
-        <member name="P:ZswBlog.Entity.ArticleEntity.coverImageId">
+        <member name="P:ZswBlog.Entity.ArticleEntity.coverImage">
             <summary>
             文章插图
             </summary>

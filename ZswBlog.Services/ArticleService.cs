@@ -87,7 +87,8 @@ namespace ZswBlog.Services
         /// <param name="count"></param>
         /// <returns></returns>
         public List<ArticleDTO> GetArticlesByNearSave(int count) {
-            return _articleRepository.GetArticlesByNearSave(count);
+            List<ArticleEntity> articles = _articleRepository.GetModels(a=> a.isShow).OrderByDescending(a=>a.createDate).Take(count).ToList();
+            return _mapper.Map<List<ArticleDTO>>(articles);
         }
 
         /// <summary>
