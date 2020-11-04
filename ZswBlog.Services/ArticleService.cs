@@ -1,5 +1,6 @@
 ﻿using Autofac.Extras.DynamicProxy;
 using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using ZswBlog.DTO;
@@ -28,11 +29,16 @@ namespace ZswBlog.Services
         public PageDTO<ArticleDTO> GetArticleListByCategoryId(int limit, int pageIndex, int categoryId)
         {
             List<ArticleEntity> articles = _articleRepository.GetModelsByPage(limit, pageIndex, false, (ArticleEntity a) => a.visits, (ArticleEntity ac) => ac.categoryId == categoryId, out int pageCount).ToList();
-            List<ArticleDTO> articleDTOs = _mapper.Map<List<ArticleDTO>>(articles);
+            List<ArticleDTO> articleDTOList = _mapper.Map<List<ArticleDTO>>(articles);
+            foreach (var articleDTO in articleDTOList)
+            {
+                articleDTO.category = _categoryService.GetCategoryById(articleDTO.categoryId);
+                articleDTO.tags = _articleTagService.GetTagListByArticleId(articleDTO.id);
+            }
             return new PageDTO<ArticleDTO>(limit,
                                            pageIndex,
                                            pageCount,
-                                           articleDTOs);
+                                           articleDTOList);
         }
 
         /// <summary>
@@ -43,7 +49,13 @@ namespace ZswBlog.Services
         public List<ArticleDTO> GetArticlesByDimTitle(string dimTitle)
         {
             List<ArticleEntity> articles = _articleRepository.GetModels(a => a.title.Contains(dimTitle)).Where(a => a.isShow).ToList();
-            return _mapper.Map<List<ArticleDTO>>(articles);
+            List<ArticleDTO> articleDTOList = _mapper.Map<List<ArticleDTO>>(articles);
+            foreach (var articleDTO in articleDTOList)
+            {
+                articleDTO.category = _categoryService.GetCategoryById(articleDTO.categoryId);
+                articleDTO.tags = _articleTagService.GetTagListByArticleId(articleDTO.id);
+            }
+            return articleDTOList;
         }
 
         /// <summary>
@@ -57,10 +69,11 @@ namespace ZswBlog.Services
             ArticleEntity article = _articleRepository.GetSingleModel(a => a.id == articleId);
             if (article == null)
             {
-                articleDTO = _mapper.Map<ArticleDTO>(article);
-                articleDTO.category = _categoryService.GetCategoryById(articleDTO.categoryId);
-                articleDTO.tags = _articleTagService.GetTagListByArticleId(articleId);
+                return null;
             }
+            articleDTO = _mapper.Map<ArticleDTO>(article);
+            articleDTO.category = _categoryService.GetCategoryById(articleDTO.categoryId);
+            articleDTO.tags = _articleTagService.GetTagListByArticleId(articleId);
             return articleDTO;
         }
 
@@ -74,11 +87,16 @@ namespace ZswBlog.Services
         public PageDTO<ArticleDTO> GetArticlesByPageAndIsShow(int limit, int pageIndex, bool isShow)
         {
             List<ArticleEntity> articles = _articleRepository.GetModelsByPage(limit, pageIndex, false, a => a.createDate, a => a.isShow == isShow, out int pageCount).ToList();
-            List<ArticleDTO> articleDTOs = _mapper.Map<List<ArticleDTO>>(articles);
+            List<ArticleDTO> articleDTOList = _mapper.Map<List<ArticleDTO>>(articles);
+            foreach (var articleDTO in articleDTOList)
+            {
+                articleDTO.category = _categoryService.GetCategoryById(articleDTO.categoryId);
+                articleDTO.tags = _articleTagService.GetTagListByArticleId(articleDTO.id);
+            }
             return new PageDTO<ArticleDTO>(limit,
                                            pageIndex,
                                            pageCount,
-                                           articleDTOs);
+                                           articleDTOList);
         }
 
         /// <summary>
@@ -86,8 +104,9 @@ namespace ZswBlog.Services
         /// </summary>
         /// <param name="count"></param>
         /// <returns></returns>
-        public List<ArticleDTO> GetArticlesByNearSave(int count) {
-            List<ArticleEntity> articles = _articleRepository.GetModels(a=> a.isShow).OrderByDescending(a=>a.createDate).Take(count).ToList();
+        public List<ArticleDTO> GetArticlesByNearSave(int count)
+        {
+            List<ArticleEntity> articles = _articleRepository.GetModels(a => a.isShow).OrderByDescending(a => a.createDate).Take(count).ToList();
             return _mapper.Map<List<ArticleDTO>>(articles);
         }
 
@@ -101,11 +120,16 @@ namespace ZswBlog.Services
         public PageDTO<ArticleDTO> GetArticlesByPageClass(int limit, int pageIndex, int articleClass)
         {
             List<ArticleEntity> articles = _articleRepository.GetModelsByPage(limit, pageIndex, false, a => a.createDate, a => a.categoryId == articleClass, out int pageCount).ToList();
-            List<ArticleDTO> articleDTOs = _mapper.Map<List<ArticleDTO>>(articles);
+            List<ArticleDTO> articleDTOList = _mapper.Map<List<ArticleDTO>>(articles);
+            foreach (var articleDTO in articleDTOList)
+            {
+                articleDTO.category = _categoryService.GetCategoryById(articleDTO.categoryId);
+                articleDTO.tags = _articleTagService.GetTagListByArticleId(articleDTO.id);
+            }
             return new PageDTO<ArticleDTO>(limit,
                                            pageIndex,
                                            pageCount,
-                                           articleDTOs);
+                                           articleDTOList);
         }
 
         /// <summary>

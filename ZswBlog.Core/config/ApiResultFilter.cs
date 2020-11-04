@@ -20,7 +20,7 @@ namespace ZswBlog.Core.Controllers
         public override void OnResultExecuting(ResultExecutingContext context)
         {
             var objectResult = context.Result as ObjectResult;
-            context.Result = new OkObjectResult(new BaseResultModel(code: 200, result: objectResult.Value));
+            context.Result = new OkObjectResult(new BaseResultModel(code: objectResult.StatusCode, result: objectResult.Value));
         }
     }
 }

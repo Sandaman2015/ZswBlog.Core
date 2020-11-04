@@ -36,6 +36,9 @@ namespace ZswBlog.Core.Controllers
             if (article == null)
             {
                 article = _articleService.GetArticleById(id);
+                if (article == null) {
+                    return NotFound("未找到该文章，请重新返回浏览");
+                }
                 await RedisHelper.SetAsync("ZswBlog:Article:Article-" + article.id, article, 60 * 60 * 6);
             }
             return Ok(article);

@@ -53,13 +53,11 @@ namespace ZswBlog.DTO
         /// <summary>
         /// 目标用户名称
         /// </summary>
-        [NotMapped]
         public string targetUserName { get; set; }
 
         /// <summary>
         /// 目标用户头像
         /// </summary>
-        [NotMapped]
         public string targetUserPortrait { get; set; }
     }
 }

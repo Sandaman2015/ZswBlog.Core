@@ -54,11 +54,11 @@ namespace ZswBlog.ThirdParty.Music
                 List<string> nameList= musicSongs.songs[0].ar.Select(a => a.name).ToList();                
                 musicDTOs.Add(new MusicDTO()
                 {
-                    title = musicSongs.songs[0].name,
+                    name = musicSongs.songs[0].name,
                     artist = string.Join(",", nameList),
-                    pic=musicSongs.songs[0].al.picUrl,                    
+                    cover=musicSongs.songs[0].al.picUrl,                    
                     lrc= lyric,
-                    src= musicUrl.data[0].url
+                    url= musicUrl.data[0].url
                 });
                 if (count == 0) {
                     break;

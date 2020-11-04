@@ -84,45 +84,19 @@ namespace ZswBlog.Services
         /// <param name="limit"></param>
         /// <param name="pageIndex"></param>
         /// <returns></returns>
-        public PageDTO<MessageTreeDTO> GetMessagesByRecursion(int limit, int pageIndex)
-        {
-            int pageCount;
-            List<MessageEntity> messages = _messageRepository.GetModelsByPage(limit, pageIndex, false, (a => a.createDate), (a => a.targetId == 0), out pageCount).ToList();
-            List<MessageTreeDTO> messageDTOs = _mapper.Map<List<MessageTreeDTO>>(messages);
-            foreach (MessageTreeDTO messageTree in messageDTOs)
+        public PageDTO<MessageTreeDTO> GetMessagesByRecursion(int limit, int pageIndex) {
+            List<MessageEntity> messageTopEntities = _messageRepository.GetModelsByPage(limit, pageIndex, false, a => a.createDate, a => a.targetId == 0 && a.targetUserId == null, out int total).ToList();
+            List<MessageTreeDTO> messageTreeList = new List<MessageTreeDTO>();
+            foreach (var item in messageTopEntities)
             {
+                MessageTreeDTO messageTree = _mapper.Map<MessageTreeDTO>(item);
                 ConvertMessageTree(messageTree);
-                messageTree.children = new List<MessageTreeDTO>();
-                RecursionComments(messageTree, messageTree.id, new List<MessageTreeDTO>());
+                List<MessageDTO> entities = _messageRepository.GetMessagesRecursive(item.id);                     
+                messageTree.children = _mapper.Map<List<MessageTreeDTO>>(entities);
+                messageTreeList.Add(messageTree);
             }
-            return new PageDTO<MessageTreeDTO>(pageIndex, limit, pageCount, messageDTOs);
+            return new PageDTO<MessageTreeDTO>(pageIndex, limit, total, messageTreeList);
         }
-
-        /// <summary>
-        /// 清空列表
-        /// </summary>
-        /// <returns></returns>
-        private bool RecursionComments(MessageTreeDTO treeDTO, int targetId, List<MessageTreeDTO> messageTrees)
-        {
-            List<MessageEntity> messages = _messageRepository.GetModels((MessageEntity me) => me.targetId == targetId).ToList();
-            if (messages.Count > 0)
-            {
-                List<MessageTreeDTO> treeDTOs = _mapper.Map<List<MessageTreeDTO>>(messages);
-                foreach (MessageTreeDTO message in treeDTOs)
-                {
-                    ConvertMessageTree(message);
-                    messageTrees.Add(message);
-                }
-                return RecursionComments(treeDTO, treeDTOs[0].id, messageTrees);
-            }
-            else
-            {
-                messageTrees = messageTrees.OrderBy(e => e.createDate).ToList();
-                treeDTO.children.AddRange(messageTrees);
-                return true;
-            }
-        }
-
         /// <summary>
         /// 根据count获取顶级留言
         /// </summary>

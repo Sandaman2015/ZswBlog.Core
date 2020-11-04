@@ -12,7 +12,7 @@ namespace ZswBlog.DTO
         /// <summary>
         /// 音乐标题
         /// </summary>
-        public string title { get; set; }
+        public string name { get; set; }
         /// <summary>
         /// 演唱人
         /// </summary>
@@ -20,11 +20,11 @@ namespace ZswBlog.DTO
         /// <summary>
         /// 音乐地址
         /// </summary>
-        public string src { get; set; }
+        public string url { get; set; }
         /// <summary>
         /// 音乐logo
         /// </summary>
-        public string pic { get; set; }
+        public string cover { get; set; }
         /// <summary>
         /// 音乐歌词
         /// </summary>

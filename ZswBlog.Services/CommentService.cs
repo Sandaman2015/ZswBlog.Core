@@ -131,7 +131,7 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public PageDTO<CommentTreeDTO> GetCommentsByRecursion(int limit, int pageIndex, int articleId)
         {
-            List<CommentEntity> comments = _commentRepository.GetModelsByPage(limit, pageIndex, false, a => a.createDate, a => a.targetId != 0 && a.articleId == articleId, out int pageCount).ToList();
+            List<CommentEntity> comments = _commentRepository.GetModelsByPage(limit, pageIndex, false, a => a.createDate, c =>c.articleId == articleId, out int pageCount).ToList();
             List<CommentTreeDTO> commentDTOs = _mapper.Map<List<CommentTreeDTO>>(comments);
             foreach (CommentTreeDTO commentTree in commentDTOs)
             {

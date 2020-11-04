@@ -579,7 +579,7 @@
             音乐返回DTO
             </summary>
         </member>
-        <member name="P:ZswBlog.DTO.MusicDTO.title">
+        <member name="P:ZswBlog.DTO.MusicDTO.name">
             <summary>
             音乐标题
             </summary>
@@ -589,12 +589,12 @@
             演唱人
             </summary>
         </member>
-        <member name="P:ZswBlog.DTO.MusicDTO.src">
+        <member name="P:ZswBlog.DTO.MusicDTO.url">
             <summary>
             音乐地址
             </summary>
         </member>
-        <member name="P:ZswBlog.DTO.MusicDTO.pic">
+        <member name="P:ZswBlog.DTO.MusicDTO.cover">
             <summary>
             音乐logo
             </summary>

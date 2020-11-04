@@ -20,6 +20,7 @@ namespace ZswBlog.Common.Profiles
         {
             CreateMap<MessageEntity, MessageDTO>();
             CreateMap<MessageEntity, MessageTreeDTO>();
+            CreateMap<MessageDTO, MessageTreeDTO>();
         }
     }
 }
