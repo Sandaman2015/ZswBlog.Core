@@ -205,6 +205,13 @@
             <param name="pageIndex"></param>
             <returns></returns>
         </member>
+        <member name="M:ZswBlog.Core.Controllers.MessageController.GetMessageListByCount(System.Int32)">
+            <summary>
+            获取留言列表
+            </summary>
+            <param name="count">获取数</param>
+            <returns></returns>
+        </member>
         <member name="M:ZswBlog.Core.Controllers.MessageController.SaveMessage(ZswBlog.Entity.MessageEntity)">
             <summary>
             添加留言

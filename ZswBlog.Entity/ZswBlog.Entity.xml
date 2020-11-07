@@ -411,6 +411,11 @@
             
             </summary>
         </member>
+        <member name="P:ZswBlog.Entity.ZswBlogDbContext.CommentDTO">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="M:ZswBlog.Entity.ZswBlogDbContext.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <summary>
             

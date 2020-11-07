@@ -17,6 +17,12 @@ namespace ZswBlog.Repository
             IQueryable<MessageDTO> messages = _readDbContext.Set<MessageDTO>().FromSqlRaw(sql, new object[0]);
             return messages.ToList();
         }
+        public List<MessageDTO> GetMessageOnNearSave(int count)
+        {
+            var sql = string.Format("select {0} from tab_message m left join tab_user u on u.id = m.userId order by createDate desc limit {1}", _sqlField, count);
+            IQueryable<MessageDTO> messages = _readDbContext.Set<MessageDTO>().FromSqlRaw(sql, new object[0]);
+            return messages.ToList();
+        }
 
         public List<MessageDTO> GetMessagesRecursive(int targetId)
         {

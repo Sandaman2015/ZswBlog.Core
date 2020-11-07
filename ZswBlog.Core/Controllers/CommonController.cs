@@ -41,8 +41,8 @@ namespace ZswBlog.Core.Controllers
             List<MusicDTO> musicDTOs = await RedisHelper.GetAsync<List<MusicDTO>>("ZswBlog:Common:MusicList");
             if (musicDTOs == null)
             {
-                musicDTOs = MusicHelper.GetMusicListByCount(30);
-                RedisHelper.SetAsync("ZswBlog:Common:MusicList", musicDTOs, 60 * 60 * 12);
+                musicDTOs = MusicHelper.GetMusicListByCount(20);
+                RedisHelper.SetAsync("ZswBlog:Common:MusicList", musicDTOs, 2400);
             }
             return Ok(musicDTOs);
         }
@@ -55,11 +55,11 @@ namespace ZswBlog.Core.Controllers
         [HttpGet]
         public async Task<ActionResult<List<MusicDTO>>> GetAllMusicList()
         {
-            List<MusicDTO> musicDTOs = await RedisHelper.GetAsync<List<MusicDTO>>("ZswBlog:Common:MusicAllList");
+            List<MusicDTO> musicDTOs = await RedisHelper.GetAsync<List<MusicDTO>>("ZswBlog:Common:MusicList");
             if (musicDTOs == null)
             {
-                musicDTOs = MusicHelper.GetMusicListByCount(100);
-                RedisHelper.SetAsync("ZswBlog:Common:MusicAllList", musicDTOs, 60 * 60 * 12);
+                musicDTOs = MusicHelper.GetMusicListByCount(50);
+                RedisHelper.SetAsync("ZswBlog:Common:MusicList", musicDTOs, 2400);
             }
             return Ok(musicDTOs);
         }
@@ -78,7 +78,7 @@ namespace ZswBlog.Core.Controllers
             if (initDataDTO == null)
             {
                 List<ArticleDTO> articles = _articleService.GetArticlesByNearSave(3);
-                List<MessageDTO> messages = _messageService.GetMessageOnNoReplyAndCount(10);
+                List<MessageDTO> messages = _messageService.GetMessageOnNearSave(10);
                 DateTime date1 = DateTime.Parse("2019-10-08 00:00:00");
                 DateTime date2 = DateTime.Now;
                 TimeSpan sp = date2.Subtract(date1);

@@ -133,5 +133,10 @@ namespace ZswBlog.Services
             treeDTO.userPortrait = user.portrait;
             treeDTO.userName = user.nickName;
         }
+
+        public List<MessageDTO> GetMessageOnNearSave(int count)
+        {
+            return _messageRepository.GetMessageOnNearSave(count);
+        }
     }
 }

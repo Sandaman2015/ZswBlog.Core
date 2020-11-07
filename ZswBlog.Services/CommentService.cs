@@ -131,17 +131,18 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public PageDTO<CommentTreeDTO> GetCommentsByRecursion(int limit, int pageIndex, int articleId)
         {
-            List<CommentEntity> comments = _commentRepository.GetModelsByPage(limit, pageIndex, false, a => a.createDate, c =>c.articleId == articleId, out int pageCount).ToList();
-            List<CommentTreeDTO> commentDTOs = _mapper.Map<List<CommentTreeDTO>>(comments);
-            foreach (CommentTreeDTO commentTree in commentDTOs)
+            List<CommentEntity> comments = _commentRepository.GetModelsByPage(limit, pageIndex, false, a => a.createDate, c =>c.articleId == articleId && c.targetId == 0, out int total).ToList();
+            List<CommentTreeDTO> commentDTOList = new List<CommentTreeDTO>();
+            foreach (CommentEntity item in comments)
             {
+                CommentTreeDTO commentTree = _mapper.Map<CommentTreeDTO>(item);
                 ConvertCommentTree(commentTree);
-                commentTree.children = new List<CommentTreeDTO>();
-                RecursionComments(commentTree, commentTree.id, new List<CommentTreeDTO>());
+                List<CommentDTO> treeDTOList = _commentRepository.GetCommentsRecursive(item.id, articleId);
+                commentTree.children = _mapper.Map<List<CommentTreeDTO>>(treeDTOList);
+                commentDTOList.Add(commentTree);
             }
-            return new PageDTO<CommentTreeDTO>(pageIndex, limit, pageCount, commentDTOs);
+            return new PageDTO<CommentTreeDTO>(pageIndex, limit, total, commentDTOList);
         }
-
         /// <summary>
         /// 清空列表
         /// </summary>

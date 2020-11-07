@@ -8,5 +8,6 @@ namespace ZswBlog.IRepository
     public interface IMessageRepository : IBaseRepository<MessageEntity> {
         List<MessageDTO> GetMessageOnNoReply(int count);
         List<MessageDTO> GetMessagesRecursive(int targetId);
+        List<MessageDTO> GetMessageOnNearSave(int count);
     }
 }

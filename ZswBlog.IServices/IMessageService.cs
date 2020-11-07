@@ -32,6 +32,13 @@ namespace ZswBlog.IServices
         List<MessageDTO> GetMessageOnNoReplyAndCount(int count);
 
         /// <summary>
+        /// 获取最近添加的留言列表
+        /// </summary>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        List<MessageDTO> GetMessageOnNearSave(int count);
+
+        /// <summary>
         /// 根据用户获取最新提交的留言
         /// </summary>
         /// <param name="userId"></param>

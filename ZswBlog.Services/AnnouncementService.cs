@@ -42,7 +42,7 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public List<AnnouncementDTO> GetPushAnnouncement()
         {
-            List<AnnouncementEntity> announcements = _announcementRepository.GetModels(a => a.endPushDate < DateTime.Now).ToList();
+            List<AnnouncementEntity> announcements = _announcementRepository.GetModels(a => a.endPushDate > DateTime.Now).ToList();
             return _mapper.Map<List<AnnouncementDTO>>(announcements);
         }
     }

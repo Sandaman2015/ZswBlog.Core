@@ -99,6 +99,7 @@ namespace ZswBlog.Entity
         /// 
         /// </summary>
         public virtual DbSet<AnnouncementEntity> AnnouncementEntities { get; set; }
+        // 充血关联模型实体
         /// <summary>
         /// 
         /// </summary>
@@ -107,6 +108,10 @@ namespace ZswBlog.Entity
         /// 
         /// </summary>
         public virtual DbSet<ArticleDTO> ArticleDTO { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public virtual DbSet<CommentDTO> CommentDTO { get; set; }
         /// <summary>
         /// 
         /// </summary>

@@ -37,11 +37,11 @@ namespace ZswBlog.Entity
         /// <summary>
         /// 目标用户
         /// </summary>
-        public int? targetUserId => targetUserId == null ? 0 : targetUserId;
+        public int? targetUserId { get; set; }
         /// <summary>
         /// 目标评论
         /// </summary>
-        public int? targetId => targetId == null ? 0 : targetId;
+        public int? targetId { get; set; }
         /// <summary>
         /// 评论位置
         /// </summary>

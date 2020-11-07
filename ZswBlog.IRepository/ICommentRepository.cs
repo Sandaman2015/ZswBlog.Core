@@ -1,7 +1,10 @@
-﻿using ZswBlog.Entity;
+﻿using System.Collections.Generic;
+using ZswBlog.DTO;
+using ZswBlog.Entity;
 
 namespace ZswBlog.IRepository
 {
-    //public interface ICommentRepository : IBaseRepository<Comment> { }
-    public interface ICommentRepository : IBaseRepository<CommentEntity> { }
+    public interface ICommentRepository : IBaseRepository<CommentEntity> {
+        List<CommentDTO> GetCommentsRecursive(int targetId, int articleId);
+    }
 }

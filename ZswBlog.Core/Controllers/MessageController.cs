@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ZswBlog.DTO;
@@ -40,6 +41,21 @@ namespace ZswBlog.Core.Controllers
             });
         }
 
+        /// <summary>
+        /// 获取留言列表
+        /// </summary>
+        /// <param name="count">获取数</param>
+        /// <returns></returns>
+        [Route(template: "/message/get/list/{count}")]
+        [HttpGet]
+        public async Task<ActionResult<List<MessageDTO>>> GetMessageListByCount([FromRoute] int count)
+        {
+            return await Task.Run(() =>
+            {
+                List<MessageDTO> pageDTO = _messageService.GetMessageOnNearSave(count);
+                return Ok(pageDTO);
+            });
+        }
 
         /// <summary>
         /// 添加留言
