@@ -26,7 +26,6 @@ namespace ZswBlog.Core.Controllers
         /// <summary>
         /// 获取指定置顶的通知公告
         /// </summary>
-        /// <param name="top"></param>
         /// <returns></returns>
         [Route("/announcement/get/top")]
         [HttpGet]
@@ -43,7 +42,6 @@ namespace ZswBlog.Core.Controllers
         /// <summary>
         /// 获取正在推送的通知公告
         /// </summary>
-        /// <param name="top"></param>
         /// <returns></returns>
         [Route("/announcement/get/push")]
         [HttpGet]
@@ -59,7 +57,6 @@ namespace ZswBlog.Core.Controllers
         /// <summary>
         /// 获取所有的通知公告
         /// </summary>
-        /// <param name="top"></param>
         /// <returns></returns>
         [Route("/announcement/get/all")]
         [HttpGet]

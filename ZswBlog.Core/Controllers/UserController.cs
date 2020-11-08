@@ -25,10 +25,11 @@ namespace ZswBlog.Core.Controllers
 
         private readonly IMapper _mapper;
 
-        public UserController(IUserService userService, IMapper mapper)
+        public UserController(IUserService userService, IMapper mapper, IQQUserInfoService userInfoService)
         {
             _userService = userService;
             _mapper = mapper;
+            _userInfoService = userInfoService;
         }
 
         /// <summary>
@@ -86,7 +87,7 @@ namespace ZswBlog.Core.Controllers
                 if (userDTO == null)
                 {
                     jsonResult = "本次登录没有找到您的信息，不如刷新试试重新登录吧";
-                    returnData = new { msg = jsonResult, url = returnUrl };
+                    returnData = new { msg = jsonResult, url = returnUrl,code = 400 };
                 }
                 else
                 {
@@ -96,7 +97,7 @@ namespace ZswBlog.Core.Controllers
                         RedisHelper.Set("ZswBlog:UserInfo:" + userDTO.id, userDTO, 60 * 60 * 6);
                     }
                     jsonResult = "登录成功！欢迎您：" + userDTO.nickName;
-                    returnData = new { msg = jsonResult, userId = userDTO, userEmail = userDTO.email, url = returnUrl };
+                    returnData = new { msg = jsonResult, code = 200, user = userDTO, userEmail = userDTO.email, url = returnUrl };
                 }
                 return Ok(returnData);
             });

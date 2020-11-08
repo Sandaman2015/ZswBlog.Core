@@ -29,15 +29,14 @@ namespace ZswBlog.Core.Controllers
         [HttpGet]
         public async Task<ActionResult<List<FriendLinkDTO>>> GetFriendLinks()
         {
-            List<FriendLinkDTO> friendLinkDTOs;
+            List<FriendLinkDTO> friendLinkDTOs = _friendLinkSerivce.GetFriendLinksByIsShow(true);
             //读取缓存
-            friendLinkDTOs = await RedisHelper.GetAsync<List<FriendLinkDTO>>("ZswBlog:FriendLink:FriendLinkDTOList");
-            if (friendLinkDTOs == null)
-            {
-                // 开启缓存
-                friendLinkDTOs = _friendLinkSerivce.GetFriendLinksByIsShow(true);
-                await RedisHelper.SetAsync("ZswBlog:FriendLink:FriendLinkList", friendLinkDTOs, 1200);
-            }
+            //friendLinkDTOs = await RedisHelper.GetAsync<List<FriendLinkDTO>>("ZswBlog:FriendLink:FriendLinkDTOList");
+            //if (friendLinkDTOs == null)
+            //{
+            // 开启缓存
+                //await RedisHelper.SetAsync("ZswBlog:FriendLink:FriendLinkList", friendLinkDTOs, 1200);
+            //}
             return Ok(friendLinkDTOs);
         }
 

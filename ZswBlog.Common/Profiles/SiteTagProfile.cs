@@ -18,7 +18,7 @@ namespace ZswBlog.Common.Profiles
         /// </summary>
         public SiteTagProfile()
         {
-            CreateMap<SiteTagEntity, SiteTagDTO>();
+            CreateMap<SiteTagEntity, SiteTagDTO>().ForMember(a=>a.name,a=>a.MapFrom(b=>b.title));
         }
     }
 }

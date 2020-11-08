@@ -38,5 +38,10 @@ namespace ZswBlog.Entity
         /// 是否显示1不显示,0显示
         /// </summary>
         public bool isShow { get; set; }
+
+        /// <summary>
+        /// 预览
+        /// </summary>
+        public string priview { get; set; }
     }
 }

@@ -31,7 +31,7 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public List<SiteTagDTO> GetAllSiteTags()
         {
-            List<SiteTagEntity> siteTags = _siteTagRepository.GetModels(a => a.id != 0).ToList();
+            List<SiteTagEntity> siteTags = _siteTagRepository.GetModels(a => a.isShow).ToList().OrderByDescending(a=>a.createDate).Take(30).ToList();
             return _mapper.Map<List<SiteTagDTO>>(siteTags);
         }
 

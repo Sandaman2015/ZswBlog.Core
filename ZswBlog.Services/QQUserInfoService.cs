@@ -77,7 +77,7 @@ namespace ZswBlog.Services
                         throw new Exception("该用户被禁止登陆！");
                     }
                     user.lastLoginDate = DateTime.Now;
-                    user.loginCount = 1;
+                    user.loginCount += 1;
                     _userService.UpdateEntity(user);
                     return _mapper.Map<UserDTO>(user);
                 }

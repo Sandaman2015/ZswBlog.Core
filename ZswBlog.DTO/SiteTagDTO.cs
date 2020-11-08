@@ -12,6 +12,6 @@
         /// <summary>
         /// 站点标签名称
         /// </summary>
-        public string title { get; set; }
+        public string name { get; set; }
     }
 }

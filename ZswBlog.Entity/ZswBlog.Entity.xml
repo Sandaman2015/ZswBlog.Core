@@ -712,6 +712,11 @@
             是否显示1不显示,0显示
             </summary>
         </member>
+        <member name="P:ZswBlog.Entity.TravelEntity.priview">
+            <summary>
+            预览
+            </summary>
+        </member>
         <member name="T:ZswBlog.Entity.TravelFileAttachmentEntity">
             <summary>
             旅行附件中间实体对象

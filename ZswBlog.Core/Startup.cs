@@ -84,6 +84,7 @@ namespace ZswBlog.Core
                 cfg.AddProfile<FriendLinkProfile>();
                 cfg.AddProfile<UserProfile>();
                 cfg.AddProfile<AnnouncementProfile>();
+                cfg.AddProfile<TravelProfile>();
             }));
 
             //添加全局返回结果，异常处理，参数验证

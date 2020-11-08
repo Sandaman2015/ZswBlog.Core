@@ -18,21 +18,18 @@
             <summary>
             获取指定置顶的通知公告
             </summary>
-            <param name="top"></param>
             <returns></returns>
         </member>
         <member name="M:ZswBlog.Core.Controllers.AnnouncementController.GetPushAnnouncements">
             <summary>
             获取正在推送的通知公告
             </summary>
-            <param name="top"></param>
             <returns></returns>
         </member>
         <member name="M:ZswBlog.Core.Controllers.AnnouncementController.GetAllAnnouncements">
             <summary>
             获取所有的通知公告
             </summary>
-            <param name="top"></param>
             <returns></returns>
         </member>
         <member name="T:ZswBlog.Core.Controllers.ArticleController">
@@ -236,6 +233,14 @@
             <summary>
             获取所有时间线文章
             </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.TravelController.GetTravelsByPage(System.Int32,System.Int32)">
+            <summary>
+            分页获取旅行信息
+            </summary>
+            <param name="limit"></param>
+            <param name="pageIndex"></param>
             <returns></returns>
         </member>
         <member name="M:ZswBlog.Core.Controllers.UserController.GetUserOnNearLogin">

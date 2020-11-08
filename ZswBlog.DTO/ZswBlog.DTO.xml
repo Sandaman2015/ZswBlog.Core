@@ -649,7 +649,7 @@
             站点标签id
             </summary>
         </member>
-        <member name="P:ZswBlog.DTO.SiteTagDTO.title">
+        <member name="P:ZswBlog.DTO.SiteTagDTO.name">
             <summary>
             站点标签名称
             </summary>
@@ -737,6 +737,11 @@
         <member name="P:ZswBlog.DTO.TravelDTO.isShow">
             <summary>
             是否显示1不显示,0显示
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.TravelDTO.priview">
+            <summary>
+            预览
             </summary>
         </member>
         <member name="T:ZswBlog.DTO.UserDTO">

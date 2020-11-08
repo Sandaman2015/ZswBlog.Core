@@ -14,10 +14,11 @@ namespace ZswBlog.Services
         public ITravelRepository _travelRepository { get; set; }
         public IMapper _mapper { get; set; }
 
-        public List<TravelDTO> GetTravels()
+        public PageDTO<TravelDTO> GetTravelsByPage(int pageSize,int pageIndex)
         {
-            List<TravelEntity> travels = _travelRepository.GetModels(a => a.id != 0).ToList();
-            return _mapper.Map<List<TravelDTO>>(travels);
+            List<TravelEntity> travels = _travelRepository.GetModelsByPage(pageSize, pageIndex,false,a=>a.createDate,a => a.id != 0 && a.isShow,out int total).ToList();
+            List<TravelDTO> travelDTOList = _mapper.Map<List<TravelDTO>>(travels);
+            return new PageDTO<TravelDTO>(pageIndex, pageSize, total, travelDTOList);
         }
 
         public TravelDTO GetTravel(int tId)

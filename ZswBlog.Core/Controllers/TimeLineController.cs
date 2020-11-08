@@ -28,13 +28,13 @@ namespace ZswBlog.Core.Controllers
         [HttpGet]
         public async Task<ActionResult<List<TimeLineDTO>>> GetAllTimeLineAsync()
         {
-            List<TimeLineDTO> timelinesDTOList;
-            timelinesDTOList = await RedisHelper.GetAsync<List<TimeLineDTO>>("ZswBlog:TimeLine:TimeLineList");
-            if (timelinesDTOList==null)
-            {
-                timelinesDTOList = _timeLineService.GetTimeLineList();
-                await RedisHelper.SetAsync("ZswBlog:TimeLine:TimeLineList", timelinesDTOList, 1200);
-            }
+            List<TimeLineDTO> timelinesDTOList = _timeLineService.GetTimeLineList();
+            //timelinesDTOList = await RedisHelper.GetAsync<List<TimeLineDTO>>("ZswBlog:TimeLine:TimeLineList");
+            //if (timelinesDTOList==null)
+            //{
+            //    timelinesDTOList = _timeLineService.GetTimeLineList();
+            //    await RedisHelper.SetAsync("ZswBlog:TimeLine:TimeLineList", timelinesDTOList, 1200);
+            //}
             return Ok(timelinesDTOList);
         }
     }

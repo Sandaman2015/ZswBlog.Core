@@ -27,13 +27,12 @@ namespace ZswBlog.Core.Controllers
         [HttpGet]
         public async Task<ActionResult<List<SiteTagDTO>>> GetAllSiteTagAsync()
         {
-            List<SiteTagDTO> siteTagDTOList;
-            siteTagDTOList = await RedisHelper.GetAsync<List<SiteTagDTO>>("ZswBlog:SiteTag:SiteTagList");
-            if (siteTagDTOList == null)
-            {
-                siteTagDTOList = _siteTagService.GetAllSiteTags();
-                await RedisHelper.SetAsync("ZswBlog:SiteTag:SiteTagList", siteTagDTOList, 1200);
-            }
+            List<SiteTagDTO> siteTagDTOList = _siteTagService.GetAllSiteTags();
+            //siteTagDTOList = await RedisHelper.GetAsync<List<SiteTagDTO>>("ZswBlog:SiteTag:SiteTagList");
+            //if (siteTagDTOList == null)
+            //{
+            //    await RedisHelper.SetAsync("ZswBlog:SiteTag:SiteTagList", siteTagDTOList, 1200);
+            //}
             return Ok(siteTagDTOList);
 
         }
