@@ -55,6 +55,6 @@ namespace ZswBlog.IServices
         /// <param name="targetId"></param>
         /// <returns></returns>
         PageDTO<CommentTreeDTO> GetCommentsByRecursion(int limit, int pageIndex, int articleId);
-
+        bool AddComment(CommentEntity t);
     }
 }

@@ -47,7 +47,7 @@ namespace ZswBlog.Services
         /// </summary>
         /// <param name="t"></param>
         /// <returns></returns>
-        public override bool AddEntity(MessageEntity t)
+        public bool AddMessage(MessageEntity t)
         {
             bool flag = false;
             UserDTO user = _userService.GetUserById(t.userId);
@@ -84,14 +84,15 @@ namespace ZswBlog.Services
         /// <param name="limit"></param>
         /// <param name="pageIndex"></param>
         /// <returns></returns>
-        public PageDTO<MessageTreeDTO> GetMessagesByRecursion(int limit, int pageIndex) {
+        public PageDTO<MessageTreeDTO> GetMessagesByRecursion(int limit, int pageIndex)
+        {
             List<MessageEntity> messageTopEntities = _messageRepository.GetModelsByPage(limit, pageIndex, false, a => a.createDate, a => a.targetId == 0 && a.targetUserId == null, out int total).ToList();
             List<MessageTreeDTO> messageTreeList = new List<MessageTreeDTO>();
             foreach (var item in messageTopEntities)
             {
                 MessageTreeDTO messageTree = _mapper.Map<MessageTreeDTO>(item);
                 ConvertMessageTree(messageTree);
-                List<MessageDTO> entities = _messageRepository.GetMessagesRecursive(item.id);                     
+                List<MessageDTO> entities = _messageRepository.GetMessagesRecursive(item.id);
                 messageTree.children = _mapper.Map<List<MessageTreeDTO>>(entities);
                 messageTreeList.Add(messageTree);
             }
@@ -117,7 +118,8 @@ namespace ZswBlog.Services
             if (treeDTO.targetId != 0)
             {
                 UserDTO targetUser = RedisHelper.Get<UserDTO>("ZswBlog:UserInfo:" + treeDTO.targetUserId);
-                if (targetUser == null) { 
+                if (targetUser == null)
+                {
                     targetUser = _userService.GetUserById(treeDTO.targetUserId);
                     RedisHelper.Set("ZswBlog:UserInfo:" + treeDTO.targetUserId, targetUser, 60 * 60 * 6);
                 }
@@ -127,8 +129,8 @@ namespace ZswBlog.Services
             UserDTO user = RedisHelper.Get<UserDTO>("ZswBlog:UserInfo:" + treeDTO.userId);
             if (user == null)
             {
-                user= _userService.GetUserById(treeDTO.userId);
-                RedisHelper.Set("ZswBlog:UserInfo:" + treeDTO.userId, user, 60*60*6);
+                user = _userService.GetUserById(treeDTO.userId);
+                RedisHelper.Set("ZswBlog:UserInfo:" + treeDTO.userId, user, 60 * 60 * 6);
             }
             treeDTO.userPortrait = user.portrait;
             treeDTO.userName = user.nickName;

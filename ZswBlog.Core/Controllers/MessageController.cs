@@ -68,23 +68,28 @@ namespace ZswBlog.Core.Controllers
         {
             return await Task.Run(() =>
             {
-                string msg;
+                bool flag;
                 // 获取IP地址
                 if (param.location != null)
                 {
                     string ip = Request.HttpContext.Connection.RemoteIpAddress.ToString();
                     param.location = ip;
-                }                
-                msg = _messageService.AddEntity(param) ? "添加成功" : "添加失败";
+                }
+                param.createDate = DateTime.Now;
+                if (param.targetId == null) {
+                    param.targetId = 0;
+                }
+                flag = _messageService.AddMessage(param);
                 // 发送邮件
                 if (param.targetId != 0 && param.targetUserId != null)
                 {
+                    flag = false;
                     MessageDTO toMessage = _messageService.GetMessageById(param.targetId.Value);
                     MessageDTO fromMessage = _messageService.GetMessageById(param.id);
                     bool isSendReplyEmail = _emailHelper.ReplySendEmail(toMessage, fromMessage, SendEmailType.回复留言);
-                    msg = isSendReplyEmail ? "回复成功" : "回复失败,请刷新页面后重试";
+                    flag = isSendReplyEmail;
                 }
-                return Ok(msg);
+                return Ok(flag);
             });
         }
     }

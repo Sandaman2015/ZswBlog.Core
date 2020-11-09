@@ -92,7 +92,7 @@ namespace ZswBlog.Core
             {
                 //options.Filters.Add<ValidateModelAttribute>();
                 options.Filters.Add<ApiResultFilter>();
-                options.Filters.Add<BaseExceptionFilter>();
+                //options.Filters.Add<BaseExceptionFilter>();
             });
 
             //ÈÕÆÚ×ª»»

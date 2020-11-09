@@ -87,7 +87,7 @@ namespace ZswBlog.Services
         /// </summary>
         /// <param name="t"></param>
         /// <returns></returns>
-        public override bool AddEntity(CommentEntity t)
+        public bool AddComment(CommentEntity t)
         {
             bool flag = false;
             UserDTO user = _userService.GetUserById(t.userId);
@@ -119,7 +119,7 @@ namespace ZswBlog.Services
             if (comments != null && comments.Count > 0)
             {
                 TimeSpan timeSpan = DateTime.Now - comments[0].createDate;
-                flag = timeSpan.TotalMinutes < 1;
+                flag = timeSpan.TotalMinutes > 1;
             }
             return flag;
         }
@@ -131,7 +131,7 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public PageDTO<CommentTreeDTO> GetCommentsByRecursion(int limit, int pageIndex, int articleId)
         {
-            List<CommentEntity> comments = _commentRepository.GetModelsByPage(limit, pageIndex, false, a => a.createDate, c =>c.articleId == articleId && c.targetId == 0, out int total).ToList();
+            List<CommentEntity> comments = _commentRepository.GetModelsByPage(limit, pageIndex, false, a => a.createDate, c => c.articleId == articleId && c.targetId == 0, out int total).ToList();
             List<CommentTreeDTO> commentDTOList = new List<CommentTreeDTO>();
             foreach (CommentEntity item in comments)
             {

@@ -44,5 +44,6 @@ namespace ZswBlog.IServices
         /// <param name="userId"></param>
         /// <returns></returns>
         bool IsExistsMessageOnNewestByUserId(int userId);
+        bool AddMessage(MessageEntity t);
     }
 }

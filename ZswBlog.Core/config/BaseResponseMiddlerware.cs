@@ -62,9 +62,9 @@ namespace ZswBlog.Core.config
             }
         }
         //异常错误信息捕获，将错误信息用Json方式返回
-        private static Task HandleExceptionAsync(HttpContext context, int statusCode, string msg)
+        private static Task HandleExceptionAsync(HttpContext context, int statusCode, string message)
         {
-            var result = JsonConvert.SerializeObject(new { Success = false, Msg = msg, Type = statusCode.ToString() });
+            var result = JsonConvert.SerializeObject(new { success = false, msg = message, code = statusCode });
             context.Response.ContentType = "application/json;charset=utf-8";
             return context.Response.WriteAsync(result);
         }

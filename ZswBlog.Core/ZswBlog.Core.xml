@@ -269,12 +269,6 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:ZswBlog.Core.config.BaseExceptionFilter.OnException(Microsoft.AspNetCore.Mvc.Filters.ExceptionContext)">
-            <summary>
-            触发异常捕获
-            </summary>
-            <param name="context"></param>
-        </member>
         <member name="T:ZswBlog.Core.config.BaseResponseMiddlerware">
             <summary>
             错误反馈中间件
