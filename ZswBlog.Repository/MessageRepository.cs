@@ -26,7 +26,7 @@ namespace ZswBlog.Repository
 
         public List<MessageDTO> GetMessagesRecursive(int targetId)
         {
-            var sql = string.Format("WITH RECURSIVE temp AS(select m.id, m.content, m.createDate, m.userId, m.targetUserId, m.targetId, m.location, m.browser, u.nickName as userName, u.portrait as userPortrait, us.nickName as targetUserName, us.portrait as targetUserPortrait from tab_message m left join tab_user u on u.id = m.userId left join tab_user us on us.id = m.targetuserId where targetId = {0} UNION ALL select  m.id, m.content, m.createDate, m.userId,m.targetUserId,m.targetId,m.location,m.browser,t.userName,t.userPortrait,t.targetUserName, t.targetUserPortrait from tab_message m, temp t where m.targetId = t.id and m.targetUserId = t.userId)SELECT * FROM temp", targetId);
+            var sql = string.Format("WITH RECURSIVE temp AS(select m.id, m.content, m.createDate, m.userId, m.targetUserId, m.targetId, m.location, m.browser from tab_message m where targetId = {0} UNION ALL select  m.id, m.content, m.createDate, m.userId, m.targetUserId, m.targetId, m.location, m.browser from tab_message m, temp t where m.targetId = t.id) SELECT t.*,us.nickName as targetUserName, us.portrait as targetUserPortrait, u.nickName as userName, u.portrait as userPortrait  FROM temp t left join tab_user u on u.id = t.userId left join tab_user us on us.id = t.targetUserId ", targetId);
             IQueryable<MessageDTO> messages = _readDbContext.Set<MessageDTO>().FromSqlRaw(sql, new object[0]);
             return messages.ToList();
         }

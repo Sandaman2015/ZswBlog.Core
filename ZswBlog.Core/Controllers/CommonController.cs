@@ -19,10 +19,10 @@ namespace ZswBlog.Core.Controllers
     {
         private readonly IArticleService _articleService;
         private readonly IMessageService _messageService;
-        private readonly ITagService _tagService;
+        private readonly ISiteTagService _tagService;
         private readonly IConfiguration conf;
 
-        public CommonController(IMessageService messageService, IArticleService articleService, ITagService tagService, IConfiguration conf)
+        public CommonController(IMessageService messageService, IArticleService articleService, ISiteTagService tagService, IConfiguration conf)
         {
             _messageService = messageService;
             _articleService = articleService;
@@ -82,7 +82,7 @@ namespace ZswBlog.Core.Controllers
                 DateTime date1 = DateTime.Parse("2019-10-08 00:00:00");
                 DateTime date2 = DateTime.Now;
                 TimeSpan sp = date2.Subtract(date1);
-                int tagCount = _tagService.GetEntitiesCount();
+                int tagCount = _tagService.GetAllSiteTagsCount();
                 int timeCount = sp.Days;
                 int articleCount = _articleService.GetEntitiesCount();
                 int visitCount = await GetVisit();

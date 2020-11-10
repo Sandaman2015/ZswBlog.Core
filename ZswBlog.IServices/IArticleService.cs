@@ -71,5 +71,11 @@ namespace ZswBlog.IServices
         /// <param name="count"></param>
         /// <returns></returns>
         List<ArticleDTO> GetArticlesByNearSave(int count);
+        /// <summary>
+        /// 添加文章喜爱数
+        /// </summary>
+        /// <param name="articleId"></param>
+        /// <returns></returns>
+        bool AddArticleLike(int articleId);
     }
 }

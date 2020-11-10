@@ -3,6 +3,7 @@ using AutoMapper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using ZswBlog.DTO;
 using ZswBlog.Entity;
 using ZswBlog.IRepository;
@@ -69,14 +70,35 @@ namespace ZswBlog.Services
             ArticleEntity article = _articleRepository.GetSingleModel(a => a.id == articleId);
             if (article == null)
             {
-                return null;
+                throw new Exception("未找到文章");
             }
             articleDTO = _mapper.Map<ArticleDTO>(article);
             articleDTO.category = _categoryService.GetCategoryById(articleDTO.categoryId);
             articleDTO.tags = _articleTagService.GetTagListByArticleId(articleId);
+            AddArticleVisitAsync(articleId);
             return articleDTO;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="articleId"></param>
+        private void AddArticleVisitAsync(int articleId)
+        {
+           ArticleEntity article = _articleRepository.GetSingleModel(a => a.id == articleId);
+           article.visits += 1;
+           _articleRepository.Update(article);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="articleId"></param>
+        /// <returns></returns>
+        public bool AddArticleLike(int articleId)
+        {
+           ArticleEntity article = _articleRepository.GetSingleModel(a => a.id == articleId);
+           article.like += 1;
+           return _articleRepository.Update(article);
+        }
         /// <summary>
         /// 分页获取文章DTO
         /// </summary>

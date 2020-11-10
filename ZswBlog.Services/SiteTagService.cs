@@ -45,5 +45,10 @@ namespace ZswBlog.Services
             SiteTagEntity siteTagEntity = _siteTagRepository.GetSingleModel(a => a.id == tId);
             return _siteTagRepository.Delete(siteTagEntity);
         }
+
+        public int GetAllSiteTagsCount()
+        {
+            return _siteTagRepository.GetModelsCountByCondition(a => a.isShow);
+        }
     }
 }

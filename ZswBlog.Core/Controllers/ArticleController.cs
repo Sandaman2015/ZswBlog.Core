@@ -60,6 +60,19 @@ namespace ZswBlog.Core.Controllers
                 return Ok(articles);
             });
         }
+        /// <summary>
+        /// 文章添加喜爱数
+        /// </summary>
+        /// <param name="articleId"></param>
+        /// <returns></returns>
+        [Route(template: "/article/save/like/{articleId}")]
+        [HttpPost]
+        public async Task<ActionResult<bool>> AddArticleLike(int articleId) {
+            return await Task.Run(() =>
+            {
+                return _articleService.AddArticleLike(articleId);
+            });
+        }
 
         /// <summary>
         /// 根据喜好获取文章

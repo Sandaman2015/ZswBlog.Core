@@ -18,5 +18,10 @@ namespace ZswBlog.IServices
         /// </summary>
         /// <returns></returns>
         List<SiteTagDTO> GetAllSiteTags();
+        /// <summary>
+        /// 获取所有站点标签数量
+        /// </summary>
+        /// <returns></returns>
+        int GetAllSiteTagsCount();
     }
 }

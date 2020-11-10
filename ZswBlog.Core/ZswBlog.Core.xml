@@ -52,6 +52,13 @@
             <param name="pageIndex"></param>
             <returns></returns>
         </member>
+        <member name="M:ZswBlog.Core.Controllers.ArticleController.AddArticleLike(System.Int32)">
+            <summary>
+            文章添加喜爱数
+            </summary>
+            <param name="articleId"></param>
+            <returns></returns>
+        </member>
         <member name="M:ZswBlog.Core.Controllers.ArticleController.GetArticleListByLikes">
             <summary>
             根据喜好获取文章
