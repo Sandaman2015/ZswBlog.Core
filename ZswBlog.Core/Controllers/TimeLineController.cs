@@ -26,7 +26,7 @@ namespace ZswBlog.Core.Controllers
         /// <returns></returns>
         [Route("/timeline/get/all")]
         [HttpGet]
-        public async Task<ActionResult<List<TimeLineDTO>>> GetAllTimeLineAsync()
+        public ActionResult<List<TimeLineDTO>> GetAllTimeLineAsync()
         {
             List<TimeLineDTO> timelinesDTOList = _timeLineService.GetTimeLineList();
             //timelinesDTOList = await RedisHelper.GetAsync<List<TimeLineDTO>>("ZswBlog:TimeLine:TimeLineList");

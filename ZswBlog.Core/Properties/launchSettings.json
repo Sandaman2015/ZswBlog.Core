@@ -32,9 +32,13 @@
       "applicationUrl": "http://localhost:5000"
     },
     "Docker": {
-      "commandName": "Docker",
+      "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "http://localhost:8004/Common/GetMusicList",
+      "launchUrl": "http://localhost:8004/swagger/index.html",
+      "environmentVariables": {
+        "ASPNETCORE_URLS": "http://+:8004",
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
       "publishAllPorts": true,
       "useSSL": true
     }

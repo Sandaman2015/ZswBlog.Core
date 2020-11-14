@@ -12,10 +12,12 @@ namespace ZswBlog.ThirdParty.Music
     {
 
         private static string _baseMusicUrl;
+        private static string _songMusicUrl;
 
         static MusicHelper()
         {
             _baseMusicUrl = ConfigHelper.GetValue("MusicBaseUrl");
+            _songMusicUrl = ConfigHelper.GetValue("SongBaseUrl");
         }
 
         public static List<MusicDTO> GetMusicListByCount(int count) {
@@ -39,10 +41,10 @@ namespace ZswBlog.ThirdParty.Music
                 string lyricResult = RequestHelper.HttpGet(songsLyric, Encoding.UTF8);
                 Musiclyric musiclyric = JsonConvert.DeserializeObject<Musiclyric>(lyricResult);
 
-                //获取歌曲连接
-                var songsUrl= string.Format(_baseMusicUrl + "/song/url?id={0}", tracks.id);
-                string songsUrlResult = RequestHelper.HttpGet(songsUrl, Encoding.UTF8);
-                MusicUrlData musicUrl = JsonConvert.DeserializeObject<MusicUrlData>(songsUrlResult);
+                ////获取歌曲连接
+                //var songsUrl= string.Format(_baseMusicUrl + "/song/url?id={0}", tracks.id);
+                //string songsUrlResult = RequestHelper.HttpGet(songsUrl, Encoding.UTF8);
+                //MusicUrlData musicUrl = JsonConvert.DeserializeObject<MusicUrlData>(songsUrlResult);
 
                 //填充歌曲歌词
                 string lyric = null;
@@ -51,15 +53,15 @@ namespace ZswBlog.ThirdParty.Music
                 if (!musiclyric.nolyric && !musiclyric.uncollected) {
                     lyric = musiclyric.lrc.lyric;
                 }
-                List<string> nameList= musicSongs.songs[0].ar.Select(a => a.name).ToList();                
+                List<string> nameList= musicSongs.songs[0].ar.Select(a => a.name).ToList();
                 musicDTOs.Add(new MusicDTO()
                 {
                     name = musicSongs.songs[0].name,
                     artist = string.Join(",", nameList),
-                    cover=musicSongs.songs[0].al.picUrl,                    
-                    lrc= lyric,
-                    url= musicUrl.data[0].url
-                });
+                    cover = musicSongs.songs[0].al.picUrl,
+                    lrc = lyric,
+                    url = _songMusicUrl + tracks.id + ".mp3"
+                }) ;
                 if (count == 0) {
                     break;
                 }

@@ -25,7 +25,7 @@ namespace ZswBlog.Core.Controllers
         /// <returns></returns>
         [Route("/sitetag/get/all")]
         [HttpGet]
-        public async Task<ActionResult<List<SiteTagDTO>>> GetAllSiteTagAsync()
+        public ActionResult<List<SiteTagDTO>> GetAllSiteTagAsync()
         {
             List<SiteTagDTO> siteTagDTOList = _siteTagService.GetAllSiteTags();
             //siteTagDTOList = await RedisHelper.GetAsync<List<SiteTagDTO>>("ZswBlog:SiteTag:SiteTagList");

@@ -21,6 +21,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using ZswBlog.Common.Jwt;
+using System.Reflection;
 
 namespace ZswBlog.Core
 {
@@ -135,11 +136,11 @@ namespace ZswBlog.Core
                 });
                 // 为 Swagger JSON and UI设置xml文档注释路径
                 var coreXmlPath = Path.Combine(AppContext.BaseDirectory, "ZswBlog.Core.xml");
-                var EntityXmlPath = Path.Combine(AppContext.BaseDirectory, "ZswBlog.Entity.xml");
-                var DTOXmlPath = Path.Combine(AppContext.BaseDirectory, "ZswBlog.DTO.xml");
+                var entityXmlPath = Path.Combine(AppContext.BaseDirectory, "ZswBlog.Entity.xml");
+                var dTOXmlPath = Path.Combine(AppContext.BaseDirectory, "ZswBlog.DTO.xml");
                 c.IncludeXmlComments(coreXmlPath);
-                c.IncludeXmlComments(EntityXmlPath);
-                c.IncludeXmlComments(DTOXmlPath);
+                c.IncludeXmlComments(entityXmlPath);
+                c.IncludeXmlComments(dTOXmlPath);
 
                 //Bearer 的scheme定义
                 var securityScheme = new OpenApiSecurityScheme()

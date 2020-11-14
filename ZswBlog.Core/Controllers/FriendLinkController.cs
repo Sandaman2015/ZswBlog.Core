@@ -27,7 +27,7 @@ namespace ZswBlog.Core.Controllers
         /// <returns></returns>
         [Route("/friendlink/get/all")]
         [HttpGet]
-        public async Task<ActionResult<List<FriendLinkDTO>>> GetFriendLinks()
+        public ActionResult<List<FriendLinkDTO>> GetFriendLinks()
         {
             List<FriendLinkDTO> friendLinkDTOs = _friendLinkSerivce.GetFriendLinksByIsShow(true);
             //读取缓存

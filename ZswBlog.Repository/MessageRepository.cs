@@ -9,7 +9,6 @@ namespace ZswBlog.Repository
 {
     public class MessageRepository : BaseRepository<MessageEntity>, IMessageRepository, IBaseRepository<MessageEntity>
     {
-        readonly static string _baseSqlField = "id,content,createDate,userId,targetUserId,targetId,location,browser";
         readonly static string _sqlField = "m.id,m.content,m.browser,m.location,m.userId,m.createDate,u.nickName as userName, u.portrait as userPortrait, null as targetUserPortrait, null as targetUserName";
         public List<MessageDTO> GetMessageOnNoReply(int count)
         {

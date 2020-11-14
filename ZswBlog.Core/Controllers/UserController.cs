@@ -74,6 +74,7 @@ namespace ZswBlog.Core.Controllers
         /// 获取QQ登录用户信息
         /// </summary>
         /// <param name="accessToken"></param>
+        /// <param name="returnUrl"></param>
         /// <returns></returns>
         [Route("/user/login/qq")]
         [HttpGet]

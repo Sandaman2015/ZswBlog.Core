@@ -1,0 +1,14 @@
+version: '3.4'
+
+services:
+  zswblog.core:
+    image: ${DOCKER_REGISTRY-}zswblogcore
+    build:
+      context: .
+      dockerfile: ZswBlog.Core/Dockerfile
+    ports:
+        - 8004:8004
+    volumes:
+        #此处请修改您的映射地址，由于在config中存在visit文件夹所以您需要在您的映射地址村新建一个visit.txt文件并在行首输入0后保存
+        #映射地址会自动同步文件
+        - "D:/Git_ZswBlog_Project/config:/app/config"

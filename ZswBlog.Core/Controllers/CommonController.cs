@@ -41,7 +41,7 @@ namespace ZswBlog.Core.Controllers
             List<MusicDTO> musicDTOs = await RedisHelper.GetAsync<List<MusicDTO>>("ZswBlog:Common:MusicList");
             if (musicDTOs == null)
             {
-                musicDTOs = MusicHelper.GetMusicListByCount(20);
+                musicDTOs = MusicHelper.GetMusicListByCount(30);
                 RedisHelper.SetAsync("ZswBlog:Common:MusicList", musicDTOs, 2400);
             }
             return Ok(musicDTOs);

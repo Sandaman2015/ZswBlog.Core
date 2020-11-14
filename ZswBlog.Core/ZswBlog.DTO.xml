@@ -1,0 +1,798 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ZswBlog.DTO</name>
+    </assembly>
+    <members>
+        <member name="T:ZswBlog.DTO.AnnouncementDTO">
+            <summary>
+            通知公告
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.AnnouncementDTO.id">
+            <summary>
+            操作id
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.AnnouncementDTO.createDate">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.AnnouncementDTO.operatorId">
+            <summary>
+            操作人
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.AnnouncementDTO.content">
+            <summary>
+            公告内容
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.AnnouncementDTO.isTop">
+            <summary>
+            是否置顶
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.AnnouncementDTO.sort">
+            <summary>
+            排序
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.AnnouncementDTO.endPushDate">
+            <summary>
+            结束推送时间
+            </summary>
+        </member>
+        <member name="T:ZswBlog.DTO.ArticleDTO">
+            <summary>
+            文章数据传输对象
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.ArticleDTO.id">
+            <summary>
+            文章id
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.ArticleDTO.createDate">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.ArticleDTO.operatorId">
+            <summary>
+            操作人
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.ArticleDTO.title">
+            <summary>
+            文章标题
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.ArticleDTO.content">
+            <summary>
+            文章内容
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.ArticleDTO.like">
+            <summary>
+            点赞数
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.ArticleDTO.categoryId">
+            <summary>
+            所属分类，默认为0是默认分类
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.ArticleDTO.visits">
+            <summary>
+            浏览次数
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.ArticleDTO.isShow">
+            <summary>
+            是否显示1不显示,0显示
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.ArticleDTO.lastUpdateDate">
+            <summary>
+            上次更新时间
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.ArticleDTO.isTop">
+            <summary>
+            是否置顶1不置顶,0置顶
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.ArticleDTO.topSort">
+            <summary>
+            置顶排序
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.ArticleDTO.readTime">
+            <summary>
+            阅读时间
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.ArticleDTO.textCount">
+            <summary>
+            文章总字数
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.ArticleDTO.category">
+            <summary>
+            文章分类对象
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.ArticleDTO.tags">
+            <summary>
+            文章标签
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.ArticleDTO.coverImage">
+            <summary>
+            文章背景图片
+            </summary>
+        </member>
+        <member name="T:ZswBlog.DTO.ArticleTagDTO">
+             <summary>
+            文章表标签
+             </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.ArticleTagDTO.id">
+            <summary>
+            中间表id
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.ArticleTagDTO.createDate">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.ArticleTagDTO.operatorId">
+            <summary>
+            操作人
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.ArticleTagDTO.articleId">
+            <summary>
+            文章id
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.ArticleTagDTO.tagId">
+            <summary>
+            标签id
+            </summary>
+        </member>
+        <member name="T:ZswBlog.DTO.BaseDTO">
+            <summary>
+            父类DTO 用与以后扩展
+            </summary>
+        </member>
+        <member name="T:ZswBlog.DTO.CategoryDTO">
+            <summary>
+            文章分类表
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CategoryDTO.id">
+            <summary>
+            分类主键
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CategoryDTO.name">
+            <summary>
+            分类名称
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CategoryDTO.operatorId">
+            <summary>
+            操作人
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CategoryDTO.createDate">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CategoryDTO.description">
+            <summary>
+            分类描述
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CategoryDTO.articleCount">
+            <summary>
+            文章数量
+            </summary>
+        </member>
+        <member name="T:ZswBlog.DTO.CommentDTO">
+            <summary>
+            评论DTO
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CommentDTO.id">
+            <summary>
+            评论id
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CommentDTO.createDate">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CommentDTO.content">
+            <summary>
+            评论内容
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CommentDTO.userId">
+            <summary>
+            用户id
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CommentDTO.articleId">
+            <summary>
+            所属文章id
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CommentDTO.targetUserId">
+            <summary>
+            目标用户
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CommentDTO.targetId">
+            <summary>
+            目标评论
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CommentDTO.location">
+            <summary>
+            评论位置
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CommentDTO.browser">
+            <summary>
+            浏览器
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CommentDTO.userName">
+            <summary>
+            用户名称
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CommentDTO.userPortrait">
+            <summary>
+            用户头像
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CommentDTO.targetUserName">
+            <summary>
+            目标用户名称
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CommentDTO.targetUserPortrait">
+            <summary>
+            目标用户头像
+            </summary>
+        </member>
+        <member name="T:ZswBlog.DTO.CommentTreeDTO">
+            <summary>
+            评论树
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CommentTreeDTO.id">
+            <summary>
+            评论id
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CommentTreeDTO.createDate">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CommentTreeDTO.content">
+            <summary>
+            评论内容
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CommentTreeDTO.userId">
+            <summary>
+            用户id
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CommentTreeDTO.articleId">
+            <summary>
+            所属文章id
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CommentTreeDTO.targetUserId">
+            <summary>
+            目标用户
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CommentTreeDTO.targetId">
+            <summary>
+            目标评论
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CommentTreeDTO.location">
+            <summary>
+            评论位置
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CommentTreeDTO.browser">
+            <summary>
+            浏览器
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CommentTreeDTO.userName">
+            <summary>
+            用户名称
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CommentTreeDTO.userPortrait">
+            <summary>
+            用户头像
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CommentTreeDTO.targetUserName">
+            <summary>
+            目标用户名称
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CommentTreeDTO.targetUserPortrait">
+            <summary>
+            目标用户头像
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CommentTreeDTO.children">
+            <summary>
+            评论子集
+            </summary>
+        </member>
+        <member name="T:ZswBlog.DTO.FriendLinkDTO">
+            <summary>
+            友情链接DTO
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.FriendLinkDTO.id">
+            <summary>
+            友情链接id
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.FriendLinkDTO.createDate">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.FriendLinkDTO.operatorId">
+            <summary>
+            操作人
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.FriendLinkDTO.title">
+            <summary>
+            友情链接标题
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.FriendLinkDTO.portrait">
+            <summary>
+            友情连接头像地址
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.FriendLinkDTO.src">
+            <summary>
+            友情链接地址
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.FriendLinkDTO.description">
+            <summary>
+            友情链接描述
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.FriendLinkDTO.isShow">
+            <summary>
+            是否显示1不显示,0显示
+            </summary>
+        </member>
+        <member name="T:ZswBlog.DTO.IndexInitDataDTO">
+            <summary>
+            页面初始化数据
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.IndexInitDataDTO.Messages">
+            <summary>
+            留言列表前二十
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.IndexInitDataDTO.Articles">
+            <summary>
+            文章列表前三
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.IndexInitDataDTO.DataCount">
+            <summary>
+            统计数据
+            </summary>
+        </member>
+        <member name="T:ZswBlog.DTO.CountData">
+            <summary>
+            页面统计数据
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CountData.VisitsCount">
+            <summary>
+            页面浏览数
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CountData.ArticleCount">
+            <summary>
+            文章总数
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CountData.RunDays">
+            <summary>
+            网站运行时间
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CountData.TagsCount">
+            <summary>
+            标签总数
+            </summary>
+        </member>
+        <member name="T:ZswBlog.DTO.MessageDTO">
+            <summary>
+            留言对象
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.MessageDTO.id">
+            <summary>
+            留言id
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.MessageDTO.content">
+            <summary>
+            留言内容
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.MessageDTO.createDate">
+            <summary>
+            留言时间
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.MessageDTO.userId">
+            <summary>
+            用户id
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.MessageDTO.targetUserId">
+            <summary>
+            目标留言用户
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.MessageDTO.targetId">
+            <summary>
+            目标留言id
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.MessageDTO.location">
+            <summary>
+            留言位置
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.MessageDTO.browser">
+            <summary>
+            浏览器
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.MessageDTO.userName">
+            <summary>
+            用户名称
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.MessageDTO.userPortrait">
+            <summary>
+            用户头像
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.MessageDTO.targetUserName">
+            <summary>
+            目标用户名称
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.MessageDTO.targetUserPortrait">
+            <summary>
+            目标用户头像
+            </summary>
+        </member>
+        <member name="T:ZswBlog.DTO.MessageTreeDTO">
+            <summary>
+            留言树DTO
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.MessageTreeDTO.id">
+            <summary>
+            留言id
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.MessageTreeDTO.content">
+            <summary>
+            留言内容
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.MessageTreeDTO.createDate">
+            <summary>
+            留言时间
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.MessageTreeDTO.userId">
+            <summary>
+            用户id
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.MessageTreeDTO.targetUserId">
+            <summary>
+            目标留言用户
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.MessageTreeDTO.targetId">
+            <summary>
+            目标留言id
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.MessageTreeDTO.location">
+            <summary>
+            留言位置
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.MessageTreeDTO.browser">
+            <summary>
+            浏览器
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.MessageTreeDTO.userName">
+            <summary>
+            用户名称
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.MessageTreeDTO.userPortrait">
+            <summary>
+            用户头像
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.MessageTreeDTO.targetUserName">
+            <summary>
+            目标用户名称
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.MessageTreeDTO.targetUserPortrait">
+            <summary>
+            目标用户头像
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.MessageTreeDTO.children">
+            <summary>
+            留言子集
+            </summary>
+        </member>
+        <member name="T:ZswBlog.DTO.MusicDTO">
+            <summary>
+            音乐返回DTO
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.MusicDTO.name">
+            <summary>
+            音乐标题
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.MusicDTO.artist">
+            <summary>
+            演唱人
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.MusicDTO.url">
+            <summary>
+            音乐地址
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.MusicDTO.cover">
+            <summary>
+            音乐logo
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.MusicDTO.lrc">
+            <summary>
+            音乐歌词
+            </summary>
+        </member>
+        <member name="T:ZswBlog.DTO.PageDTO`1">
+            <summary>
+            分页返回支持类
+            </summary>
+            <typeparam name="T">实体或DTO对象</typeparam>
+        </member>
+        <member name="M:ZswBlog.DTO.PageDTO`1.#ctor(System.Int32,System.Int32,System.Int32,System.Collections.Generic.List{`0})">
+            <summary>
+            填充数据对象
+            </summary>
+            <param name="pageIndex"></param>
+            <param name="pageSize"></param>
+            <param name="count"></param>
+            <param name="data"></param>
+        </member>
+        <member name="P:ZswBlog.DTO.PageDTO`1.pageIndex">
+            <summary>
+            页数
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.PageDTO`1.pageSize">
+            <summary>
+            页码
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.PageDTO`1.count">
+            <summary>
+            总数
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.PageDTO`1.data">
+            <summary>
+            对象集合
+            </summary>
+        </member>
+        <member name="T:ZswBlog.DTO.SiteTagDTO">
+            <summary>
+            站点标签对象
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.SiteTagDTO.id">
+            <summary>
+            站点标签id
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.SiteTagDTO.name">
+            <summary>
+            站点标签名称
+            </summary>
+        </member>
+        <member name="T:ZswBlog.DTO.TagDTO">
+            <summary>
+            标签数据传输对象
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.TagDTO.id">
+            <summary>
+            标签id
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.TagDTO.createDate">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.TagDTO.operatorId">
+            <summary>
+            操作人
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.TagDTO.name">
+            <summary>
+            标签名称
+            </summary>
+        </member>
+        <member name="T:ZswBlog.DTO.TimeLineDTO">
+            <summary>
+            时间线对象
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.TimeLineDTO.id">
+            <summary>
+            时间线id
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.TimeLineDTO.content">
+            <summary>
+            时间线内容
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.TimeLineDTO.title">
+            <summary>
+            时间线标题
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.TimeLineDTO.createDate">
+            <summary>
+            时间线时间
+            </summary>
+        </member>
+        <member name="T:ZswBlog.DTO.TravelDTO">
+            <summary>
+            旅行DTO
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.TravelDTO.id">
+            <summary>
+            旅行分享id
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.TravelDTO.createDate">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.TravelDTO.operatorId">
+            <summary>
+            操作人
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.TravelDTO.title">
+            <summary>
+            标题
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.TravelDTO.content">
+            <summary>
+            旅行分享内容
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.TravelDTO.isShow">
+            <summary>
+            是否显示1不显示,0显示
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.TravelDTO.priview">
+            <summary>
+            预览
+            </summary>
+        </member>
+        <member name="T:ZswBlog.DTO.UserDTO">
+            <summary>
+            用户对象
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.UserDTO.id">
+            <summary>
+            用户id
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.UserDTO.password">
+            <summary>
+            密码
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.UserDTO.email">
+            <summary>
+            邮件地址
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.UserDTO.nickName">
+            <summary>
+            昵称
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.UserDTO.loginTime">
+            <summary>
+            首次登录
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.UserDTO.portrait">
+            <summary>
+            头像
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.UserDTO.createDate">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.UserDTO.lastLoginDate">
+            <summary>
+            上次登录
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.UserDTO.loginCount">
+            <summary>
+            登录次数
+            </summary>
+        </member>
+    </members>
+</doc>
