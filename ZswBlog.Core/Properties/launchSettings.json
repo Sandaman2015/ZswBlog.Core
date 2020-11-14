@@ -14,7 +14,7 @@
   "$schema": "http://json.schemastore.org/launchsettings.json",
   "profiles": {
     "IIS Express": {
-      "commandName": "IISExpress",
+      "commandName": "Docker",
       "launchBrowser": true,
       "launchUrl": "http://localhost:8004/swagger/index.html",
       "environmentVariables": {
@@ -25,7 +25,7 @@
     "ZswBlog.Core": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "weatherforecast",
+      "launchUrl": "http://localhost:8004/swagger/index.html",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
@@ -33,14 +33,14 @@
     },
     "Docker": {
       "commandName": "Project",
-      "launchBrowser": true,
+      "launchBrowser": false,
       "launchUrl": "http://localhost:8004/swagger/index.html",
       "environmentVariables": {
         "ASPNETCORE_URLS": "http://+:8004",
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "publishAllPorts": true,
-      "useSSL": true
+      "publishAllPorts": false,
+      "useSSL": false
     }
   }
 }
