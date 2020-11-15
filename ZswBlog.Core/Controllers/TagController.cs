@@ -10,7 +10,6 @@ namespace ZswBlog.Web.Controllers
     /// <summary>
     /// 标签页
     /// </summary>
-    [Route("/api/[controller]/[action]")]
     [ApiController]
     public class TagController : ControllerBase
     {
@@ -31,7 +30,7 @@ namespace ZswBlog.Web.Controllers
         /// 获取所有的文章标签
         /// </summary>
         /// <returns></returns>
-        [Route("/tag/get/all")]
+        [Route("/api/tag/get/all")]
         [HttpGet]
         public async Task<ActionResult<List<TagDTO>>> GetTagList()
         {
@@ -54,7 +53,7 @@ namespace ZswBlog.Web.Controllers
         /// <param name="pageIndex"></param>
         /// <param name="tagId"></param>
         /// <returns></returns>
-        [Route(template: "/tag/get/page/{tagId}")]
+        [Route(template: "/api/tag/get/page/{tagId}")]
         [HttpGet]
         public async Task<ActionResult<PageDTO<ArticleDTO>>> GetArticleListByPageAndTagId(int limit, int pageIndex, [FromRoute] int tagId)
         {

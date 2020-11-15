@@ -9,7 +9,9 @@ using ZswBlog.IServices;
 
 namespace ZswBlog.Core.Controllers
 {
-    [Route("api/[controller]")]
+    /// <summary>
+    /// 时间线
+    /// </summary>
     [ApiController]
     public class TimeLineController : ControllerBase
     {
@@ -24,7 +26,7 @@ namespace ZswBlog.Core.Controllers
         /// 获取所有时间线文章
         /// </summary>
         /// <returns></returns>
-        [Route("/timeline/get/all")]
+        [Route("/api/timeline/get/all")]
         [HttpGet]
         public ActionResult<List<TimeLineDTO>> GetAllTimeLineAsync()
         {

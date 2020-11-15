@@ -1,0 +1,9 @@
+version: '3.1'
+services:
+    zswblogcore:
+      image: registry.cn-hangzhou.aliyuncs.com/zswblogcore/zswblogcore:latest-4
+      container_name: zswblog
+      ports:
+        - "8004:8004"
+      volumes:
+        - ./data/app/config:/app/config

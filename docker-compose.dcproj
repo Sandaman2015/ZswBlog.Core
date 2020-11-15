@@ -9,6 +9,7 @@
     <DockerServiceName>zswblog.core</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
+    <None Include="docker-compose-zswblog.yaml" />
     <None Include="docker-compose.yml" />
     <None Include=".dockerignore" />
   </ItemGroup>

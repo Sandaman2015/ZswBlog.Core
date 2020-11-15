@@ -8,5 +8,3 @@ services:
       dockerfile: ZswBlog.Core/Dockerfile
     ports:
         - 8004:8004
-    volumes:
-        - "D:/Git_ZswBlog_Project/config:/app/config"

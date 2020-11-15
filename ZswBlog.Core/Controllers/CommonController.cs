@@ -13,7 +13,6 @@ namespace ZswBlog.Core.Controllers
     /// <summary>
     /// 通用控制器
     /// </summary>
-    [Route("api/[controller]")]
     [ApiController]
     public class CommonController : ControllerBase
     {
@@ -34,7 +33,7 @@ namespace ZswBlog.Core.Controllers
         /// 获取歌曲列表
         /// </summary>
         /// <returns></returns>
-        [Route("/music/get/top")]
+        [Route("/api/music/get/top")]
         [HttpGet]
         public async Task<ActionResult<List<MusicDTO>>> GetMusicList()
         {
@@ -51,7 +50,7 @@ namespace ZswBlog.Core.Controllers
         /// 获取所有歌曲列表
         /// </summary>
         /// <returns></returns>
-        [Route("/music/get/all")]
+        [Route("/api/music/get/all")]
         [HttpGet]
         public async Task<ActionResult<List<MusicDTO>>> GetAllMusicList()
         {
@@ -68,7 +67,7 @@ namespace ZswBlog.Core.Controllers
         /// 获取初始化页面数据
         /// </summary>
         /// <returns></returns>
-        [Route("/common/get/init")]
+        [Route("/api/common/get/init")]
         [HttpGet]
         public async Task<ActionResult> GetInitData()
         {

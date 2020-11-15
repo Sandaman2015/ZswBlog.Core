@@ -33,7 +33,6 @@
     },
     "Docker": {
       "commandName": "Project",
-      "launchBrowser": false,
       "launchUrl": "http://localhost:8004/swagger/index.html",
       "environmentVariables": {
         "ASPNETCORE_URLS": "http://+:8004",

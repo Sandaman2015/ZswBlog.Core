@@ -12,7 +12,6 @@ namespace ZswBlog.Core.Controllers
     /// <summary>
     /// 通知公告
     /// </summary>
-    [Route("api/[controller]")]
     [ApiController]
     public class AnnouncementController : ControllerBase
     {
@@ -27,8 +26,7 @@ namespace ZswBlog.Core.Controllers
         /// 获取指定置顶的通知公告
         /// </summary>
         /// <returns></returns>
-        [Route("/announcement/get/top")]
-        [HttpGet]
+        [HttpGet("/api/announcement/get/top")]
         public async Task<ActionResult<List<AnnouncementDTO>>> GetAnnouncementsOnTop()
         {
             return await Task.Run(() =>
@@ -43,8 +41,7 @@ namespace ZswBlog.Core.Controllers
         /// 获取正在推送的通知公告
         /// </summary>
         /// <returns></returns>
-        [Route("/announcement/get/push")]
-        [HttpGet]
+        [HttpGet("/api/announcement/get/push")]
         public async Task<ActionResult<List<AnnouncementDTO>>> GetPushAnnouncements()
         {
             return await Task.Run(() =>
@@ -58,8 +55,7 @@ namespace ZswBlog.Core.Controllers
         /// 获取所有的通知公告
         /// </summary>
         /// <returns></returns>
-        [Route("/announcement/get/all")]
-        [HttpGet]
+        [HttpGet("/api/announcement/get/all")]
         public async Task<ActionResult<List<AnnouncementDTO>>> GetAllAnnouncements()
         {
             return await Task.Run(() =>

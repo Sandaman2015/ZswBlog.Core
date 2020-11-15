@@ -12,7 +12,6 @@ namespace ZswBlog.Core.Controllers
     /// <summary>
     /// 文章分类控制器
     /// </summary>
-    [Route("api/[controller]")]
     [ApiController]
     public class CategoryController : ControllerBase
     {
@@ -28,7 +27,7 @@ namespace ZswBlog.Core.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns> 
-        [Route(template:"/category/get/{id}")]
+        [Route(template: "/api/category/get/{id}")]
         [HttpGet]
         public async Task<ActionResult<CategoryDTO>> GetCategoryById(int id)
         {
@@ -42,7 +41,7 @@ namespace ZswBlog.Core.Controllers
         /// 获取所有文章类型
         /// </summary>
         /// <returns></returns>
-        [Route("/category/get/all")]
+        [Route("/api/category/get/all")]
         [HttpGet]
         public async Task<ActionResult<List<CategoryDTO>>> GetAllCategory()
         {

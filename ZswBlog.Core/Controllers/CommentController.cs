@@ -14,7 +14,6 @@ namespace ZswBlog.Core.Controllers
     /// <summary>
     /// 评论控制器
     /// </summary>
-    [Route("api/[controller]")]
     [ApiController]
     public class CommentController : ControllerBase
     {
@@ -41,7 +40,7 @@ namespace ZswBlog.Core.Controllers
         /// <param name="pageIndex"></param>
         /// <param name="articleId"></param>
         /// <returns></returns>
-        [Route(template: "/comment/get/page")]
+        [Route(template: "/api/comment/get/page")]
         [HttpGet]
         public async Task<ActionResult<PageDTO<CommentTreeDTO>>> GetCommentTreeListByPage([FromQuery] int limit, [FromQuery] int pageIndex,[FromQuery] int articleId)
         {
@@ -57,7 +56,7 @@ namespace ZswBlog.Core.Controllers
         /// </summary>
         /// <param name="param"></param>
         /// <returns></returns>
-        [Route(template: "/comment/save")]
+        [Route(template: "/api/comment/save")]
         [HttpPost]
         public async Task<ActionResult> SaveMessage([FromBody] CommentEntity param)
         {

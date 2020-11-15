@@ -9,7 +9,9 @@ using ZswBlog.IServices;
 
 namespace ZswBlog.Core.Controllers
 {
-    [Route("api/[controller]")]
+    /// <summary>
+    /// 旅行分享
+    /// </summary>
     [ApiController]
     public class TravelController : ControllerBase
     {
@@ -25,7 +27,7 @@ namespace ZswBlog.Core.Controllers
         /// <param name="limit"></param>
         /// <param name="pageIndex"></param>
         /// <returns></returns>
-        [Route("/travel/page/get")]
+        [Route("/api/travel/page/get")]
         [HttpGet]
         public async Task<ActionResult<PageDTO<TravelDTO>>> GetTravelsByPage(int limit,int pageIndex)
         {

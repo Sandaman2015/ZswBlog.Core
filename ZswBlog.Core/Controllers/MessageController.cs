@@ -12,7 +12,6 @@ namespace ZswBlog.Core.Controllers
     /// <summary>
     /// 留言控制器
     /// </summary>
-    [Route("api/[controller]")]
     [ApiController]
     public class MessageController : ControllerBase
     {
@@ -30,7 +29,7 @@ namespace ZswBlog.Core.Controllers
         /// <param name="limit"></param>
         /// <param name="pageIndex"></param>
         /// <returns></returns>
-        [Route(template: "/message/get/page")]
+        [Route(template: "/api/message/get/page")]
         [HttpGet]
         public async Task<ActionResult<PageDTO<MessageTreeDTO>>> GetMessageTreeListByPage([FromQuery] int limit, [FromQuery] int pageIndex)
         {
@@ -46,7 +45,7 @@ namespace ZswBlog.Core.Controllers
         /// </summary>
         /// <param name="count">获取数</param>
         /// <returns></returns>
-        [Route(template: "/message/get/list/{count}")]
+        [Route(template: "/api/message/get/list/{count}")]
         [HttpGet]
         public async Task<ActionResult<List<MessageDTO>>> GetMessageListByCount([FromRoute] int count)
         {
@@ -62,7 +61,7 @@ namespace ZswBlog.Core.Controllers
         /// </summary>
         /// <param name="param"></param>
         /// <returns></returns>
-        [Route(template: "/message/save")]
+        [Route(template: "/api/message/save")]
         [HttpPost]
         public async Task<ActionResult> SaveMessage([FromBody] MessageEntity param)
         {

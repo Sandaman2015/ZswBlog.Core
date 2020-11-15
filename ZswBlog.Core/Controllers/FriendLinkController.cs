@@ -10,7 +10,9 @@ using ZswBlog.IServices;
 
 namespace ZswBlog.Core.Controllers
 {
-    [Route("api/[controller]")]
+    /// <summary>
+    /// 友情链接
+    /// </summary>
     [ApiController]
     public class FriendLinkController : ControllerBase
     {
@@ -25,7 +27,7 @@ namespace ZswBlog.Core.Controllers
         /// 获取所有友情链接
         /// </summary>
         /// <returns></returns>
-        [Route("/friendlink/get/all")]
+        [Route("/api/friendlink/get/all")]
         [HttpGet]
         public ActionResult<List<FriendLinkDTO>> GetFriendLinks()
         {
@@ -45,7 +47,7 @@ namespace ZswBlog.Core.Controllers
         /// </summary>
         /// <param name="param"></param>
         /// <returns></returns>
-        [Route("/friendlink/save")]
+        [Route("/api/friendlink/save")]
         [HttpPost]
         public async Task<ActionResult> SaveFriendLink([FromBody]FriendLinkEntity param)
         {

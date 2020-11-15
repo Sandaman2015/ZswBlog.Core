@@ -10,7 +10,9 @@ using ZswBlog.IServices;
 
 namespace ZswBlog.Core.Controllers
 {
-    [Route("api/[controller]")]
+    /// <summary>
+    /// 本站标签
+    /// </summary>
     [ApiController]
     public class SiteTagController : ControllerBase
     {
@@ -23,7 +25,7 @@ namespace ZswBlog.Core.Controllers
         /// 获取所有站点标签
         /// </summary>
         /// <returns></returns>
-        [Route("/sitetag/get/all")]
+        [Route("/api/sitetag/get/all")]
         [HttpGet]
         public ActionResult<List<SiteTagDTO>> GetAllSiteTagAsync()
         {
@@ -42,7 +44,7 @@ namespace ZswBlog.Core.Controllers
         /// </summary>
         /// <param name="prama"></param>
         /// <returns></returns>
-        [Route("/sitetag/save")]
+        [Route("/api/sitetag/save")]
         [HttpPost]
         public async Task<ActionResult<bool>> SaveSiteTag(SiteTagEntity prama)
         {

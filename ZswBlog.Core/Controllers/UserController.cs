@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -11,11 +10,12 @@ using Microsoft.AspNetCore.Mvc;
 using ZswBlog.DTO;
 using ZswBlog.Entity;
 using ZswBlog.IServices;
-using ZswBlog.ThirdParty;
 
 namespace ZswBlog.Core.Controllers
 {
-    [Route("api/[controller]")]
+    /// <summary>
+    /// 用户
+    /// </summary>
     [ApiController]
     public class UserController : ControllerBase
     {
@@ -36,7 +36,7 @@ namespace ZswBlog.Core.Controllers
         /// 获取最近登录用户
         /// </summary>
         /// <returns></returns>
-        [Route("/user/get/near")]
+        [Route("/api/user/get/near")]
         [HttpGet]
         public async Task<ActionResult<List<UserDTO>>> GetUserOnNearLogin()
         {
@@ -56,7 +56,7 @@ namespace ZswBlog.Core.Controllers
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        [Route("/user/save/email")]
+        [Route("/api/user/save/email")]
         [HttpPost]
         public async Task<ActionResult<bool>> SaveEmail([FromBody] UserEntity user)
         {
@@ -76,7 +76,7 @@ namespace ZswBlog.Core.Controllers
         /// <param name="accessToken"></param>
         /// <param name="returnUrl"></param>
         /// <returns></returns>
-        [Route("/user/login/qq")]
+        [Route("/api/user/login/qq")]
         [HttpGet]
         public async Task<ActionResult> QQLoginByAccessToken([FromQuery] string accessToken, string returnUrl)//分页面跳转可以多带一个参数
         {
@@ -108,7 +108,7 @@ namespace ZswBlog.Core.Controllers
         /// 根据Token获取用户信息
         /// </summary>
         /// <returns></returns>
-        [Route("/user/admin/get/info")]
+        [Route("/api/user/admin/get/info")]
         [Authorize]
         [HttpGet]
         public async Task<ActionResult<dynamic>> GetUserInfoByAccessToken()

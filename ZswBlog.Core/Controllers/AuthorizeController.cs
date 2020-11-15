@@ -16,7 +16,6 @@ namespace ZswBlog.Core.Controllers
     /// <summary>
     /// Token分发
     /// </summary>
-    [Route("api/[controller]")]
     [ApiController]
     public class AuthorizeController : ControllerBase
     {
@@ -36,7 +35,7 @@ namespace ZswBlog.Core.Controllers
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        [Route("/authorize/get/token")]
+        [Route("/api/authorize/get/token")]
         [HttpPost]
         public async Task<ActionResult<dynamic>> GetToken([FromForm] UserVerifyQuery request)
         {

@@ -17,7 +17,6 @@ namespace ZswBlog.Core.Controllers
     /// <summary>
     /// 附件控制器
     /// </summary>
-    [Route("api/[controller]")]
     [ApiController]
     public class FileAttachmentController : ControllerBase
     {
@@ -40,7 +39,7 @@ namespace ZswBlog.Core.Controllers
         /// <param name="files"></param>
         /// <param name="operatorId"></param>
         /// <returns></returns>
-        [Route("/attachment/upload/image")]
+        [Route("/api/attachment/upload/image")]
         [HttpPost]
         [Authorize]
         public async Task<ActionResult<List<FileAttachmentEntity>>> UploadImageList(List<IFormFile> files, [FromForm] int operatorId)
@@ -87,7 +86,7 @@ namespace ZswBlog.Core.Controllers
         /// 删除图片列表
         /// </summary>
         /// <returns></returns>
-        [Route("/attachment/delete/image")]
+        [Route("/api/attachment/delete/image")]
         [HttpDelete]
         [Authorize]
         public async Task<ActionResult<bool>> DeleteImageList([FromForm] string[] fileNames)
