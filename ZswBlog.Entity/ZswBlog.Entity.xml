@@ -772,6 +772,11 @@
             昵称
             </summary>
         </member>
+        <member name="P:ZswBlog.Entity.UserEntity.loginName">
+            <summary>
+            登录名
+            </summary>
+        </member>
         <member name="P:ZswBlog.Entity.UserEntity.loginTime">
             <summary>
             首次登录

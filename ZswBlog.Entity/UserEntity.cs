@@ -31,6 +31,10 @@ namespace ZswBlog.Entity
         /// </summary>
         public string nickName { get; set; }
         /// <summary>
+        /// 登录名
+        /// </summary>
+        public string loginName { get; set; }
+        /// <summary>
         /// 首次登录
         /// </summary>
         public DateTime loginTime { get; set; }

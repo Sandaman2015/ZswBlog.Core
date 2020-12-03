@@ -65,7 +65,7 @@ namespace ZswBlog.Core
                 options.AddPolicy(MyAllowSpecificOrigins,
               builder => //builder.AllowAnyOrigin()
                          //根据自己情况调整
-              builder.WithOrigins("http://localhost:8080")
+              builder.WithOrigins("http://localhost:8080", "http://localhost:9528")
               .AllowAnyMethod()
               .AllowAnyHeader()
               .AllowCredentials());

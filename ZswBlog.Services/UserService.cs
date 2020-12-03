@@ -129,7 +129,7 @@ namespace ZswBlog.Services
             {
                 password = EncryptProvider.Base64Encrypt(password);
                 password = EncryptProvider.Md5(password);
-                UserEntity userEntity = _userRepository.GetSingleModel(a => a.nickName == userName && a.password == password);
+                UserEntity userEntity = _userRepository.GetSingleModel(a => a.loginName == userName && a.password == password);
                 return userEntity;
             }
             catch (Exception ex) {

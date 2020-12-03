@@ -22,6 +22,21 @@ namespace ZswBlog.Core.Controllers
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="article"></param>
+        /// <returns></returns>
+        [Route(template: "/api/article/save")]
+        [Authorize]
+        [HttpPost]
+        public async Task<ActionResult<bool>> SaveArticle(ArticleDTO article) {
+            return await Task.Run(() =>
+            {
+                return true;
+            });
+        }
+
+        /// <summary>
         /// 获取文章详情
         /// </summary>
         /// <param name="id">文章Id</param>
