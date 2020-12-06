@@ -1,6 +1,7 @@
 using AutoMapper;
 using ZswBlog.DTO;
 using ZswBlog.Entity;
+using ZswBlog.Query;
 
 namespace ZswBlog.Common.Profiles
 {
@@ -14,8 +15,8 @@ namespace ZswBlog.Common.Profiles
         /// </summary>
         public ArticleProfile()
         {
-            CreateMap<ArticleEntity, ArticleDTO>()
-              .ForMember(dest => dest.readTime, pro => pro.MapFrom(src => src.textCount / 250));
+            CreateMap<ArticleEntity, ArticleDTO>();
+            CreateMap<ArticleSaveQuery, ArticleEntity>();
         }
     }
 }

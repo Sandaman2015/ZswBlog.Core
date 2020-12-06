@@ -66,5 +66,22 @@ namespace ZswBlog.Common.Util
             }
             return content;
         }
+
+        /// <summary>
+        /// 去除字符串中的Html标签只保留纯文本
+        /// 去除以下标签闭合标签比如<img src="x.jpg" />
+        /// 成对标签，只去除标签本身，不去除中间的内容 比如<pre>xx</pre>,将保留xx
+        /// </summary>
+        /// <param name="htmlContent">Html内容</param>
+        /// <param name="length"></param>
+        /// <returns></returns>
+        public static string ReplaceTag(string htmlContent, int length = 0)
+        {
+            string retValue =Regex.Replace(htmlContent, "<[^>]+>", "");
+            retValue = Regex.Replace(retValue, "&[^;]+;", "");
+            if (length > 0 && retValue.Length > length)
+                return retValue.Substring(0, length);
+            return retValue;
+        }
     }
 }

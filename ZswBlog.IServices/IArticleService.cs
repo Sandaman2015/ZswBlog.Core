@@ -8,14 +8,6 @@ namespace ZswBlog.IServices
     public interface IArticleService : IBaseService<ArticleEntity>
     {
         /// <summary>
-        /// 根据类型获取分页文章
-        /// </summary>
-        /// <param name="limit">页码大小</param>
-        /// <param name="pageIndex">页数</param>
-        /// <param name="articleClass">文章类型</param>
-        /// <returns></returns>
-        PageDTO<ArticleDTO> GetArticlesByPageClass(int limit, int pageIndex, int articleClass);
-        /// <summary>
         /// 根据文章标题模糊获取
         /// </summary>
         /// <param name="dimTitle">模糊的文章标题</param>

@@ -58,10 +58,10 @@ namespace ZswBlog.Core.Controllers
                     _jwtSettings.Audience,
                     claims,
                     DateTime.Now,
-                    DateTime.Now.AddSeconds(10),
+                    DateTime.Now.AddSeconds(1800),
                     creds);
                 //获取JWT生成的Token
-                respData = new { flag = true ,express = DateTime.Now.AddSeconds(10), accessToken = new JwtSecurityTokenHandler().WriteToken(token) };
+                respData = new { flag = true ,express = DateTime.Now.AddSeconds(1800), accessToken = new JwtSecurityTokenHandler().WriteToken(token) };
                 return Ok(respData);
             });
         }

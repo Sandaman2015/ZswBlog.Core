@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ZswBlog.Common.Util;
 using ZswBlog.DTO;
 using ZswBlog.Entity;
 using ZswBlog.IRepository;
@@ -29,12 +30,13 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public PageDTO<ArticleDTO> GetArticleListByCategoryId(int limit, int pageIndex, int categoryId)
         {
-            List<ArticleEntity> articles = _articleRepository.GetModelsByPage(limit, pageIndex, false, (ArticleEntity a) => a.visits, (ArticleEntity ac) => ac.categoryId == categoryId, out int pageCount).ToList();
+            List<ArticleEntity> articles = _articleRepository.GetModelsByPage(limit, pageIndex, false, (ArticleEntity a) => a.visits, (ArticleEntity ac) => ac.categoryId == categoryId && ac.isShow, out int pageCount).ToList();
             List<ArticleDTO> articleDTOList = _mapper.Map<List<ArticleDTO>>(articles);
             foreach (var articleDTO in articleDTOList)
             {
                 articleDTO.category = _categoryService.GetCategoryById(articleDTO.categoryId);
                 articleDTO.tags = _articleTagService.GetTagListByArticleId(articleDTO.id);
+                articleDTO.content = StringHelper.ReplaceTag(articleDTO.content, 500);
             }
             return new PageDTO<ArticleDTO>(limit,
                                            pageIndex,
@@ -55,6 +57,7 @@ namespace ZswBlog.Services
             {
                 articleDTO.category = _categoryService.GetCategoryById(articleDTO.categoryId);
                 articleDTO.tags = _articleTagService.GetTagListByArticleId(articleDTO.id);
+                articleDTO.content = StringHelper.ReplaceTag(articleDTO.content, 500);
             }
             return articleDTOList;
         }
@@ -67,7 +70,7 @@ namespace ZswBlog.Services
         public ArticleDTO GetArticleById(int articleId)
         {
             ArticleDTO articleDTO = null;
-            ArticleEntity article = _articleRepository.GetSingleModel(a => a.id == articleId);
+            ArticleEntity article = _articleRepository.GetSingleModel(a => a.id == articleId && a.isShow);
             if (article == null)
             {
                 throw new Exception("未找到文章");
@@ -108,12 +111,13 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public PageDTO<ArticleDTO> GetArticlesByPageAndIsShow(int limit, int pageIndex, bool isShow)
         {
-            List<ArticleEntity> articles = _articleRepository.GetModelsByPage(limit, pageIndex, false, a => a.createDate, a => a.isShow == isShow, out int pageCount).ToList();
+            List<ArticleEntity> articles = _articleRepository.GetModelsByPage(limit, pageIndex, false, a => a.createDate, a => a.isShow == isShow && a.isShow, out int pageCount).ToList();
             List<ArticleDTO> articleDTOList = _mapper.Map<List<ArticleDTO>>(articles);
             foreach (var articleDTO in articleDTOList)
             {
                 articleDTO.category = _categoryService.GetCategoryById(articleDTO.categoryId);
                 articleDTO.tags = _articleTagService.GetTagListByArticleId(articleDTO.id);
+                articleDTO.content = StringHelper.ReplaceTag(articleDTO.content, 500);
             }
             return new PageDTO<ArticleDTO>(limit,
                                            pageIndex,
@@ -129,29 +133,12 @@ namespace ZswBlog.Services
         public List<ArticleDTO> GetArticlesByNearSave(int count)
         {
             List<ArticleEntity> articles = _articleRepository.GetModels(a => a.isShow).OrderByDescending(a => a.createDate).Take(count).ToList();
-            return _mapper.Map<List<ArticleDTO>>(articles);
-        }
-
-        /// <summary>
-        /// 根据类型分页获取文章DTO列表
-        /// </summary>
-        /// <param name="limit"></param>
-        /// <param name="pageIndex"></param>
-        /// <param name="articleClass"></param>
-        /// <returns></returns>
-        public PageDTO<ArticleDTO> GetArticlesByPageClass(int limit, int pageIndex, int articleClass)
-        {
-            List<ArticleEntity> articles = _articleRepository.GetModelsByPage(limit, pageIndex, false, a => a.createDate, a => a.categoryId == articleClass, out int pageCount).ToList();
-            List<ArticleDTO> articleDTOList = _mapper.Map<List<ArticleDTO>>(articles);
+            List<ArticleDTO> articleDTOList =_mapper.Map<List<ArticleDTO>>(articles);
             foreach (var articleDTO in articleDTOList)
             {
-                articleDTO.category = _categoryService.GetCategoryById(articleDTO.categoryId);
-                articleDTO.tags = _articleTagService.GetTagListByArticleId(articleDTO.id);
+                articleDTO.content = StringHelper.ReplaceTag(articleDTO.content, 500);
             }
-            return new PageDTO<ArticleDTO>(limit,
-                                           pageIndex,
-                                           pageCount,
-                                           articleDTOList);
+            return articleDTOList;
         }
 
         /// <summary>
@@ -203,7 +190,7 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public int GetArticleCountByCategoryId(int categoryId)
         {
-            return _articleRepository.GetModelsCountByCondition(a => a.categoryId == categoryId);
+            return _articleRepository.GetModelsCountByCondition(a => a.categoryId == categoryId && a.isShow);
         }
     }
 }

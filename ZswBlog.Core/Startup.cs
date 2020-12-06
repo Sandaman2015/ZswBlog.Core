@@ -86,14 +86,13 @@ namespace ZswBlog.Core
                 cfg.AddProfile<UserProfile>();
                 cfg.AddProfile<AnnouncementProfile>();
                 cfg.AddProfile<TravelProfile>();
+                cfg.AddProfile<TagProfile>();
             }));
 
             //添加全局返回结果，异常处理，参数验证
             services.AddControllers(options =>
             {
-                //options.Filters.Add<ValidateModelAttribute>();
                 options.Filters.Add<ApiResultFilter>();
-                //options.Filters.Add<BaseExceptionFilter>();
             });
 
             //日期转换
@@ -130,7 +129,7 @@ namespace ZswBlog.Core
                     Description = "ZswBlog WebSite ASP.NET CORE WebApi",
                     Contact = new OpenApiContact
                     {
-                        Name = "Sandman",
+                        Name = "Sandaman",
                         Email = "sandaman2015@163.com"
                     }
                 });

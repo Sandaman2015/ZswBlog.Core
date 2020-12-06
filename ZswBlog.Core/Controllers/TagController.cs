@@ -35,15 +35,18 @@ namespace ZswBlog.Web.Controllers
         public async Task<ActionResult<List<TagDTO>>> GetTagList()
         {
             List<TagDTO> articleTags;
-            articleTags = await RedisHelper.GetAsync<List<TagDTO>>("ZswBlog:Tag:TagList");
-            if (articleTags == null)
+            return await Task.Run(() =>
             {
-                //获取所有标签
                 articleTags = _tagService.GetAllTag();
+                return Ok(articleTags);
+            });
+            //articleTags = await RedisHelper.GetAsync<List<TagDTO>>("ZswBlog:Tag:TagList");
+            //if (articleTags == null)
+            //{
+                //获取所有标签
                 //开启缓存
-                await RedisHelper.SetAsync("ZswBlog:Tag:TagList", articleTags, 1200);
-            }
-            return Ok(articleTags);
+            //    await RedisHelper.SetAsync("ZswBlog:Tag:TagList", articleTags, 1200);
+            //}
         }
 
         /// <summary>

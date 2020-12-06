@@ -42,7 +42,7 @@ namespace ZswBlog.Core.Controllers
         [Route("/api/attachment/upload/image")]
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult<List<FileAttachmentEntity>>> UploadImageList(List<IFormFile> files, [FromForm] int operatorId)
+        public async Task<ActionResult<List<FileAttachmentEntity>>> UploadImageList(List<IFormFile> files, [FromQuery] int operatorId)
         {
             return await Task.Run(() =>
             {
