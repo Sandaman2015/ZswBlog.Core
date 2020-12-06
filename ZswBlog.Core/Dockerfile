@@ -33,6 +33,21 @@ COPY --from=publish /app/publish .
 ENV ASPNETCORE_URLS=http://+:8004
 #配置为开发环境
 ENV ASPNETCORE_ENVIRONMENT=Development
+#配置Appsetting.json的配置
+ENV CONNECTIONSTRINGS_REDISCONNECTIONSTRING="182.61.148.221:6379,password=732668,database=0"
+ENV CONNECTIONSTRINGS_CLUSTERMYSQLCONNECTION="server=182.61.148.221;port=3306;database=zswblog;SslMode=None;uid=root;pwd=732668;Allow User Variables=true;"
+ENV CONNECTIONSTRINGS_MASTERMYSQLCONNECTION="server=182.61.148.221;port=3306;database=zswblog;SslMode=None;uid=root;pwd=732668;Allow User Variables=true;"
+ENV QQAPPKEY=101858486
+ENV QQAPPSECRET=9ae0e34cadf786a0a7050659423a55e8
+ENV LOCATIONKEY=HIQBZ-WNQKK-6VZJ7-AR3XK-HEVAK-5DBXD
+ENV EMAILSENDADDRESS="1761317983@qq.com"
+ENV EMAILSECRETKEY=emqwtiqpmrpccbae
+ENV MUSICBASESITE="/PLAYLIST/DETAIL?ID=585511463"
+#阿里云
+ENV ACCESSKEYID=LTAI4GDdBoYhq6z8MHd9cxim
+ENV ACCESSKEYSECRET=31p2Z0XTVFvhrhl1e1JhzqAV5lYBL4
+ENV ENDPOINT="oss-cn-hangzhou.aliyuncs.com"
+ENV BUCKETNAME=zswblog
 #设置时间为中国上海
 ENV TZ=Asia/Shanghai
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone

@@ -111,7 +111,16 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public PageDTO<ArticleDTO> GetArticlesByPageAndIsShow(int limit, int pageIndex, bool isShow)
         {
-            List<ArticleEntity> articles = _articleRepository.GetModelsByPage(limit, pageIndex, false, a => a.createDate, a => a.isShow == isShow && a.isShow, out int pageCount).ToList();
+            List<ArticleEntity> articles;
+            int pageCount;
+            if (isShow)
+            {
+                articles = _articleRepository.GetModelsByPage(limit, pageIndex, false, a => a.createDate, a => a.isShow, out  pageCount).ToList();
+            }
+            else
+            {
+                articles = _articleRepository.GetModelsByPage(limit, pageIndex, false, a => a.createDate, null, out pageCount).ToList();
+            }
             List<ArticleDTO> articleDTOList = _mapper.Map<List<ArticleDTO>>(articles);
             foreach (var articleDTO in articleDTOList)
             {

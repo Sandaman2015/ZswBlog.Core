@@ -29,14 +29,13 @@ namespace ZswBlog.Core
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>().UseUrls("http://*:8004");
-                }).UseServiceProviderFactory(new AutofacServiceProviderFactory()).ConfigureLogging((hostingContext, logging) =>
+                }).UseServiceProviderFactory(new AutofacServiceProviderFactory())
+            .ConfigureLogging((hostingContext, logging) =>
                 {
-                    logging.ClearProviders(); //去掉默认添加的日志提供程序
-                                              //添加控制台输出
-                    logging.AddConsole();
-                    //添加调试输出
-                    //logging.AddDebug();
-                });
+            logging.ClearProviders(); //去掉默认添加的日志提供程序                                              
+            logging.AddConsole();//添加控制台输出                    
+            //logging.AddDebug();//添加调试输出
+        });
 
     }
 }

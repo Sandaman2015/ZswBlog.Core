@@ -22,6 +22,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using ZswBlog.Common.Jwt;
 using System.Reflection;
+using ZswBlog.Common.AopConfig;
 
 namespace ZswBlog.Core
 {
@@ -45,11 +46,11 @@ namespace ZswBlog.Core
         public IConfiguration Configuration { get; }
         readonly string MyAllowSpecificOrigins = "AllowAll";
         /// <summary>
-        /// 日志工厂
+        /// 此处日志用来配置数据库执行语句的
         /// </summary>
         private static readonly ILoggerFactory _logFactory = LoggerFactory.Create(build =>
         {
-            build.AddConsole();  // 用于控制台程序的输出
+            build.ClearProviders(); //去掉默认添加的日志提供程序
             build.AddDebug();    // 用于VS调试，输出窗口的输出
         });
 
@@ -71,6 +72,11 @@ namespace ZswBlog.Core
               .AllowCredentials());
             });
 
+            //使用自带依赖注入日志配置到Aop事务
+            services.AddSingleton((container) =>
+            {
+                return new EnableTransaction() { logger = _logFactory.CreateLogger("Transaction") };
+            });
 
             //AutoMapper映射文件
             services.AddSingleton((AutoMapper.IConfigurationProvider)new MapperConfiguration(cfg =>

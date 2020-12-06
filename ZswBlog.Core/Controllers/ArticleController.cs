@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using ZswBlog.Common.Util;
 using ZswBlog.DTO;
 using ZswBlog.Entity;
@@ -29,19 +29,40 @@ namespace ZswBlog.Core.Controllers
             _articleTagService = articleTagService;
         }
 
+
         /// <summary>
-        /// 
+        /// 分页获取文章列表
+        /// </summary>
+        /// <param name="limit"></param>
+        /// <param name="pageIndex"></param>
+        /// <returns></returns>
+        [Route(template: "/api/article/admin/get/page")]
+        [Authorize]
+        [HttpGet]
+        public async Task<ActionResult<PageDTO<ArticleDTO>>> GetArticleAllListByPage([FromQuery] int limit, [FromQuery] int pageIndex)
+        {
+            return await Task.Run(() =>
+            {
+                PageDTO<ArticleDTO> articles = _articleService.GetArticlesByPageAndIsShow(limit, pageIndex, false);
+                return Ok(articles);
+            });
+        }
+
+
+        /// <summary>
+        /// 保存文章
         /// </summary>
         /// <param name="article"></param>
         /// <returns></returns>
-        [Route(template: "/api/article/save")]
+        [Route(template: "/api/article/admin/save")]
         [Authorize]
         [HttpPost]
-        public async Task<ActionResult<bool>> SaveArticle(ArticleSaveQuery article) {
+        public async Task<ActionResult<bool>> SaveArticle(ArticleSaveQuery article)
+        {
             return await Task.Run(() =>
             {
                 ArticleEntity articleEntity = _mapper.Map<ArticleEntity>(article);
-                string replaceContent =  StringHelper.ReplaceTag(article.content, 99999);
+                string replaceContent = StringHelper.ReplaceTag(article.content, 99999);
                 //设置文章基本参数
                 articleEntity.like = 0;
                 articleEntity.visits = 0;
@@ -79,7 +100,8 @@ namespace ZswBlog.Core.Controllers
             if (article == null)
             {
                 article = _articleService.GetArticleById(id);
-                if (article == null) {
+                if (article == null)
+                {
                     return NotFound("未找到该文章，请重新返回浏览");
                 }
                 await RedisHelper.SetAsync("ZswBlog:Article:Article-" + article.id, article, 60 * 60 * 6);
@@ -103,6 +125,8 @@ namespace ZswBlog.Core.Controllers
                 return Ok(articles);
             });
         }
+
+
         /// <summary>
         /// 文章添加喜爱数
         /// </summary>
@@ -110,7 +134,8 @@ namespace ZswBlog.Core.Controllers
         /// <returns></returns>
         [Route(template: "/api/article/save/like/{articleId}")]
         [HttpPost]
-        public async Task<ActionResult<bool>> AddArticleLike(int articleId) {
+        public async Task<ActionResult<bool>> AddArticleLike(int articleId)
+        {
             return await Task.Run(() =>
             {
                 return _articleService.AddArticleLike(articleId);
