@@ -31,6 +31,12 @@ namespace ZswBlog.Core
     /// </summary>
     public class Startup
     {
+        private static readonly ILogger _logger = LoggerFactory.Create(build =>
+        {
+            build.AddConsole();  // 用于控制台程序的输出
+            build.AddDebug();    // 用于VS调试，输出窗口的输出
+        }).CreateLogger("Startup");
+
         /// <summary>
         /// 初始化Configuration文件
         /// </summary>
@@ -71,12 +77,7 @@ namespace ZswBlog.Core
               .AllowAnyHeader()
               .AllowCredentials());
             });
-
-            //使用自带依赖注入日志配置到Aop事务
-            services.AddSingleton((container) =>
-            {
-                return new EnableTransaction() { logger = _logFactory.CreateLogger("Transaction") };
-            });
+            
 
             //AutoMapper映射文件
             services.AddSingleton((AutoMapper.IConfigurationProvider)new MapperConfiguration(cfg =>
@@ -113,6 +114,8 @@ namespace ZswBlog.Core
             //Mysql连接池
             var readConnection = Configuration.GetConnectionString("ClusterMysqlConnection");
             var writleConnection = Configuration.GetConnectionString("MasterMysqlConnection");
+            _logger.LogInformation("读取数据库配置连接地址："+ readConnection);
+            _logger.LogInformation("更新数据库配置连接地址：" + writleConnection);
             services.AddDbContext<WritleDbContext>(options => options.UseMySql(writleConnection));
             services.AddDbContext<ReadDbContext>(options => options.UseMySql(readConnection)
             .EnableSensitiveDataLogging(true)
@@ -122,6 +125,7 @@ namespace ZswBlog.Core
 
             //初始化 RedisHelper
             var redisConnection = Configuration.GetConnectionString("RedisConnectionString");
+            _logger.LogInformation("Redis配置连接地址：" + redisConnection);
             var csredis = new CSRedis.CSRedisClient(redisConnection);
             RedisHelper.Initialization(csredis);
             // 注册Swagger服务
@@ -192,9 +196,12 @@ namespace ZswBlog.Core
         {
             if (env.IsDevelopment())
             {
+                _logger.LogInformation("当前为开发环境：Development");
                 app.UseDeveloperExceptionPage();
             }
-
+            else {
+                _logger.LogInformation("当前为生产环境：Production");
+            }
             //自定义HTTP状态错误反馈中间件
             app.UseErrorHandling();
 
@@ -231,7 +238,9 @@ namespace ZswBlog.Core
         /// <param name="containerBuilder"></param>
         public void ConfigureContainer(ContainerBuilder containerBuilder)
         {
+            _logger.LogInformation("开始装载Autofac依赖注入配置文件");
             containerBuilder.RegisterModule<ConfigureAutofac>();
+            _logger.LogInformation("装载Autofac依赖注入配置文件结束");
         }
     }
 }

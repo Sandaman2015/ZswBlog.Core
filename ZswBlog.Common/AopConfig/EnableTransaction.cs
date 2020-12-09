@@ -17,7 +17,11 @@ namespace ZswBlog.Common.AopConfig
         {
         }
 
-        public ILogger logger{ get; set; }
+        private static readonly ILogger logger = LoggerFactory.Create(build =>
+        {
+            build.AddConsole();  // 用于控制台程序的输出
+            build.AddDebug();    // 用于VS调试，输出窗口的输出
+        }).CreateLogger("TRANSACTION_LOG");
 
         /// <summary>
         /// AOP开启事务控制

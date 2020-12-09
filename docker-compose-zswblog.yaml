@@ -1,23 +1,30 @@
 version: '3.1'
 services:
     zswblogcore:
-      image: registry.cn-hangzhou.aliyuncs.com/zswblogcore/zswblogcore:latest-5
+      image: registry.cn-hangzhou.aliyuncs.com/zswblogcore/zswblogcore:latest-7
       container_name: zswblog
       environment:
-        - ASPNETCORE_URLS="http://+:8004"
-        - ASPNETCORE_ENVIRONMENT=Product
-        - CONNECTIONSTRINGS_REDISCONNECTIONSTRING="182.61.148.221:6379,password=732668,database=0"
-        - CONNECTIONSTRINGS_CLUSTERMYSQLCONNECTION="server=182.61.148.221;port=3306;database=zswblog;SslMode=None;uid=root;pwd=732668;Allow User Variables=true;"
-        - CONNECTIONSTRINGS_MASTERMYSQLCONNECTION="server=182.61.148.221;port=3306;database=zswblog;SslMode=None;uid=root;pwd=732668;Allow User Variables=true;"
+        - ASPNETCORE_URLS=http://+:8004
+        - ASPNETCORE_ENVIRONMENT=Production
+        # Redis和Mysql主从连接地址配置
+        - CONNECTIONSTRINGS__REDISCONNECTIONSTRING=182.61.148.221:6379,password=732668,database=0
+        - CONNECTIONSTRINGS__CLUSTERMYSQLCONNECTION=server=182.61.148.221;port=3306;database=zswblog;SslMode=None;uid=root;pwd=732668;Allow User Variables=true;
+        - CONNECTIONSTRINGS__MASTERMYSQLCONNECTION=server=182.61.148.221;port=3306;database=zswblog;SslMode=None;uid=root;pwd=732668;Allow User Variables=true;
+        # QQ登录AppKey和Secret
         - QQAPPKEY=101858486
         - QQAPPSECRET=9ae0e34cadf786a0a7050659423a55e8
+        # 腾讯位置开发者AppSecret
         - LOCATIONKEY=HIQBZ-WNQKK-6VZJ7-AR3XK-HEVAK-5DBXD
-        - EMAILSENDADDRESS="1761317983@qq.com"
+        # 邮箱服务
+        - EMAILSENDADDRESS=1761317983@qq.com
         - EMAILSECRETKEY=emqwtiqpmrpccbae
-        - MUSICBASESITE="/PLAYLIST/DETAIL?ID=585511463"            
+        # 网易云音乐站服务
+        - MUSICBASEURL=http://47.97.43.95:3000
+        - MUSICBASESITE=/PLAYLIST/DETAIL?ID=585511463         
+        # 阿里云OSS地址
         - ACCESSKEYID=LTAI4GDdBoYhq6z8MHd9cxim
         - ACCESSKEYSECRET=31p2Z0XTVFvhrhl1e1JhzqAV5lYBL4
-        - ENDPOINT="oss-cn-hangzhou.aliyuncs.com"
+        - ENDPOINT=oss-cn-hangzhou.aliyuncs.com
         - BUCKETNAME=zswblog
       ports:
         - "8004:8004"

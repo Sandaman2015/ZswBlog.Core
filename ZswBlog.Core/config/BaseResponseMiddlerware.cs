@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,11 @@ namespace ZswBlog.Core.config
     {
         private readonly RequestDelegate next;
 
+        private static readonly ILogger _logger = LoggerFactory.Create(build =>
+        {
+            build.AddConsole();  // 用于控制台程序的输出
+            build.AddDebug();    // 用于VS调试，输出窗口的输出
+        }).CreateLogger("ExceptionResponseMiddlerware");
         public BaseResponseMiddlerware(RequestDelegate next)
         {
             this.next = next;
@@ -64,6 +70,7 @@ namespace ZswBlog.Core.config
         //异常错误信息捕获，将错误信息用Json方式返回
         private static Task HandleExceptionAsync(HttpContext context, int statusCode, string message)
         {
+            _logger.LogError("异常捕获输出：" + message + "     请求Ip:" + context.Connection.RemoteIpAddress.ToString());
             var result = JsonConvert.SerializeObject(new { success = false, msg = message, code = statusCode });
             context.Response.ContentType = "application/json;charset=utf-8";
             return context.Response.WriteAsync(result);
