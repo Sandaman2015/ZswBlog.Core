@@ -21,8 +21,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using ZswBlog.Common.Jwt;
-using System.Reflection;
-using ZswBlog.Common.AopConfig;
+using Nacos.AspNetCore;
 
 namespace ZswBlog.Core
 {
@@ -77,7 +76,9 @@ namespace ZswBlog.Core
               .AllowAnyHeader()
               .AllowCredentials());
             });
-            
+
+            // important step
+            services.AddNacosAspNetCore(Configuration);
 
             //AutoMapperÓ³ÉäÎÄ¼þ
             services.AddSingleton((AutoMapper.IConfigurationProvider)new MapperConfiguration(cfg =>
