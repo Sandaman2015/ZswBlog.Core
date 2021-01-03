@@ -67,10 +67,17 @@ namespace ZswBlog.Services
         /// </summary>
         /// <param name="articleId"></param>
         /// <returns></returns>
-        public ArticleDTO GetArticleById(int articleId)
+        public ArticleDTO GetArticleById(int articleId, bool isShow)
         {
             ArticleDTO articleDTO = null;
-            ArticleEntity article = _articleRepository.GetSingleModel(a => a.id == articleId && a.isShow);
+            ArticleEntity article = null;
+            if (isShow)
+            {
+                article = _articleRepository.GetSingleModel(a => a.id == articleId && a.isShow);
+            }
+            else{
+                article = _articleRepository.GetSingleModel(a => a.id == articleId);
+            }
             if (article == null)
             {
                 throw new Exception("未找到文章");
@@ -119,7 +126,7 @@ namespace ZswBlog.Services
             }
             else
             {
-                articles = _articleRepository.GetModelsByPage(limit, pageIndex, false, a => a.createDate, null, out pageCount).ToList();
+                articles = _articleRepository.GetModelsByPage(limit, pageIndex, false, a => a.createDate, a => a.id != 0, out pageCount).ToList();
             }
             List<ArticleDTO> articleDTOList = _mapper.Map<List<ArticleDTO>>(articles);
             foreach (var articleDTO in articleDTOList)

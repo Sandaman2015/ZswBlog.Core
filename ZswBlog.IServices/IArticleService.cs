@@ -26,7 +26,7 @@ namespace ZswBlog.IServices
         /// </summary>
         /// <param name="articleId">文章Id</param>
         /// <returns></returns>
-        ArticleDTO GetArticleById(int articleId);
+        ArticleDTO GetArticleById(int articleId, bool isShow);
         /// <summary>
         /// 获取所有文章
         /// </summary>

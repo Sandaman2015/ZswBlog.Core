@@ -48,7 +48,6 @@ namespace ZswBlog.Core.Controllers
             });
         }
 
-
         /// <summary>
         /// 保存文章
         /// </summary>
@@ -85,7 +84,17 @@ namespace ZswBlog.Core.Controllers
                 return Ok(flag);
             });
         }
-
+        [Route(template: "/api/article/admin/get/{id}")]
+        [Authorize]
+        [HttpGet]
+        public async Task<ActionResult<ArticleDTO>> GetAdminArticleById(int id)
+        {
+            return await Task.Run(() =>
+            {
+                ArticleDTO article = _articleService.GetArticleById(id, false);
+                return Ok(article);
+            });
+        }
         /// <summary>
         /// 获取文章详情
         /// </summary>
@@ -99,7 +108,7 @@ namespace ZswBlog.Core.Controllers
             article = await RedisHelper.GetAsync<ArticleDTO>("ZswBlog:Article:Article-" + id);
             if (article == null)
             {
-                article = _articleService.GetArticleById(id);
+                article = _articleService.GetArticleById(id, true);
                 if (article == null)
                 {
                     return NotFound("未找到该文章，请重新返回浏览");

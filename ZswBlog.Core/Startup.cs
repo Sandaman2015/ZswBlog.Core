@@ -77,9 +77,6 @@ namespace ZswBlog.Core
               .AllowCredentials());
             });
 
-            // important step
-            services.AddNacosAspNetCore(Configuration);
-
             //AutoMapperÓ³ÉäÎÄ¼þ
             services.AddSingleton((AutoMapper.IConfigurationProvider)new MapperConfiguration(cfg =>
             {
