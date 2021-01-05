@@ -9,6 +9,7 @@ using ZswBlog.DTO;
 using ZswBlog.Entity;
 using ZswBlog.IServices;
 using ZswBlog.Query;
+using System.Linq;
 
 namespace ZswBlog.Core.Controllers
 {
@@ -31,7 +32,7 @@ namespace ZswBlog.Core.Controllers
 
 
         /// <summary>
-        /// 分页获取文章列表
+        /// 后台管理-分页获取文章列表
         /// </summary>
         /// <param name="limit"></param>
         /// <param name="pageIndex"></param>
@@ -39,7 +40,7 @@ namespace ZswBlog.Core.Controllers
         [Route(template: "/api/article/admin/get/page")]
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult<PageDTO<ArticleDTO>>> GetArticleAllListByPage([FromQuery] int limit, [FromQuery] int pageIndex)
+        public async Task<ActionResult<PageDTO<ArticleDTO>>> GetArticleAllListByPage([FromQuery] int limit, [FromQuery] int pageIndex, [FromQuery] int categoryId, string nickTitle)
         {
             return await Task.Run(() =>
             {
@@ -47,9 +48,52 @@ namespace ZswBlog.Core.Controllers
                 return Ok(articles);
             });
         }
+        /// <summary>
+        /// 后台管理-文章更新
+        /// </summary>
+        /// <param name="article"></param>
+        /// <returns></returns>
+        [Route(template: "/api/article/admin/update")]
+        [Authorize]
+        [HttpPost]
+        public async Task<ActionResult<bool>> UpdateArticle(ArticleUpdateQuery article) {
+            return await Task.Run(() =>
+            {
+                //转换文章对象
+                ArticleDTO articleDTO = _articleService.GetArticleById(article.id, false);
+                if (articleDTO == null) {
+                    throw new Exception("文章未找到");
+                }
+                ArticleEntity articleEntity = _mapper.Map<ArticleEntity>(articleDTO);
+                articleEntity = _mapper.Map<ArticleEntity>(article);
+                //赋值
+                string replaceContent = StringHelper.ReplaceTag(article.content, 99999);
+                articleEntity.lastUpdateDate = DateTime.Now;
+                articleEntity.textCount = replaceContent.Length;
+                articleEntity.readTime = replaceContent.Length / 125;
+                bool flag = _articleService.UpdateEntity(articleEntity);
+                if (!articleDTO.tags.Select(t => t.id).ToList().Equals(article.tagIdList))
+                {
+                    //删除所有文章标签
+                    _articleTagService.RemoveAlreadyExistArticleTag(article.id);
+                    //遍历添加文章标签
+                    foreach (int id in article.tagIdList)
+                    {
+                        _articleTagService.AddEntity(new ArticleTagEntity()
+                        {
+                            articleId = articleEntity.id,
+                            createDate = articleEntity.createDate,
+                            tagId = id,
+                            operatorId = -1
+                        });
+                    }
+                }
+                return Ok(flag);
+            });
+        }
 
         /// <summary>
-        /// 保存文章
+        /// 后台管理-保存文章
         /// </summary>
         /// <param name="article"></param>
         /// <returns></returns>
@@ -84,6 +128,11 @@ namespace ZswBlog.Core.Controllers
                 return Ok(flag);
             });
         }
+        /// <summary>
+        /// 后台管理-获取文章详情
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [Route(template: "/api/article/admin/get/{id}")]
         [Authorize]
         [HttpGet]

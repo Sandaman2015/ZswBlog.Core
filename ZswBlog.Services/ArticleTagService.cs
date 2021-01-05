@@ -16,14 +16,6 @@ namespace ZswBlog.Services
         public ITagRepository _tagRepository { get; set; }
         public IMapper _mapper { get; set; }
 
-        //public ArticleTagService(IArticleTagRepository repository, IArticleRepository articleRepository, ITagRepository tagRepository, IMapper mapper)
-        //{
-        //    _repository = repository;
-        //    _articleRepository = articleRepository;
-        //    _tagRepository = tagRepository;
-        //    _mapper = mapper;
-        //}
-
         /// <summary>
         /// 根据标签id获取
         /// </summary>
@@ -60,7 +52,21 @@ namespace ZswBlog.Services
             List<TagDTO> tagDTOs = _mapper.Map<List<TagDTO>>(tags);
             return tagDTOs;
         }
-        
+        /// <summary>
+        /// 删除所有已经绑定的文章标签
+        /// </summary>
+        /// <param name="articleId"></param>
+        /// <returns></returns>
+        public bool RemoveAlreadyExistArticleTag(int articleId)
+        {
+            List<ArticleTagEntity> articleTags = _articleTagRepository.GetModels(a => a.articleId == articleId).ToList();
+            articleTags.ForEach(a =>
+            {
+                _articleTagRepository.Delete(a);
+            });
+            return true;
+        }
+
         /// <summary>
         /// 删除实体对象
         /// </summary>

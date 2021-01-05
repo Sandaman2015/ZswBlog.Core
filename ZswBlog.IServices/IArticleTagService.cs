@@ -21,5 +21,12 @@ namespace ZswBlog.IServices
         /// <param name="tagId">标签id</param>
         /// <returns></returns>
         PageDTO<ArticleDTO> GetArticleListIdByTagId(int limit, int pageIndex, int tagId);
+
+        /// <summary>
+        /// 删除所有已经绑定的文章标签
+        /// </summary>
+        /// <param name="articleId">文章编号</param>
+        /// <returns></returns>
+        bool RemoveAlreadyExistArticleTag(int articleId);
     }
 }
