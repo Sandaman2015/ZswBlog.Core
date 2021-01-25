@@ -21,7 +21,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using ZswBlog.Common.Jwt;
-using Nacos.AspNetCore;
 
 namespace ZswBlog.Core
 {
@@ -30,10 +29,10 @@ namespace ZswBlog.Core
     /// </summary>
     public class Startup
     {
-        private static readonly ILogger _logger = LoggerFactory.Create(build =>
+        private static readonly ILogger Logger = LoggerFactory.Create(build =>
         {
-            build.AddConsole();  // 用于控制台程序的输出
-            build.AddDebug();    // 用于VS调试，输出窗口的输出
+            build.AddConsole(); // 用于控制台程序的输出
+            build.AddDebug(); // 用于VS调试，输出窗口的输出
         }).CreateLogger("Startup");
 
         /// <summary>
@@ -48,15 +47,17 @@ namespace ZswBlog.Core
         /// <summary>
         /// 配置访问属性
         /// </summary>
-        public IConfiguration Configuration { get; }
-        readonly string MyAllowSpecificOrigins = "AllowAll";
+        private IConfiguration Configuration { get; }
+
+        private const string MyAllowSpecificOrigins = "AllowAll";
+
         /// <summary>
         /// 此处日志用来配置数据库执行语句的
         /// </summary>
-        private static readonly ILoggerFactory _logFactory = LoggerFactory.Create(build =>
+        private static readonly ILoggerFactory LogFactory = LoggerFactory.Create(build =>
         {
             build.ClearProviders(); //去掉默认添加的日志提供程序
-            build.AddDebug();    // 用于VS调试，输出窗口的输出
+            build.AddDebug(); // 用于VS调试，输出窗口的输出
         });
 
         /// <summary>
@@ -69,16 +70,16 @@ namespace ZswBlog.Core
             services.AddCors(options =>
             {
                 options.AddPolicy(MyAllowSpecificOrigins,
-              builder => //builder.AllowAnyOrigin()
-                         //根据自己情况调整
-              builder.WithOrigins("http://localhost:8080", "http://localhost:9528")
-              .AllowAnyMethod()
-              .AllowAnyHeader()
-              .AllowCredentials());
+                    builder => //builder.AllowAnyOrigin()
+                        //根据自己情况调整
+                        builder.WithOrigins("http://localhost:8080", "http://localhost:9528")
+                            .AllowAnyMethod()
+                            .AllowAnyHeader()
+                            .AllowCredentials());
             });
 
             //AutoMapper映射文件
-            services.AddSingleton((AutoMapper.IConfigurationProvider)new MapperConfiguration(cfg =>
+            services.AddSingleton((AutoMapper.IConfigurationProvider) new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile<ArticleProfile>();
                 cfg.AddProfile<MessageProfile>();
@@ -95,41 +96,37 @@ namespace ZswBlog.Core
             }));
 
             //添加全局返回结果，异常处理，参数验证
-            services.AddControllers(options =>
-            {
-                options.Filters.Add<ApiResultFilter>();
-            });
+            services.AddControllers(options => { options.Filters.Add<ApiResultFilter>(); });
 
             //日期转换
             services.AddMvc().AddJsonOptions(configure =>
-             {
-                 configure.JsonSerializerOptions.Converters.Add(new DatetimeJsonConverter());
-             }).AddNewtonsoftJson(
+            {
+                configure.JsonSerializerOptions.Converters.Add(new DatetimeJsonConverter());
+            }).AddNewtonsoftJson(
                 // 
                 option => option.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-                );
+            );
 
             //Mysql连接池
             var readConnection = Configuration.GetConnectionString("ClusterMysqlConnection");
             var writleConnection = Configuration.GetConnectionString("MasterMysqlConnection");
-            _logger.LogInformation("读取数据库配置连接地址："+ readConnection);
-            _logger.LogInformation("更新数据库配置连接地址：" + writleConnection);
+            Logger.LogInformation("读取数据库配置连接地址：" + readConnection);
+            Logger.LogInformation("更新数据库配置连接地址：" + writleConnection);
             services.AddDbContext<WritleDbContext>(options => options.UseMySql(writleConnection));
             services.AddDbContext<ReadDbContext>(options => options.UseMySql(readConnection)
-            .EnableSensitiveDataLogging(true)
-            .UseLoggerFactory(_logFactory)
+                .UseLoggerFactory(LogFactory)
             );
 
 
             //初始化 RedisHelper
             var redisConnection = Configuration.GetConnectionString("RedisConnectionString");
-            _logger.LogInformation("Redis配置连接地址：" + redisConnection);
+            Logger.LogInformation("Redis配置连接地址：" + redisConnection);
             var csredis = new CSRedis.CSRedisClient(redisConnection);
             RedisHelper.Initialization(csredis);
             // 注册Swagger服务
             services.AddSwaggerGen(c =>
             {
-                // 添加文档信息
+                // 添加文档信息s
                 c.SwaggerDoc("v2", new OpenApiInfo
                 {
                     Title = "ZswBlog",
@@ -144,15 +141,16 @@ namespace ZswBlog.Core
                 // 为 Swagger JSON and UI设置xml文档注释路径
                 var coreXmlPath = Path.Combine(AppContext.BaseDirectory, "ZswBlog.Core.xml");
                 var entityXmlPath = Path.Combine(AppContext.BaseDirectory, "ZswBlog.Entity.xml");
-                var dTOXmlPath = Path.Combine(AppContext.BaseDirectory, "ZswBlog.DTO.xml");
+                var dtoXmlPath = Path.Combine(AppContext.BaseDirectory, "ZswBlog.DTO.xml");
                 c.IncludeXmlComments(coreXmlPath);
                 c.IncludeXmlComments(entityXmlPath);
-                c.IncludeXmlComments(dTOXmlPath);
+                c.IncludeXmlComments(dtoXmlPath);
 
                 //Bearer 的scheme定义
                 var securityScheme = new OpenApiSecurityScheme()
                 {
-                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                    Description =
+                        "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
                     Name = "Authorization",
                     //参数添加在头部
                     In = ParameterLocation.Header,
@@ -194,12 +192,14 @@ namespace ZswBlog.Core
         {
             if (env.IsDevelopment())
             {
-                _logger.LogInformation("当前为开发环境：Development");
+                Logger.LogInformation("当前为开发环境：Development");
                 app.UseDeveloperExceptionPage();
             }
-            else {
-                _logger.LogInformation("当前为生产环境：Production");
+            else
+            {
+                Logger.LogInformation("当前为生产环境：Production");
             }
+
             //自定义HTTP状态错误反馈中间件
             app.UseErrorHandling();
 
@@ -210,10 +210,7 @@ namespace ZswBlog.Core
             app.UseSwagger();
 
             // 配置SwaggerUI
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v2/swagger.json", "ZswBlog ApiDocument");
-            });
+            app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v2/swagger.json", "ZswBlog ApiDocument"); });
 
             //访问wwwroot文件夹的配置，开启静态文件
             app.UseStaticFiles();
@@ -225,20 +222,18 @@ namespace ZswBlog.Core
             app.UseAuthentication();
             app.UseAuthorization();
             //开启地址映射
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
+
         /// <summary>
         /// 依赖注入
         /// </summary>
         /// <param name="containerBuilder"></param>
         public void ConfigureContainer(ContainerBuilder containerBuilder)
         {
-            _logger.LogInformation("开始装载Autofac依赖注入配置文件");
+            Logger.LogInformation("开始装载Autofac依赖注入配置文件");
             containerBuilder.RegisterModule<ConfigureAutofac>();
-            _logger.LogInformation("装载Autofac依赖注入配置文件结束");
+            Logger.LogInformation("装载Autofac依赖注入配置文件结束");
         }
     }
 }
