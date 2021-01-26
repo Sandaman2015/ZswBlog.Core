@@ -1,24 +1,27 @@
-﻿
-using System;
+﻿using System;
 using System.Threading.Tasks;
-using ZswBlog.Entity;
+using ZswBlog.Entity.DbContext;
 using ZswBlog.IRepository;
 using ZswBlog.IServices;
 
 namespace ZswBlog.Services
 {
-    public class FileAttachmentService : BaseService<FileAttachmentEntity, IFileAttachmentRepository>, IFileAttachmentService
+    public class FileAttachmentService : BaseService<FileAttachmentEntity, IFileAttachmentRepository>,
+        IFileAttachmentService
     {
-        public IFileAttachmentRepository _fileAttachmentRepository { get; set; }
+        public IFileAttachmentRepository FileAttachmentRepository { get; set; }
 
         /// <summary>
         /// 根据id获取附件对象
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public FileAttachmentEntity GetAttachmentById(int id)
+        public async Task<FileAttachmentEntity> GetAttachmentByIdAsync(int id)
         {
-            return _fileAttachmentRepository.GetSingleModel(a => a.id == id);
+            return await Task.Run(() =>
+            {
+                return FileAttachmentRepository.GetSingleModelAsync(a => a.id == id).Result;
+            });
         }
 
         /// <summary>
@@ -26,9 +29,12 @@ namespace ZswBlog.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public string GetFilePathById(int id)
+        public async Task<string> GetFilePathByIdAsync(int id)
         {
-            return _fileAttachmentRepository.GetSingleModel(a => a.id == id).path;
+            return await Task.Run(() =>
+            {
+                return FileAttachmentRepository.GetSingleModelAsync(a => a.id == id).Result.path;
+            });
         }
     }
 }

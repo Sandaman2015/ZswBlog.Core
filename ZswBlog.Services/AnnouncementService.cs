@@ -3,8 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using ZswBlog.DTO;
-using ZswBlog.Entity;
+using ZswBlog.Entity.DbContext;
 using ZswBlog.IRepository;
 using ZswBlog.IServices;
 
@@ -19,10 +20,13 @@ namespace ZswBlog.Services
         /// 获取所有通知公告
         /// </summary>
         /// <returns></returns>
-        public List<AnnouncementDTO> GetAllAnnouncement()
+        public async Task<List<AnnouncementDTO>> GetAllAnnouncementAsync()
         {
-            List<AnnouncementEntity> announcements = _announcementRepository.GetModels(a => a.id != 0).ToList();
-            return _mapper.Map<List<AnnouncementDTO>>(announcements);
+            return await Task.Run(() =>
+            {
+                var announcements = _announcementRepository.GetModelsAsync(a => a.id != 0).Result.ToList();
+                return _mapper.Map<List<AnnouncementDTO>>(announcements);
+            });
         }
 
         /// <summary>
@@ -30,20 +34,28 @@ namespace ZswBlog.Services
         /// </summary>
         /// <param name="count"></param>
         /// <returns></returns>
-        public List<AnnouncementDTO> GetAnnouncementsOnTop(int count)
+        public async Task<List<AnnouncementDTO>> GetAnnouncementsOnTopAsync(int count)
         {
-            List<AnnouncementEntity> announcements = _announcementRepository.GetModels(a => a.isTop && a.endPushDate < DateTime.Now).Take(count).ToList();
-            return _mapper.Map<List<AnnouncementDTO>>(announcements);
+            return await Task.Run(() =>
+            {
+                var announcements = _announcementRepository.GetModelsAsync(a => a.isTop && a.endPushDate < DateTime.Now)
+                    .Result.Take(count).ToList();
+                return _mapper.Map<List<AnnouncementDTO>>(announcements);
+            });
         }
 
         /// <summary>
         /// 获取正在推送的通知公告
         /// </summary>
         /// <returns></returns>
-        public List<AnnouncementDTO> GetPushAnnouncement()
+        public async Task<List<AnnouncementDTO>> GetPushAnnouncementAsync()
         {
-            List<AnnouncementEntity> announcements = _announcementRepository.GetModels(a => a.endPushDate > DateTime.Now).ToList();
-            return _mapper.Map<List<AnnouncementDTO>>(announcements);
+            return await Task.Run(() =>
+            {
+                var announcements = _announcementRepository.GetModelsAsync(a => a.endPushDate > DateTime.Now).Result
+                    .ToList();
+                return _mapper.Map<List<AnnouncementDTO>>(announcements);
+            });
         }
     }
 }

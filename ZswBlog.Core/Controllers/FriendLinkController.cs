@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ZswBlog.Core.config;
 using ZswBlog.DTO;
-using ZswBlog.Entity;
+using ZswBlog.Entity.DbContext;
 using ZswBlog.IServices;
 
 namespace ZswBlog.Core.Controllers
@@ -16,22 +15,27 @@ namespace ZswBlog.Core.Controllers
     [ApiController]
     public class FriendLinkController : ControllerBase
     {
-        private readonly IFriendLinkService _friendLinkSerivce;
+        private readonly IFriendLinkService _friendLinkService;
 
-        public FriendLinkController(IFriendLinkService friendLinkSerivce)
+        /// <summary>
+        /// 默认构造函数
+        /// </summary>
+        /// <param name="friendLinkService"></param>
+        public FriendLinkController(IFriendLinkService friendLinkService)
         {
-            _friendLinkSerivce = friendLinkSerivce;
+            _friendLinkService = friendLinkService;
         }
 
         /// <summary>
         /// 获取所有友情链接
         /// </summary>
         /// <returns></returns>
-        [Route("/api/friendlink/get/all")]
+        [Route("/api/friendLink/get/all")]
         [HttpGet]
+        [FunctionDescription("获取所有友情链接")]
         public ActionResult<List<FriendLinkDTO>> GetFriendLinks()
         {
-            List<FriendLinkDTO> friendLinkDTOs = _friendLinkSerivce.GetFriendLinksByIsShow(true);
+            var friendLinkDtOs = _friendLinkService.GetFriendLinksByIsShowAsync(true);
             //读取缓存
             //friendLinkDTOs = await RedisHelper.GetAsync<List<FriendLinkDTO>>("ZswBlog:FriendLink:FriendLinkDTOList");
             //if (friendLinkDTOs == null)
@@ -39,7 +43,7 @@ namespace ZswBlog.Core.Controllers
             // 开启缓存
                 //await RedisHelper.SetAsync("ZswBlog:FriendLink:FriendLinkList", friendLinkDTOs, 1200);
             //}
-            return Ok(friendLinkDTOs);
+            return Ok(friendLinkDtOs);
         }
 
         /// <summary>
@@ -49,6 +53,7 @@ namespace ZswBlog.Core.Controllers
         /// <returns></returns>
         [Route("/api/friendlink/save")]
         [HttpPost]
+        [FunctionDescription("申请友情链接")]
         public async Task<ActionResult> SaveFriendLink([FromBody]FriendLinkEntity param)
         {
             return await Task.Run(() =>
@@ -59,7 +64,7 @@ namespace ZswBlog.Core.Controllers
                 param.title = System.Web.HttpUtility.HtmlEncode(param.title);
                 param.createDate = DateTime.Now;
                 param.isShow = false;
-                bool flag = _friendLinkSerivce.AddEntity(param);
+                var flag = _friendLinkService.AddEntityAsync(param);
                 return Ok(flag);
             });            
         }

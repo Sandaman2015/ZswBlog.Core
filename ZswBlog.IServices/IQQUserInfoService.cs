@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using ZswBlog.DTO;
-using ZswBlog.Entity;
+using ZswBlog.Entity.DbContext;
 
 namespace ZswBlog.IServices
 {
@@ -15,12 +15,12 @@ namespace ZswBlog.IServices
         /// </summary>
         /// <param name="openId"></param>
         /// <returns></returns>
-        QQUserInfoEntity GetQQUserInfoByOpenId(string openId);
+        Task<QQUserInfoEntity> GetQQUserInfoByOpenIdAsync(string openId);
 
         /// <summary>
         /// 根据第三方Token获取用户信息
         /// </summary>
         /// <returns></returns>
-        UserDTO GetUserByAccessToken(string accessToken);
+        Task<UserDTO> GetUserByAccessTokenAsync(string accessToken);
     }
 }

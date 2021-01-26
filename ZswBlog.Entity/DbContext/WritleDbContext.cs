@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ZswBlog.Entity
+namespace ZswBlog.Entity.DbContext
 {
     /// <summary>
     /// 写入数据库

@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 using ZswBlog.Common.Profiles;
 using System.IO;
 using ZswBlog.Core.config;
-using ZswBlog.Entity;
+using ZswBlog.Entity.DbContext;
 using ZswBlog.Common.Util;
 using System;
 using ZswBlog.Core.Controllers;
@@ -95,8 +95,12 @@ namespace ZswBlog.Core
                 cfg.AddProfile<TagProfile>();
             }));
 
-            //添加全局返回结果，异常处理，参数验证
-            services.AddControllers(options => { options.Filters.Add<ApiResultFilter>(); });
+            //添加全局返回结果，异常处理，参数验证，日志记录
+            services.AddControllers(options =>
+            {
+                options.Filters.Add<ApiResultFilter>();
+                options.Filters.Add<LogFilter>();
+            });
 
             //日期转换
             services.AddMvc().AddJsonOptions(configure =>

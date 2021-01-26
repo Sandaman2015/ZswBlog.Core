@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace ZswBlog.Entity
+namespace ZswBlog.Entity.DbContext
 {
     /// <summary>
     /// 操作日志实体对象

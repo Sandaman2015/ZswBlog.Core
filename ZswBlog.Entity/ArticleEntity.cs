@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace ZswBlog.Entity
+namespace ZswBlog.Entity.DbContext
 {
     /// <summary>
     /// 文章实体对象
@@ -76,5 +76,10 @@ namespace ZswBlog.Entity
         /// 文章总字数
         /// </summary>
         public int textCount { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public CategoryEntity Category { get; set; }
     }
 }

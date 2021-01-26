@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using ZswBlog.DTO;
-using ZswBlog.Entity;
+using ZswBlog.Entity.DbContext;
 using ZswBlog.IRepository;
 using ZswBlog.IServices;
 
@@ -10,17 +11,20 @@ namespace ZswBlog.Services
 {
     public class TagService : BaseService<TagEntity, ITagRepository>, ITagService
     {
-        public ITagRepository _tagRepository { get; set; }
-        public IMapper _mapper { get; set; }
+        public ITagRepository TagRepository { get; set; }
+        public IMapper Mapper { get; set; }
 
         /// <summary>
         /// 获取所有标签
         /// </summary>
         /// <returns></returns>
-        public List<TagDTO> GetAllTag()
+        public async Task<List<TagDTO>> GetAllTagAsync()
         {
-            List<TagEntity> tags = _tagRepository.GetModels(a => a.id != 0).ToList();
-            return _mapper.Map<List<TagDTO>>(tags);
+            return await Task.Run(() =>
+            {
+                var tags = TagRepository.GetModelsAsync(a => a.id != 0).Result.ToList();
+                return Mapper.Map<List<TagDTO>>(tags);
+            });
         }
 
         /// <summary>
@@ -28,10 +32,10 @@ namespace ZswBlog.Services
         /// </summary>
         /// <param name="tagId"></param>
         /// <returns></returns>
-        public TagDTO GetTagById(int tagId)
+        public async Task<TagDTO> GetTagByIdAsync(int tagId)
         {
-            TagEntity tag = _tagRepository.GetSingleModel(a => a.id == tagId);
-            return _mapper.Map<TagDTO>(tag);
+            var tag = await TagRepository.GetSingleModelAsync(a => a.id == tagId);
+            return Mapper.Map<TagDTO>(tag);
         }
 
         /// <summary>
@@ -39,10 +43,10 @@ namespace ZswBlog.Services
         /// </summary>
         /// <param name="tId"></param>
         /// <returns></returns>
-        public bool RemoveEntity(int tId)
+        public async Task<bool> RemoveEntityAsync(int tId)
         {
-            TagEntity tag = _tagRepository.GetSingleModel(a => a.id == tId);
-            return _tagRepository.Delete(tag);
+            var tag = await TagRepository.GetSingleModelAsync(a => a.id == tId);
+            return await TagRepository.DeleteAsync(tag);
         }
     }
 }

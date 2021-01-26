@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using ZswBlog.Core.config;
 using ZswBlog.DTO;
-using ZswBlog.Entity;
+using ZswBlog.Entity.DbContext;
 using ZswBlog.IServices;
 using ZswBlog.ThirdParty.Email;
 
@@ -17,6 +18,12 @@ namespace ZswBlog.Core.Controllers
     {
         private readonly IMessageService _messageService;
         private readonly EmailHelper _emailHelper;
+
+        /// <summary>
+        /// 默认构造函数
+        /// </summary>
+        /// <param name="messageService"></param>
+        /// <param name="emailHelper"></param>
         public MessageController(IMessageService messageService, EmailHelper emailHelper)
         {
             _messageService = messageService;
@@ -31,12 +38,14 @@ namespace ZswBlog.Core.Controllers
         /// <returns></returns>
         [Route(template: "/api/message/get/page")]
         [HttpGet]
-        public async Task<ActionResult<PageDTO<MessageTreeDTO>>> GetMessageTreeListByPage([FromQuery] int limit, [FromQuery] int pageIndex)
+        [FunctionDescription("分页获取留言列表")]
+        public async Task<ActionResult<PageDTO<MessageTreeDTO>>> GetMessageTreeListByPage([FromQuery] int limit,
+            [FromQuery] int pageIndex)
         {
             return await Task.Run(() =>
             {
-                PageDTO<MessageTreeDTO> pageDTO = _messageService.GetMessagesByRecursion(limit, pageIndex);
-                return Ok(pageDTO);
+                var pageDto = _messageService.GetMessagesByRecursionAsync(limit, pageIndex);
+                return Ok(pageDto);
             });
         }
 
@@ -47,12 +56,13 @@ namespace ZswBlog.Core.Controllers
         /// <returns></returns>
         [Route(template: "/api/message/get/list/{count}")]
         [HttpGet]
+        [FunctionDescription("获取留言列表")]
         public async Task<ActionResult<List<MessageDTO>>> GetMessageListByCount([FromRoute] int count)
         {
             return await Task.Run(() =>
             {
-                List<MessageDTO> pageDTO = _messageService.GetMessageOnNearSave(count);
-                return Ok(pageDTO);
+                var pageDto = _messageService.GetMessageOnNearSaveAsync(count);
+                return Ok(pageDto);
             });
         }
 
@@ -63,33 +73,29 @@ namespace ZswBlog.Core.Controllers
         /// <returns></returns>
         [Route(template: "/api/message/save")]
         [HttpPost]
+        [FunctionDescription("添加留言")]
         public async Task<ActionResult> SaveMessage([FromBody] MessageEntity param)
         {
-            return await Task.Run(() =>
+            // 获取IP地址
+            if (param.location != null)
             {
-                bool flag;
-                // 获取IP地址
-                if (param.location != null)
+                if (Request.HttpContext.Connection.RemoteIpAddress != null)
                 {
-                    string ip = Request.HttpContext.Connection.RemoteIpAddress.ToString();
+                    var ip = Request.HttpContext.Connection.RemoteIpAddress.ToString();
                     param.location = ip;
                 }
-                param.createDate = DateTime.Now;
-                if (param.targetId == null) {
-                    param.targetId = 0;
-                }
-                flag = _messageService.AddMessage(param);
-                // 发送邮件
-                if (param.targetId != 0 && param.targetUserId != null)
-                {
-                    flag = false;
-                    MessageDTO toMessage = _messageService.GetMessageById(param.targetId.Value);
-                    MessageDTO fromMessage = _messageService.GetMessageById(param.id);
-                    bool isSendReplyEmail = _emailHelper.ReplySendEmail(toMessage, fromMessage, SendEmailType.回复留言);
-                    flag = isSendReplyEmail;
-                }
-                return Ok(flag);
-            });
+            }
+
+            param.createDate = DateTime.Now;
+            param.targetId ??= 0;
+            var flag = await _messageService.AddMessageAsync(param);
+            // 发送邮件
+            if (param.targetId == 0 || param.targetUserId == null) return Ok(flag);
+            var toMessage = _messageService.GetMessageByIdAsync(param.targetId.Value);
+            var fromMessage = _messageService.GetMessageByIdAsync(param.id);
+            var isSendReplyEmail = _emailHelper.ReplySendEmail(toMessage, fromMessage, SendEmailType.回复留言);
+            flag = isSendReplyEmail;
+            return Ok(flag);
         }
     }
 }

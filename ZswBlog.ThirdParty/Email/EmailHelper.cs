@@ -56,8 +56,8 @@ namespace ZswBlog.ThirdParty.Email
         public bool ReplySendEmail(dynamic to, dynamic from, SendEmailType sendEmailType)
         {            
             MailAddress MessageFrom = new MailAddress(_sendEmailAddress); //发件人邮箱地址 
-            UserDTO targetUser = _userService.GetUserById(to.userId);
-            UserDTO user = _userService.GetUserById(from.userId);
+            UserDTO targetUser = _userService.GetUserByIdAsync(to.userId);
+            UserDTO user = _userService.GetUserByIdAsync(from.userId);
             string MessageTo = targetUser.email; //收件人邮箱地址 
             string MessageSubject =  _siteName + "博客回复通知"; //邮件主题    
             string Content;//目标的内容
@@ -67,9 +67,9 @@ namespace ZswBlog.ThirdParty.Email
             if (sendEmailType == SendEmailType.回复评论)
             {
                 //评论回复
-                var replyMessage = _commentService.GetCommentById(from.id);
+                var replyMessage = _commentService.GetCommentByIdAsync(from.id);
                 ReplyContent = replyMessage.content;
-                var message = _commentService.GetCommentById(to.id);
+                var message = _commentService.GetCommentByIdAsync(to.id);
                 Content = message.content;
                 int ArticleId = message.articleId;
                 url += "/details/" + ArticleId;
@@ -77,9 +77,9 @@ namespace ZswBlog.ThirdParty.Email
             else
             {
                 //留言回复
-                var replyLeacots = _messageService.GetMessageById(from.id);
+                var replyLeacots = _messageService.GetMessageByIdAsync(from.id);
                 ReplyContent = replyLeacots.content;
-                var leacots = _messageService.GetMessageById(to.id);
+                var leacots = _messageService.GetMessageByIdAsync(to.id);
                 Content = leacots.content;
                 url += "/leacots";
             }

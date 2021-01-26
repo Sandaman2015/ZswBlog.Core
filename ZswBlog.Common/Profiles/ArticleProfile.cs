@@ -1,6 +1,6 @@
 using AutoMapper;
 using ZswBlog.DTO;
-using ZswBlog.Entity;
+using ZswBlog.Entity.DbContext;
 using ZswBlog.Query;
 
 namespace ZswBlog.Common.Profiles

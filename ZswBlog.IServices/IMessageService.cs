@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ZswBlog.DTO;
-using ZswBlog.Entity;
+using ZswBlog.Entity.DbContext;
 
 namespace ZswBlog.IServices
 {
@@ -14,7 +14,7 @@ namespace ZswBlog.IServices
         /// </summary>
         /// <param name="messageId"></param>
         /// <returns></returns>
-        MessageDTO GetMessageById(int messageId);
+        Task<MessageDTO> GetMessageByIdAsync(int messageId);
 
         /// <summary>
         /// 分页获取留言
@@ -22,28 +22,19 @@ namespace ZswBlog.IServices
         /// <param name="limit"></param>
         /// <param name="pageIndex"></param>
         /// <returns></returns>
-        PageDTO<MessageTreeDTO> GetMessagesByRecursion(int limit, int pageIndex);
-
-        /// <summary>
-        /// 根据count获取顶级留言
-        /// </summary>
-        /// <param name="count"></param>
-        /// <returns></returns>
-        List<MessageDTO> GetMessageOnNoReplyAndCount(int count);
+        Task<PageDTO<MessageTreeDTO>> GetMessagesByRecursionAsync(int limit, int pageIndex);
 
         /// <summary>
         /// 获取最近添加的留言列表
         /// </summary>
         /// <param name="count"></param>
         /// <returns></returns>
-        List<MessageDTO> GetMessageOnNearSave(int count);
-
+        Task<List<MessageDTO>> GetMessageOnNearSaveAsync(int count);
         /// <summary>
-        /// 根据用户获取最新提交的留言
+        /// 
         /// </summary>
-        /// <param name="userId"></param>
+        /// <param name="t"></param>
         /// <returns></returns>
-        bool IsExistsMessageOnNewestByUserId(int userId);
-        bool AddMessage(MessageEntity t);
+        Task<bool> AddMessageAsync(MessageEntity t);
     }
 }

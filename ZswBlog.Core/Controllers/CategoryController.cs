@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ZswBlog.Core.config;
 using ZswBlog.DTO;
 using ZswBlog.IServices;
 
@@ -17,6 +15,10 @@ namespace ZswBlog.Core.Controllers
     {
         private readonly ICategoryService _categoryService;
 
+        /// <summary>
+        /// 默认构造函数
+        /// </summary>
+        /// <param name="categoryService"></param>
         public CategoryController(ICategoryService categoryService)
         {
             _categoryService = categoryService;
@@ -29,12 +31,10 @@ namespace ZswBlog.Core.Controllers
         /// <returns></returns> 
         [Route(template: "/api/category/get/{id}")]
         [HttpGet]
+        [FunctionDescription("根据类型Id获取类型详情")]
         public async Task<ActionResult<CategoryDTO>> GetCategoryById(int id)
         {
-            return await Task.Run(() =>
-            {
-                return _categoryService.GetCategoryById(id);
-            });
+            return await Task.Run(() => _categoryService.GetCategoryByIdAsync(id));
         }
 
         /// <summary>
@@ -43,12 +43,10 @@ namespace ZswBlog.Core.Controllers
         /// <returns></returns>
         [Route("/api/category/get/all")]
         [HttpGet]
+        [FunctionDescription("获取所有文章类型")]
         public async Task<ActionResult<List<CategoryDTO>>> GetAllCategory()
         {
-            return await Task.Run(() =>
-            {
-                return _categoryService.GetAllCategories();
-            });
+            return await Task.Run(() => _categoryService.GetAllCategoriesAsync());
         }
     }
 }

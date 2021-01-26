@@ -2,8 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using ZswBlog.DTO;
-using ZswBlog.Entity;
+using ZswBlog.Entity.DbContext;
 using ZswBlog.IRepository;
 using ZswBlog.IServices;
 using ZswBlog.ThirdParty.Location;
@@ -12,18 +13,22 @@ namespace ZswBlog.Services
 {
     public class MessageService : BaseService<MessageEntity, IMessageRepository>, IMessageService
     {
-        public IMessageRepository _messageRepository { get; set; }
-        public IMapper _mapper { get; set; }
-        public IUserService _userService { get; set; }
+        public IMessageRepository MessageRepository { get; set; }
+        public IMapper Mapper { get; set; }
+        public IUserService UserService { get; set; }
+
         /// <summary>
         /// 获取留言详情
         /// </summary>
         /// <param name="messageId"></param>
         /// <returns></returns>
-        public MessageDTO GetMessageById(int messageId)
+        public async Task<MessageDTO> GetMessageByIdAsync(int messageId)
         {
-            MessageEntity message = _messageRepository.GetSingleModel(a => a.id == messageId);
-            return _mapper.Map<MessageDTO>(message);
+            return await Task.Run(() =>
+            {
+                var message = MessageRepository.GetSingleModelAsync(a => a.id == messageId);
+                return Mapper.Map<MessageDTO>(message);
+            });
         }
 
         /// <summary>
@@ -31,15 +36,16 @@ namespace ZswBlog.Services
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public bool IsExistsMessageOnNewestByUserId(int userId)
+        public async Task<bool> IsExistsMessageOnNewestByUserId(int userId)
         {
-            List<MessageEntity> messages = _messageRepository.GetModels(a => a.userId == userId).OrderByDescending(a => a.createDate).ToList();
-            if (messages != null && messages.Count > 0)
+            return await Task.Run(() =>
             {
-                TimeSpan timeSpan = DateTime.Now - messages[0].createDate;
+                var messages = MessageRepository.GetModelsAsync(a => a.userId == userId).Result
+                    .OrderByDescending(a => a.createDate).ToList();
+                if (messages.Count <= 0) return true;
+                var timeSpan = DateTime.Now - messages[0].createDate;
                 return timeSpan.TotalMinutes > 1;
-            }
-            else return true;
+            });
         }
 
         /// <summary>
@@ -47,24 +53,26 @@ namespace ZswBlog.Services
         /// </summary>
         /// <param name="t"></param>
         /// <returns></returns>
-        public bool AddMessage(MessageEntity t)
+        public async Task<bool> AddMessageAsync(MessageEntity t)
         {
-            bool flag = false;
-            UserDTO user = _userService.GetUserById(t.userId);
-            if (IsExistsMessageOnNewestByUserId(t.userId))
+            return await Task.Run(() =>
             {
-                // 判断用户是否为空
-                if (user != null)
+                bool flag;
+                var user = UserService.GetUserByIdAsync(t.userId);
+                if (IsExistsMessageOnNewestByUserId(t.userId).Result)
                 {
+                    // 判断用户是否为空
+                    if (user == null) return false;
                     t.location = LocationHelper.GetLocation(t.location);
-                    flag = _messageRepository.Add(t);
+                    flag = MessageRepository.AddAsync(t).Result;
                 }
-            }
-            else
-            {
-                throw new Exception("你已经在一分钟前提交过一次了");
-            }
-            return flag;
+                else
+                {
+                    throw new Exception("你已经在一分钟前提交过一次了");
+                }
+
+                return flag;
+            });
         }
 
         /// <summary>
@@ -72,10 +80,13 @@ namespace ZswBlog.Services
         /// </summary>
         /// <param name="tId"></param>
         /// <returns></returns>
-        public bool RemoveEntity(int tId)
+        public async Task<bool> RemoveEntityAsync(int tId)
         {
-            MessageEntity message = _messageRepository.GetSingleModel(a => a.id == tId);
-            return _messageRepository.Delete(message);
+            return await Task.Run(() =>
+            {
+                var message = MessageRepository.GetSingleModelAsync(a => a.id == tId).Result;
+                return MessageRepository.DeleteAsync(message);
+            });
         }
 
         /// <summary>
@@ -84,61 +95,54 @@ namespace ZswBlog.Services
         /// <param name="limit"></param>
         /// <param name="pageIndex"></param>
         /// <returns></returns>
-        public PageDTO<MessageTreeDTO> GetMessagesByRecursion(int limit, int pageIndex)
+        public async Task<PageDTO<MessageTreeDTO>> GetMessagesByRecursionAsync(int limit, int pageIndex)
         {
-            List<MessageEntity> messageTopEntities = _messageRepository.GetModelsByPage(limit, pageIndex, false, a => a.createDate, a => a.targetId == 0 && a.targetUserId == null, out int total).ToList();
-            List<MessageTreeDTO> messageTreeList = new List<MessageTreeDTO>();
-            foreach (var item in messageTopEntities)
+            return await Task.Run(() =>
             {
-                MessageTreeDTO messageTree = _mapper.Map<MessageTreeDTO>(item);
-                ConvertMessageTree(messageTree);
-                List<MessageDTO> entities = _messageRepository.GetMessagesRecursive(item.id);
-                messageTree.children = _mapper.Map<List<MessageTreeDTO>>(entities);
-                messageTreeList.Add(messageTree);
-            }
-            return new PageDTO<MessageTreeDTO>(pageIndex, limit, total, messageTreeList);
-        }
-        /// <summary>
-        /// 根据count获取顶级留言
-        /// </summary>
-        /// <param name="count"></param>
-        /// <returns></returns>
-        public List<MessageDTO> GetMessageOnNoReplyAndCount(int count)
-        {
-            List<MessageDTO> messages = _messageRepository.GetMessageOnNoReply(count);
-            return messages;
+                var messageTopEntities = MessageRepository.GetModelsByPage(limit, pageIndex, false, a => a.createDate,
+                    a => a.targetId == 0 && a.targetUserId == null, out var total).ToList();
+                var messageTreeList = new List<MessageTreeDTO>();
+                foreach (var item in messageTopEntities)
+                {
+                    var messageTree = Mapper.Map<MessageTreeDTO>(item);
+                    ConvertMessageTree(messageTree);
+                    var entities = MessageRepository.GetMessagesRecursive(item.id);
+                    messageTree.children = Mapper.Map<List<MessageTreeDTO>>(entities);
+                    messageTreeList.Add(messageTree);
+                }
+
+                return new PageDTO<MessageTreeDTO>(pageIndex, limit, total, messageTreeList);
+            });
         }
 
         /// <summary>
         /// 用户信息填充
         /// </summary>
-        /// <param name="treeDTO"></param>
-        public void ConvertMessageTree(MessageTreeDTO treeDTO)
+        /// <param name="treeDto"></param>
+        private async Task ConvertMessageTree(MessageTreeDTO treeDto)
         {
-            if (treeDTO.targetId != 0)
+            if (treeDto.targetId != 0)
             {
-                UserDTO targetUser = RedisHelper.Get<UserDTO>("ZswBlog:UserInfo:" + treeDTO.targetUserId);
+                var targetUser = RedisHelper.Get<UserDTO>("ZswBlog:UserInfo:" + treeDto.targetUserId);
                 if (targetUser == null)
                 {
-                    targetUser = _userService.GetUserById(treeDTO.targetUserId);
-                    RedisHelper.Set("ZswBlog:UserInfo:" + treeDTO.targetUserId, targetUser, 60 * 60 * 6);
+                    targetUser = await UserService.GetUserByIdAsync(treeDto.targetUserId);
+                    await RedisHelper.SetAsync("ZswBlog:UserInfo:" + treeDto.targetUserId, targetUser, 60 * 60 * 6);
                 }
-                treeDTO.targetUserPortrait = targetUser.portrait;
-                treeDTO.targetUserName = targetUser.nickName;
+
+                treeDto.targetUserPortrait = targetUser.portrait;
+                treeDto.targetUserName = targetUser.nickName;
             }
-            UserDTO user = RedisHelper.Get<UserDTO>("ZswBlog:UserInfo:" + treeDTO.userId);
-            if (user == null)
-            {
-                user = _userService.GetUserById(treeDTO.userId);
-                RedisHelper.Set("ZswBlog:UserInfo:" + treeDTO.userId, user, 60 * 60 * 6);
-            }
-            treeDTO.userPortrait = user.portrait;
-            treeDTO.userName = user.nickName;
+
+            var user = RedisHelper.Get<UserDTO>("ZswBlog:UserInfo:" + treeDto.userId);
+            if (user != null) return;
+            user = await UserService.GetUserByIdAsync(treeDto.userId);
+            await RedisHelper.SetAsync("ZswBlog:UserInfo:" + treeDto.userId, user, 60 * 60 * 6);
         }
 
-        public List<MessageDTO> GetMessageOnNearSave(int count)
+        public async Task<List<MessageDTO>> GetMessageOnNearSaveAsync(int count)
         {
-            return _messageRepository.GetMessageOnNearSave(count);
+            return await Task.Run(() => MessageRepository.GetMessageOnNearSave(count));
         }
     }
 }

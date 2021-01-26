@@ -4,12 +4,12 @@ using System.Collections.Generic;
 using System.Text;
 using ZswBlog.DTO;
 
-namespace ZswBlog.Entity
+namespace ZswBlog.Entity.DbContext
 {
     /// <summary>
     /// 
     /// </summary>
-    public partial class ZswBlogDbContext : DbContext
+    public partial class ZswBlogDbContext : Microsoft.EntityFrameworkCore.DbContext
     {
         /// <summary>
         /// 
@@ -43,7 +43,7 @@ namespace ZswBlog.Entity
         /// <summary>
         /// 
         /// </summary>
-        public virtual DbSet<FriendLinkEntity> FriendlinkEntities { get; set; }
+        public virtual DbSet<FriendLinkEntity> FriendLinkEntities { get; set; }
 
         /// <summary>
         /// 
@@ -99,17 +99,16 @@ namespace ZswBlog.Entity
         /// 
         /// </summary>
         public virtual DbSet<AnnouncementEntity> AnnouncementEntities { get; set; }
-        // 充血关联模型实体
         /// <summary>
-        /// 
+        /// 充血关联模型实体
         /// </summary>
         public virtual DbSet<MessageDTO> MessageDTO { get; set; }
         /// <summary>
-        /// 
+        /// 充血关联模型实体
         /// </summary>
         public virtual DbSet<ArticleDTO> ArticleDTO { get; set; }
         /// <summary>
-        /// 
+        /// 充血关联模型实体
         /// </summary>
         public virtual DbSet<CommentDTO> CommentDTO { get; set; }
         /// <summary>

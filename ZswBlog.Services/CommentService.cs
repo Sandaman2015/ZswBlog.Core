@@ -2,8 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using ZswBlog.DTO;
-using ZswBlog.Entity;
+using ZswBlog.Entity.DbContext;
 using ZswBlog.IRepository;
 using ZswBlog.IServices;
 using ZswBlog.ThirdParty.Location;
@@ -12,29 +13,35 @@ namespace ZswBlog.Services
 {
     public class CommentService : BaseService<CommentEntity, ICommentRepository>, ICommentService
     {
-        public ICommentRepository _commentRepository { get; set; }
-        public IMapper _mapper { get; set; }
-        public IUserService _userService { get; set; }
+        public ICommentRepository CommentRepository { get; set; }
+        public IMapper Mapper { get; set; }
+        public IUserService UserService { get; set; }
 
         /// <summary>
         /// 获取评论详情
         /// </summary>
         /// <param name="commentId"></param>
         /// <returns></returns>
-        public CommentDTO GetCommentById(int commentId)
+        public async Task<CommentDTO> GetCommentByIdAsync(int commentId)
         {
-            CommentEntity comment = _repository.GetSingleModel(a => a.id == commentId);
-            return _mapper.Map<CommentDTO>(comment);
+            return await Task.Run(() =>
+            {
+                var comment = Repository.GetSingleModelAsync(a => a.id == commentId);
+                return Mapper.Map<CommentDTO>(comment);
+            });
         }
 
         /// <summary>
         /// 获取所有
         /// </summary>
         /// <returns></returns>
-        public List<CommentDTO> GetAllComments()
+        public async Task<List<CommentDTO>> GetAllCommentsAsync()
         {
-            List<CommentEntity> comments = _repository.GetModels(a => a.id != 0).ToList();
-            return _mapper.Map<List<CommentDTO>>(comments);
+            return await Task.Run(() =>
+            {
+                var comments = Repository.GetModelsAsync(a => a.id != 0).Result.ToList();
+                return Mapper.Map<List<CommentDTO>>(comments);
+            });
         }
 
         /// <summary>
@@ -42,10 +49,13 @@ namespace ZswBlog.Services
         /// </summary>
         /// <param name="targetId"></param>
         /// <returns></returns>
-        public List<CommentDTO> GetCommentsByTargetId(int targetId)
+        public async Task<List<CommentDTO>> GetCommentsByTargetIdAsync(int targetId)
         {
-            List<CommentEntity> comments = _repository.GetModels(a => a.targetId == targetId).ToList();
-            return _mapper.Map<List<CommentDTO>>(comments);
+            return await Task.Run(() =>
+            {
+                var comments = Repository.GetModelsAsync(a => a.targetId == targetId).Result.ToList();
+                return Mapper.Map<List<CommentDTO>>(comments);
+            });
         }
 
         /// <summary>
@@ -55,20 +65,25 @@ namespace ZswBlog.Services
         /// <param name="limit"></param>
         /// <param name="pageIndex"></param>
         /// <returns></returns>
-        public PageDTO<CommentDTO> GetCommentsOnNotReplyByPage(int articleId, int limit, int pageIndex)
+        public async Task<PageDTO<CommentDTO>> GetCommentsOnNotReplyByPageAsync(int articleId, int limit, int pageIndex)
         {
-            List<CommentEntity> comments = _repository.GetModelsByPage(limit, pageIndex, false, (a => a.id), (a => a.targetId == 0 && a.articleId == articleId), out int pageCount).ToList();
-            List<CommentDTO> commentDTOs = _mapper.Map<List<CommentDTO>>(comments);
-            return new PageDTO<CommentDTO>(pageIndex, limit, pageCount, commentDTOs);
+            return await Task.Run(() =>
+            {
+                var comments = Repository.GetModelsByPage(limit, pageIndex, false, (a => a.id),
+                    (a => a.targetId == 0 && a.articleId == articleId), out var pageCount).ToList();
+                var commentDtOs = Mapper.Map<List<CommentDTO>>(comments);
+                return new PageDTO<CommentDTO>(pageIndex, limit, pageCount, commentDtOs);
+            });
         }
+
         /// <summary>
         /// 根据id删除评论
         /// </summary>
         /// <param name="tId"></param>
         /// <returns></returns>
-        public bool RemoveEntity(int tId)
+        public async Task<bool> RemoveEntityAsync(int tId)
         {
-            return _repository.Delete(new CommentEntity { id = tId });
+            return await Repository.DeleteAsync(new CommentEntity {id = tId});
         }
 
         /// <summary>
@@ -76,10 +91,13 @@ namespace ZswBlog.Services
         /// </summary>
         /// <param name="articleId"></param>
         /// <returns></returns>
-        public List<CommentDTO> GetCommentsOnNotReply(int articleId)
+        public async Task<List<CommentDTO>> GetCommentsOnNotReplyAsync(int articleId)
         {
-            List<CommentEntity> comments = _repository.GetModels(a => a.id == 0 && a.articleId == articleId).ToList();
-            return _mapper.Map<List<CommentDTO>>(comments);
+            return await Task.Run(() =>
+            {
+                var comments = Repository.GetModelsAsync(a => a.id == 0 && a.articleId == articleId).Result.ToList();
+                return Mapper.Map<List<CommentDTO>>(comments);
+            });
         }
 
         /// <summary>
@@ -87,24 +105,25 @@ namespace ZswBlog.Services
         /// </summary>
         /// <param name="t"></param>
         /// <returns></returns>
-        public bool AddComment(CommentEntity t)
+        public async Task<bool> AddCommentAsync(CommentEntity t)
         {
-            bool flag = false;
-            UserDTO user = _userService.GetUserById(t.userId);
-            if (IsExistsCommentOnNewestByUserId(t.userId))
+            return await Task.Run(() =>
             {
-                // 判断用户是否为空
-                if (user != null)
+                bool flag;
+                var user = UserService.GetUserByIdAsync(t.userId);
+                if (IsExistsCommentOnNewestByUserIdAsync(t.userId).Result)
                 {
+                    // 判断用户是否为空
+                    if (user == null) return false;
                     t.location = LocationHelper.GetLocation(t.location);
-                    flag = _commentRepository.Add(t);
+                    flag = CommentRepository.AddAsync(t).Result;
                 }
-            }
-            else
-            {
-                throw new Exception("你已经在一分钟前提交过一次了");
-            }
-            return flag;
+                else
+                {
+                    throw new Exception("你已经在一分钟前提交过一次了");
+                }
+                return flag;
+            });
         }
 
         /// <summary>
@@ -112,86 +131,74 @@ namespace ZswBlog.Services
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public bool IsExistsCommentOnNewestByUserId(int userId)
+        public async Task<bool> IsExistsCommentOnNewestByUserIdAsync(int userId)
         {
-            bool flag = true;
-            List<CommentEntity> comments = _repository.GetModels(a => a.userId == userId).OrderByDescending(a => a.createDate).ToList();
-            if (comments != null && comments.Count > 0)
+            return await Task.Run(() =>
             {
-                TimeSpan timeSpan = DateTime.Now - comments[0].createDate;
-                flag = timeSpan.TotalMinutes > 1;
-            }
-            return flag;
+                var comments = Repository.GetModelsAsync(a => a.userId == userId).Result
+                    .OrderByDescending(a => a.createDate).ToList();
+                if (comments.Count <= 0) return true;
+                var timeSpan = DateTime.Now - comments[0].createDate;
+                var flag = timeSpan.TotalMinutes > 1;
+                return flag;
+            });
         }
 
         /// <summary>
         /// 递归调用
         /// </summary>
-        /// <param name="targetId"></param>
+        /// <param name="limit"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="articleId"></param>
         /// <returns></returns>
-        public PageDTO<CommentTreeDTO> GetCommentsByRecursion(int limit, int pageIndex, int articleId)
+        public async Task<PageDTO<CommentTreeDTO>> GetCommentsByRecursionAsync(int limit, int pageIndex, int articleId)
         {
-            List<CommentEntity> comments = _commentRepository.GetModelsByPage(limit, pageIndex, false, a => a.createDate, c => c.articleId == articleId && c.targetId == 0, out int total).ToList();
-            List<CommentTreeDTO> commentDTOList = new List<CommentTreeDTO>();
-            foreach (CommentEntity item in comments)
+            return await Task.Run(() =>
             {
-                CommentTreeDTO commentTree = _mapper.Map<CommentTreeDTO>(item);
-                ConvertCommentTree(commentTree);
-                List<CommentDTO> treeDTOList = _commentRepository.GetCommentsRecursive(item.id, articleId);
-                commentTree.children = _mapper.Map<List<CommentTreeDTO>>(treeDTOList);
-                commentDTOList.Add(commentTree);
-            }
-            return new PageDTO<CommentTreeDTO>(pageIndex, limit, total, commentDTOList);
-        }
-        /// <summary>
-        /// 清空列表
-        /// </summary>
-        /// <returns></returns>
-        private bool RecursionComments(CommentTreeDTO treeDTO, int targetId, List<CommentTreeDTO> commentTrees)
-        {
-            List<CommentEntity> comments = _commentRepository.GetModels((CommentEntity ce) => ce.targetId == targetId).ToList();
-            if (comments.Count > 0)
-            {
-                List<CommentTreeDTO> commentTree = _mapper.Map<List<CommentTreeDTO>>(comments);
-                foreach (CommentTreeDTO comment in commentTree)
+                var comments = CommentRepository.GetModelsByPage(limit, pageIndex, false, a => a.createDate,
+                    c => c.articleId == articleId && c.targetId == 0, out var total).ToList();
+                var commentDtoList = new List<CommentTreeDTO>();
+                foreach (var item in comments)
                 {
-                    ConvertCommentTree(comment);
-                    commentTrees.Add(comment);
+                    var commentTree = Mapper.Map<CommentTreeDTO>(item);
+                    ConvertCommentTree(commentTree);
+                    var treeDtoList = CommentRepository.GetCommentsRecursive(item.id, articleId);
+                    commentTree.children = Mapper.Map<List<CommentTreeDTO>>(treeDtoList);
+                    commentDtoList.Add(commentTree);
                 }
-                return RecursionComments(treeDTO, commentTree[0].id, commentTrees);
-            }
-            else
-            {
-                commentTrees = commentTrees.OrderBy(e => e.createDate).ToList();
-                treeDTO.children.AddRange(commentTrees);
-                return true;
-            }
+
+                return new PageDTO<CommentTreeDTO>(pageIndex, limit, total, commentDtoList);
+            });
         }
+
         /// <summary>
         /// 用户信息填充
         /// </summary>
-        /// <param name="treeDTO"></param>
-        public void ConvertCommentTree(CommentTreeDTO treeDTO)
+        /// <param name="treeDto"></param>
+        public async Task ConvertCommentTree(CommentTreeDTO treeDto)
         {
-            if (treeDTO.targetId != 0)
+            if (treeDto.targetId != 0)
             {
-                UserDTO targetUser = RedisHelper.Get<UserDTO>("ZswBlog:UserInfo:" + treeDTO.targetUserId);
+                var targetUser = RedisHelper.Get<UserDTO>("ZswBlog:UserInfo:" + treeDto.targetUserId);
                 if (targetUser == null)
                 {
-                    targetUser = _userService.GetUserById(treeDTO.targetUserId);
-                    RedisHelper.Set("ZswBlog:UserInfo:" + treeDTO.targetUserId, targetUser, 60 * 60 * 6);
+                    targetUser = await UserService.GetUserByIdAsync(treeDto.targetUserId);
+                    await RedisHelper.SetAsync("ZswBlog:UserInfo:" + treeDto.targetUserId, targetUser, 60 * 60 * 6);
                 }
-                treeDTO.targetUserPortrait = targetUser.portrait;
-                treeDTO.targetUserName = targetUser.nickName;
+
+                treeDto.targetUserPortrait = targetUser.portrait;
+                treeDto.targetUserName = targetUser.nickName;
             }
-            UserDTO user = RedisHelper.Get<UserDTO>("ZswBlog:UserInfo:" + treeDTO.userId);
+
+            var user = RedisHelper.Get<UserDTO>("ZswBlog:UserInfo:" + treeDto.userId);
             if (user == null)
             {
-                user = _userService.GetUserById(treeDTO.userId);
-                RedisHelper.Set("ZswBlog:UserInfo:" + treeDTO.userId, user, 60 * 60 * 6);
+                user = await UserService.GetUserByIdAsync(treeDto.userId);
+                await RedisHelper.SetAsync("ZswBlog:UserInfo:" + treeDto.userId, user, 60 * 60 * 6);
             }
-            treeDTO.userPortrait = user.portrait;
-            treeDTO.userName = user.nickName;
+
+            treeDto.userPortrait = user.portrait;
+            treeDto.userName = user.nickName;
         }
     }
 }

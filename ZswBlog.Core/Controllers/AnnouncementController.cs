@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
+using ZswBlog.Core.config;
 using ZswBlog.DTO;
 using ZswBlog.IServices;
 
@@ -15,8 +15,13 @@ namespace ZswBlog.Core.Controllers
     [ApiController]
     public class AnnouncementController : ControllerBase
     {
-        private IAnnouncementService _announcementService;
+        private readonly IAnnouncementService _announcementService;
 
+        /// <summary>
+        /// 默认构造函数
+        /// </summary>
+        /// <param name="announcementService"></param>
+        [Description]
         public AnnouncementController(IAnnouncementService announcementService)
         {
             _announcementService = announcementService;
@@ -26,13 +31,15 @@ namespace ZswBlog.Core.Controllers
         /// 获取指定置顶的通知公告
         /// </summary>
         /// <returns></returns>
-        [HttpGet("/api/announcement/get/top")]
+        [Route("/api/announcement/get/top")]
+        [HttpGet]
+        [FunctionDescription("获取指定置顶的通知公告")]
         public async Task<ActionResult<List<AnnouncementDTO>>> GetAnnouncementsOnTop()
         {
             return await Task.Run(() =>
             {
-                int count = 3;
-                List<AnnouncementDTO> announcements = _announcementService.GetAnnouncementsOnTop(count);
+                const int count = 3;
+                var announcements = _announcementService.GetAnnouncementsOnTopAsync(count);
                 return Ok(announcements);
             });
         }
@@ -41,12 +48,14 @@ namespace ZswBlog.Core.Controllers
         /// 获取正在推送的通知公告
         /// </summary>
         /// <returns></returns>
-        [HttpGet("/api/announcement/get/push")]
+        [Route(("/api/announcement/get/push"))]
+        [HttpGet]
+        [FunctionDescription("获取正在推送的通知公告")]
         public async Task<ActionResult<List<AnnouncementDTO>>> GetPushAnnouncements()
         {
             return await Task.Run(() =>
             {
-                List<AnnouncementDTO> announcements = _announcementService.GetPushAnnouncement();
+                var announcements = _announcementService.GetPushAnnouncementAsync();
                 return Ok(announcements);
             });
         }
@@ -55,12 +64,15 @@ namespace ZswBlog.Core.Controllers
         /// 获取所有的通知公告
         /// </summary>
         /// <returns></returns>
-        [HttpGet("/api/announcement/get/all")]
+        [Route(("/api/announcement/get/all"))]
+        [HttpGet]
+        [FunctionDescription("获取所有的通知公告")]
         public async Task<ActionResult<List<AnnouncementDTO>>> GetAllAnnouncements()
         {
             return await Task.Run(() =>
             {
-                List<AnnouncementDTO> announcements = _announcementService.GetAllAnnouncement();
+                var route = $"Controller：{HttpContext.GetRouteData().Values["controller"]}，Action：{HttpContext.GetRouteData().Values["action"]}";
+                var announcements = _announcementService.GetAllAnnouncementAsync();
                 return Ok(announcements);
             });
         }

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using ZswBlog.DTO;
-using ZswBlog.Entity;
+using ZswBlog.Entity.DbContext;
 
 namespace ZswBlog.IServices
 {
@@ -11,13 +11,13 @@ namespace ZswBlog.IServices
         /// 获取所有标签信息
         /// </summary>
         /// <returns></returns>
-        List<TagDTO> GetAllTag();
+        Task<List<TagDTO>> GetAllTagAsync();
 
         /// <summary>
         /// 根据id获取标签信息
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        TagDTO GetTagById(int id);
+        Task<TagDTO> GetTagByIdAsync(int id);
     }
 }

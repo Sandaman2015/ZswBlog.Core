@@ -12,21 +12,21 @@ namespace ZswBlog.Services
     [Intercept(typeof(EnableTransaction))]
     public abstract class BaseService<T, D> : IBaseService<T> where T : class, new() where D : IBaseRepository<T>
     {
-        public IBaseRepository<T> _repository { get; set; }
+        public IBaseRepository<T> Repository { get; set; }
 
-        public virtual bool AddEntity(T t)
+        public virtual Task<bool> AddEntityAsync(T t)
         {
-            return _repository.Add(t);
+            return Repository.AddAsync(t);
         }
 
-        public int GetEntitiesCount()
+        public Task<int> GetEntitiesCountAsync()
         {
-            return _repository.GetModelsCountByCondition(null);
+            return Repository.GetModelsCountByConditionAsync(null);
         }
 
-        public virtual bool UpdateEntity(T t)
+        public virtual Task<bool> UpdateEntityAsync(T t)
         {
-            return _repository.Update(t);
+            return Repository.UpdateAsync(t);
         }
     }
 }

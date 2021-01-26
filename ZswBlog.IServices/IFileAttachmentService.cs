@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using ZswBlog.Entity;
+using ZswBlog.Entity.DbContext;
 
 namespace ZswBlog.IServices
 {
@@ -11,14 +11,14 @@ namespace ZswBlog.IServices
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        string GetFilePathById(int id);
+        Task<string> GetFilePathByIdAsync(int id);
 
         /// <summary>
         /// 根据主键获取附件信息
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        FileAttachmentEntity GetAttachmentById(int id);
+        Task<FileAttachmentEntity> GetAttachmentByIdAsync(int id);
         
     }
 }

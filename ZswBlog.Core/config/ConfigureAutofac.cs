@@ -19,26 +19,27 @@ namespace ZswBlog.Core.config
         protected override void Load(ContainerBuilder builder)
         {
             //业务逻辑层所在程序集命名空间
-            Assembly Repository = Assembly.Load("ZswBlog.Repository");
+            var repositoryImpl = Assembly.Load("ZswBlog.Repository");
             //接口层所在程序集命名空间
-            Assembly IRepository = Assembly.Load("ZswBlog.IRepository");
+            var repository = Assembly.Load("ZswBlog.IRepository");
             //自动注入
-            builder.RegisterAssemblyTypes(Repository, IRepository)
+            builder.RegisterAssemblyTypes(repositoryImpl, repository)
                 .AsImplementedInterfaces().PropertiesAutowired().InstancePerDependency().EnableClassInterceptors();
 
-            Assembly services = Assembly.Load("ZswBlog.Services");
-            Assembly IServices = Assembly.Load("ZswBlog.IServices");
-            builder.RegisterAssemblyTypes(services, IServices)
-                .AsImplementedInterfaces().PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies).InstancePerLifetimeScope().EnableClassInterceptors();
+            var servicesImpl = Assembly.Load("ZswBlog.Services");
+            var services = Assembly.Load("ZswBlog.IServices");
+            builder.RegisterAssemblyTypes(servicesImpl, services)
+                .AsImplementedInterfaces().PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies)
+                .InstancePerLifetimeScope().EnableClassInterceptors();
 
             //AutoMapper的注入
             builder.RegisterType<Mapper>().As<IMapper>().AsSelf().PropertiesAutowired().InstancePerDependency();
 
-            Assembly util = Assembly.Load("ZswBlog.Common");
+            var util = Assembly.Load("ZswBlog.Common");
             builder.RegisterAssemblyTypes(util)
                 .AsSelf().PropertiesAutowired().SingleInstance();
 
-            Assembly thirdParty = Assembly.Load("ZswBlog.ThirdParty");
+            var thirdParty = Assembly.Load("ZswBlog.ThirdParty");
             builder.RegisterAssemblyTypes(thirdParty)
                 .AsSelf().PropertiesAutowired().SingleInstance();
             ////注册仓储，所有IRepository接口到Repository的映射

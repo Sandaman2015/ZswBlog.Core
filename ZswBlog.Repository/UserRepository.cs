@@ -1,4 +1,4 @@
-﻿using ZswBlog.Entity;
+﻿using ZswBlog.Entity.DbContext;
 using ZswBlog.IRepository;
 
 namespace ZswBlog.Repository

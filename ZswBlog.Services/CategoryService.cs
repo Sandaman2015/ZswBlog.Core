@@ -2,8 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using ZswBlog.DTO;
-using ZswBlog.Entity;
+using ZswBlog.Entity.DbContext;
 using ZswBlog.IRepository;
 using ZswBlog.IServices;
 
@@ -11,32 +12,41 @@ namespace ZswBlog.Services
 {
     public class CategoryService : BaseService<CategoryEntity, ICategoryRepoistory>, ICategoryService
     {
-        public ICategoryRepoistory _categoryRepoistory { get; set; }
-        public IArticleService _articleService { get; set; }
-        public IMapper _mapper { get; set; }
+        public ICategoryRepoistory CategoryRepository { get; set; }
+        public IArticleService ArticleService { get; set; }
+        public IMapper Mapper { get; set; }
 
         /// <summary>
         /// 获取所有分类以及文章数量
         /// </summary>
         /// <returns></returns>
-        public List<CategoryDTO> GetAllCategories()
+        public async Task<List<CategoryDTO>> GetAllCategoriesAsync()
         {
-            List<CategoryEntity> categories = _categoryRepoistory.GetModels((CategoryEntity c) => c.id != 0).ToList();
-            List<CategoryDTO> dTOList= _mapper.Map<List<CategoryDTO>>(categories);
-            foreach (var item in dTOList) {
-                item.articleCount = _articleService.GetArticleCountByCategoryId(item.id);
-            }
-            return dTOList;
+            return await Task.Run(() =>
+            {
+                var categories = CategoryRepository.GetModelsAsync((CategoryEntity c) => c.id != 0).Result.ToList();
+                var dToList = Mapper.Map<List<CategoryDTO>>(categories);
+                foreach (var item in dToList)
+                {
+                    item.articleCount = ArticleService.GetArticleCountByCategoryIdAsync(item.id).Result;
+                }
+
+                return dToList;
+            });
         }
+
         /// <summary>
         /// 根据分类Id获取详情
         /// </summary>
         /// <param name="tId"></param>
         /// <returns></returns>
-        public CategoryDTO GetCategoryById(int tId)
+        public async Task<CategoryDTO> GetCategoryByIdAsync(int tId)
         {
-            CategoryEntity category = _categoryRepoistory.GetSingleModel((CategoryEntity c) => c.id == tId);
-            return _mapper.Map<CategoryDTO>(category);
+            return await Task.Run(() =>
+            {
+                var category = CategoryRepository.GetSingleModelAsync((CategoryEntity c) => c.id == tId);
+                return Mapper.Map<CategoryDTO>(category);
+            });
         }
     }
 }

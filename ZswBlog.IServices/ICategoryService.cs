@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using ZswBlog.DTO;
-using ZswBlog.Entity;
+using ZswBlog.Entity.DbContext;
 
 namespace ZswBlog.IServices
 {
@@ -13,11 +13,11 @@ namespace ZswBlog.IServices
         /// 获取所有文章分类
         /// </summary>
         /// <returns></returns>
-        List<CategoryDTO> GetAllCategories();
+        Task<List<CategoryDTO>> GetAllCategoriesAsync();
         /// <summary>
         /// 根据Id获取单个分类
         /// </summary>
         /// <returns></returns>
-        CategoryDTO GetCategoryById(int tId);       
+        Task<CategoryDTO> GetCategoryByIdAsync(int tId);       
     }
 }

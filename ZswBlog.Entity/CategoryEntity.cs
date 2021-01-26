@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace ZswBlog.Entity
+namespace ZswBlog.Entity.DbContext
 {
     /// <summary>
     /// 分类实体对象

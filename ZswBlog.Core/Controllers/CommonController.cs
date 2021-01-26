@@ -4,6 +4,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using ZswBlog.Core.config;
 using ZswBlog.DTO;
 using ZswBlog.IServices;
 using ZswBlog.ThirdParty.Music;
@@ -19,14 +20,22 @@ namespace ZswBlog.Core.Controllers
         private readonly IArticleService _articleService;
         private readonly IMessageService _messageService;
         private readonly ISiteTagService _tagService;
-        private readonly IConfiguration conf;
+        private readonly IConfiguration _configuration;
 
-        public CommonController(IMessageService messageService, IArticleService articleService, ISiteTagService tagService, IConfiguration conf)
+        /// <summary>
+        /// 默认构造函数
+        /// </summary>
+        /// <param name="messageService"></param>
+        /// <param name="articleService"></param>
+        /// <param name="tagService"></param>
+        /// <param name="configuration"></param>
+        public CommonController(IMessageService messageService, IArticleService articleService,
+            ISiteTagService tagService, IConfiguration configuration)
         {
             _messageService = messageService;
             _articleService = articleService;
             _tagService = tagService;
-            this.conf = conf;
+            _configuration = configuration;
         }
 
         /// <summary>
@@ -35,15 +44,14 @@ namespace ZswBlog.Core.Controllers
         /// <returns></returns>
         [Route("/api/music/get/top")]
         [HttpGet]
+        [FunctionDescription("获取歌曲列表")]
         public async Task<ActionResult<List<MusicDTO>>> GetMusicList()
         {
-            List<MusicDTO> musicDTOs = await RedisHelper.GetAsync<List<MusicDTO>>("ZswBlog:Common:MusicList");
-            if (musicDTOs == null)
-            {
-                musicDTOs = MusicHelper.GetMusicListByCount(30);
-                RedisHelper.SetAsync("ZswBlog:Common:MusicList", musicDTOs, 2400);
-            }
-            return Ok(musicDTOs);
+            var musicDtOs = await RedisHelper.GetAsync<List<MusicDTO>>("ZswBlog:Common:MusicList");
+            if (musicDtOs != null) return Ok(musicDtOs);
+            musicDtOs = MusicHelper.GetMusicListByCount(30);
+            RedisHelper.SetAsync("ZswBlog:Common:MusicList", musicDtOs, 2400);
+            return Ok(musicDtOs);
         }
 
         /// <summary>
@@ -52,15 +60,14 @@ namespace ZswBlog.Core.Controllers
         /// <returns></returns>
         [Route("/api/music/get/all")]
         [HttpGet]
+        [FunctionDescription("获取所有歌曲列表")]
         public async Task<ActionResult<List<MusicDTO>>> GetAllMusicList()
         {
-            List<MusicDTO> musicDTOs = await RedisHelper.GetAsync<List<MusicDTO>>("ZswBlog:Common:MusicList");
-            if (musicDTOs == null)
-            {
-                musicDTOs = MusicHelper.GetMusicListByCount(50);
-                RedisHelper.SetAsync("ZswBlog:Common:MusicList", musicDTOs, 2400);
-            }
-            return Ok(musicDTOs);
+            var musicDtOs = await RedisHelper.GetAsync<List<MusicDTO>>("ZswBlog:Common:MusicList");
+            if (musicDtOs != null) return Ok(musicDtOs);
+            musicDtOs = MusicHelper.GetMusicListByCount(50);
+            RedisHelper.SetAsync("ZswBlog:Common:MusicList", musicDtOs, 2400);
+            return Ok(musicDtOs);
         }
 
         /// <summary>
@@ -69,65 +76,63 @@ namespace ZswBlog.Core.Controllers
         /// <returns></returns>
         [Route("/api/common/get/init")]
         [HttpGet]
+        [FunctionDescription("获取首页初始化数据")]
         public async Task<ActionResult> GetInitData()
         {
-            IndexInitDataDTO initDataDTO;
             //首页的数据初始化数据
-            initDataDTO = await RedisHelper.GetAsync<IndexInitDataDTO>("ZswBlog:Common:InitData");
-            if (initDataDTO == null)
+            var initDataDto = await RedisHelper.GetAsync<IndexInitDataDTO>("ZswBlog:Common:InitData");
+            if (initDataDto != null) return Ok(initDataDto);
+            var articles = await _articleService.GetArticlesByNearSaveAsync(3);
+            var messages = await _messageService.GetMessageOnNearSaveAsync(10);
+            var date1 = DateTime.Parse("2019-10-08 00:00:00");
+            var date2 = DateTime.Now;
+            var sp = date2.Subtract(date1);
+            var tagCount = await _tagService.GetAllSiteTagsCountAsync();
+            var timeCount = sp.Days;
+            var articleCount = await _articleService.GetEntitiesCountAsync();
+            var visitCount = await GetVisit();
+            initDataDto = new IndexInitDataDTO()
             {
-                List<ArticleDTO> articles = _articleService.GetArticlesByNearSave(3);
-                List<MessageDTO> messages = _messageService.GetMessageOnNearSave(10);
-                DateTime date1 = DateTime.Parse("2019-10-08 00:00:00");
-                DateTime date2 = DateTime.Now;
-                TimeSpan sp = date2.Subtract(date1);
-                int tagCount = _tagService.GetAllSiteTagsCount();
-                int timeCount = sp.Days;
-                int articleCount = _articleService.GetEntitiesCount();
-                int visitCount = await GetVisit();
-                initDataDTO = new IndexInitDataDTO()
+                DataCount = new CountData()
                 {
-                    DataCount = new CountData()
-                    {
-                        VisitsCount = visitCount,
-                        TagsCount = tagCount,
-                        RunDays = timeCount,
-                        ArticleCount = articleCount
-                    },
-                    Articles = articles,
-                    Messages = messages
-                };
-                await RedisHelper.SetAsync("ZswBlog:Common:InitData", initDataDTO, 60 * 60 * 3);
-            }
-            return Ok(initDataDTO);
+                    VisitsCount = visitCount,
+                    TagsCount = tagCount,
+                    RunDays = timeCount,
+                    ArticleCount = articleCount
+                },
+                Articles = articles,
+                Messages = messages
+            };
+            await RedisHelper.SetAsync("ZswBlog:Common:InitData", initDataDto, 60 * 60 * 3);
+
+            return Ok(initDataDto);
         }
 
+        /// <summary>
+        /// 获取浏览数
+        /// </summary>
+        /// <returns></returns>
         private async Task<int> GetVisit()
         {
-            string filepath = Path.Combine(Directory.GetCurrentDirectory(), conf.GetValue<string>("filePath"));
-            FileStream fileStream = new FileStream(filepath, FileMode.Open);
-            StreamReader reader;
-            StreamWriter writer;
-            int visit = 0;
+            var filepath = Path.Combine(Directory.GetCurrentDirectory(), _configuration.GetValue<string>("filePath"));
+            var fileStream = new FileStream(filepath, FileMode.Open);
+            int visit;
             try
             {
-                reader = new StreamReader(fileStream);
-                string line = await reader.ReadLineAsync();
-                visit = int.Parse(line);
+                var reader = new StreamReader(fileStream);
+                var line = await reader.ReadLineAsync();
+                visit = int.Parse(line ?? string.Empty);
                 fileStream.Flush();
                 reader.Close();
-                writer = new StreamWriter(filepath, append: false);
+                var writer = new StreamWriter(filepath, append: false);
                 await writer.WriteLineAsync((visit + 1).ToString());
                 await writer.DisposeAsync();
-            }
-            catch (IOException e)
-            {
-                throw e;
             }
             finally
             {
                 fileStream.Close();
             }
+
             return visit;
         }
     }

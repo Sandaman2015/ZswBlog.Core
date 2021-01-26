@@ -1,15 +1,16 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using ZswBlog.Common.Util;
+using ZswBlog.Core.config;
 using ZswBlog.DTO;
-using ZswBlog.Entity;
+using ZswBlog.Entity.DbContext;
 using ZswBlog.IServices;
 using ZswBlog.Query;
-using System.Linq;
 
 namespace ZswBlog.Core.Controllers
 {
@@ -23,6 +24,12 @@ namespace ZswBlog.Core.Controllers
         private readonly IMapper _mapper;
         private readonly IArticleTagService _articleTagService;
 
+        /// <summary>
+        /// 默认构造函数
+        /// </summary>
+        /// <param name="articleService"></param>
+        /// <param name="mapper"></param>
+        /// <param name="articleTagService"></param>
         public ArticleController(IArticleService articleService, IMapper mapper, IArticleTagService articleTagService)
         {
             _articleService = articleService;
@@ -34,20 +41,22 @@ namespace ZswBlog.Core.Controllers
         /// <summary>
         /// 后台管理-分页获取文章列表
         /// </summary>
-        /// <param name="limit"></param>
-        /// <param name="pageIndex"></param>
+        /// <param name="limit">页码</param>
+        /// <param name="pageIndex">页数</param>
+        /// <param name="categoryId">分类编码</param>
+        /// <param name="nickTitle">模糊查询</param>
         /// <returns></returns>
         [Route(template: "/api/article/admin/get/page")]
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult<PageDTO<ArticleDTO>>> GetArticleAllListByPage([FromQuery] int limit, [FromQuery] int pageIndex, [FromQuery] int categoryId, string nickTitle)
+        [FunctionDescription("后台管理-分页获取文章列表")]
+        public async Task<ActionResult<PageDTO<ArticleDTO>>> GetArticleAllListByPage([FromQuery] int limit,
+            [FromQuery] int pageIndex, [FromQuery] int categoryId, string nickTitle)
         {
-            return await Task.Run(() =>
-            {
-                PageDTO<ArticleDTO> articles = _articleService.GetArticlesByPageAndIsShow(limit, pageIndex, false);
-                return Ok(articles);
-            });
+            var articles = await _articleService.GetArticlesByPageAndIsShowAsync(limit, pageIndex, false);
+            return Ok(articles);
         }
+
         /// <summary>
         /// 后台管理-文章更新
         /// </summary>
@@ -56,38 +65,41 @@ namespace ZswBlog.Core.Controllers
         [Route(template: "/api/article/admin/update")]
         [Authorize]
         [HttpPost]
-        public async Task<ActionResult<bool>> UpdateArticle(ArticleUpdateQuery article) {
+        [FunctionDescription("后台管理-文章更新")]
+        public async Task<ActionResult<bool>> UpdateArticle(ArticleUpdateQuery article)
+        {
             return await Task.Run(() =>
             {
                 //转换文章对象
-                ArticleDTO articleDTO = _articleService.GetArticleById(article.id, false);
-                if (articleDTO == null) {
+                var articleDto = _articleService.GetArticleByIdAsync(article.id, false);
+                if (articleDto == null)
+                {
                     throw new Exception("文章未找到");
                 }
-                ArticleEntity articleEntity = _mapper.Map<ArticleEntity>(articleDTO);
-                articleEntity = _mapper.Map<ArticleEntity>(article);
+
+                _mapper.Map<ArticleEntity>(articleDto);
+                var articleEntity = _mapper.Map<ArticleEntity>(article);
                 //赋值
-                string replaceContent = StringHelper.ReplaceTag(article.content, 99999);
+                var replaceContent = StringHelper.ReplaceTag(article.content, 99999);
                 articleEntity.lastUpdateDate = DateTime.Now;
                 articleEntity.textCount = replaceContent.Length;
                 articleEntity.readTime = replaceContent.Length / 125;
-                bool flag = _articleService.UpdateEntity(articleEntity);
-                if (!articleDTO.tags.Select(t => t.id).ToList().Equals(article.tagIdList))
+                var flag = _articleService.UpdateEntityAsync(articleEntity);
+                if (articleDto.Result.tags.Select(t => t.id).ToList().Equals(article.tagIdList)) return Ok(flag);
+                //删除所有文章标签
+                _articleTagService.RemoveAlreadyExistArticleTagAsync(article.id);
+                //遍历添加文章标签
+                foreach (var id in article.tagIdList)
                 {
-                    //删除所有文章标签
-                    _articleTagService.RemoveAlreadyExistArticleTag(article.id);
-                    //遍历添加文章标签
-                    foreach (int id in article.tagIdList)
+                    _articleTagService.AddEntityAsync(new ArticleTagEntity()
                     {
-                        _articleTagService.AddEntity(new ArticleTagEntity()
-                        {
-                            articleId = articleEntity.id,
-                            createDate = articleEntity.createDate,
-                            tagId = id,
-                            operatorId = -1
-                        });
-                    }
+                        articleId = articleEntity.id,
+                        createDate = articleEntity.createDate,
+                        tagId = id,
+                        operatorId = -1
+                    });
                 }
+
                 return Ok(flag);
             });
         }
@@ -100,12 +112,13 @@ namespace ZswBlog.Core.Controllers
         [Route(template: "/api/article/admin/save")]
         [Authorize]
         [HttpPost]
+        [FunctionDescription("后台管理-保存文章")]
         public async Task<ActionResult<bool>> SaveArticle(ArticleSaveQuery article)
         {
             return await Task.Run(() =>
             {
-                ArticleEntity articleEntity = _mapper.Map<ArticleEntity>(article);
-                string replaceContent = StringHelper.ReplaceTag(article.content, 99999);
+                var articleEntity = _mapper.Map<ArticleEntity>(article);
+                var replaceContent = StringHelper.ReplaceTag(article.content, 99999);
                 //设置文章基本参数
                 articleEntity.like = 0;
                 articleEntity.visits = 0;
@@ -113,11 +126,11 @@ namespace ZswBlog.Core.Controllers
                 articleEntity.textCount = replaceContent.Length;
                 articleEntity.readTime = replaceContent.Length / 125;
                 articleEntity.operatorId = -1;
-                bool flag = _articleService.AddEntity(articleEntity);
+                var flag = _articleService.AddEntityAsync(articleEntity);
                 //遍历添加文章标签
-                foreach (int id in article.tagIdList)
+                foreach (var id in article.tagIdList)
                 {
-                    _articleTagService.AddEntity(new ArticleTagEntity()
+                    _articleTagService.AddEntityAsync(new ArticleTagEntity()
                     {
                         articleId = articleEntity.id,
                         createDate = articleEntity.createDate,
@@ -125,9 +138,11 @@ namespace ZswBlog.Core.Controllers
                         operatorId = -1
                     });
                 }
+
                 return Ok(flag);
             });
         }
+
         /// <summary>
         /// 后台管理-获取文章详情
         /// </summary>
@@ -136,14 +151,16 @@ namespace ZswBlog.Core.Controllers
         [Route(template: "/api/article/admin/get/{id}")]
         [Authorize]
         [HttpGet]
+        [FunctionDescription("后台管理-获取文章详情")]
         public async Task<ActionResult<ArticleDTO>> GetAdminArticleById(int id)
         {
             return await Task.Run(() =>
             {
-                ArticleDTO article = _articleService.GetArticleById(id, false);
+                var article = _articleService.GetArticleByIdAsync(id, false);
                 return Ok(article);
             });
         }
+
         /// <summary>
         /// 获取文章详情
         /// </summary>
@@ -151,19 +168,18 @@ namespace ZswBlog.Core.Controllers
         /// <returns></returns>
         [Route(template: "/api/article/get/{id}")]
         [HttpGet]
+        [FunctionDescription("获取文章详情")]
         public async Task<ActionResult<ArticleDTO>> GetArticleById(int id)
         {
-            ArticleDTO article;
-            article = await RedisHelper.GetAsync<ArticleDTO>("ZswBlog:Article:Article-" + id);
+            var article = await RedisHelper.GetAsync<ArticleDTO>("ZswBlog:Article:Article-" + id);
+            if (article != null) return Ok(article);
+            article = await _articleService.GetArticleByIdAsync(id, true);
             if (article == null)
             {
-                article = _articleService.GetArticleById(id, true);
-                if (article == null)
-                {
-                    return NotFound("未找到该文章，请重新返回浏览");
-                }
-                await RedisHelper.SetAsync("ZswBlog:Article:Article-" + article.id, article, 60 * 60 * 6);
+                return NotFound("未找到该文章，请重新返回浏览");
             }
+
+            await RedisHelper.SetAsync("ZswBlog:Article:Article-" + article.id, article, 60 * 60 * 6);
             return Ok(article);
         }
 
@@ -175,13 +191,12 @@ namespace ZswBlog.Core.Controllers
         /// <returns></returns>
         [Route(template: "/api/article/get/page")]
         [HttpGet]
-        public async Task<ActionResult<PageDTO<ArticleDTO>>> GetArticleListByPage([FromQuery] int limit, [FromQuery] int pageIndex)
+        [FunctionDescription("分页获取文章列表")]
+        public async Task<ActionResult<PageDTO<ArticleDTO>>> GetArticleListByPage([FromQuery] int limit,
+            [FromQuery] int pageIndex)
         {
-            return await Task.Run(() =>
-            {
-                PageDTO<ArticleDTO> articles = _articleService.GetArticlesByPageAndIsShow(limit, pageIndex, true);
-                return Ok(articles);
-            });
+            var articles = await _articleService.GetArticlesByPageAndIsShowAsync(limit, pageIndex, true);
+            return Ok(articles);
         }
 
 
@@ -192,12 +207,10 @@ namespace ZswBlog.Core.Controllers
         /// <returns></returns>
         [Route(template: "/api/article/save/like/{articleId}")]
         [HttpPost]
+        [FunctionDescription("文章添加喜爱数")]
         public async Task<ActionResult<bool>> AddArticleLike(int articleId)
         {
-            return await Task.Run(() =>
-            {
-                return _articleService.AddArticleLike(articleId);
-            });
+            return await Task.Run(() => _articleService.AddArticleLikeAsync(articleId));
         }
 
         /// <summary>
@@ -206,11 +219,12 @@ namespace ZswBlog.Core.Controllers
         /// <returns></returns>
         [Route(template: "/api/article/get/list/like")]
         [HttpGet]
+        [FunctionDescription("根据喜好获取文章")]
         public async Task<ActionResult<List<ArticleDTO>>> GetArticleListByLikes()
         {
             return await Task.Run(() =>
             {
-                List<ArticleDTO> articles = _articleService.GetArticlesByLike(7);
+                var articles = _articleService.GetArticlesByLikeAsync(7);
                 return Ok(articles);
             });
         }
@@ -221,11 +235,12 @@ namespace ZswBlog.Core.Controllers
         /// <returns></returns>
         [Route(template: "/api/article/get/list/visit")]
         [HttpGet]
+        [FunctionDescription("根据浏览数获取文章")]
         public async Task<ActionResult<List<ArticleDTO>>> GetArticleListByVisit()
         {
             return await Task.Run(() =>
             {
-                List<ArticleDTO> articles = _articleService.GetArticlesByVisit(7);
+                var articles = _articleService.GetArticlesByVisitAsync(7);
                 return Ok(articles);
             });
         }
@@ -236,11 +251,12 @@ namespace ZswBlog.Core.Controllers
         /// <returns></returns>
         [Route(template: "/api/article/get/fuzzy")]
         [HttpGet]
+        [FunctionDescription("模糊查询获取文章")]
         public async Task<ActionResult<List<ArticleDTO>>> GetArticleListByFuzzyTitle(string fuzzyTitle)
         {
             return await Task.Run(() =>
             {
-                List<ArticleDTO> articles = _articleService.GetArticlesByDimTitle(fuzzyTitle);
+                var articles = _articleService.GetArticlesByDimTitleAsync(fuzzyTitle);
                 return Ok(articles);
             });
         }
@@ -251,14 +267,15 @@ namespace ZswBlog.Core.Controllers
         /// <returns></returns>
         [Route(template: "/api/article/get/page/category")]
         [HttpGet]
-        public async Task<ActionResult<PageDTO<ArticleDTO>>> GetArticleListByCategory([FromQuery] int limit, [FromQuery] int pageIndex, [FromQuery] int categoryId)
+        [FunctionDescription("根据文章类型分页获取文章列表")]
+        public async Task<ActionResult<PageDTO<ArticleDTO>>> GetArticleListByCategory([FromQuery] int limit,
+            [FromQuery] int pageIndex, [FromQuery] int categoryId)
         {
             return await Task.Run(() =>
             {
-                PageDTO<ArticleDTO> articles = _articleService.GetArticleListByCategoryId(limit, pageIndex, categoryId);
+                var articles = _articleService.GetArticleListByCategoryIdAsync(limit, pageIndex, categoryId);
                 return Ok(articles);
             });
         }
     }
 }
-

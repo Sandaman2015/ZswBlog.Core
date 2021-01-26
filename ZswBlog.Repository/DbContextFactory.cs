@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Threading;
-using ZswBlog.Entity;
+using ZswBlog.Entity.DbContext;
 
 namespace ZswBlog.Repository
 {

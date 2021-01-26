@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace ZswBlog.IRepository
 {
@@ -16,63 +17,56 @@ namespace ZswBlog.IRepository
         /// </summary>
         /// <param name="t"></param>
         /// <returns></returns>
-        bool Add(T t);
+        Task<bool> AddAsync(T t);
 
         /// <summary>
         /// 添加可遍历的对象
         /// </summary>
         /// <param name="t"></param>
         /// <returns></returns>
-        bool Add(IEnumerable<T> t);
+        Task<bool> AddListAsync(IEnumerable<T> t);
 
         /// <summary>
         /// 删除对象
         /// </summary>
         /// <param name="t"></param>
         /// <returns></returns>
-        bool Delete(T t);
+        Task<bool> DeleteAsync(T t);
 
         /// <summary>
         /// 删除可迭代的对象
         /// </summary>
         /// <param name="t"></param>
         /// <returns></returns>
-        bool Delete(IEnumerable<T> t);
+        Task<bool> DeleteListAsync(IEnumerable<T> t);
 
         /// <summary>
         /// 更新对象
         /// </summary>
         /// <param name="t"></param>
         /// <returns></returns>
-        bool Update(T t);
+        Task<bool> UpdateAsync(T t);
 
         /// <summary>
         /// 更新可迭代的对象
         /// </summary>
         /// <param name="t"></param>
         /// <returns></returns>
-        bool Update(IEnumerable<T> t);
+        Task<bool> UpdateListAsync(IEnumerable<T> t);
 
         /// <summary>
         /// 查询当前实体数据
         /// </summary>
         /// <param name="whereLambda"></param>
         /// <returns></returns>
-        T GetSingleModel(Expression<Func<T, bool>> whereLambda);
+        Task<T> GetSingleModelAsync(Expression<Func<T, bool>> whereLambda);
 
         /// <summary>
         /// 查询数据
         /// </summary>
         /// <param name="whereLambda">GetModels里面的是一个实体类=>实体类的成员属性判断后返回tolist<实体成员></param>
         /// <returns></returns>
-        IQueryable<T> GetModels(Expression<Func<T, bool>> whereLambda);
-
-        /// <summary>
-        /// 查询数据
-        /// </summary>
-        /// <param name="sql">通过sql查询数据</param>
-        /// <returns></returns>
-        IQueryable<T> GetModelsBySql(string sql);
+        Task<IQueryable<T>> GetModelsAsync(Expression<Func<T, bool>> whereLambda);
 
         /// <summary>
         /// 返回一个查询后的列表
@@ -92,6 +86,6 @@ namespace ZswBlog.IRepository
         /// </summary>
         /// <param name="whereLambda"></param>
         /// <returns></returns>
-        int GetModelsCountByCondition(Expression<Func<T, bool>> whereLambda);
+        Task<int> GetModelsCountByConditionAsync(Expression<Func<T, bool>> whereLambda);
     }
 }

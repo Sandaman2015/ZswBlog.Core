@@ -2,8 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using ZswBlog.DTO;
-using ZswBlog.Entity;
+using ZswBlog.Entity.DbContext;
 using ZswBlog.IRepository;
 using ZswBlog.IServices;
 
@@ -11,16 +12,20 @@ namespace ZswBlog.Services
 {
     public class FriendLinkService : BaseService<FriendLinkEntity, IFriendLinkRepository>, IFriendLinkService
     {
-        public IFriendLinkRepository _friendLinkRepository { get; set; }
-        public IMapper _mapper { get; set; }
+        public IFriendLinkRepository FriendLinkRepository { get; set; }
+        public IMapper Mapper { get; set; }
+
         /// <summary>
         /// 获取所有友情链接
         /// </summary>
         /// <returns></returns>
-        public List<FriendLinkDTO> GetAllFriendLinks()
+        public async Task<List<FriendLinkDTO>> GetAllFriendLinksAsync()
         {
-            List<FriendLinkEntity> friendLinks = _friendLinkRepository.GetModels(a => a.id != 0).ToList();
-            return _mapper.Map<List<FriendLinkDTO>>(friendLinks);
+            return await Task.Run(() =>
+            {
+                var friendLinks = FriendLinkRepository.GetModelsAsync(a => a.id != 0).Result.ToList();
+                return Mapper.Map<List<FriendLinkDTO>>(friendLinks);
+            });
         }
 
         /// <summary>
@@ -28,11 +33,16 @@ namespace ZswBlog.Services
         /// </summary>
         /// <param name="isShow"></param>
         /// <returns></returns>
-        public List<FriendLinkDTO> GetFriendLinksByIsShow(bool isShow)
+        public async Task<List<FriendLinkDTO>> GetFriendLinksByIsShowAsync(bool isShow)
         {
-            List<FriendLinkEntity> friendLinks = _friendLinkRepository.GetModels(a => a.id != 0).ToList();
-            friendLinks = isShow ? friendLinks.Where(a => a.isShow).ToList() : friendLinks.Where(a => !a.isShow).ToList();
-            return _mapper.Map<List<FriendLinkDTO>>(friendLinks);
+            return await Task.Run(() =>
+            {
+                var friendLinks = FriendLinkRepository.GetModelsAsync(a => a.id != 0).Result.ToList();
+                friendLinks = isShow
+                    ? friendLinks.Where(a => a.isShow).ToList()
+                    : friendLinks.Where(a => !a.isShow).ToList();
+                return Mapper.Map<List<FriendLinkDTO>>(friendLinks);
+            });
         }
 
         /// <summary>
@@ -40,10 +50,10 @@ namespace ZswBlog.Services
         /// </summary>
         /// <param name="tId"></param>
         /// <returns></returns>
-        public bool RemoveEntityAsync(int tId)
+        public async Task<bool> RemoveEntityAsync(int tId)
         {
-            FriendLinkEntity friendLink = _friendLinkRepository.GetSingleModel(a => a.id == tId);
-            return _friendLinkRepository.Delete(friendLink);
+            var friendLink = await FriendLinkRepository.GetSingleModelAsync(a => a.id == tId);
+            return await FriendLinkRepository.DeleteAsync(friendLink);
         }
     }
 }

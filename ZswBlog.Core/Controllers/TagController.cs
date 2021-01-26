@@ -1,11 +1,11 @@
-using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using ZswBlog.Core.config;
 using ZswBlog.DTO;
 using ZswBlog.IServices;
 
-namespace ZswBlog.Web.Controllers
+namespace ZswBlog.Core.Controllers
 {
     /// <summary>
     /// 标签页
@@ -16,7 +16,7 @@ namespace ZswBlog.Web.Controllers
         private readonly IArticleTagService _articleTagService;
         private readonly ITagService _tagService;
         /// <summary>
-        /// 
+        /// 默认构造函数
         /// </summary>
         /// <param name="articleTagService"></param>
         /// <param name="tagService"></param>
@@ -32,14 +32,11 @@ namespace ZswBlog.Web.Controllers
         /// <returns></returns>
         [Route("/api/tag/get/all")]
         [HttpGet]
+        [FunctionDescription("获取所有的文章标签")]
         public async Task<ActionResult<List<TagDTO>>> GetTagList()
         {
-            List<TagDTO> articleTags;
-            return await Task.Run(() =>
-            {
-                articleTags = _tagService.GetAllTag();
-                return Ok(articleTags);
-            });
+            var articleTags = await _tagService.GetAllTagAsync();
+            return Ok(articleTags);
             //articleTags = await RedisHelper.GetAsync<List<TagDTO>>("ZswBlog:Tag:TagList");
             //if (articleTags == null)
             //{
@@ -50,20 +47,21 @@ namespace ZswBlog.Web.Controllers
         }
 
         /// <summary>
-        /// 获取根据Id单个标签下的文章
+        /// 分页获取根据Id单个标签下的文章
         /// </summary>
-        /// <param name="limit"></param>
-        /// <param name="pageIndex"></param>
-        /// <param name="tagId"></param>
+        /// <param name="limit">页码</param>
+        /// <param name="pageIndex">页数</param>
+        /// <param name="tagId">类型编码</param>
         /// <returns></returns>
         [Route(template: "/api/tag/get/page/{tagId}")]
         [HttpGet]
+        [FunctionDescription("分页获取根据Id单个标签下的文章")]
         public async Task<ActionResult<PageDTO<ArticleDTO>>> GetArticleListByPageAndTagId(int limit, int pageIndex, [FromRoute] int tagId)
         {
             return await Task.Run(() =>
             {
-                PageDTO<ArticleDTO> pageDTO = _articleTagService.GetArticleListIdByTagId(limit, pageIndex, tagId);
-                return Ok(pageDTO);
+                var pageDto = _articleTagService.GetArticleListIdByTagIdAsync(limit, pageIndex, tagId);
+                return Ok(pageDto);
             });
         }
     }

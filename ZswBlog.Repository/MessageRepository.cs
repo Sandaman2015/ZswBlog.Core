@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ZswBlog.DTO;
-using ZswBlog.Entity;
+using ZswBlog.Entity.DbContext;
 using ZswBlog.IRepository;
 
 namespace ZswBlog.Repository

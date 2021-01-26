@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using ZswBlog.DTO;
-using ZswBlog.Entity;
+using ZswBlog.Entity.DbContext;
 
 namespace ZswBlog.IServices
 {
@@ -11,12 +11,12 @@ namespace ZswBlog.IServices
         /// 获取所有的友情链接
         /// </summary>
         /// <returns></returns>
-       List<FriendLinkDTO> GetAllFriendLinks();
+       Task<List<FriendLinkDTO>> GetAllFriendLinksAsync();
         /// <summary>
         /// 选择显示友情链接
         /// </summary>
         /// <param name="isShow">选择显示</param>
         /// <returns></returns>
-        List<FriendLinkDTO> GetFriendLinksByIsShow(bool isShow);
+        Task<List<FriendLinkDTO>> GetFriendLinksByIsShowAsync(bool isShow);
     }
 }

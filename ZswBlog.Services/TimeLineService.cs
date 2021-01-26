@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ZswBlog.DTO;
-using ZswBlog.Entity;
+using ZswBlog.Entity.DbContext;
 using ZswBlog.IRepository;
 using ZswBlog.IServices;
 
@@ -12,27 +12,32 @@ namespace ZswBlog.Services
 {
     public class TimeLineService : BaseService<TimeLineEntity, ITimeLineRepository>, ITimeLineService
     {
-        public ITimeLineRepository _timeLineRepository { get; set; }
-        public IMapper _mapper { get; set; }
+        public ITimeLineRepository TimeLineRepository { get; set; }
+        public IMapper Mapper { get; set; }
+
         /// <summary>
         /// 删除时间线
         /// </summary>
         /// <param name="tId"></param>
         /// <returns></returns>
-        public bool RemoveEntity(int tId)
+        public async Task<bool> RemoveEntityAsync(int tId)
         {
-            TimeLineEntity timeLine = _timeLineRepository.GetSingleModel(a => a.id == tId);
-            return _timeLineRepository.Delete(timeLine);
+            var timeLine = await TimeLineRepository.GetSingleModelAsync(a => a.id == tId);
+            return await TimeLineRepository.DeleteAsync(timeLine);
         }
 
         /// <summary>
         /// 获取所有时间线列表
         /// </summary>
         /// <returns></returns>
-        public List<TimeLineDTO> GetTimeLineList()
+        public async Task<List<TimeLineDTO>> GetTimeLineListAsync()
         {
-            List<TimeLineEntity> timeLines = _timeLineRepository.GetModels(a => a.id != 0).OrderByDescending(a=>a.createDate).ToList();
-            return _mapper.Map<List<TimeLineDTO>>(timeLines);
+            return await Task.Run(() =>
+            {
+                var timeLines = TimeLineRepository.GetModelsAsync(a => a.id != 0).Result
+                    .OrderByDescending(a => a.createDate).ToList();
+                return Mapper.Map<List<TimeLineDTO>>(timeLines);
+            });
         }
     }
 }

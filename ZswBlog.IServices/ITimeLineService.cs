@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using ZswBlog.DTO;
-using ZswBlog.Entity;
+using ZswBlog.Entity.DbContext;
 
 namespace ZswBlog.IServices
 {
@@ -11,6 +11,6 @@ namespace ZswBlog.IServices
         /// 获取所有的时间线按照时间排序
         /// </summary>
         /// <returns></returns>
-        List<TimeLineDTO> GetTimeLineList();
+        Task<List<TimeLineDTO>> GetTimeLineListAsync();
     }
 }
