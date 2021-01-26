@@ -162,7 +162,7 @@ namespace ZswBlog.Services
                 {
                     var commentTree = Mapper.Map<CommentTreeDTO>(item);
                     ConvertCommentTree(commentTree);
-                    var treeDtoList = CommentRepository.GetCommentsRecursive(item.id, articleId);
+                    var treeDtoList = CommentRepository.GetCommentsRecursiveAsync(item.id, articleId);
                     commentTree.children = Mapper.Map<List<CommentTreeDTO>>(treeDtoList);
                     commentDtoList.Add(commentTree);
                 }

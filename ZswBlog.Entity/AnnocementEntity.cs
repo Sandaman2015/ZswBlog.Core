@@ -16,6 +16,7 @@ namespace ZswBlog.Entity.DbContext
         /// 操作id
         /// </summary>
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int id { get; set; }
 
         /// <summary>

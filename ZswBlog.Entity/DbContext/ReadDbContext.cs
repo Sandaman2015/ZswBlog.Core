@@ -9,7 +9,7 @@ namespace ZswBlog.Entity.DbContext
     /// 读取数据库
     /// </summary>
     public class ReadDbContext: ZswBlogDbContext
-    {
+    { 
         /// <summary>
         /// 
         /// </summary>

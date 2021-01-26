@@ -28,11 +28,10 @@ namespace ZswBlog.Services
             return await Task.Run(() =>
             {
                 var articleTags = ArticleTagRepository.GetModelsByPage(limit, pageIndex, false,
-                    a => a.id, a => a.id == tagId, out var pageCount).ToList();
+                    a => a.id, a => a.id == tagId, out var pageCount);
                 var articles = articleTags
                     .Select(item => ArticleRepository.GetSingleModelAsync(a => a.id == item.articleId))
                     .Select(article => article.Result).ToList();
-
                 var articleDtOs = Mapper.Map<List<ArticleDTO>>(articles);
                 return new PageDTO<ArticleDTO>(pageIndex, limit, pageCount, articleDtOs);
             });
@@ -45,15 +44,16 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<List<TagDTO>> GetTagListByArticleIdAsync(int articleId)
         {
-            return await Task.Run(() =>
+            var articleTags =
+                await ArticleTagRepository.GetModelsAsync(a => a.articleId == articleId);
+            List<TagEntity> tags = new List<TagEntity>();
+            foreach (var item in articleTags.ToList())
             {
-                var articleTags =
-                    ArticleTagRepository.GetModelsAsync(a => a.articleId == articleId).Result.ToList();
-                var tags = articleTags.Select(item => TagRepository.GetSingleModelAsync(a => a.id == item.tagId))
-                    .Select(tag => tag).ToList();
-                var tagDtOs = Mapper.Map<List<TagDTO>>(tags);
-                return tagDtOs;
-            });
+                var tag = await TagRepository.GetSingleModelAsync(a => a.id == item.tagId);
+                tags.Add(tag);
+            }
+            var tagDtOs = Mapper.Map<List<TagDTO>>(tags);
+            return tagDtOs;
         }
 
         /// <summary>
@@ -63,13 +63,10 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<bool> RemoveAlreadyExistArticleTagAsync(int articleId)
         {
-            return await Task.Run(() =>
-            {
-                var articleTags =
-                    ArticleTagRepository.GetModelsAsync(a => a.articleId == articleId).Result.ToList();
-                articleTags.ForEach(a => { ArticleTagRepository.DeleteAsync(a); });
-                return true;
-            });
+            var articleTags =
+              await ArticleTagRepository.GetModelsAsync(a => a.articleId == articleId);
+            articleTags.ToList().ForEach(a => { ArticleTagRepository.DeleteAsync(a); });
+            return true;
         }
 
         /// <summary>
@@ -79,12 +76,9 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<bool> RemoveEntityAsync(int tId)
         {
-            return await Task.Run(() =>
-            {
-                var entity =
-                    ArticleTagRepository.GetSingleModelAsync(at => at.id == tId);
-                return ArticleTagRepository.DeleteAsync(entity.Result);
-            });
+            var entity =
+                await ArticleTagRepository.GetSingleModelAsync(at => at.id == tId);
+            return await ArticleTagRepository.DeleteAsync(entity);
         }
     }
 }

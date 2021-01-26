@@ -30,7 +30,6 @@ namespace ZswBlog.Services
                 {
                     item.articleCount = ArticleService.GetArticleCountByCategoryIdAsync(item.id).Result;
                 }
-
                 return dToList;
             });
         }
@@ -42,11 +41,8 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<CategoryDTO> GetCategoryByIdAsync(int tId)
         {
-            return await Task.Run(() =>
-            {
-                var category = CategoryRepository.GetSingleModelAsync((CategoryEntity c) => c.id == tId);
-                return Mapper.Map<CategoryDTO>(category);
-            });
+            var category = await CategoryRepository.GetSingleModelAsync((CategoryEntity c) => c.id == tId);
+            return Mapper.Map<CategoryDTO>(category);
         }
     }
 }

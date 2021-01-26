@@ -99,18 +99,18 @@ namespace ZswBlog.Entity.DbContext
         /// 
         /// </summary>
         public virtual DbSet<AnnouncementEntity> AnnouncementEntities { get; set; }
-        /// <summary>
-        /// 充血关联模型实体
-        /// </summary>
-        public virtual DbSet<MessageDTO> MessageDTO { get; set; }
-        /// <summary>
-        /// 充血关联模型实体
-        /// </summary>
-        public virtual DbSet<ArticleDTO> ArticleDTO { get; set; }
-        /// <summary>
-        /// 充血关联模型实体
-        /// </summary>
-        public virtual DbSet<CommentDTO> CommentDTO { get; set; }
+        ///// <summary>
+        ///// 充血关联模型实体
+        ///// </summary>
+        //public virtual DbSet<MessageDTO> MessageDTO { get; set; }
+        ///// <summary>
+        ///// 充血关联模型实体
+        ///// </summary>
+        //public virtual DbSet<ArticleDTO> ArticleDTO { get; set; }
+        ///// <summary>
+        ///// 充血关联模型实体
+        ///// </summary>
+        //public virtual DbSet<CommentDTO> CommentDTO { get; set; }
         /// <summary>
         /// 
         /// </summary>

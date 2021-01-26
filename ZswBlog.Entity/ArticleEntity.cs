@@ -41,6 +41,7 @@ namespace ZswBlog.Entity.DbContext
         /// <summary>
         /// 所属分类，默认为0是默认分类
         /// </summary>
+        [ForeignKey("category")]
         public int categoryId { get; set; }
         /// <summary>
         /// 浏览次数
@@ -65,7 +66,7 @@ namespace ZswBlog.Entity.DbContext
         /// <summary>
         /// 置顶排序
         /// </summary>
-        public int topSort { get; set; }
+        public Nullable<int> topSort { get; set; }
 
         /// <summary>
         /// 阅读时间
@@ -80,6 +81,6 @@ namespace ZswBlog.Entity.DbContext
         /// <summary>
         /// 
         /// </summary>
-        public CategoryEntity Category { get; set; }
+        public virtual CategoryEntity category { get; set; }
     }
 }

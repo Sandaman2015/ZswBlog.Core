@@ -106,7 +106,7 @@ namespace ZswBlog.Services
                 {
                     var messageTree = Mapper.Map<MessageTreeDTO>(item);
                     ConvertMessageTree(messageTree);
-                    var entities = MessageRepository.GetMessagesRecursive(item.id);
+                    var entities = MessageRepository.GetMessagesRecursiveAsync(item.id);
                     messageTree.children = Mapper.Map<List<MessageTreeDTO>>(entities);
                     messageTreeList.Add(messageTree);
                 }
@@ -142,7 +142,7 @@ namespace ZswBlog.Services
 
         public async Task<List<MessageDTO>> GetMessageOnNearSaveAsync(int count)
         {
-            return await Task.Run(() => MessageRepository.GetMessageOnNearSave(count));
+            return await Task.Run(() => MessageRepository.GetMessageOnNearSaveAsync(count));
         }
     }
 }

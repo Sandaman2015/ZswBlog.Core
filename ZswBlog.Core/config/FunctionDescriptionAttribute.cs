@@ -33,14 +33,26 @@ namespace ZswBlog.Core.config
         /// get your function description when you are logging 
         /// </summary>
         public virtual string Description => DescriptionValue;
-
+        /// <summary>
+        /// 
+        /// </summary>
         public string DescriptionValue { get; set; }
-
-        public override bool Equals(object? obj) =>
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object obj) =>
             obj is FunctionDescriptionAttribute other && other.Description == Description;
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public override int GetHashCode() => Description?.GetHashCode() ?? 0;
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public override bool IsDefaultAttribute() => Equals(Default);
     }
 }

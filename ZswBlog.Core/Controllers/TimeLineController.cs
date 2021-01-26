@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ZswBlog.Core.config;
 using ZswBlog.DTO;
@@ -30,16 +31,19 @@ namespace ZswBlog.Core.Controllers
         [Route("/api/timeline/get/all")]
         [HttpGet]
         [FunctionDescription("获取所有时间线文章")]
-        public ActionResult<List<TimeLineDTO>> GetAllTimeLineAsync()
+        public async Task<ActionResult<List<TimeLineDTO>>> GetAllTimeLineAsync()
         {
-            var timelinesDtoList = _timeLineService.GetTimeLineListAsync();
+            return await Task.Run(() =>
+            {
+                var timelinesDtoList = _timeLineService.GetTimeLineListAsync();
+                return Ok(timelinesDtoList);
+            });
             //timelinesDTOList = await RedisHelper.GetAsync<List<TimeLineDTO>>("ZswBlog:TimeLine:TimeLineList");
             //if (timelinesDTOList==null)
             //{
             //    timelinesDTOList = _timeLineService.GetTimeLineList();
             //    await RedisHelper.SetAsync("ZswBlog:TimeLine:TimeLineList", timelinesDTOList, 1200);
             //}
-            return Ok(timelinesDtoList);
         }
     }
 }

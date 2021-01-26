@@ -29,6 +29,7 @@ namespace ZswBlog.Entity.DbContext
         /// <summary>
         /// 用户id
         /// </summary>
+        [ForeignKey("user")]
         public int userId { get; set; }
         /// <summary>
         /// 所属文章id
@@ -37,11 +38,12 @@ namespace ZswBlog.Entity.DbContext
         /// <summary>
         /// 目标用户
         /// </summary>
-        public int? targetUserId { get; set; }
+        [ForeignKey("targetUser")]
+        public Nullable<int> targetUserId { get; set; }
         /// <summary>
         /// 目标评论
         /// </summary>
-        public int? targetId { get; set; }
+        public Nullable<int> targetId { get; set; }
         /// <summary>
         /// 评论位置
         /// </summary>
@@ -50,5 +52,13 @@ namespace ZswBlog.Entity.DbContext
         /// 浏览器
         /// </summary>
         public string browser { get; set; }
+        /// <summary>
+        /// 留言用户
+        /// </summary>
+        public virtual UserEntity user { get; set; }
+        /// <summary>
+        /// 目标用户
+        /// </summary>
+        public virtual UserEntity targetUser { get; set; }
     }
 }

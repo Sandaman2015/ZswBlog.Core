@@ -64,7 +64,10 @@ namespace ZswBlog.Repository
 
         public async Task<IQueryable<T>> GetModelsAsync(Expression<Func<T, bool>> whereLambda)
         {
-            return _readDbContext.Set<T>().Where(whereLambda);
+            return await Task.Run(() =>
+            {
+                return _readDbContext.Set<T>().Where(whereLambda);
+            }); 
         }
 
         public IQueryable<T> GetModelsByPage<TType>(int pageSize, int pageIndex, bool isAsc,
@@ -79,14 +82,20 @@ namespace ZswBlog.Repository
 
         public async Task<T> GetSingleModelAsync(Expression<Func<T, bool>> whereLambda)
         {
-            return await _readDbContext.Set<T>().Where(whereLambda).FirstOrDefaultAsync<T>();
+            return await Task.Run(() =>
+            {
+                return _readDbContext.Set<T>().Where(whereLambda).FirstOrDefault<T>();
+            });            
         }
 
         public async Task<int> GetModelsCountByConditionAsync(Expression<Func<T, bool>> whereLambda)
         {
-            return whereLambda == null
-                ? _readDbContext.Set<T>().Count()
-                : _readDbContext.Set<T>().Where(whereLambda).Count();
+            return await Task.Run(() =>
+            {
+                return whereLambda == null
+                    ? _readDbContext.Set<T>().Count()
+                    : _readDbContext.Set<T>().Where(whereLambda).Count();
+            });
         }
     }
 }

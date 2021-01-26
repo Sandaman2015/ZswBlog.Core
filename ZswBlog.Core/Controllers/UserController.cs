@@ -90,21 +90,20 @@ namespace ZswBlog.Core.Controllers
             if (userDto == null)
             {
                 jsonResult = "本次登录没有找到您的信息，不如刷新试试重新登录吧";
-                returnData = new {msg = jsonResult, url = returnUrl, code = 400};
+                returnData = new { msg = jsonResult, url = returnUrl, code = 400 };
             }
             else
             {
                 var user = RedisHelper.Get<UserDTO>("ZswBlog:UserInfo:" + userDto.id);
                 if (user == null)
                 {
-                    await RedisHelper.SetAsync("ZswBlog:UserInfo:" + userDto.id, userDto, 60 * 60 * 6);
+                    RedisHelper.SetAsync("ZswBlog:UserInfo:" + userDto.id, userDto, 60 * 60 * 6);
                 }
 
                 jsonResult = "登录成功！欢迎您：" + userDto.nickName;
                 returnData = new
-                    {msg = jsonResult, code = 200, user = userDto, userEmail = userDto.email, url = returnUrl};
+                { msg = jsonResult, code = 200, user = userDto, userEmail = userDto.email, url = returnUrl };
             }
-
             return Ok(returnData);
         }
 
@@ -115,26 +114,22 @@ namespace ZswBlog.Core.Controllers
         [Route("/api/user/admin/get/info")]
         [Authorize]
         [HttpGet]
-        [FunctionDescription("根据QQ的Token获取QQ用户信息")]
+        //[FunctionDescription("根据QQ的Token获取QQ用户信息")]
         public async Task<ActionResult<dynamic>> GetUserInfoByAccessToken()
         {
-            return await Task.Run(() =>
+            dynamic returnValue = new { url = "/admin/login", msg = "请重新登录！" };
+            var bearer = HttpContext.Request.Headers["Authorization"].FirstOrDefault();
+            if (string.IsNullOrEmpty(bearer) || !bearer.Contains("Bearer"))
             {
-                dynamic returnValue = new {url = "/admin/login", msg = "请重新登录！"};
-                var bearer = HttpContext.Request.Headers["Authorization"].FirstOrDefault();
-                if (string.IsNullOrEmpty(bearer) || !bearer.Contains("Bearer"))
-                {
-                    return returnValue;
-                }
-
-                var jwt = bearer.Split(' ');
-                var tokenObj = new JwtSecurityToken(jwt[1]);
-                var claimsIdentity = new ClaimsIdentity(tokenObj.Claims);
-                var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
-                var userId = int.Parse(claimsPrincipal.FindFirstValue("userId"));
-                var userDto = _userService.GetUserByIdAsync(userId);
-                return userDto;
-            });
+                return returnValue;
+            }
+            var jwt = bearer.Split(' ');
+            var tokenObj = new JwtSecurityToken(jwt[1]);
+            var claimsIdentity = new ClaimsIdentity(tokenObj.Claims);
+            var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+            var userId = int.Parse(claimsPrincipal.FindFirstValue("userId"));
+            var userDto = await _userService.GetUserByIdAsync(userId);
+            return userDto;
         }
     }
 }

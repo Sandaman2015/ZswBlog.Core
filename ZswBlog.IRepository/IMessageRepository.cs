@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using ZswBlog.DTO;
 using ZswBlog.Entity.DbContext;
 
 namespace ZswBlog.IRepository
 {
-    //public interface IMessageRepository : IBaseRepository<Message> { }
     public interface IMessageRepository : IBaseRepository<MessageEntity> {
-        List<MessageDTO> GetMessageOnNoReply(int count);
-        List<MessageDTO> GetMessagesRecursive(int targetId);
-        List<MessageDTO> GetMessageOnNearSave(int count);
+        Task<List<MessageDTO>> GetMessageOnNoReplyAsync(int count);
+        Task<List<MessageDTO>> GetMessagesRecursiveAsync(int targetId);
+        Task<List<MessageDTO>> GetMessageOnNearSaveAsync(int count);
     }
 }
