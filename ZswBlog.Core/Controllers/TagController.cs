@@ -15,6 +15,7 @@ namespace ZswBlog.Core.Controllers
     {
         private readonly IArticleTagService _articleTagService;
         private readonly ITagService _tagService;
+
         /// <summary>
         /// 默认构造函数
         /// </summary>
@@ -40,8 +41,8 @@ namespace ZswBlog.Core.Controllers
             //articleTags = await RedisHelper.GetAsync<List<TagDTO>>("ZswBlog:Tag:TagList");
             //if (articleTags == null)
             //{
-                //获取所有标签
-                //开启缓存
+            //获取所有标签
+            //开启缓存
             //    await RedisHelper.SetAsync("ZswBlog:Tag:TagList", articleTags, 1200);
             //}
         }
@@ -56,13 +57,11 @@ namespace ZswBlog.Core.Controllers
         [Route(template: "/api/tag/get/page/{tagId}")]
         [HttpGet]
         [FunctionDescription("分页获取根据Id单个标签下的文章")]
-        public async Task<ActionResult<PageDTO<ArticleDTO>>> GetArticleListByPageAndTagId(int limit, int pageIndex, [FromRoute] int tagId)
+        public async Task<ActionResult<PageDTO<ArticleDTO>>> GetArticleListByPageAndTagId(int limit, int pageIndex,
+            [FromRoute] int tagId)
         {
-            return await Task.Run(() =>
-            {
-                var pageDto = _articleTagService.GetArticleListIdByTagIdAsync(limit, pageIndex, tagId);
-                return Ok(pageDto);
-            });
+            var pageDto = await _articleTagService.GetArticleListIdByTagIdAsync(limit, pageIndex, tagId);
+            return Ok(pageDto);
         }
     }
 }

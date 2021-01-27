@@ -16,7 +16,7 @@ using ZswBlog.ThirdParty;
 
 namespace ZswBlog.Services
 {
-    [Intercept(typeof(EnableTransaction))]
+    // [Intercept(typeof(EnableTransaction))]
     public class UserService : BaseService<UserEntity, IUserRepository>, IUserService
     {
         public IUserRepository UserRepository { get; set; }
@@ -25,11 +25,8 @@ namespace ZswBlog.Services
 
         public async Task<List<UserDTO>> GetAllUsersAsync()
         {
-            return await Task.Run(() =>
-            {
-                var users = UserRepository.GetModelsAsync(a => a.id != 0).Result.ToList();
-                return Mapper.Map<List<UserDTO>>(users);
-            });
+            var users = await UserRepository.GetModelsAsync(a => a.id != 0);
+            return Mapper.Map<List<UserDTO>>(users.ToList());
         }
 
         public async Task<UserDTO> GetUserByOpenIdAsync(string openId)
@@ -98,12 +95,8 @@ namespace ZswBlog.Services
 
         public async Task<List<UserDTO>> GetUsersNearVisitAsync(int count)
         {
-            return await Task.Run(() =>
-            {
-                var users = Repository.GetModelsAsync(a => a.id != 0).Result
-                    .OrderByDescending(a => a.createDate).Take(count).ToList();
-                return Mapper.Map<List<UserDTO>>(users);
-            });
+            var users = await Repository.GetModelsAsync(a => a.id != 0);
+            return Mapper.Map<List<UserDTO>>(users.OrderByDescending(a => a.createDate).Take(count).ToList());
         }
 
         public virtual async Task<bool> RemoveEntityAsync(int tId)

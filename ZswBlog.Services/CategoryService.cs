@@ -22,16 +22,13 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<List<CategoryDTO>> GetAllCategoriesAsync()
         {
-            return await Task.Run(() =>
+            var categories = await CategoryRepository.GetModelsAsync(c => c.id != 0);
+            var dToList = Mapper.Map<List<CategoryDTO>>(categories.ToList());
+            foreach (var item in dToList)
             {
-                var categories = CategoryRepository.GetModelsAsync((CategoryEntity c) => c.id != 0).Result.ToList();
-                var dToList = Mapper.Map<List<CategoryDTO>>(categories);
-                foreach (var item in dToList)
-                {
-                    item.articleCount = ArticleService.GetArticleCountByCategoryIdAsync(item.id).Result;
-                }
-                return dToList;
-            });
+                item.articleCount = await ArticleService.GetArticleCountByCategoryIdAsync(item.id);
+            }
+            return dToList;
         }
 
         /// <summary>
@@ -41,7 +38,7 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<CategoryDTO> GetCategoryByIdAsync(int tId)
         {
-            var category = await CategoryRepository.GetSingleModelAsync((CategoryEntity c) => c.id == tId);
+            var category = await CategoryRepository.GetSingleModelAsync(c => c.id == tId);
             return Mapper.Map<CategoryDTO>(category);
         }
     }

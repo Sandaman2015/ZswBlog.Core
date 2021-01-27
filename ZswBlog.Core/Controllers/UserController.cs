@@ -114,7 +114,7 @@ namespace ZswBlog.Core.Controllers
         [Route("/api/user/admin/get/info")]
         [Authorize]
         [HttpGet]
-        //[FunctionDescription("根据QQ的Token获取QQ用户信息")]
+        [FunctionDescription("根据QQ的Token获取QQ用户信息")]
         public async Task<ActionResult<dynamic>> GetUserInfoByAccessToken()
         {
             dynamic returnValue = new { url = "/admin/login", msg = "请重新登录！" };

@@ -29,6 +29,12 @@ namespace ZswBlog.IServices
         /// <returns></returns>
         Task<ArticleDTO> GetArticleByIdAsync(int articleId, bool isShow);
         /// <summary>
+        /// 根据文章Id号获取文章
+        /// </summary>
+        /// <param name="articleId">文章Id</param>
+        /// <returns></returns>
+        Task<ArticleEntity> GetArticleEntityByIdAsync(int articleId);
+        /// <summary>
         /// 获取所有文章
         /// </summary>
         /// <returns></returns>

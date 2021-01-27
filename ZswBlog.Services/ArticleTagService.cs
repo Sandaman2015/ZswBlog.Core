@@ -65,7 +65,10 @@ namespace ZswBlog.Services
         {
             var articleTags =
               await ArticleTagRepository.GetModelsAsync(a => a.articleId == articleId);
-            articleTags.ToList().ForEach(a => { ArticleTagRepository.DeleteAsync(a); });
+            foreach (var item in articleTags)
+            {
+               await ArticleTagRepository.DeleteAsync(item);
+            }
             return true;
         }
 

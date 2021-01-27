@@ -32,12 +32,8 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<List<TimeLineDTO>> GetTimeLineListAsync()
         {
-            return await Task.Run(() =>
-            {
-                var timeLines = TimeLineRepository.GetModelsAsync(a => a.id != 0).Result
-                    .OrderByDescending(a => a.createDate).ToList();
-                return Mapper.Map<List<TimeLineDTO>>(timeLines);
-            });
+            var timeLines = await TimeLineRepository.GetModelsAsync(a => a.id != 0);
+            return Mapper.Map<List<TimeLineDTO>>(timeLines.OrderByDescending(a => a.createDate).ToList());
         }
     }
 }

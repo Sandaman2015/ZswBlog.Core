@@ -33,11 +33,8 @@ namespace ZswBlog.Core.Controllers
         [FunctionDescription("获取所有时间线文章")]
         public async Task<ActionResult<List<TimeLineDTO>>> GetAllTimeLineAsync()
         {
-            return await Task.Run(() =>
-            {
-                var timelinesDtoList = _timeLineService.GetTimeLineListAsync();
+                var timelinesDtoList = await  _timeLineService.GetTimeLineListAsync();
                 return Ok(timelinesDtoList);
-            });
             //timelinesDTOList = await RedisHelper.GetAsync<List<TimeLineDTO>>("ZswBlog:TimeLine:TimeLineList");
             //if (timelinesDTOList==null)
             //{

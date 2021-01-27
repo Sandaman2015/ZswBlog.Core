@@ -174,6 +174,11 @@
             
             </summary>
         </member>
+        <member name="P:ZswBlog.Entity.DbContext.ArticleEntity.tags">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="T:ZswBlog.Entity.DbContext.ArticleTagEntity">
             <summary>
             文章标签表
@@ -199,14 +204,29 @@
             文章id
             </summary>
         </member>
+        <member name="P:ZswBlog.Entity.DbContext.ArticleTagEntity.article">
+            <summary>
+            关联外键多对多
+            </summary>
+        </member>
         <member name="P:ZswBlog.Entity.DbContext.ArticleTagEntity.tagId">
             <summary>
             标签id
             </summary>
         </member>
+        <member name="P:ZswBlog.Entity.DbContext.ArticleTagEntity.tag">
+            <summary>
+            关联外键多对多
+            </summary>
+        </member>
         <member name="T:ZswBlog.Entity.DbContext.CategoryEntity">
             <summary>
             分类实体对象
+            </summary>
+        </member>
+        <member name="M:ZswBlog.Entity.DbContext.CategoryEntity.#ctor">
+            <summary>
+            
             </summary>
         </member>
         <member name="P:ZswBlog.Entity.DbContext.CategoryEntity.id">
@@ -232,6 +252,11 @@
         <member name="P:ZswBlog.Entity.DbContext.CategoryEntity.description">
             <summary>
             分类描述
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.DbContext.CategoryEntity.articles">
+            <summary>
+            多对多模型
             </summary>
         </member>
         <member name="T:ZswBlog.Entity.DbContext.CommentEntity">
@@ -416,9 +441,24 @@
             
             </summary>
         </member>
+        <member name="P:ZswBlog.Entity.DbContext.ZswBlogDbContext.MessageDTO">
+            <summary>
+            非模型实体
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.DbContext.ZswBlogDbContext.ArticleDTO">
+            <summary>
+            非模型实体
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.DbContext.ZswBlogDbContext.CommentDTO">
+            <summary>
+            非模型实体
+            </summary>
+        </member>
         <member name="M:ZswBlog.Entity.DbContext.ZswBlogDbContext.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <summary>
-            
+            Fluent API定义实体属性与关联
             </summary>
             <param name="modelBuilder"></param>
         </member>

@@ -6,6 +6,10 @@ namespace ZswBlog.Query
 {
     public class ArticleUpdateQuery
     {
+        public ArticleUpdateQuery()
+        {
+            tagIdList = new List<int>();
+        }
         /// <summary>
         /// 文章编号
         /// </summary>

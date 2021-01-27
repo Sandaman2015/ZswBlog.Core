@@ -33,9 +33,9 @@ namespace ZswBlog.Core.Controllers
         [Route("/api/friendLink/get/all")]
         [HttpGet]
         [FunctionDescription("获取所有友情链接")]
-        public ActionResult<List<FriendLinkDTO>> GetFriendLinks()
+        public async Task<ActionResult<List<FriendLinkDTO>>> GetFriendLinks()
         {
-            var friendLinkDtOs = _friendLinkService.GetFriendLinksByIsShowAsync(true);
+            var friendLinkDtOs = await  _friendLinkService.GetFriendLinksByIsShowAsync(true);
             //读取缓存
             //friendLinkDTOs = await RedisHelper.GetAsync<List<FriendLinkDTO>>("ZswBlog:FriendLink:FriendLinkDTOList");
             //if (friendLinkDTOs == null)
@@ -56,17 +56,14 @@ namespace ZswBlog.Core.Controllers
         [FunctionDescription("申请友情链接")]
         public async Task<ActionResult> SaveFriendLink([FromBody]FriendLinkEntity param)
         {
-            return await Task.Run(() =>
-            {
                 param.src = System.Web.HttpUtility.HtmlEncode(param.src);
                 param.portrait = System.Web.HttpUtility.HtmlEncode(param.portrait);
                 param.description = System.Web.HttpUtility.HtmlEncode(param.description);
                 param.title = System.Web.HttpUtility.HtmlEncode(param.title);
                 param.createDate = DateTime.Now;
                 param.isShow = false;
-                var flag = _friendLinkService.AddEntityAsync(param);
+                var flag = await _friendLinkService.AddEntityAsync(param);
                 return Ok(flag);
-            });            
         }
     }
 }

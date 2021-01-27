@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using ZswBlog.DTO;
 
@@ -99,20 +100,20 @@ namespace ZswBlog.Entity.DbContext
         /// 
         /// </summary>
         public virtual DbSet<AnnouncementEntity> AnnouncementEntities { get; set; }
-        ///// <summary>
-        ///// 充血关联模型实体
-        ///// </summary>
-        //public virtual DbSet<MessageDTO> MessageDTO { get; set; }
-        ///// <summary>
-        ///// 充血关联模型实体
-        ///// </summary>
-        //public virtual DbSet<ArticleDTO> ArticleDTO { get; set; }
-        ///// <summary>
-        ///// 充血关联模型实体
-        ///// </summary>
-        //public virtual DbSet<CommentDTO> CommentDTO { get; set; }
         /// <summary>
-        /// 
+        /// 非模型实体
+        /// </summary>
+        public virtual DbSet<MessageDTO> MessageDTO { get; set; }
+        /// <summary>
+        /// 非模型实体
+        /// </summary>
+        public virtual DbSet<ArticleDTO> ArticleDTO { get; set; }
+        /// <summary>
+        /// 非模型实体
+        /// </summary>
+        public virtual DbSet<CommentDTO> CommentDTO { get; set; }
+        /// <summary>
+        /// Fluent API定义实体属性与关联
         /// </summary>
         /// <param name="modelBuilder"></param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)

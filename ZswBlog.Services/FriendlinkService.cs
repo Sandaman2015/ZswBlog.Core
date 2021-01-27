@@ -21,11 +21,8 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<List<FriendLinkDTO>> GetAllFriendLinksAsync()
         {
-            return await Task.Run(() =>
-            {
-                var friendLinks = FriendLinkRepository.GetModelsAsync(a => a.id != 0).Result.ToList();
-                return Mapper.Map<List<FriendLinkDTO>>(friendLinks);
-            });
+                var friendLinks = await FriendLinkRepository.GetModelsAsync(a => a.id != 0);
+                return Mapper.Map<List<FriendLinkDTO>>(friendLinks.ToList());
         }
 
         /// <summary>
@@ -35,14 +32,11 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<List<FriendLinkDTO>> GetFriendLinksByIsShowAsync(bool isShow)
         {
-            return await Task.Run(() =>
-            {
-                var friendLinks = FriendLinkRepository.GetModelsAsync(a => a.id != 0).Result.ToList();
-                friendLinks = isShow
+                var friendLinks = await FriendLinkRepository.GetModelsAsync(a => a.id != 0);
+                var friendLinkList = isShow
                     ? friendLinks.Where(a => a.isShow).ToList()
                     : friendLinks.Where(a => !a.isShow).ToList();
-                return Mapper.Map<List<FriendLinkDTO>>(friendLinks);
-            });
+                return Mapper.Map<List<FriendLinkDTO>>(friendLinkList);
         }
 
         /// <summary>

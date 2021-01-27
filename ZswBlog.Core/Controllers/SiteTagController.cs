@@ -54,15 +54,12 @@ namespace ZswBlog.Core.Controllers
         [FunctionDescription("添加站点标签")]
         public async Task<ActionResult<bool>> SaveSiteTag(SiteTagEntity param)
         {
-            return await Task.Run(() =>
-            {
                 param.createDate = DateTime.Now;
                 param.isShow = false;
                 param.like = 0;
                 param.title = System.Web.HttpUtility.HtmlEncode(param.title);
-                var flag = _siteTagService.AddEntityAsync(param);
+                var flag = await _siteTagService.AddEntityAsync(param);
                 return Ok(flag);
-            });
         }
     }
 }

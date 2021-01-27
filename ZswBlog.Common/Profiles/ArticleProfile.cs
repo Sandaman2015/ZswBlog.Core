@@ -16,6 +16,7 @@ namespace ZswBlog.Common.Profiles
         public ArticleProfile()
         {
             CreateMap<ArticleEntity, ArticleDTO>();
+            CreateMap<ArticleDTO, ArticleEntity>();
             CreateMap<ArticleSaveQuery, ArticleEntity>();
             CreateMap<ArticleUpdateQuery, ArticleEntity>();
         }

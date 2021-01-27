@@ -38,14 +38,11 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<bool> IsExistsMessageOnNewestByUserId(int userId)
         {
-            return await Task.Run(() =>
-            {
-                var messages = MessageRepository.GetModelsAsync(a => a.userId == userId).Result
-                    .OrderByDescending(a => a.createDate).ToList();
-                if (messages.Count <= 0) return true;
-                var timeSpan = DateTime.Now - messages[0].createDate;
-                return timeSpan.TotalMinutes > 1;
-            });
+            var messages = await MessageRepository.GetModelsAsync(a => a.userId == userId);
+
+            if (messages.OrderByDescending(a => a.createDate).ToList().Count <= 0) return true;
+            var timeSpan = DateTime.Now - messages.OrderByDescending(a => a.createDate).ToList()[0].createDate;
+            return timeSpan.TotalMinutes > 1;
         }
 
         /// <summary>
@@ -55,24 +52,21 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<bool> AddMessageAsync(MessageEntity t)
         {
-            return await Task.Run(() =>
+            bool flag;
+            var user = await UserService.GetUserByIdAsync(t.userId);
+            if (await IsExistsMessageOnNewestByUserId(t.userId))
             {
-                bool flag;
-                var user = UserService.GetUserByIdAsync(t.userId);
-                if (IsExistsMessageOnNewestByUserId(t.userId).Result)
-                {
-                    // 判断用户是否为空
-                    if (user == null) return false;
-                    t.location = LocationHelper.GetLocation(t.location);
-                    flag = MessageRepository.AddAsync(t).Result;
-                }
-                else
-                {
-                    throw new Exception("你已经在一分钟前提交过一次了");
-                }
+                // 判断用户是否为空
+                if (user == null) return false;
+                t.location = LocationHelper.GetLocation(t.location);
+                flag = await MessageRepository.AddAsync(t);
+            }
+            else
+            {
+                throw new Exception("你已经在一分钟前提交过一次了");
+            }
 
-                return flag;
-            });
+            return flag;
         }
 
         /// <summary>
@@ -82,11 +76,8 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<bool> RemoveEntityAsync(int tId)
         {
-            return await Task.Run(() =>
-            {
-                var message = MessageRepository.GetSingleModelAsync(a => a.id == tId).Result;
-                return MessageRepository.DeleteAsync(message);
-            });
+            var message = await MessageRepository.GetSingleModelAsync(a => a.id == tId);
+            return await MessageRepository.DeleteAsync(message);
         }
 
         /// <summary>
@@ -97,22 +88,19 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<PageDTO<MessageTreeDTO>> GetMessagesByRecursionAsync(int limit, int pageIndex)
         {
-            return await Task.Run(() =>
+            var messageTopEntities = MessageRepository.GetModelsByPage(limit, pageIndex, false, a => a.createDate,
+                a => a.targetId == 0 && a.targetUserId == null, out var total).ToList();
+            var messageTreeList = new List<MessageTreeDTO>();
+            foreach (var item in messageTopEntities.ToList())
             {
-                var messageTopEntities = MessageRepository.GetModelsByPage(limit, pageIndex, false, a => a.createDate,
-                    a => a.targetId == 0 && a.targetUserId == null, out var total).ToList();
-                var messageTreeList = new List<MessageTreeDTO>();
-                foreach (var item in messageTopEntities)
-                {
-                    var messageTree = Mapper.Map<MessageTreeDTO>(item);
-                    ConvertMessageTree(messageTree);
-                    var entities = MessageRepository.GetMessagesRecursiveAsync(item.id);
-                    messageTree.children = Mapper.Map<List<MessageTreeDTO>>(entities);
-                    messageTreeList.Add(messageTree);
-                }
+                var messageTree = Mapper.Map<MessageTreeDTO>(item);
+                await ConvertMessageTree(messageTree);
+                var entities = await MessageRepository.GetMessagesRecursiveAsync(item.id);
+                messageTree.children = Mapper.Map<List<MessageTreeDTO>>(entities.ToList());
+                messageTreeList.Add(messageTree);
+            }
 
-                return new PageDTO<MessageTreeDTO>(pageIndex, limit, total, messageTreeList);
-            });
+            return new PageDTO<MessageTreeDTO>(pageIndex, limit, total, messageTreeList);
         }
 
         /// <summary>

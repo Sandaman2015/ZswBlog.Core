@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using ZswBlog.Common.Util;
 using ZswBlog.DTO;
 using ZswBlog.Entity.DbContext;
@@ -14,7 +15,6 @@ namespace ZswBlog.Services
     public class ArticleService : BaseService<ArticleEntity, IArticleRepository>, IArticleService
     {
         public IArticleRepository ArticleRepository { get; set; }
-        public ICategoryService CategoryService { get; set; }
         public IArticleTagService ArticleTagService { get; set; }
         public IMapper Mapper { get; set; }
 
@@ -28,14 +28,17 @@ namespace ZswBlog.Services
         public async Task<PageDTO<ArticleDTO>> GetArticleListByCategoryIdAsync(int limit, int pageIndex, int categoryId)
         {
             var articles = ArticleRepository.GetModelsByPage(limit, pageIndex, false,
-                a => a.visits, ac => ac.categoryId == categoryId && ac.isShow,
-                out var pageCount).ToList();
+                    a => a.visits, ac => ac.categoryId == categoryId && ac.isShow,
+                    out var pageCount)
+                .Include(t => t.category)
+                .ToList();
             var articleDtoList = Mapper.Map<List<ArticleDTO>>(articles);
             foreach (var articleDto in articleDtoList)
             {
                 articleDto.tags = await ArticleTagService.GetTagListByArticleIdAsync(articleDto.id);
                 articleDto.content = StringHelper.ReplaceTag(articleDto.content, 500);
             }
+
             return new PageDTO<ArticleDTO>(limit,
                 pageIndex,
                 pageCount,
@@ -49,13 +52,15 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<List<ArticleDTO>> GetArticlesByDimTitleAsync(string dimTitle)
         {
-            var articles = await ArticleRepository.GetModelsAsync(a => a.title.Contains(dimTitle));
-            var articleDtoList = Mapper.Map<List<ArticleDTO>>(articles.Where(a => a.isShow));
+            var articles =
+                (await ArticleRepository.GetModelsAsync(a => a.title.Contains(dimTitle))).Include(c => c.category);
+            var articleDtoList = Mapper.Map<List<ArticleDTO>>(articles.ToList().Where(a => a.isShow));
             foreach (var articleDto in articleDtoList)
             {
                 articleDto.tags = await ArticleTagService.GetTagListByArticleIdAsync(articleDto.id);
                 articleDto.content = StringHelper.ReplaceTag(articleDto.content, 500);
             }
+
             return articleDtoList;
         }
 
@@ -68,8 +73,12 @@ namespace ZswBlog.Services
         public async Task<ArticleDTO> GetArticleByIdAsync(int articleId, bool isShow)
         {
             var article = isShow
-                ? await ArticleRepository.GetSingleModelAsync(a => a.id == articleId && a.isShow)
-                : await ArticleRepository.GetSingleModelAsync(a => a.id == articleId);
+                ? (await ArticleRepository.GetModelsAsync(a => a.id == articleId && a.isShow))
+                .Include(c => c.category)
+                .FirstOrDefault()
+                : (await ArticleRepository.GetModelsAsync(a => a.id == articleId))
+                .Include(c => c.category)
+                .FirstOrDefault();
             if (article == null)
             {
                 throw new Exception("未找到文章");
@@ -77,19 +86,26 @@ namespace ZswBlog.Services
 
             var articleDto = Mapper.Map<ArticleDTO>(article);
             articleDto.tags = await ArticleTagService.GetTagListByArticleIdAsync(articleId);
-            AddArticleVisitAsync(articleId);
+            await AddArticleVisitAsync(articleId);
             return articleDto;
+        }
+
+        public async Task<ArticleEntity> GetArticleEntityByIdAsync(int articleId)
+        {
+            var articleEntity = await ArticleRepository.GetSingleModelAsync(a => a.id == articleId);
+            articleEntity.tags = await ArticleTagService.GetTagListByArticleIdAsync(articleId);
+            return articleEntity;
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="articleId"></param>
-        private void AddArticleVisitAsync(int articleId)
+        private async Task AddArticleVisitAsync(int articleId)
         {
-            var article = ArticleRepository.GetSingleModelAsync(a => a.id == articleId);
-            article.Result.visits += 1;
-            ArticleRepository.UpdateAsync(article.Result);
+            var article = await ArticleRepository.GetSingleModelAsync(a => a.id == articleId);
+            article.visits += 1;
+            await ArticleRepository.UpdateAsync(article);
         }
 
         /// <summary>
@@ -118,14 +134,14 @@ namespace ZswBlog.Services
             if (isShow)
             {
                 articles = ArticleRepository
-                    .GetModelsByPage(limit, pageIndex, false, a => a.createDate, a => a.isShow, out pageCount)
-                    .ToList();
+                    .GetModelsByPage(limit, pageIndex, true, a => a.createDate, a => a.isShow, out pageCount)
+                    .Include(c => c.category).ToList();
             }
             else
             {
                 articles = ArticleRepository
-                    .GetModelsByPage(limit, pageIndex, false, a => a.createDate, a => a.id != 0, out pageCount)
-                    .ToList();
+                    .GetModelsByPage(limit, pageIndex, true, a => a.createDate, a => a.id != 0, out pageCount)
+                    .Include(c => c.category).ToList();
             }
 
             var articleDtoList = Mapper.Map<List<ArticleDTO>>(articles);
@@ -148,8 +164,9 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<List<ArticleDTO>> GetArticlesByNearSaveAsync(int count)
         {
-            var articles = await ArticleRepository.GetModelsAsync(a => a.isShow);
-            var articleDtoList = Mapper.Map<List<ArticleDTO>>(articles.OrderByDescending(a => a.createDate).Take(count).ToList());
+            var articles = (await ArticleRepository.GetModelsAsync(a => a.isShow)).Include(c => c.category);
+            var articleDtoList =
+                Mapper.Map<List<ArticleDTO>>(articles.OrderByDescending(a => a.createDate).Take(count).ToList());
             foreach (var articleDto in articleDtoList)
             {
                 articleDto.content = StringHelper.ReplaceTag(articleDto.content, 500);

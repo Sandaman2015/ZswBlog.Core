@@ -13,6 +13,7 @@ namespace ZswBlog.Core.Controllers
     public class TravelController : ControllerBase
     {
         private readonly ITravelService _travelService;
+
         /// <summary>
         /// 默认构造函数
         /// </summary>
@@ -31,13 +32,10 @@ namespace ZswBlog.Core.Controllers
         [Route("/api/travel/page/get")]
         [HttpGet]
         [FunctionDescription("分页获取旅行分享信息")]
-        public async Task<ActionResult<PageDTO<TravelDTO>>> GetTravelsByPage(int limit,int pageIndex)
+        public async Task<ActionResult<PageDTO<TravelDTO>>> GetTravelsByPage(int limit, int pageIndex)
         {
-            return await Task.Run(() =>
-            {
-                var travelPageDto = _travelService.GetTravelsByPageAsync(limit, pageIndex);
-                return Ok(travelPageDto);
-            });
+            var travelPageDto = await _travelService.GetTravelsByPageAsync(limit, pageIndex);
+            return Ok(travelPageDto);
         }
     }
 }

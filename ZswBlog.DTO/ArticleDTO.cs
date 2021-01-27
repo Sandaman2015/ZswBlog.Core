@@ -9,6 +9,10 @@ namespace ZswBlog.DTO
     /// </summary>
     public class ArticleDTO
     {
+        public ArticleDTO()
+        {
+            this.tags = new List<TagDTO>();
+        }
         /// <summary>
         /// 文章id
         /// </summary>

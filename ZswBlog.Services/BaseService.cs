@@ -9,24 +9,23 @@ using ZswBlog.IServices;
 
 namespace ZswBlog.Services
 {
-    [Intercept(typeof(EnableTransaction))]
     public abstract class BaseService<T, D> : IBaseService<T> where T : class, new() where D : IBaseRepository<T>
     {
         public IBaseRepository<T> Repository { get; set; }
 
-        public virtual Task<bool> AddEntityAsync(T t)
+        public virtual async Task<bool> AddEntityAsync(T t)
         {
-            return Repository.AddAsync(t);
+            return await Repository.AddAsync(t);
         }
 
-        public Task<int> GetEntitiesCountAsync()
+        public async Task<int> GetEntitiesCountAsync()
         {
-            return Repository.GetModelsCountByConditionAsync(null);
+            return await Repository.GetModelsCountByConditionAsync(null);
         }
 
-        public virtual Task<bool> UpdateEntityAsync(T t)
+        public virtual async Task<bool> UpdateEntityAsync(T t)
         {
-            return Repository.UpdateAsync(t);
+            return await Repository.UpdateAsync(t);
         }
     }
 }

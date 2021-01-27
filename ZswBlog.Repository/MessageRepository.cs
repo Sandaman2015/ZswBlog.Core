@@ -16,7 +16,7 @@ namespace ZswBlog.Repository
             return await Task.Run(() =>
             {
                 var sql = string.Format("select {0} from tab_message m left join tab_user u on u.id = m.userId where m.targetId is null or m.targetId = 0", _sqlField);
-                IQueryable<MessageDTO> messages = _readDbContext.Set<MessageDTO>().FromSqlRaw(sql, new object[0]);
+                IQueryable<MessageDTO> messages = ReadDbContext.Set<MessageDTO>().FromSqlRaw(sql, new object[0]);
                 return messages.ToList();
             });
         }
@@ -25,7 +25,7 @@ namespace ZswBlog.Repository
             return await Task.Run(() =>
             {
                 var sql = string.Format("select {0} from tab_message m left join tab_user u on u.id = m.userId order by createDate desc limit {1}", _sqlField, count);
-                IQueryable<MessageDTO> messages = _readDbContext.Set<MessageDTO>().FromSqlRaw(sql, new object[0]);
+                IQueryable<MessageDTO> messages = ReadDbContext.Set<MessageDTO>().FromSqlRaw(sql, new object[0]);
                 return messages.ToList();
             });
         }
@@ -35,7 +35,7 @@ namespace ZswBlog.Repository
             return await Task.Run(() =>
             {
                 var sql = string.Format("WITH RECURSIVE temp AS(select m.id, m.content, m.createDate, m.userId, m.targetUserId, m.targetId, m.location, m.browser from tab_message m where targetId = {0} UNION ALL select  m.id, m.content, m.createDate, m.userId, m.targetUserId, m.targetId, m.location, m.browser from tab_message m, temp t where m.targetId = t.id) SELECT t.*,us.nickName as targetUserName, us.portrait as targetUserPortrait, u.nickName as userName, u.portrait as userPortrait  FROM temp t left join tab_user u on u.id = t.userId left join tab_user us on us.id = t.targetUserId ", targetId);
-                IQueryable<MessageDTO> messages = _readDbContext.Set<MessageDTO>().FromSqlRaw(sql, new object[0]);
+                IQueryable<MessageDTO> messages = ReadDbContext.Set<MessageDTO>().FromSqlRaw(sql, new object[0]);
                 return messages.ToList();
             });
         }

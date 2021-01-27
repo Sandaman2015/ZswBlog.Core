@@ -36,12 +36,9 @@ namespace ZswBlog.Core.Controllers
         [FunctionDescription("获取指定置顶的通知公告")]
         public async Task<ActionResult<List<AnnouncementDTO>>> GetAnnouncementsOnTop()
         {
-            return await Task.Run(() =>
-            {
-                const int count = 3;
-                var announcements = _announcementService.GetAnnouncementsOnTopAsync(count);
-                return Ok(announcements);
-            });
+            const int count = 3;
+            var announcements = await _announcementService.GetAnnouncementsOnTopAsync(count);
+            return Ok(announcements);
         }
 
         /// <summary>
@@ -53,11 +50,8 @@ namespace ZswBlog.Core.Controllers
         [FunctionDescription("获取正在推送的通知公告")]
         public async Task<ActionResult<List<AnnouncementDTO>>> GetPushAnnouncements()
         {
-            return await Task.Run(() =>
-            {
-                var announcements = _announcementService.GetPushAnnouncementAsync();
-                return Ok(announcements);
-            });
+            var announcements = await _announcementService.GetPushAnnouncementAsync();
+            return Ok(announcements);
         }
 
         /// <summary>
@@ -69,12 +63,8 @@ namespace ZswBlog.Core.Controllers
         [FunctionDescription("获取所有的通知公告")]
         public async Task<ActionResult<List<AnnouncementDTO>>> GetAllAnnouncements()
         {
-            return await Task.Run(() =>
-            {
-                var route = $"Controller：{HttpContext.GetRouteData().Values["controller"]}，Action：{HttpContext.GetRouteData().Values["action"]}";
-                var announcements = _announcementService.GetAllAnnouncementAsync();
-                return Ok(announcements);
-            });
+            var announcements = await _announcementService.GetAllAnnouncementAsync();
+            return Ok(announcements);
         }
     }
 }

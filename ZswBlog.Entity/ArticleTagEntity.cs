@@ -30,9 +30,22 @@ namespace ZswBlog.Entity.DbContext
         /// 文章id
         /// </summary>
         public int articleId { get; set; }
+
+        /// <summary>
+        /// 关联外键多对多
+        /// </summary>
+        [ForeignKey("articleId")]
+        public virtual ArticleEntity article { get; set; }
+
         /// <summary>
         /// 标签id
         /// </summary>
         public int tagId { get; set; }
+        
+        /// <summary>
+        /// 关联外键多对多
+        /// </summary>
+        [ForeignKey("tagId")]
+        public virtual TagEntity tag { get; set; }
     }
 }

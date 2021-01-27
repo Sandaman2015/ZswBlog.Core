@@ -43,11 +43,8 @@ namespace ZswBlog.Core.Controllers
         public async Task<ActionResult<PageDTO<CommentTreeDTO>>> GetCommentTreeListByPage([FromQuery] int limit,
             [FromQuery] int pageIndex, [FromQuery] int articleId)
         {
-            return await Task.Run(() =>
-            {
-                var pageDto = _commentService.GetCommentsByRecursionAsync(limit, pageIndex, articleId);
-                return Ok(pageDto);
-            });
+            var pageDto = await _commentService.GetCommentsByRecursionAsync(limit, pageIndex, articleId);
+            return Ok(pageDto);
         }
 
         /// <summary>

@@ -42,11 +42,8 @@ namespace ZswBlog.Core.Controllers
         public async Task<ActionResult<PageDTO<MessageTreeDTO>>> GetMessageTreeListByPage([FromQuery] int limit,
             [FromQuery] int pageIndex)
         {
-            return await Task.Run(() =>
-            {
-                var pageDto = _messageService.GetMessagesByRecursionAsync(limit, pageIndex);
-                return Ok(pageDto);
-            });
+            var pageDto = await _messageService.GetMessagesByRecursionAsync(limit, pageIndex);
+            return Ok(pageDto);
         }
 
         /// <summary>
@@ -59,11 +56,8 @@ namespace ZswBlog.Core.Controllers
         [FunctionDescription("获取留言列表")]
         public async Task<ActionResult<List<MessageDTO>>> GetMessageListByCount([FromRoute] int count)
         {
-            return await Task.Run(() =>
-            {
-                var pageDto = _messageService.GetMessageOnNearSaveAsync(count);
-                return Ok(pageDto);
-            });
+            var pageDto = await _messageService.GetMessageOnNearSaveAsync(count);
+            return Ok(pageDto);
         }
 
         /// <summary>
@@ -91,8 +85,8 @@ namespace ZswBlog.Core.Controllers
             var flag = await _messageService.AddMessageAsync(param);
             // 发送邮件
             if (param.targetId == 0 || param.targetUserId == null) return Ok(flag);
-            var toMessage = _messageService.GetMessageByIdAsync(param.targetId.Value);
-            var fromMessage = _messageService.GetMessageByIdAsync(param.id);
+            var toMessage = await _messageService.GetMessageByIdAsync(param.targetId.Value);
+            var fromMessage = await _messageService.GetMessageByIdAsync(param.id);
             var isSendReplyEmail = _emailHelper.ReplySendEmail(toMessage, fromMessage, SendEmailType.回复留言);
             flag = isSendReplyEmail;
             return Ok(flag);

@@ -46,39 +46,36 @@ namespace ZswBlog.Core.Controllers
         [FunctionDescription("获取后台操作token")]
         public async Task<ActionResult<object>> GetToken([FromBody] UserVerifyQuery request)
         {
-            return await Task.Run(() =>
+            dynamic respData;
+            var isValidate = await _userService.ValidatePasswordAsync(request.username, request.password);
+            if (isValidate == null)
             {
-                dynamic respData;
-                var isValidate = _userService.ValidatePasswordAsync(request.username, request.password);
-                if (isValidate == null)
-                {
-                    respData = new { flag = false, msg = "用户名或密码错误" };
-                    return respData;
-                }
+                respData = new {flag = false, msg = "用户名或密码错误"};
+                return respData;
+            }
 
-                //可扩展自定义返回参数
-                var claims = new[]
-                {
-                new Claim("userId", isValidate.Result.id.ToString()),
+            //可扩展自定义返回参数
+            var claims = new[]
+            {
+                new Claim("userId", isValidate.id.ToString()),
                 new Claim("userName", request.username)
             };
-                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.SecretKey));
-                var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-                var token = new JwtSecurityToken(_jwtSettings.Issuer,
-                    _jwtSettings.Audience,
-                    claims,
-                    DateTime.Now,
-                    DateTime.Now.AddSeconds(1800),
-                    creds);
-                //获取JWT生成的Token
-                respData = new
-                {
-                    flag = true,
-                    express = DateTime.Now.AddSeconds(1800),
-                    accessToken = new JwtSecurityTokenHandler().WriteToken(token)
-                };
-                return Ok(respData);
-            });
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.SecretKey));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var token = new JwtSecurityToken(_jwtSettings.Issuer,
+                _jwtSettings.Audience,
+                claims,
+                DateTime.Now,
+                DateTime.Now.AddSeconds(1800),
+                creds);
+            //获取JWT生成的Token
+            respData = new
+            {
+                flag = true,
+                express = DateTime.Now.AddSeconds(1800),
+                accessToken = new JwtSecurityTokenHandler().WriteToken(token)
+            };
+            return Ok(respData);
         }
     }
 }

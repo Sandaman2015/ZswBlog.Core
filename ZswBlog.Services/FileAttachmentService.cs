@@ -18,10 +18,7 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<FileAttachmentEntity> GetAttachmentByIdAsync(int id)
         {
-            return await Task.Run(() =>
-            {
-                return FileAttachmentRepository.GetSingleModelAsync(a => a.id == id).Result;
-            });
+            return await FileAttachmentRepository.GetSingleModelAsync(a => a.id == id);
         }
 
         /// <summary>
@@ -31,10 +28,8 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<string> GetFilePathByIdAsync(int id)
         {
-            return await Task.Run(() =>
-            {
-                return FileAttachmentRepository.GetSingleModelAsync(a => a.id == id).Result.path;
-            });
+            var file = await FileAttachmentRepository.GetSingleModelAsync(a => a.id == id);
+            return file.path;
         }
     }
 }

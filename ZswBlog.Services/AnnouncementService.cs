@@ -13,8 +13,8 @@ namespace ZswBlog.Services
 {
     public class AnnouncementService : BaseService<AnnouncementEntity, IAnnouncementRepository>, IAnnouncementService
     {
-        public IAnnouncementRepository _announcementRepository { get; set; }
-        public IMapper _mapper { get; set; }
+        public IAnnouncementRepository AnnouncementRepository { get; set; }
+        public IMapper Mapper { get; set; }
 
         /// <summary>
         /// 获取所有通知公告
@@ -22,11 +22,8 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<List<AnnouncementDTO>> GetAllAnnouncementAsync()
         {
-            return await Task.Run(() =>
-            {
-                var announcements = _announcementRepository.GetModelsAsync(a => a.id != 0).Result.ToList();
-                return _mapper.Map<List<AnnouncementDTO>>(announcements);
-            });
+            var announcements = await AnnouncementRepository.GetModelsAsync(a => a.id != 0);
+            return Mapper.Map<List<AnnouncementDTO>>(announcements.ToList());
         }
 
         /// <summary>
@@ -36,12 +33,9 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<List<AnnouncementDTO>> GetAnnouncementsOnTopAsync(int count)
         {
-            return await Task.Run(() =>
-            {
-                var announcements = _announcementRepository.GetModelsAsync(a => a.isTop && a.endPushDate < DateTime.Now)
-                    .Result.Take(count).ToList();
-                return _mapper.Map<List<AnnouncementDTO>>(announcements);
-            });
+            var announcements =
+                await AnnouncementRepository.GetModelsAsync(a => a.isTop && a.endPushDate < DateTime.Now);
+            return Mapper.Map<List<AnnouncementDTO>>(announcements.Take(count).ToList());
         }
 
         /// <summary>
@@ -50,12 +44,8 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<List<AnnouncementDTO>> GetPushAnnouncementAsync()
         {
-            return await Task.Run(() =>
-            {
-                var announcements = _announcementRepository.GetModelsAsync(a => a.endPushDate > DateTime.Now).Result
-                    .ToList();
-                return _mapper.Map<List<AnnouncementDTO>>(announcements);
-            });
+            var announcements = await AnnouncementRepository.GetModelsAsync(a => a.endPushDate > DateTime.Now);
+            return Mapper.Map<List<AnnouncementDTO>>(announcements.ToList());
         }
     }
 }
