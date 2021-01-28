@@ -4,7 +4,10 @@ using ZswBlog.Common.Util;
 
 namespace ZswBlog.ThirdParty.Location
 {
-    public class LocationHelper
+    /// <summary>
+    /// 腾讯开发获取地址服务
+    /// </summary>
+    public static class LocationHelper
     {
         /// <summary>
         /// 位置服务
@@ -13,11 +16,11 @@ namespace ZswBlog.ThirdParty.Location
         /// <returns></returns>
         public static string GetLocation(string ip)
         {
-            string tenctApi = ConfigHelper.GetValue("TecentLocationApi");
-            string locationKey = ConfigHelper.GetValue("LocationKey");
-            string url = tenctApi + "?ip=" + ip + "&key=" + locationKey + "";
-            string jsonResult = RequestHelper.HttpGet(url, Encoding.UTF8);
-            LocationModel location = JsonConvert.DeserializeObject<LocationModel>(jsonResult);
+            var tencentApi = ConfigHelper.GetValue("TencentLocationApi");
+            var locationKey = ConfigHelper.GetValue("LocationKey");
+            var url = tencentApi + "?ip=" + ip + "&key=" + locationKey + "";
+            var jsonResult = RequestHelper.HttpGet(url, Encoding.UTF8);
+            var location = JsonConvert.DeserializeObject<LocationModel>(jsonResult);
             string address;
             if (location.result == null)
             {
@@ -25,7 +28,7 @@ namespace ZswBlog.ThirdParty.Location
             }
             else
             {
-                AddressInfo addInfo = location.result.ad_info;
+                var addInfo = location.result.ad_info;
                 address = addInfo.province + addInfo.city + addInfo.district;
             }
             return address;

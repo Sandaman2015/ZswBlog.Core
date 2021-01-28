@@ -16,7 +16,7 @@ namespace ZswBlog.Core.Controllers
     public class SiteTagController : ControllerBase
     {
         private readonly ISiteTagService _siteTagService;
-        
+
         /// <summary>
         /// 默认构造函数
         /// </summary>
@@ -25,6 +25,7 @@ namespace ZswBlog.Core.Controllers
         {
             _siteTagService = siteTagService;
         }
+
         /// <summary>
         /// 获取所有站点标签
         /// </summary>
@@ -32,16 +33,15 @@ namespace ZswBlog.Core.Controllers
         [Route("/api/sitetag/get/all")]
         [HttpGet]
         [FunctionDescription("获取所有站点标签")]
-        public ActionResult<List<SiteTagDTO>> GetAllSiteTagAsync()
+        public async Task<ActionResult<List<SiteTagDTO>>> GetAllSiteTagAsync()
         {
-            var siteTagDtoList = _siteTagService.GetAllSiteTagsAsync();
+            var siteTagDtoList = await _siteTagService.GetAllSiteTagsAsync();
             //siteTagDTOList = await RedisHelper.GetAsync<List<SiteTagDTO>>("ZswBlog:SiteTag:SiteTagList");
             //if (siteTagDTOList == null)
             //{
             //    await RedisHelper.SetAsync("ZswBlog:SiteTag:SiteTagList", siteTagDTOList, 1200);
             //}
             return Ok(siteTagDtoList);
-
         }
 
         /// <summary>
@@ -54,12 +54,12 @@ namespace ZswBlog.Core.Controllers
         [FunctionDescription("添加站点标签")]
         public async Task<ActionResult<bool>> SaveSiteTag(SiteTagEntity param)
         {
-                param.createDate = DateTime.Now;
-                param.isShow = false;
-                param.like = 0;
-                param.title = System.Web.HttpUtility.HtmlEncode(param.title);
-                var flag = await _siteTagService.AddEntityAsync(param);
-                return Ok(flag);
+            param.createDate = DateTime.Now;
+            param.isShow = false;
+            param.like = 0;
+            param.title = System.Web.HttpUtility.HtmlEncode(param.title);
+            var flag = await _siteTagService.AddEntityAsync(param);
+            return Ok(flag);
         }
     }
 }

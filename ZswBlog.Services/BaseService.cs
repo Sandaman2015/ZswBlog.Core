@@ -18,7 +18,7 @@ namespace ZswBlog.Services
             return await Repository.AddAsync(t);
         }
 
-        public async Task<int> GetEntitiesCountAsync()
+        public virtual async Task<int> GetEntitiesCountAsync()
         {
             return await Repository.GetModelsCountByConditionAsync(null);
         }

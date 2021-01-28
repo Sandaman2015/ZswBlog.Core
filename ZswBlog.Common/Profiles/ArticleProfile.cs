@@ -18,7 +18,10 @@ namespace ZswBlog.Common.Profiles
             CreateMap<ArticleEntity, ArticleDTO>();
             CreateMap<ArticleDTO, ArticleEntity>();
             CreateMap<ArticleSaveQuery, ArticleEntity>();
-            CreateMap<ArticleUpdateQuery, ArticleEntity>();
+            CreateMap<ArticleUpdateQuery, ArticleEntity>()
+                .ForMember(dest => dest.createDate, opt => opt.Ignore())
+                .ForMember(dest => dest.visits, opt=>opt.Ignore());
+            
         }
     }
 }

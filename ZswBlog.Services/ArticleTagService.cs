@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper.QueryableExtensions;
 using ZswBlog.DTO;
 using ZswBlog.Entity.DbContext;
 using ZswBlog.IRepository;
@@ -25,16 +26,13 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<PageDTO<ArticleDTO>> GetArticleListIdByTagIdAsync(int limit, int pageIndex, int tagId)
         {
-            return await Task.Run(() =>
-            {
-                var articleTags = ArticleTagRepository.GetModelsByPage(limit, pageIndex, false,
-                    a => a.id, a => a.id == tagId, out var pageCount);
-                var articles = articleTags
-                    .Select(item => ArticleRepository.GetSingleModelAsync(a => a.id == item.articleId))
-                    .Select(article => article.Result).ToList();
-                var articleDtOs = Mapper.Map<List<ArticleDTO>>(articles);
-                return new PageDTO<ArticleDTO>(pageIndex, limit, pageCount, articleDtOs);
-            });
+            var articleTags = ArticleTagRepository.GetModelsByPage(limit, pageIndex, false,
+                a => a.id, a => a.id == tagId, out var pageCount);
+            var articles =
+                await ArticleRepository.GetModelsAsync(
+                    a => articleTags.Select(c => c.articleId).ToList().Contains(a.id));
+            var articleDtOs = Mapper.Map<List<ArticleDTO>>(articles.ToList());
+            return new PageDTO<ArticleDTO>(pageIndex, limit, pageCount, articleDtOs);
         }
 
         /// <summary>
@@ -46,12 +44,13 @@ namespace ZswBlog.Services
         {
             var articleTags =
                 await ArticleTagRepository.GetModelsAsync(a => a.articleId == articleId);
-            List<TagEntity> tags = new List<TagEntity>();
+            var tags = new List<TagEntity>();
             foreach (var item in articleTags.ToList())
             {
                 var tag = await TagRepository.GetSingleModelAsync(a => a.id == item.tagId);
                 tags.Add(tag);
             }
+
             var tagDtOs = Mapper.Map<List<TagDTO>>(tags);
             return tagDtOs;
         }
@@ -64,24 +63,12 @@ namespace ZswBlog.Services
         public async Task<bool> RemoveAlreadyExistArticleTagAsync(int articleId)
         {
             var articleTags =
-              await ArticleTagRepository.GetModelsAsync(a => a.articleId == articleId);
-            foreach (var item in articleTags)
+                await ArticleTagRepository.GetModelsAsync(a => a.articleId == articleId);
+            foreach (var item in articleTags.ToList())
             {
-               await ArticleTagRepository.DeleteAsync(item);
+                await ArticleTagRepository.DeleteAsync(item);
             }
             return true;
-        }
-
-        /// <summary>
-        /// 删除实体对象
-        /// </summary>
-        /// <param name="tId"></param>
-        /// <returns></returns>
-        public async Task<bool> RemoveEntityAsync(int tId)
-        {
-            var entity =
-                await ArticleTagRepository.GetSingleModelAsync(at => at.id == tId);
-            return await ArticleTagRepository.DeleteAsync(entity);
         }
     }
 }

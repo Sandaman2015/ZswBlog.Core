@@ -69,7 +69,7 @@ namespace ZswBlog.Core.Controllers
             var userInfo = await _userService.GetUserByIdAsync(user.id);
             userInfo.email = user.email;
             user = _mapper.Map<UserEntity>(userInfo);
-            var flag = _userService.UpdateEntityAsync(user);
+            var flag = await _userService.UpdateEntityAsync(user);
             return Ok(flag);
         }
 
@@ -94,7 +94,7 @@ namespace ZswBlog.Core.Controllers
             }
             else
             {
-                var user = RedisHelper.Get<UserDTO>("ZswBlog:UserInfo:" + userDto.id);
+                var user = await RedisHelper.GetAsync<UserDTO>("ZswBlog:UserInfo:" + userDto.id);
                 if (user == null)
                 {
                     RedisHelper.SetAsync("ZswBlog:UserInfo:" + userDto.id, userDto, 60 * 60 * 6);

@@ -73,7 +73,7 @@ namespace ZswBlog.Core.Controllers
             var replaceContent = StringHelper.ReplaceTag(article.content, 99999);
             articleEntity.lastUpdateDate = DateTime.Now;
             articleEntity.textCount = replaceContent.Length;
-            articleEntity.readTime = replaceContent.Length / 125;
+            articleEntity.readTime = replaceContent.Length / 325;
             var flag = await _articleService.UpdateEntityAsync(articleEntity);
             //删除所有文章标签
             await _articleTagService.RemoveAlreadyExistArticleTagAsync(article.id);
@@ -83,7 +83,7 @@ namespace ZswBlog.Core.Controllers
                 await _articleTagService.AddEntityAsync(new ArticleTagEntity()
                 {
                     articleId = articleEntity.id,
-                    createDate = articleEntity.createDate,
+                    createDate = DateTime.Now,
                     tagId = id,
                     operatorId = -1
                 });
@@ -110,7 +110,7 @@ namespace ZswBlog.Core.Controllers
             articleEntity.visits = 0;
             articleEntity.createDate = DateTime.Now;
             articleEntity.textCount = replaceContent.Length;
-            articleEntity.readTime = replaceContent.Length / 125;
+            articleEntity.readTime = replaceContent.Length / 325;
             articleEntity.operatorId = -1;
             var flag = await _articleService.AddEntityAsync(articleEntity);
             //遍历添加文章标签
@@ -139,7 +139,7 @@ namespace ZswBlog.Core.Controllers
         [FunctionDescription("后台管理-获取文章详情")]
         public async Task<ActionResult<ArticleDTO>> GetAdminArticleById(int id)
         {
-            var article = await _articleService.GetArticleByIdAsync(id, false);
+            var article = await _articleService.GetArticleByIdAsync(id, false, false);
             return Ok(article);
         }
 
@@ -153,15 +153,14 @@ namespace ZswBlog.Core.Controllers
         [FunctionDescription("获取文章详情")]
         public async Task<ActionResult<ArticleDTO>> GetArticleById(int id)
         {
-            var article = await RedisHelper.GetAsync<ArticleDTO>("ZswBlog:Article:Article-" + id);
-            if (article != null) return Ok(article);
-            article = await _articleService.GetArticleByIdAsync(id, true);
+            // var article = await RedisHelper.GetAsync<ArticleDTO>("ZswBlog:Article:Article-" + id);
+            // if (article != null) return Ok(article);
+            var article =  await _articleService.GetArticleByIdAsync(id, true, true);
             if (article == null)
             {
                 return NotFound("未找到该文章，请重新返回浏览");
             }
-
-            await RedisHelper.SetAsync("ZswBlog:Article:Article-" + article.id, article, 60 * 60 * 6);
+            // await RedisHelper.SetAsync("ZswBlog:Article:Article-" + article.id, article, 60 * 60 * 6);
             return Ok(article);
         }
 

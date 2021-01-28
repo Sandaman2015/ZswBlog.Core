@@ -138,7 +138,7 @@ namespace ZswBlog.Services
             var comments = CommentRepository.GetModelsByPage(limit, pageIndex, false, a => a.createDate,
                 c => c.articleId == articleId && c.targetId == 0, out var total).ToList();
             var commentDtoList = new List<CommentTreeDTO>();
-            foreach (var item in comments.ToList())
+             foreach (var item in comments.ToList())
             {
                 var commentTree = Mapper.Map<CommentTreeDTO>(item);
                 await ConvertCommentTree(commentTree);
@@ -158,7 +158,7 @@ namespace ZswBlog.Services
         {
             if (treeDto.targetId != 0)
             {
-                var targetUser = RedisHelper.Get<UserDTO>("ZswBlog:UserInfo:" + treeDto.targetUserId);
+                var targetUser = await RedisHelper.GetAsync<UserDTO>("ZswBlog:UserInfo:" + treeDto.targetUserId);
                 if (targetUser == null)
                 {
                     targetUser = await UserService.GetUserByIdAsync(treeDto.targetUserId);
@@ -169,7 +169,7 @@ namespace ZswBlog.Services
                 treeDto.targetUserName = targetUser.nickName;
             }
 
-            var user = RedisHelper.Get<UserDTO>("ZswBlog:UserInfo:" + treeDto.userId);
+            var user = await RedisHelper.GetAsync<UserDTO>("ZswBlog:UserInfo:" + treeDto.userId);
             if (user == null)
             {
                 user = await UserService.GetUserByIdAsync(treeDto.userId);

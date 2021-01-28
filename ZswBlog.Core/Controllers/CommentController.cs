@@ -62,7 +62,7 @@ namespace ZswBlog.Core.Controllers
             {
                 if (Request.HttpContext.Connection.RemoteIpAddress != null)
                 {
-                    var ip = Request.HttpContext.Connection.RemoteIpAddress.ToString();
+                    var ip = Request.HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
                     param.location = ip;
                 }
             }
@@ -72,8 +72,8 @@ namespace ZswBlog.Core.Controllers
             var flag = await _commentService.AddCommentAsync(param);
             // 发送邮件
             if (param.targetId == 0 || param.targetUserId == null) return Ok(flag);
-            var toComment = _commentService.GetCommentByIdAsync(param.targetId.Value);
-            var fromComment = _commentService.GetCommentByIdAsync(param.id);
+            var toComment = await _commentService.GetCommentByIdAsync(param.targetId.Value);
+            var fromComment = await _commentService.GetCommentByIdAsync(param.id);
             flag = _emailHelper.ReplySendEmail(toComment, fromComment, SendEmailType.回复评论);
             return Ok(flag);
         }

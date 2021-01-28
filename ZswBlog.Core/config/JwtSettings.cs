@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ZswBlog.Common.Jwt
+﻿namespace ZswBlog.Core.config
 {
+    /// <summary>
+    /// JWT密钥对象
+    /// </summary>
     public class JwtSettings
     {
         /// <summary>

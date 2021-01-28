@@ -16,6 +16,7 @@ namespace ZswBlog.Services
     {
         public IArticleRepository ArticleRepository { get; set; }
         public IArticleTagService ArticleTagService { get; set; }
+        public ICategoryService CategoryService { get; set; }
         public IMapper Mapper { get; set; }
 
         /// <summary>
@@ -69,41 +70,42 @@ namespace ZswBlog.Services
         /// </summary>
         /// <param name="articleId">文章编码</param>
         /// <param name="isShow">是否显示</param>
+        /// <param name="addVisit">是否添加浏览数</param>
         /// <returns></returns>
-        public async Task<ArticleDTO> GetArticleByIdAsync(int articleId, bool isShow)
+        public async Task<ArticleDTO> GetArticleByIdAsync(int articleId, bool isShow, bool addVisit)
         {
-            var article = isShow
-                ? (await ArticleRepository.GetModelsAsync(a => a.id == articleId && a.isShow))
-                .Include(c => c.category)
-                .FirstOrDefault()
-                : (await ArticleRepository.GetModelsAsync(a => a.id == articleId))
-                .Include(c => c.category)
-                .FirstOrDefault();
+            ArticleEntity article;
+            if (isShow)
+            {
+                article = await ArticleRepository.GetSingleModelAsync(a => a.id == articleId && a.isShow);
+            }
+            else
+            {
+                article = await ArticleRepository.GetSingleModelAsync(a => a.id == articleId);
+            }
             if (article == null)
             {
                 throw new Exception("未找到文章");
             }
-
+            if (addVisit) AddArticleVisitAsync(article);
             var articleDto = Mapper.Map<ArticleDTO>(article);
+            articleDto.category = await CategoryService.GetCategoryByIdAsync(articleDto.categoryId);
             articleDto.tags = await ArticleTagService.GetTagListByArticleIdAsync(articleId);
-            await AddArticleVisitAsync(articleId);
             return articleDto;
         }
 
         public async Task<ArticleEntity> GetArticleEntityByIdAsync(int articleId)
         {
             var articleEntity = await ArticleRepository.GetSingleModelAsync(a => a.id == articleId);
-            articleEntity.tags = await ArticleTagService.GetTagListByArticleIdAsync(articleId);
             return articleEntity;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="articleId"></param>
-        private async Task AddArticleVisitAsync(int articleId)
+        /// <param name="article"></param>
+        private async Task AddArticleVisitAsync(ArticleEntity article)
         {
-            var article = await ArticleRepository.GetSingleModelAsync(a => a.id == articleId);
             article.visits += 1;
             await ArticleRepository.UpdateAsync(article);
         }
@@ -134,13 +136,15 @@ namespace ZswBlog.Services
             if (isShow)
             {
                 articles = ArticleRepository
-                    .GetModelsByPage(limit, pageIndex, true, a => a.createDate, a => a.isShow, out pageCount)
+                    .GetModelsByPage(limit, pageIndex, false, a => a.createDate, a => a.isShow, out pageCount)
+                    .OrderBy(a => a.isTop)
+                    .ThenBy(a => a.topSort)
                     .Include(c => c.category).ToList();
             }
             else
             {
                 articles = ArticleRepository
-                    .GetModelsByPage(limit, pageIndex, true, a => a.createDate, a => a.id != 0, out pageCount)
+                    .GetModelsByPage(limit, pageIndex, false, a => a.createDate, a => a.id != 0, out pageCount)
                     .Include(c => c.category).ToList();
             }
 

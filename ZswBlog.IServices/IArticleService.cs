@@ -26,8 +26,9 @@ namespace ZswBlog.IServices
         /// </summary>
         /// <param name="articleId">文章Id</param>
         /// <param name="isShow">是否显示</param>
+        /// <param name="addVisit">是否添加浏览数</param>
         /// <returns></returns>
-        Task<ArticleDTO> GetArticleByIdAsync(int articleId, bool isShow);
+        Task<ArticleDTO> GetArticleByIdAsync(int articleId, bool isShow, bool addVisit);
         /// <summary>
         /// 根据文章Id号获取文章
         /// </summary>

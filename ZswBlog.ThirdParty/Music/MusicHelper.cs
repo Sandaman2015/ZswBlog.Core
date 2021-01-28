@@ -4,70 +4,77 @@ using System.Text;
 using ZswBlog.DTO;
 using Newtonsoft.Json;
 using System.Linq;
+using System.Threading.Tasks;
 using ZswBlog.Common.Util;
 
 namespace ZswBlog.ThirdParty.Music
 {
-    public class MusicHelper
+    /// <summary>
+    /// 获取音乐
+    /// </summary>
+    public static class MusicHelper
     {
-
-        private static string _baseMusicUrl;
-        private static string _songMusicUrl;
+        private static readonly string BaseMusicUrl;
+        private static readonly string SongMusicUrl;
 
         static MusicHelper()
         {
-            _baseMusicUrl = ConfigHelper.GetValue("MusicBaseUrl");
-            _songMusicUrl = ConfigHelper.GetValue("SongBaseUrl");
+            BaseMusicUrl = ConfigHelper.GetValue("MusicBaseUrl");
+            SongMusicUrl = ConfigHelper.GetValue("SongBaseUrl");
         }
 
-        public static List<MusicDTO> GetMusicListByCount(int count) {
-            string url = ConfigHelper.GetValue("MusicBaseSite");
-            string jsonResult = RequestHelper.HttpGet(_baseMusicUrl+url, Encoding.UTF8);
-            MusicList musicList = JsonConvert.DeserializeObject<MusicList>(jsonResult);
-
-            List<MusicDTO> musicDTOs = new List<MusicDTO>();
-            List<MusicTracks> musicTracks= musicList.playlist.trackIds;
-            //遍历歌单列表
-            foreach (MusicTracks tracks in musicTracks)
+        public static async Task<List<MusicDTO>> GetMusicListByCount(int count)
+        {
+            return await Task.Run(() =>
             {
-                count--;
-                //获取歌曲详情
-                var songsData =string.Format(_baseMusicUrl+"/song/detail?ids={0}",tracks.id);
-                string dataResult = RequestHelper.HttpGet(songsData, Encoding.UTF8);
-                MusicSongs musicSongs = JsonConvert.DeserializeObject<MusicSongs>(dataResult);
-
-                //获取歌曲歌词
-                var songsLyric = string.Format(_baseMusicUrl + "/lyric?id={0}", tracks.id);
-                string lyricResult = RequestHelper.HttpGet(songsLyric, Encoding.UTF8);
-                Musiclyric musiclyric = JsonConvert.DeserializeObject<Musiclyric>(lyricResult);
-
-                ////获取歌曲连接
-                //var songsUrl= string.Format(_baseMusicUrl + "/song/url?id={0}", tracks.id);
-                //string songsUrlResult = RequestHelper.HttpGet(songsUrl, Encoding.UTF8);
-                //MusicUrlData musicUrl = JsonConvert.DeserializeObject<MusicUrlData>(songsUrlResult);
-
-                //填充歌曲歌词
-                string lyric = null;
-
-                //判断是有歌词和不为纯音乐
-                if (!musiclyric.nolyric && !musiclyric.uncollected) {
-                    lyric = musiclyric.lrc.lyric;
-                }
-                List<string> nameList= musicSongs.songs[0].ar.Select(a => a.name).ToList();
-                musicDTOs.Add(new MusicDTO()
+                var url = ConfigHelper.GetValue("MusicBaseSite");
+                var jsonResult = RequestHelper.HttpGet(BaseMusicUrl + url, Encoding.UTF8);
+                var musicList = JsonConvert.DeserializeObject<MusicList>(jsonResult);
+                var musicDtOs = new List<MusicDTO>();
+                var musicTracks = musicList.playlist.trackIds;
+                //遍历歌单列表
+                foreach (var tracks in musicTracks)
                 {
-                    name = musicSongs.songs[0].name,
-                    artist = string.Join(",", nameList),
-                    cover = musicSongs.songs[0].al.picUrl,
-                    lrc = lyric,
-                    url = _songMusicUrl + tracks.id + ".mp3"
-                }) ;
-                if (count == 0) {
-                    break;
+                    count--;
+                    //获取歌曲详情
+                    var songsData = string.Format(BaseMusicUrl + "/song/detail?ids={0}", tracks.id);
+                    var dataResult = RequestHelper.HttpGet(songsData, Encoding.UTF8);
+                    var musicSongs = JsonConvert.DeserializeObject<MusicSongs>(dataResult);
+
+                    //获取歌曲歌词
+                    var songsLyric = string.Format(BaseMusicUrl + "/lyric?id={0}", tracks.id);
+                    var lyricResult = RequestHelper.HttpGet(songsLyric, Encoding.UTF8);
+                    var musicLyric = JsonConvert.DeserializeObject<Musiclyric>(lyricResult);
+
+                    ////获取歌曲连接
+                    //var songsUrl= string.Format(_baseMusicUrl + "/song/url?id={0}", tracks.id);
+                    //string songsUrlResult = RequestHelper.HttpGet(songsUrl, Encoding.UTF8);
+                    //MusicUrlData musicUrl = JsonConvert.DeserializeObject<MusicUrlData>(songsUrlResult);
+
+                    //填充歌曲歌词
+                    string lyric = null;
+
+                    //判断是有歌词和不为纯音乐
+                    if (!musicLyric.nolyric && !musicLyric.uncollected)
+                    {
+                        lyric = musicLyric.lrc.lyric;
+                    }
+                    var nameList = musicSongs.songs[0].ar.Select(a => a.name).ToList();
+                    musicDtOs.Add(new MusicDTO()
+                    {
+                        name = musicSongs.songs[0].name,
+                        artist = string.Join(",", nameList),
+                        cover = musicSongs.songs[0].al.picUrl,
+                        lrc = lyric,
+                        url = SongMusicUrl + tracks.id + ".mp3"
+                    });
+                    if (count == 0)
+                    {
+                        break;
+                    }
                 }
-            }
-            return musicDTOs;
+                return musicDtOs;
+            });
         }
     }
-    
 }

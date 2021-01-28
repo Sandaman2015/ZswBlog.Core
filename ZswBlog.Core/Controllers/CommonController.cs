@@ -49,8 +49,8 @@ namespace ZswBlog.Core.Controllers
         {
             var musicDtOs = await RedisHelper.GetAsync<List<MusicDTO>>("ZswBlog:Common:MusicList");
             if (musicDtOs != null) return Ok(musicDtOs);
-            musicDtOs = MusicHelper.GetMusicListByCount(30);
-            RedisHelper.SetAsync("ZswBlog:Common:MusicList", musicDtOs, 2400);
+            musicDtOs = await MusicHelper.GetMusicListByCount(30);
+            await RedisHelper.SetAsync("ZswBlog:Common:MusicList", musicDtOs, 2400);
             return Ok(musicDtOs);
         }
 
@@ -65,8 +65,8 @@ namespace ZswBlog.Core.Controllers
         {
             var musicDtOs = await RedisHelper.GetAsync<List<MusicDTO>>("ZswBlog:Common:MusicList");
             if (musicDtOs != null) return Ok(musicDtOs);
-            musicDtOs = MusicHelper.GetMusicListByCount(50);
-            RedisHelper.SetAsync("ZswBlog:Common:MusicList", musicDtOs, 2400);
+            musicDtOs = await MusicHelper.GetMusicListByCount(50);
+            await RedisHelper.SetAsync("ZswBlog:Common:MusicList", musicDtOs, 2400);
             return Ok(musicDtOs);
         }
 

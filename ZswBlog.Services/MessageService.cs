@@ -111,7 +111,7 @@ namespace ZswBlog.Services
         {
             if (treeDto.targetId != 0)
             {
-                var targetUser = RedisHelper.Get<UserDTO>("ZswBlog:UserInfo:" + treeDto.targetUserId);
+                var targetUser = await RedisHelper.GetAsync<UserDTO>("ZswBlog:UserInfo:" + treeDto.targetUserId);
                 if (targetUser == null)
                 {
                     targetUser = await UserService.GetUserByIdAsync(treeDto.targetUserId);
@@ -121,11 +121,13 @@ namespace ZswBlog.Services
                 treeDto.targetUserPortrait = targetUser.portrait;
                 treeDto.targetUserName = targetUser.nickName;
             }
-
-            var user = RedisHelper.Get<UserDTO>("ZswBlog:UserInfo:" + treeDto.userId);
-            if (user != null) return;
-            user = await UserService.GetUserByIdAsync(treeDto.userId);
-            await RedisHelper.SetAsync("ZswBlog:UserInfo:" + treeDto.userId, user, 60 * 60 * 6);
+            var user = await RedisHelper.GetAsync<UserDTO>("ZswBlog:UserInfo:" + treeDto.userId);
+            if (user == null){
+                user = await UserService.GetUserByIdAsync(treeDto.userId);
+                await RedisHelper.SetAsync("ZswBlog:UserInfo:" + treeDto.userId, user, 60 * 60 * 6);
+            }
+            treeDto.userPortrait = user.portrait;
+            treeDto.userName = user.nickName;
         }
 
         public async Task<List<MessageDTO>> GetMessageOnNearSaveAsync(int count)

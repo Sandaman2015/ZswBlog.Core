@@ -76,7 +76,7 @@ namespace ZswBlog.Services
                 }
                 user.lastLoginDate = DateTime.Now;
                 user.loginCount += 1;
-                UserService.UpdateEntityAsync(user);
+                await UserService.UpdateEntityAsync(user);
                 return Mapper.Map<UserDTO>(user);
             }
             return null;

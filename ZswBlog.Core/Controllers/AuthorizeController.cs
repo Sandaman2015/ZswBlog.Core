@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using ZswBlog.Common.Jwt;
 using ZswBlog.Core.config;
 using ZswBlog.Entity.DbContext;
 using ZswBlog.IServices;

@@ -20,7 +20,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using ZswBlog.Common.Jwt;
 
 namespace ZswBlog.Core
 {
@@ -114,8 +113,8 @@ namespace ZswBlog.Core
             //Mysql连接池
             var readConnection = Configuration.GetConnectionString("ClusterMysqlConnection");
             var writleConnection = Configuration.GetConnectionString("MasterMysqlConnection");
-            Logger.LogInformation("读取数据库配置连接地址：" + readConnection);
-            Logger.LogInformation("更新数据库配置连接地址：" + writleConnection);
+            Logger.LogInformation($"读取数据库配置连接地址：{readConnection}");
+            Logger.LogInformation($"更新数据库配置连接地址：{writleConnection}");
             services.AddDbContext<WritleDbContext>(options => options.UseMySql(writleConnection));
             services.AddDbContext<ReadDbContext>(options => options.UseMySql(readConnection)
                 .UseLoggerFactory(LogFactory)
@@ -124,9 +123,9 @@ namespace ZswBlog.Core
 
             //初始化 RedisHelper
             var redisConnection = Configuration.GetConnectionString("RedisConnectionString");
-            Logger.LogInformation("Redis配置连接地址：" + redisConnection);
-            var csredis = new CSRedis.CSRedisClient(redisConnection);
-            RedisHelper.Initialization(csredis);
+            Logger.LogInformation($"Redis配置连接地址：{redisConnection}");
+            var csRedis = new CSRedis.CSRedisClient(redisConnection);
+            RedisHelper.Initialization(csRedis);
             // 注册Swagger服务
             services.AddSwaggerGen(c =>
             {
@@ -138,7 +137,7 @@ namespace ZswBlog.Core
                     Description = "ZswBlog WebSite ASP.NET CORE WebApi",
                     Contact = new OpenApiContact
                     {
-                        Name = "Sandaman",
+                        Name = "Sandman",
                         Email = "sandaman2015@163.com"
                     }
                 });
@@ -168,7 +167,7 @@ namespace ZswBlog.Core
             });
             services.AddControllers().SetCompatibilityVersion(CompatibilityVersion.Latest);
             // jwt 认证
-            JwtSettings jwtSettings = new JwtSettings();
+            var jwtSettings = new JwtSettings();
             services.Configure<JwtSettings>(Configuration.GetSection("JwtSettings"));
             Configuration.GetSection("JwtSettings").Bind(jwtSettings);
 
@@ -235,9 +234,8 @@ namespace ZswBlog.Core
         /// <param name="containerBuilder"></param>
         public void ConfigureContainer(ContainerBuilder containerBuilder)
         {
-            Logger.LogInformation("开始装载Autofac依赖注入配置文件");
+            Logger.LogInformation("装载依赖注入配置");
             containerBuilder.RegisterModule<ConfigureAutofac>();
-            Logger.LogInformation("装载Autofac依赖注入配置文件结束");
         }
     }
 }

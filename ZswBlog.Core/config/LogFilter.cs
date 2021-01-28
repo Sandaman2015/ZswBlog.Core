@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
 
@@ -7,14 +8,14 @@ namespace ZswBlog.Core.config
     /// <summary>
     /// 日志记录操作
     /// </summary>
-    public class LogFilter: ActionFilterAttribute
+    public class LogFilter : ActionFilterAttribute
     {
         private static readonly ILogger Logger = LoggerFactory.Create(build =>
         {
             build.AddConsole(); // 用于控制台程序的输出
             build.AddDebug(); // 用于VS调试，输出窗口的输出
         }).CreateLogger("LogFilter");
-        
+
 
         /// <summary>
         /// 日志记录
@@ -27,12 +28,16 @@ namespace ZswBlog.Core.config
             var actionName = context.RouteData.Values["action"]?.ToString();
             //是否有该特性
             var b = IsThatAttribute<FunctionDescriptionAttribute>(actionName, t);
-            if (!b.DescriptionValue.Equals(string.Empty))
+            if (b.DescriptionValue.Equals(string.Empty)) return;
+            var param = "";
+            foreach (var (key, value) in context.ActionArguments)
             {
-                //日志记录
-                Logger.LogInformation(
-                    $"操作记录：{b.DescriptionValue}， 操作时间：{DateTime.Now}, IP地址：{context.HttpContext.Connection.RemoteIpAddress}");    
+                param += "\n,\t\t参数描述:" + key + "=" + value;
             }
+
+            //日志记录
+            Logger.LogInformation(
+                $"操作记录：{b.DescriptionValue}\n，\t请求参数：({param})\n\t]\n， \t操作时间：{DateTime.Now}\n, \tIP地址：{context.HttpContext.Connection.RemoteIpAddress.MapToIPv4()}");
         }
 
         /// <summary>
@@ -45,10 +50,11 @@ namespace ZswBlog.Core.config
         private static T IsThatAttribute<T>(string actionName, Type t) where T : new()
         {
             var attributes = t.GetMethod(actionName)?.GetCustomAttributes(typeof(T), true);
-            if (attributes != null && attributes.Length>0)
+            if (attributes != null && attributes.Length > 0)
             {
-                return (T) attributes.GetValue(0);                
+                return (T) attributes.GetValue(0);
             }
+
             return new T();
         }
     }
