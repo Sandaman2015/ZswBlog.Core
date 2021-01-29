@@ -30,7 +30,7 @@ namespace ZswBlog.Services
         /// <param name="isShow"></param>
         /// <param name="title"></param>
         /// <returns></returns>
-        public async Task<PageDTO<ArticleDTO>> GetArticleListByCategoryIdAsync(int limit, int pageIndex, Int32 categoryId,
+        public async Task<PageDTO<ArticleDTO>> GetArticleListByCategoryIdAsync(int limit, int pageIndex, int categoryId,
             bool isShow, string title)
         {
             Expression<Func<ArticleEntity, bool>> expression = t => true;

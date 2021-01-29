@@ -148,7 +148,7 @@ namespace ZswBlog.Core.Controllers
         /// <param name="id">文章编码</param>
         /// <param name="isShow">禁用</param>
         /// <returns></returns>
-        [Route("/api/article/admin/disable/{id}")]
+        [Route("/api/article/admin/disable")]
         [Authorize]
         [HttpPost]
         [FunctionDescription("后台管理-获取文章详情")]
