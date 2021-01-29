@@ -88,5 +88,10 @@ namespace ZswBlog.Repository
                 ? ReadDbContext.Set<T>().Count()
                 : ReadDbContext.Set<T>().Where(whereLambda).Count());
         }
+
+        public async Task<IQueryable<T>> FilterModelsByQueryable(IQueryable<T> queryable, Expression<Func<T, bool>> whereLambda)
+        {
+            return await Task.Run(() => queryable.Where(whereLambda));
+        }
     }
 }

@@ -60,7 +60,7 @@ namespace ZswBlog.Core.Controllers
         /// <summary>
         /// 后台管理-文章更新
         /// </summary>
-        /// <param name="article"></param>
+        /// <param name="article">文章保存入参</param>
         /// <returns></returns>
         [Route("/api/article/admin/update")]
         [Authorize]
@@ -95,7 +95,7 @@ namespace ZswBlog.Core.Controllers
         /// <summary>
         /// 后台管理-保存文章
         /// </summary>
-        /// <param name="article"></param>
+        /// <param name="article">文章更新入参</param>
         /// <returns></returns>
         [Route(template: "/api/article/admin/save")]
         [Authorize]
@@ -124,14 +124,47 @@ namespace ZswBlog.Core.Controllers
                     operatorId = -1
                 });
             }
-
             return Ok(flag);
         }
 
         /// <summary>
+        /// 后台管理-删除文章
+        /// </summary>
+        /// <param name="id">文章编码</param>
+        /// <returns></returns>
+        [Route("/api/article/admin/remove/{id}")]
+        [Authorize]
+        [HttpPost]
+        [FunctionDescription("后台管理-删除文章")]
+        public async Task<ActionResult<ArticleDTO>> DeletedAdminArticleById(int id)
+        {
+            var flag = await _articleService.RemoveArticleAsync(id);
+            return Ok(flag);
+        }
+        
+        /// <summary>
+        /// 后台管理-禁用文章
+        /// </summary>
+        /// <param name="id">文章编码</param>
+        /// <param name="isShow">禁用</param>
+        /// <returns></returns>
+        [Route("/api/article/admin/disable/{id}")]
+        [Authorize]
+        [HttpPost]
+        [FunctionDescription("后台管理-获取文章详情")]
+        public async Task<ActionResult<ArticleDTO>> DisabledAdminArticleById(int id, bool isShow)
+        {
+            var articleDetail = await _articleService.GetArticleEntityByIdAsync(id);
+            articleDetail.isShow = isShow;
+            articleDetail.lastUpdateDate = DateTime.Now;
+            var flag = await _articleService.UpdateEntityAsync(articleDetail);
+            return Ok(flag);
+        }
+        
+        /// <summary>
         /// 后台管理-获取文章详情
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">文章编码</param>
         /// <returns></returns>
         [Route(template: "/api/article/admin/get/{id}")]
         [Authorize]
@@ -143,6 +176,20 @@ namespace ZswBlog.Core.Controllers
             return Ok(article);
         }
 
+        /// <summary>
+        /// 后台管理-类型获取文章列表分页
+        /// </summary>
+        /// <returns></returns>
+        [Route(template: "/api/article/admin/get/page/category")]
+        [HttpGet]
+        [Authorize]
+        [FunctionDescription("根据文章类型分页获取文章列表")]
+        public async Task<ActionResult<PageDTO<ArticleDTO>>> GetArticleListByCategory([FromQuery] int limit,
+            [FromQuery] int pageIndex, [FromQuery] int categoryId, string dimTitle)
+        {
+            var articles = await _articleService.GetArticleListByCategoryIdAsync(limit, pageIndex, categoryId, false, dimTitle);
+            return Ok(articles);
+        }
         /// <summary>
         /// 获取文章详情
         /// </summary>
@@ -229,21 +276,7 @@ namespace ZswBlog.Core.Controllers
         [FunctionDescription("模糊查询获取文章")]
         public async Task<ActionResult<List<ArticleDTO>>> GetArticleListByFuzzyTitle(string fuzzyTitle)
         {
-            var articles = await _articleService.GetArticlesByDimTitleAsync(fuzzyTitle);
-            return Ok(articles);
-        }
-
-        /// <summary>
-        /// 根据文章类型分页获取文章列表
-        /// </summary>
-        /// <returns></returns>
-        [Route(template: "/api/article/get/page/category")]
-        [HttpGet]
-        [FunctionDescription("根据文章类型分页获取文章列表")]
-        public async Task<ActionResult<PageDTO<ArticleDTO>>> GetArticleListByCategory([FromQuery] int limit,
-            [FromQuery] int pageIndex, [FromQuery] int categoryId)
-        {
-            var articles = await _articleService.GetArticleListByCategoryIdAsync(limit, pageIndex, categoryId);
+            var articles = await _articleService.GetArticlesByDimTitleAsync(fuzzyTitle, true);
             return Ok(articles);
         }
     }

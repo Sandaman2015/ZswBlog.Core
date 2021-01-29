@@ -11,8 +11,9 @@ namespace ZswBlog.IServices
         /// 根据文章标题模糊获取
         /// </summary>
         /// <param name="dimTitle">模糊的文章标题</param>
+        /// <param name="isShow"></param>
         /// <returns></returns>
-        Task<List<ArticleDTO>> GetArticlesByDimTitleAsync(string dimTitle);
+        Task<List<ArticleDTO>> GetArticlesByDimTitleAsync(string dimTitle, bool isShow);
         /// <summary>
         /// 可根据是否显示获取分页文章
         /// </summary>
@@ -56,8 +57,10 @@ namespace ZswBlog.IServices
         /// <param name="limit"></param>
         /// <param name="pageIndex"></param>
         /// <param name="categoryId"></param>
+        /// <param name="isShow"></param>
+        /// <param name="title"></param>
         /// <returns></returns>
-        Task<PageDTO<ArticleDTO>> GetArticleListByCategoryIdAsync(int limit, int pageIndex, int categoryId);
+        Task<PageDTO<ArticleDTO>> GetArticleListByCategoryIdAsync(int limit, int pageIndex, int categoryId, bool isShow, string title);
 
         /// <summary>
         /// 根据类型获取文章条数
@@ -77,5 +80,11 @@ namespace ZswBlog.IServices
         /// <param name="articleId"></param>
         /// <returns></returns>
         Task<bool> AddArticleLikeAsync(int articleId);
+        /// <summary>
+        /// 删除文章
+        /// </summary>
+        /// <param name="articleId"></param>
+        /// <returns></returns>
+        Task<bool> RemoveArticleAsync(int articleId);
     }
 }

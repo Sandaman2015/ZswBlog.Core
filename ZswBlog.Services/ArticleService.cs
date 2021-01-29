@@ -2,8 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using ZswBlog.Common;
 using ZswBlog.Common.Util;
 using ZswBlog.DTO;
 using ZswBlog.Entity.DbContext;
@@ -25,15 +27,27 @@ namespace ZswBlog.Services
         /// <param name="limit"></param>
         /// <param name="pageIndex"></param>
         /// <param name="categoryId"></param>
+        /// <param name="isShow"></param>
+        /// <param name="title"></param>
         /// <returns></returns>
-        public async Task<PageDTO<ArticleDTO>> GetArticleListByCategoryIdAsync(int limit, int pageIndex, int categoryId)
+        public async Task<PageDTO<ArticleDTO>> GetArticleListByCategoryIdAsync(int limit, int pageIndex, Int32 categoryId,
+            bool isShow, string title)
         {
+            Expression<Func<ArticleEntity, bool>> expression = t => true;
+            if (isShow)  expression = expression.And(ac => ac.isShow);
+            if (!string.IsNullOrEmpty(title))
+            {
+                expression = expression.And(ac => ac.title.Contains(title));
+            }
+            if (categoryId > 0)
+            {
+                expression = expression.And(ac => ac.categoryId == categoryId);
+            }
             var articles = ArticleRepository.GetModelsByPage(limit, pageIndex, false,
-                    a => a.visits, ac => ac.categoryId == categoryId && ac.isShow,
-                    out var pageCount)
-                .Include(t => t.category)
-                .ToList();
-            var articleDtoList = Mapper.Map<List<ArticleDTO>>(articles);
+                a => a.lastUpdateDate, expression,
+                out var pageCount);
+            var articleDtoList = Mapper.Map<List<ArticleDTO>>(articles
+                .Include(t => t.category).ToList());
             foreach (var articleDto in articleDtoList)
             {
                 articleDto.tags = await ArticleTagService.GetTagListByArticleIdAsync(articleDto.id);
@@ -50,11 +64,14 @@ namespace ZswBlog.Services
         /// 根据文章标题模糊查询
         /// </summary>
         /// <param name="dimTitle"></param>
+        /// <param name="isShow"></param>
         /// <returns></returns>
-        public async Task<List<ArticleDTO>> GetArticlesByDimTitleAsync(string dimTitle)
+        public async Task<List<ArticleDTO>> GetArticlesByDimTitleAsync(string dimTitle, bool isShow)
         {
             var articles =
-                (await ArticleRepository.GetModelsAsync(a => a.title.Contains(dimTitle))).Include(c => c.category);
+                (await ArticleRepository.GetModelsAsync(a =>
+                    a.title.Contains(dimTitle) && isShow ? a.isShow == true : a.id > 0))
+                .Include(c => c.category);
             var articleDtoList = Mapper.Map<List<ArticleDTO>>(articles.ToList().Where(a => a.isShow));
             foreach (var articleDto in articleDtoList)
             {
@@ -83,10 +100,12 @@ namespace ZswBlog.Services
             {
                 article = await ArticleRepository.GetSingleModelAsync(a => a.id == articleId);
             }
+
             if (article == null)
             {
                 throw new Exception("未找到文章");
             }
+
             if (addVisit) AddArticleVisitAsync(article);
             var articleDto = Mapper.Map<ArticleDTO>(article);
             articleDto.category = await CategoryService.GetCategoryByIdAsync(articleDto.categoryId);
@@ -136,7 +155,7 @@ namespace ZswBlog.Services
             if (isShow)
             {
                 articles = ArticleRepository
-                    .GetModelsByPage(limit, pageIndex, false, a => a.createDate, a => a.isShow, out pageCount)
+                    .GetModelsByPage(limit, pageIndex, false, a => a.lastUpdateDate, a => a.isShow, out pageCount)
                     .OrderBy(a => a.isTop)
                     .ThenBy(a => a.topSort)
                     .Include(c => c.category).ToList();
@@ -144,7 +163,7 @@ namespace ZswBlog.Services
             else
             {
                 articles = ArticleRepository
-                    .GetModelsByPage(limit, pageIndex, false, a => a.createDate, a => a.id != 0, out pageCount)
+                    .GetModelsByPage(limit, pageIndex, false, a => a.lastUpdateDate, a => a.id != 0, out pageCount)
                     .Include(c => c.category).ToList();
             }
 
@@ -218,11 +237,10 @@ namespace ZswBlog.Services
         /// </summary>
         /// <param name="tId"></param>
         /// <returns></returns>
-        public async Task<bool> RemoveEntity(int tId)
+        public async Task<bool> RemoveArticleAsync(int tId)
         {
             var article = await ArticleRepository.GetSingleModelAsync(a => a.id == tId);
-            article.isShow = false;
-            return await Repository.UpdateAsync(article);
+            return await Repository.DeleteAsync(article);
         }
 
         /// <summary>

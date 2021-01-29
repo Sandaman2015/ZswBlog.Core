@@ -87,5 +87,13 @@ namespace ZswBlog.IRepository
         /// <param name="whereLambda"></param>
         /// <returns></returns>
         Task<int> GetModelsCountByConditionAsync(Expression<Func<T, bool>> whereLambda);
+
+        /// <summary>
+        /// 过滤实体条件
+        /// </summary>
+        /// <param name="queryable">过滤实体</param>
+        /// <param name="whereLambda">条件</param>
+        /// <returns></returns>
+        Task<IQueryable<T>> FilterModelsByQueryable(IQueryable<T> queryable, Expression<Func<T, bool>> whereLambda);
     }
 }

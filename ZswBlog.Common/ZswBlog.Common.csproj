@@ -21,4 +21,8 @@
     <ProjectReference Include="..\ZswBlog.Query\ZswBlog.Query.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="Expression.cs" />
+  </ItemGroup>
+
 </Project>
