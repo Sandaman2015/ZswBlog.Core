@@ -41,9 +41,12 @@ namespace ZswBlog.Entity.DbContext
         /// <summary>
         /// 绑定用户id
         /// </summary>
-        [ForeignKey("user")]
         public int userId { get; set; }
 
+        /// <summary>
+        /// 所属人员
+        /// </summary>
+        [ForeignKey("userId")]
         public virtual UserEntity user { get; set; }
     }
 }

@@ -49,6 +49,11 @@
             文章数据传输对象
             </summary>
         </member>
+        <member name="M:ZswBlog.DTO.ArticleDTO.#ctor">
+            <summary>
+            默认构造函数
+            </summary>
+        </member>
         <member name="P:ZswBlog.DTO.ArticleDTO.id">
             <summary>
             文章id

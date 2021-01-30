@@ -29,9 +29,9 @@
             模块名称
             </summary>
         </member>
-        <member name="P:ZswBlog.Entity.DbContext.ActionLogEntity.actionName">
+        <member name="P:ZswBlog.Entity.DbContext.ActionLogEntity.actionDetail">
             <summary>
-            方法名称
+            操作详情
             </summary>
         </member>
         <member name="P:ZswBlog.Entity.DbContext.ActionLogEntity.actionUrl">
@@ -366,7 +366,12 @@
             </summary>
             <param name="options"></param>
         </member>
-        <member name="P:ZswBlog.Entity.DbContext.ZswBlogDbContext.Article">
+        <member name="P:ZswBlog.Entity.DbContext.ZswBlogDbContext.ActionLogEntities">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.DbContext.ZswBlogDbContext.ArticleEntities">
             <summary>
             
             </summary>
@@ -635,6 +640,11 @@
         <member name="P:ZswBlog.Entity.DbContext.QQUserInfoEntity.userId">
             <summary>
             绑定用户id
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.DbContext.QQUserInfoEntity.user">
+            <summary>
+            所属人员
             </summary>
         </member>
         <member name="T:ZswBlog.Entity.DbContext.SiteTagEntity">

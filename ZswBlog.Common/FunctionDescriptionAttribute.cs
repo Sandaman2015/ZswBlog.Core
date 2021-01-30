@@ -1,17 +1,17 @@
 using System;
 
-namespace ZswBlog.Core.config
+namespace ZswBlog.Common
 {
     /// <summary>
     /// 方法描述自定义特性
     /// </summary>
     [AttributeUsage(AttributeTargets.Method, Inherited = false)]
-    public class FunctionDescriptionAttribute : Attribute
+    public sealed class FunctionDescriptionAttribute : Attribute
     {
         /// <summary>
         /// this is only singleton object you can get
         /// </summary>
-        public static readonly FunctionDescriptionAttribute Default = new FunctionDescriptionAttribute();
+        private static readonly FunctionDescriptionAttribute Default = new FunctionDescriptionAttribute();
 
         /// <summary>
         /// on params constructor 
@@ -32,7 +32,7 @@ namespace ZswBlog.Core.config
         /// <summary>
         /// get your function description when you are logging 
         /// </summary>
-        public virtual string Description => DescriptionValue;
+        public string Description => DescriptionValue;
         /// <summary>
         /// 
         /// </summary>

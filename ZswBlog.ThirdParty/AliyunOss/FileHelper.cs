@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using ZswBlog.Common.Util;
 
@@ -366,28 +367,18 @@ namespace ZswBlog.ThirdParty.AliyunOss
         /// <param name="key">待删除的文件名称</param>
         public static bool DeleteObject(List<string> keyList)
         {
-            try
+            var count = 0;
+            //简单模式
+            const bool quietMode = false;
+            // DeleteObjectsRequest的第三个参数指定返回模式。
+            var request = new DeleteObjectsRequest(bucketName, keyList, quietMode);
+            // 删除多个文件。
+            var result = client.DeleteObjects(request);
+            if ((!quietMode) && (result.Keys != null))
             {
-                var count = 0;
-                //简单模式
-                var quietMode = false;
-                // DeleteObjectsRequest的第三个参数指定返回模式。
-                var request = new DeleteObjectsRequest(bucketName, keyList, quietMode);
-                // 删除多个文件。
-                var result = client.DeleteObjects(request);
-                if ((!quietMode) && (result.Keys != null))
-                {
-                    foreach (var obj in result.Keys)
-                    {
-                        count++;
-                    }
-                }
-                return keyList.Count == count;
+                count += result.Keys.Length;
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            return keyList.Count == count;
         }
 
         /// <summary>
@@ -395,52 +386,31 @@ namespace ZswBlog.ThirdParty.AliyunOss
         /// </summary>
         public static void PutObject(string key, string fileToUpload)
         {
-            try
-            {
-                client.PutObject(bucketName, key, fileToUpload);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            client.PutObject(bucketName, key, fileToUpload);
         }
         /// <summary>
         /// 上传一个图片
         /// </summary>
-        /// <param name="base64Code">图片经过base64加密后的结果</param>
-        /// <param name="fileName">文件名,例如:Emplyoee/dzzBack.jpg</param>
+        /// <param name="stream">图片经过base64加密后的结果</param>
+        /// <param name="fileName">文件名,例如:Employee/dzzBack.jpg</param>
         public static bool PushImg(Stream stream, string fileName)
         {
-            try
-            {
-                return client.PutObject(bucketName, fileName, stream).HttpStatusCode == System.Net.HttpStatusCode.OK;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            return client.PutObject(bucketName, fileName, stream).HttpStatusCode == System.Net.HttpStatusCode.OK;
         }
         /// <summary>
         /// 上传一个文件
         /// </summary>
         /// <param name="filebyte">图片字节 </param>
-        /// <param name="fileName">文件名,例如:Emplyoee/dzzBack.jpg</param>
+        /// <param name="fileName">文件名,例如:Employee/dzzBack.jpg</param>
         public static bool PushFile(byte[] filebyte, string fileName)
         {
-            try
-            {
-                MemoryStream stream = new MemoryStream(filebyte, 0, filebyte.Length);
-                return client.PutObject(bucketName, fileName, stream).HttpStatusCode == System.Net.HttpStatusCode.OK;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            var stream = new MemoryStream(filebyte, 0, filebyte.Length);
+            return client.PutObject(bucketName, fileName, stream).HttpStatusCode == System.Net.HttpStatusCode.OK;
         }
         /// <summary>
         /// 获取鉴权后的URL,文件过期时间默认设置为100年
         /// </summary>
-        /// <param name="fileName">文件名,例如:Emplyoee/dzzBack.jpg</param>
+        /// <param name="fileName">文件名,例如:Employee/dzzBack.jpg</param>
         /// <returns></returns>
         public static string GetFileUrl(string fileName)
         {

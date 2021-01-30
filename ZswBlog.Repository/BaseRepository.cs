@@ -23,13 +23,13 @@ namespace ZswBlog.Repository
 
         public virtual async Task<bool> AddAsync(T t)
         {
-            WritleDbContext.Set<T>().AddAsync(t);
+            WritleDbContext.Set<T>().Add(t);
             return await WritleDbContext.SaveChangesAsync() > 0;
         }
 
         public virtual async Task<bool> AddListAsync(IEnumerable<T> t)
         {
-            WritleDbContext.Set<T>().AddRangeAsync(t);
+            WritleDbContext.Set<T>().AddRange(t);
             return await WritleDbContext.SaveChangesAsync() > 0;
         }
 

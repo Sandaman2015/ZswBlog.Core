@@ -9,6 +9,7 @@ namespace ZswBlog.Entity.DbContext
     /// <summary>
     /// 操作日志实体对象
     /// </summary>
+    [Table("tab_actionlog")]
     public class ActionLogEntity
     {
         /// <summary>
@@ -24,15 +25,15 @@ namespace ZswBlog.Entity.DbContext
         /// <summary>
         /// 操作人
         /// </summary>
-        public int operatorId { get; set; }
+        public string operatorId { get; set; }
         /// <summary>
         /// 模块名称
         /// </summary>
         public string moduleName { get; set; }
         /// <summary>
-        /// 方法名称
+        /// 操作详情
         /// </summary>
-        public string actionName { get; set; }
+        public string actionDetail { get; set; }
         /// <summary>
         /// 操作地址
         /// </summary>
@@ -44,6 +45,6 @@ namespace ZswBlog.Entity.DbContext
         /// <summary>
         /// 日志类型
         /// </summary>
-        public string logType { get; set; }
+        public int logType { get; set; }
     }
 }

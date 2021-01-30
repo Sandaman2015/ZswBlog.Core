@@ -9,6 +9,9 @@ namespace ZswBlog.DTO
     /// </summary>
     public class ArticleDTO
     {
+        /// <summary>
+        /// 默认构造函数
+        /// </summary>
         public ArticleDTO()
         {
             this.tags = new List<TagDTO>();

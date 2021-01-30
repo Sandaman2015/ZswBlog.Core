@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using ZswBlog.Common;
 using ZswBlog.Core.config;
 using ZswBlog.DTO;
 using ZswBlog.IServices;

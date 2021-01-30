@@ -1,10 +1,16 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
+using ZswBlog.Common;
+using ZswBlog.Common.Enums;
+using ZswBlog.Entity.DbContext;
+using ZswBlog.IServices;
 
 namespace ZswBlog.Core.config
 {
+
     /// <summary>
     /// 日志记录操作
     /// </summary>
@@ -16,6 +22,19 @@ namespace ZswBlog.Core.config
             build.AddDebug(); // 用于VS调试，输出窗口的输出
         }).CreateLogger("LogFilter");
 
+        /// <summary>
+        /// 日志记录服务
+        /// </summary>
+        private readonly IActionLogService _actionLogService;
+
+        /// <summary>
+        /// 初始化日志记录框架
+        /// </summary>
+        /// <param name="actionLogService"></param>
+        public LogFilter(IActionLogService actionLogService)
+        {
+            _actionLogService = actionLogService;
+        }
 
         /// <summary>
         /// 日志记录
@@ -35,9 +54,23 @@ namespace ZswBlog.Core.config
                 param += "\n,\t\t参数描述:" + key + "=" + value;
             }
 
+            if (context.HttpContext.Connection.RemoteIpAddress == null) return;
+            var ip = context.HttpContext.Connection.RemoteIpAddress.MapToIPv4();
             //日志记录
             Logger.LogInformation(
-                $"操作记录：{b.DescriptionValue}\n，\t请求参数：({param})\n\t]\n， \t操作时间：{DateTime.Now}\n, \tIP地址：{context.HttpContext.Connection.RemoteIpAddress.MapToIPv4()}");
+                $"操作记录：{b.DescriptionValue}\n，\t请求参数：({param})\n\t]\n， \t操作时间：{DateTime.Now}\n, \tIP地址：{ip}");
+            if (context.HttpContext.Request.Path.ToString().Contains("/api/action/admin")) return;
+            var action = new ActionLogEntity()
+            {
+                actionDetail = b.DescriptionValue,
+                ipAddress = ip.ToString(),
+                moduleName = context.ActionDescriptor.DisplayName,
+                actionUrl = context.HttpContext.Request.Path,
+                createDate = DateTime.Now,
+                operatorId = "admin",
+                logType = (int)LogTypeEnum.INFO
+            }; 
+            _actionLogService.AddEntityAsync(action);
         }
 
         /// <summary>

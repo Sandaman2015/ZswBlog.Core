@@ -24,13 +24,13 @@ namespace ZswBlog.Core.config
             var repository = Assembly.Load("ZswBlog.IRepository");
             //自动注入
             builder.RegisterAssemblyTypes(repositoryImpl, repository)
-                .AsImplementedInterfaces().PropertiesAutowired().InstancePerDependency().EnableClassInterceptors();
+                .AsImplementedInterfaces().PropertiesAutowired().InstancePerDependency();
 
             var servicesImpl = Assembly.Load("ZswBlog.Services");
             var services = Assembly.Load("ZswBlog.IServices");
             builder.RegisterAssemblyTypes(servicesImpl, services)
                 .AsImplementedInterfaces().PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies)
-                .InstancePerLifetimeScope().EnableClassInterceptors();
+                .InstancePerLifetimeScope();
 
             //AutoMapper的注入
             builder.RegisterType<Mapper>().As<IMapper>().AsSelf().PropertiesAutowired().InstancePerDependency();

@@ -29,7 +29,12 @@ namespace ZswBlog.Entity.DbContext
         /// <summary>
         /// 
         /// </summary>
-        public virtual DbSet<ArticleEntity> Article { get; set; }
+        public virtual DbSet<ActionLogEntity> ActionLogEntities { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public virtual DbSet<ArticleEntity> ArticleEntities { get; set; }
 
         /// <summary>
         /// 
