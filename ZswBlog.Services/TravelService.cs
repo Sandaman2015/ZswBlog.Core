@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ZswBlog.DTO;
-using ZswBlog.Entity.DbContext;
+using ZswBlog.Entity;
 using ZswBlog.IRepository;
 using ZswBlog.IServices;
 
@@ -17,13 +17,10 @@ namespace ZswBlog.Services
 
         public async Task<PageDTO<TravelDTO>> GetTravelsByPageAsync(int pageSize, int pageIndex)
         {
-            return await Task.Run(() =>
-            {
-                var travels = TravelRepository.GetModelsByPage(pageSize, pageIndex, false, a => a.createDate,
-                    a => a.id != 0 && a.isShow, out var total).ToList();
-                var travelDtoList = Mapper.Map<List<TravelDTO>>(travels);
-                return new PageDTO<TravelDTO>(pageIndex, pageSize, total, travelDtoList);
-            });
+            var travels = await TravelRepository.GetModelsByPageAsync(pageSize, pageIndex, false, a => a.createDate,
+                a => a.id != 0 && a.isShow);
+            var travelDtoList = Mapper.Map<List<TravelDTO>>(travels.data.ToList());
+            return new PageDTO<TravelDTO>(pageIndex, pageSize, travels.count, travelDtoList);
         }
 
         public async Task<TravelDTO> GetTravelAsync(int tId)
@@ -34,7 +31,7 @@ namespace ZswBlog.Services
 
         public async Task<bool> RemoveEntityAsync(int tId)
         {
-            var t = new TravelEntity() {id = tId};
+            var t = new TravelEntity() { id = tId };
             return await TravelRepository.DeleteAsync(t);
         }
     }

@@ -3,7 +3,7 @@ using NETCore.Encrypt;
 using System;
 using System.Threading.Tasks;
 using ZswBlog.DTO;
-using ZswBlog.Entity.DbContext;
+using ZswBlog.Entity;
 using ZswBlog.IRepository;
 using ZswBlog.IServices;
 using ZswBlog.ThirdParty;

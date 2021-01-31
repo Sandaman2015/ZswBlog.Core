@@ -4,14 +4,18 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace ZswBlog.Entity.DbContext
+namespace ZswBlog.Entity
 {
     /// <summary>
     /// 标签实体对象
     /// </summary>
     [Table("tab_tag")]
-    public class TagEntity
+    public class TagEntity : BaseEntity
     {
+        public TagEntity()
+        {
+            this.articleTags = new List<ArticleTagEntity>();
+        }
         /// <summary>
         /// 标签id
         /// </summary>
@@ -30,5 +34,9 @@ namespace ZswBlog.Entity.DbContext
         /// 标签名称
         /// </summary>
         public string name { get; set; }
+        /// <summary>
+        /// 多对多关联
+        /// </summary>
+        public virtual List<ArticleTagEntity> articleTags { get; set; }
     }
 }

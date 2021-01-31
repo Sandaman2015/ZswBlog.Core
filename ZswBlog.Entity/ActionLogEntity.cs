@@ -4,13 +4,13 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace ZswBlog.Entity.DbContext
+namespace ZswBlog.Entity
 {
     /// <summary>
     /// 操作日志实体对象
     /// </summary>
     [Table("tab_actionlog")]
-    public class ActionLogEntity
+    public class ActionLogEntity : BaseEntity
     {
         /// <summary>
         /// 操作id

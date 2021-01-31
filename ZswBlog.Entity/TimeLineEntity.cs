@@ -4,13 +4,13 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace ZswBlog.Entity.DbContext
+namespace ZswBlog.Entity
 {
     /// <summary>
     /// 时间线实体
     /// </summary>
     [Table("tab_timeline")]
-    public class TimeLineEntity
+    public class TimeLineEntity : BaseEntity
     {
         /// <summary>
         /// 时间线id

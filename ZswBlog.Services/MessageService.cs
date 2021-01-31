@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ZswBlog.DTO;
-using ZswBlog.Entity.DbContext;
+using ZswBlog.Entity;
 using ZswBlog.IRepository;
 using ZswBlog.IServices;
 using ZswBlog.ThirdParty.Location;
@@ -88,10 +88,10 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<PageDTO<MessageTreeDTO>> GetMessagesByRecursionAsync(int limit, int pageIndex)
         {
-            var messageTopEntities = MessageRepository.GetModelsByPage(limit, pageIndex, false, a => a.createDate,
-                a => a.targetId == 0 && a.targetUserId == null, out var total).ToList();
+            var messageTopEntities = await MessageRepository.GetModelsByPageAsync(limit, pageIndex, false, a => a.createDate,
+                a => a.targetId == 0 && a.targetUserId == null);
             var messageTreeList = new List<MessageTreeDTO>();
-            foreach (var item in messageTopEntities.ToList())
+            foreach (var item in messageTopEntities.data.ToList())
             {
                 var messageTree = Mapper.Map<MessageTreeDTO>(item);
                 await ConvertMessageTree(messageTree);
@@ -100,7 +100,7 @@ namespace ZswBlog.Services
                 messageTreeList.Add(messageTree);
             }
 
-            return new PageDTO<MessageTreeDTO>(pageIndex, limit, total, messageTreeList);
+            return new PageDTO<MessageTreeDTO>(pageIndex, limit, messageTopEntities.count, messageTreeList);
         }
 
         /// <summary>

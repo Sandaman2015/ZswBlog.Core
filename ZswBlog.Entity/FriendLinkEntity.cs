@@ -4,13 +4,13 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace ZswBlog.Entity.DbContext
+namespace ZswBlog.Entity
 {
     /// <summary>
     /// 友情链接实体对象
     /// </summary>
     [Table("tab_friendlink")]
-    public class FriendLinkEntity
+    public class FriendLinkEntity : BaseEntity
     {
         /// <summary>
         /// 友情链接id

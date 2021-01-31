@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using ZswBlog.Common;
 using ZswBlog.Core.config;
 using ZswBlog.DTO;
-using ZswBlog.Entity.DbContext;
+using ZswBlog.Entity;
 using ZswBlog.IServices;
 
 namespace ZswBlog.Core.Controllers

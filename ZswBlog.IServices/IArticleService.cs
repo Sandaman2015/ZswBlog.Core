@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using ZswBlog.DTO;
-using ZswBlog.Entity.DbContext;
+using ZswBlog.Entity;
 
 namespace ZswBlog.IServices
 {
@@ -21,7 +21,7 @@ namespace ZswBlog.IServices
         /// <param name="pageIndex">页数</param>
         /// <param name="isShow">选择是否显示</param>
         /// <returns></returns>
-        Task<PageDTO<ArticleDTO>> GetArticlesByPageAndIsShowAsync(int limit, int pageIndex, bool isShow);
+        Task<PageDTO<ArticleDTO>> GetArticlesByPageAndIsShowAsync(int limit, int pageIndex, int categoryId, bool isShow);
         /// <summary>
         /// 根据文章Id号获取文章
         /// </summary>

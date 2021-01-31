@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using ZswBlog.Common;
 using ZswBlog.Common.Util;
 using ZswBlog.DTO;
-using ZswBlog.Entity.DbContext;
+using ZswBlog.Entity;
 using ZswBlog.IRepository;
 using ZswBlog.IServices;
 
@@ -34,7 +34,7 @@ namespace ZswBlog.Services
             bool isShow, string title)
         {
             Expression<Func<ArticleEntity, bool>> expression = t => true;
-            if (isShow)  expression = expression.And(ac => ac.isShow);
+            if (isShow) expression = expression.And(ac => ac.isShow);
             if (!string.IsNullOrEmpty(title))
             {
                 expression = expression.And(ac => ac.title.Contains(title));
@@ -148,35 +148,29 @@ namespace ZswBlog.Services
         /// <param name="pageIndex"></param>
         /// <param name="isShow"></param>
         /// <returns></returns>
-        public async Task<PageDTO<ArticleDTO>> GetArticlesByPageAndIsShowAsync(int limit, int pageIndex, bool isShow)
+        public async Task<PageDTO<ArticleDTO>> GetArticlesByPageAndIsShowAsync(int limit, int pageIndex,int categoryId, bool isShow)
         {
-            List<ArticleEntity> articles;
-            int pageCount;
+            PageEntity<ArticleEntity> articles;
+            Expression<Func<ArticleEntity, bool>> expression = a=> true;
+            if (categoryId != 0) {
+                expression = expression.And(a => a.categoryId == categoryId);
+            }
             if (isShow)
             {
-                articles = ArticleRepository
-                    .GetModelsByPage(limit, pageIndex, false, a => a.lastUpdateDate, a => a.isShow, out pageCount)
-                    .OrderBy(a => a.isTop)
-                    .ThenBy(a => a.topSort)
-                    .Include(c => c.category).ToList();
+                expression = expression.And(a => a.isShow == isShow);
             }
-            else
-            {
-                articles = ArticleRepository
-                    .GetModelsByPage(limit, pageIndex, false, a => a.lastUpdateDate, a => a.id != 0, out pageCount)
-                    .Include(c => c.category).ToList();
-            }
-
-            var articleDtoList = Mapper.Map<List<ArticleDTO>>(articles);
+            articles = await ArticleRepository.GetModelsByPageAsync(limit, pageIndex, false, a => a.createDate, expression);
+            articles.data
+                .OrderBy(a => a.isTop)
+                .ThenBy(a => a.topSort);
+            var articleDtoList = Mapper.Map<List<ArticleDTO>>(articles.data.ToList());
             foreach (var articleDto in articleDtoList)
             {
-                articleDto.tags = (await ArticleTagService.GetTagListByArticleIdAsync(articleDto.id)).ToList();
                 articleDto.content = StringHelper.ReplaceTag(articleDto.content, 500);
             }
-
             return new PageDTO<ArticleDTO>(limit,
                 pageIndex,
-                pageCount,
+                articles.count,
                 articleDtoList);
         }
 
@@ -194,7 +188,6 @@ namespace ZswBlog.Services
             {
                 articleDto.content = StringHelper.ReplaceTag(articleDto.content, 500);
             }
-
             return articleDtoList;
         }
 
@@ -214,12 +207,8 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<List<ArticleDTO>> GetArticlesByVisitAsync(int visitCount)
         {
-            return await Task.Run(() =>
-            {
-                var articles = ArticleRepository.GetModelsAsync(a => a.isShow)
-                    .Result.OrderByDescending(a => a.visits).Take(visitCount).ToList();
-                return Mapper.Map<List<ArticleDTO>>(articles);
-            });
+            var articles = await ArticleRepository.GetModelsAsync(a => a.isShow);
+            return Mapper.Map<List<ArticleDTO>>(articles.OrderByDescending(a => a.visits).Take(visitCount).ToList());
         }
 
         /// <summary>

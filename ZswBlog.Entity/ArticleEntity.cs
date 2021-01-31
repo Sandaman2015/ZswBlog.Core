@@ -5,76 +5,80 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 using ZswBlog.DTO;
 
-namespace ZswBlog.Entity.DbContext
+namespace ZswBlog.Entity
 {
     /// <summary>
     /// 文章实体对象
     /// </summary>
     [Table("tab_article")]
-    public class ArticleEntity
+    public class ArticleEntity : BaseEntity
     {
+        public ArticleEntity()
+        {
+            this.articleTags = new List<ArticleTagEntity>();
+        }
         /// <summary>
         /// 文章id
         /// </summary>
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int id { get; set; }
-        
+
         /// <summary>
         /// 创建时间
         /// </summary>
         public DateTime createDate { get; set; }
-        
+
         /// <summary>
         /// 操作人
         /// </summary>
         public int operatorId { get; set; }
-        
+
         /// <summary>
         /// 文章标题
         /// </summary>
         public string title { get; set; }
-        
+
         /// <summary>
         /// 文章内容
         /// </summary>
         public string content { get; set; }
-        
+
         /// <summary>
         /// 点赞数
         /// </summary>
         public int like { get; set; }
-        
+
         /// <summary>
         /// 所属分类，默认为0是默认分类
         /// </summary>
         public int categoryId { get; set; }
-        
+
         /// <summary>
         /// 浏览次数
         /// </summary>
         public int visits { get; set; }
-        
+
         /// <summary>
         /// 是否显示1不显示,0显示
         /// </summary>
         public bool isShow { get; set; }
-        
+
         /// <summary>
         /// 上次更新时间
         /// </summary>
         public DateTime lastUpdateDate { get; set; }
-        
+
         /// <summary>
         /// 文章插图
         /// </summary>
         public string coverImage { get; set; }
-        
+
         /// <summary>
         /// 是否置顶1不置顶,0置顶
         /// </summary>
         public bool isTop { get; set; }
-        
+
         /// <summary>
         /// 置顶排序
         /// </summary>
@@ -95,10 +99,10 @@ namespace ZswBlog.Entity.DbContext
         /// </summary>
         [ForeignKey("categoryId")]
         public virtual CategoryEntity category { get; set; }
-        
+
         /// <summary>
-        /// 
+        /// 多对多标签关联
         /// </summary>
-        public virtual List<TagDTO> tags { get; set; }
+        public virtual List<ArticleTagEntity> articleTags { get; set; }
     }
 }

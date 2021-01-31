@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
 using ZswBlog.Common.Enums;
-using ZswBlog.Entity.DbContext;
+using ZswBlog.Entity;
 using ZswBlog.IServices;
 
 namespace ZswBlog.Core.config

@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using ZswBlog.DTO;
+using ZswBlog.Entity;
 using ZswBlog.Entity.DbContext;
 using ZswBlog.IRepository;
 
@@ -12,24 +14,23 @@ namespace ZswBlog.Repository
     public abstract class BaseRepository<T> : IBaseRepository<T> where T : class, new() //泛型约束必须是实体
     {
         //private readonly DbContext _dbContext = DbContextFactory.Create();
-        //public SingleBlogContext _dbContext { get; set; }
+        //public ZswBlogContext _dbContext { get; set; }
 
         /// <summary>
         /// 采用属性注入的方式，共享单例操作上下文，而不通过DbFactory去创建
         /// </summary>
         public WritleDbContext WritleDbContext { get; set; }
-
         public ReadDbContext ReadDbContext { get; set; }
 
         public virtual async Task<bool> AddAsync(T t)
         {
-            WritleDbContext.Set<T>().Add(t);
+            await WritleDbContext.Set<T>().AddAsync(t);
             return await WritleDbContext.SaveChangesAsync() > 0;
         }
 
         public virtual async Task<bool> AddListAsync(IEnumerable<T> t)
         {
-            WritleDbContext.Set<T>().AddRange(t);
+            await WritleDbContext.Set<T>().AddRangeAsync(t);
             return await WritleDbContext.SaveChangesAsync() > 0;
         }
 
@@ -40,6 +41,7 @@ namespace ZswBlog.Repository
             WritleDbContext.Set<T>().Remove(t);
             return await WritleDbContext.SaveChangesAsync() > 0;
         }
+    
 
         public virtual async Task<bool> DeleteListAsync(IEnumerable<T> t)
         {
@@ -49,6 +51,7 @@ namespace ZswBlog.Repository
 
         public virtual async Task<bool> UpdateAsync(T t)
         {
+            WritleDbContext.Set<T>().Attach(t);
             WritleDbContext.Set<T>().Update(t);
             return await WritleDbContext.SaveChangesAsync() > 0;
         }
@@ -56,18 +59,18 @@ namespace ZswBlog.Repository
         public virtual async Task<bool> UpdateListAsync(IEnumerable<T> t)
         {
             WritleDbContext.Set<IEnumerable<T>>().UpdateRange(new IEnumerable<T>[]
-            {
+        {
                 t
-            });
+        });
             return await WritleDbContext.SaveChangesAsync() > 0;
         }
 
-        public async Task<IQueryable<T>> GetModelsAsync(Expression<Func<T, bool>> whereLambda)
+        public virtual async Task<IQueryable<T>> GetModelsAsync(Expression<Func<T, bool>> whereLambda)
         {
             return await Task.Run(() => ReadDbContext.Set<T>().Where(whereLambda)); 
         }
 
-        public IQueryable<T> GetModelsByPage<TType>(int pageSize, int pageIndex, bool isAsc,
+        public virtual IQueryable<T> GetModelsByPage<TType>(int pageSize, int pageIndex, bool isAsc,
             Expression<Func<T, TType>> orderByLambda, Expression<Func<T, bool>> whereLambda, out int total)
         {
             var result = ReadDbContext.Set<T>().Where(whereLambda);
@@ -77,21 +80,26 @@ namespace ZswBlog.Repository
                 : result.OrderByDescending(orderByLambda).Skip((pageIndex - 1) * pageSize).Take(pageSize);
         }
 
-        public async Task<T> GetSingleModelAsync(Expression<Func<T, bool>> whereLambda)
+        public virtual async Task<T> GetSingleModelAsync(Expression<Func<T, bool>> whereLambda)
         {
-            return await Task.Run(() => ReadDbContext.Set<T>().Where(whereLambda).FirstOrDefault<T>());            
+            return await ReadDbContext.Set<T>().Where(whereLambda).FirstOrDefaultAsync<T>();            
         }
 
-        public async Task<int> GetModelsCountByConditionAsync(Expression<Func<T, bool>> whereLambda)
+        public virtual async Task<int> GetModelsCountByConditionAsync(Expression<Func<T, bool>> whereLambda)
         {
-            return await Task.Run(() => whereLambda == null
-                ? ReadDbContext.Set<T>().Count()
-                : ReadDbContext.Set<T>().Where(whereLambda).Count());
+            return whereLambda == null
+                ? await ReadDbContext.Set<T>().CountAsync()
+                : await ReadDbContext.Set<T>().Where(whereLambda).CountAsync();
         }
 
-        public async Task<IQueryable<T>> FilterModelsByQueryable(IQueryable<T> queryable, Expression<Func<T, bool>> whereLambda)
+        public virtual async Task<PageEntity<T>> GetModelsByPageAsync<TType>(int pageSize, int pageIndex, bool isAsc, Expression<Func<T, TType>> orderByLambda, Expression<Func<T, bool>> whereLambda)
         {
-            return await Task.Run(() => queryable.Where(whereLambda));
+            var result = ReadDbContext.Set<T>().Where(whereLambda);
+            var total = await result.CountAsync();
+            var data = isAsc
+                ? result.OrderBy(orderByLambda).Skip((pageIndex - 1) * pageSize).Take(pageSize)
+                : result.OrderByDescending(orderByLambda).Skip((pageIndex - 1) * pageSize).Take(pageSize);
+            return new PageEntity<T>(pageIndex, pageSize, total, data);
         }
     }
 }

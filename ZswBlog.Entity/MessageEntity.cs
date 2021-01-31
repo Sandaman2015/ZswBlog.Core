@@ -4,13 +4,13 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace ZswBlog.Entity.DbContext
+namespace ZswBlog.Entity
 {
     /// <summary>
     /// 留言实体对象
     /// </summary>
     [Table("tab_message")]
-    public class MessageEntity
+    public class MessageEntity : BaseEntity
     {
         /// <summary>
         /// 留言id
@@ -35,11 +35,11 @@ namespace ZswBlog.Entity.DbContext
         /// 目标留言用户
         /// </summary>
         [ForeignKey("targetUser")]
-        public Nullable<int> targetUserId { get; set; }
+        public int? targetUserId { get; set; }
         /// <summary>
         /// 目标留言id
         /// </summary>
-        public Nullable<int> targetId { get; set; }
+        public int? targetId { get; set; }
         /// <summary>
         /// 留言位置
         /// </summary>

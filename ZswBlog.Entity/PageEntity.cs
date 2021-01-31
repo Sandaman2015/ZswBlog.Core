@@ -2,24 +2,24 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
-namespace ZswBlog.DTO
+namespace ZswBlog.Entity
 {
     /// <summary>
-    /// 分页返回支持类
+    /// 
     /// </summary>
-    /// <typeparam name="T">实体或DTO对象</typeparam>
-    public class PageDTO<T>
+    /// <typeparam name="T"></typeparam>
+    public class PageEntity<T> : BaseEntity where T : class, new()
     {
-
         /// <summary>
-        /// 填充数据对象
+        /// 分页对象构造函数
         /// </summary>
         /// <param name="pageIndex"></param>
         /// <param name="pageSize"></param>
         /// <param name="count"></param>
         /// <param name="data"></param>
-        public PageDTO(int pageIndex, int pageSize, int count, List<T> data)
+        public PageEntity(int pageIndex, int pageSize, int count, IQueryable<T> data)
         {
             this.pageIndex = pageIndex;
             this.pageSize = pageSize;
@@ -36,12 +36,12 @@ namespace ZswBlog.DTO
         /// </summary>
         public int pageSize { get; set; }
         /// <summary>
+        /// 分页列表
+        /// </summary>
+        public IQueryable<T> data { get; set; }
+        /// <summary>
         /// 总数
         /// </summary>
         public int count { get; set; }
-        /// <summary>
-        /// 对象集合
-        /// </summary>
-        public List<T> data { get; set; }
     }
 }

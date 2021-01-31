@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ZswBlog.DTO;
-using ZswBlog.Entity.DbContext;
+using ZswBlog.Entity;
 using ZswBlog.IRepository;
 using ZswBlog.IServices;
 using ZswBlog.ThirdParty.Location;
@@ -135,10 +135,10 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<PageDTO<CommentTreeDTO>> GetCommentsByRecursionAsync(int limit, int pageIndex, int articleId)
         {
-            var comments = CommentRepository.GetModelsByPage(limit, pageIndex, false, a => a.createDate,
-                c => c.articleId == articleId && c.targetId == 0, out var total).ToList();
+            var comments = await CommentRepository.GetModelsByPageAsync(limit, pageIndex, false, a => a.createDate,
+                c => c.articleId == articleId && c.targetId == 0);
             var commentDtoList = new List<CommentTreeDTO>();
-             foreach (var item in comments.ToList())
+             foreach (var item in comments.data.ToList())
             {
                 var commentTree = Mapper.Map<CommentTreeDTO>(item);
                 await ConvertCommentTree(commentTree);
@@ -147,7 +147,7 @@ namespace ZswBlog.Services
                 commentDtoList.Add(commentTree);
             }
 
-            return new PageDTO<CommentTreeDTO>(pageIndex, limit, total, commentDtoList);
+            return new PageDTO<CommentTreeDTO>(pageIndex, limit, comments.count, commentDtoList);
         }
 
         /// <summary>

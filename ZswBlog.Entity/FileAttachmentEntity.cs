@@ -4,13 +4,13 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace ZswBlog.Entity.DbContext
+namespace ZswBlog.Entity
 {
     /// <summary>
     /// 上传附件实体对象
     /// </summary>
     [Table("tab_file_attachment")]
-    public class FileAttachmentEntity
+    public class FileAttachmentEntity : BaseEntity
     {
         /// <summary>
         /// 附件id

@@ -4,13 +4,13 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace ZswBlog.Entity.DbContext
+namespace ZswBlog.Entity
 {
     /// <summary>
     /// 文章标签表
     /// </summary>
     [Table("tab_middle_article_tag")]
-    public class ArticleTagEntity
+    public class ArticleTagEntity : BaseEntity
     {
         /// <summary>
         /// 中间表id
@@ -41,7 +41,7 @@ namespace ZswBlog.Entity.DbContext
         /// 标签id
         /// </summary>
         public int tagId { get; set; }
-        
+
         /// <summary>
         /// 关联外键多对多
         /// </summary>

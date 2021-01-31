@@ -4,9 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper.QueryableExtensions;
 using ZswBlog.DTO;
-using ZswBlog.Entity.DbContext;
 using ZswBlog.IRepository;
 using ZswBlog.IServices;
+using ZswBlog.Entity;
 
 namespace ZswBlog.Services
 {

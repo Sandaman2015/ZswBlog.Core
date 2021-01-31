@@ -123,7 +123,18 @@ namespace ZswBlog.Entity.DbContext
         /// <param name="modelBuilder"></param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            OnModelCreatingPartial(modelBuilder);
+            modelBuilder.Entity<ArticleTagEntity>()
+                .HasKey(t => new { t.articleId, t.tagId });
+
+            modelBuilder.Entity<ArticleTagEntity>()
+                .HasOne(pt => pt.article)
+                .WithMany(p => p.articleTags)
+                .HasForeignKey(pt => pt.articleId);
+
+            modelBuilder.Entity<ArticleTagEntity>()
+                .HasOne(pt => pt.tag)
+                .WithMany(t => t.articleTags)
+                .HasForeignKey(pt => pt.tagId);
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);

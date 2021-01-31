@@ -4,13 +4,13 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace ZswBlog.Entity.DbContext
+namespace ZswBlog.Entity
 {
     /// <summary>
     /// 站点标签实体对象
     /// </summary>
     [Table("tab_sitetag")]
-    public class SiteTagEntity
+    public class SiteTagEntity : BaseEntity
     {
         /// <summary>
         /// 站点标签id

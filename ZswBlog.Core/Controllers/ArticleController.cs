@@ -9,6 +9,7 @@ using ZswBlog.Common;
 using ZswBlog.Common.Util;
 using ZswBlog.Core.config;
 using ZswBlog.DTO;
+using ZswBlog.Entity;
 using ZswBlog.Entity.DbContext;
 using ZswBlog.IServices;
 using ZswBlog.Query;
@@ -54,7 +55,7 @@ namespace ZswBlog.Core.Controllers
         public async Task<ActionResult<PageDTO<ArticleDTO>>> GetArticleAllListByPage([FromQuery] int limit,
             [FromQuery] int pageIndex, [FromQuery] int categoryId, string nickTitle)
         {
-            var articles = await _articleService.GetArticlesByPageAndIsShowAsync(limit, pageIndex, false);
+            var articles = await _articleService.GetArticlesByPageAndIsShowAsync(limit, pageIndex, categoryId, false);
             return Ok(articles);
         }
 
@@ -215,16 +216,17 @@ namespace ZswBlog.Core.Controllers
         /// <summary>
         /// 分页获取文章列表
         /// </summary>
-        /// <param name="limit"></param>
-        /// <param name="pageIndex"></param>
+        /// <param name="limit">页码</param>
+        /// <param name="pageIndex">页数</param>
+        /// <param name="categoryId">分类编码</param>
         /// <returns></returns>
         [Route(template: "/api/article/get/page")]
         [HttpGet]
         [FunctionDescription("分页获取文章列表")]
         public async Task<ActionResult<PageDTO<ArticleDTO>>> GetArticleListByPage([FromQuery] int limit,
-            [FromQuery] int pageIndex)
+            [FromQuery] int pageIndex,[FromQuery] int categoryId)
         {
-            var articles = await _articleService.GetArticlesByPageAndIsShowAsync(limit, pageIndex, true);
+            var articles = await _articleService.GetArticlesByPageAndIsShowAsync(limit, pageIndex, categoryId, true);
             return Ok(articles);
         }
 
@@ -232,7 +234,7 @@ namespace ZswBlog.Core.Controllers
         /// <summary>
         /// 文章添加喜爱数
         /// </summary>
-        /// <param name="articleId"></param>
+        /// <param name="articleId">文章编码</param>
         /// <returns></returns>
         [Route(template: "/api/article/save/like/{articleId}")]
         [HttpPost]

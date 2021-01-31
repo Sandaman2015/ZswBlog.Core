@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using ZswBlog.DTO;
-using ZswBlog.Entity.DbContext;
+using ZswBlog.Entity;
 
 namespace ZswBlog.IRepository
 {

@@ -4,13 +4,13 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace ZswBlog.Entity.DbContext
+namespace ZswBlog.Entity
 {
     /// <summary>
     /// 通知公告
     /// </summary>
     [Table("tab_announcement")]
-    public class AnnouncementEntity
+    public class AnnouncementEntity : BaseEntity
     {
         /// <summary>
         /// 操作id

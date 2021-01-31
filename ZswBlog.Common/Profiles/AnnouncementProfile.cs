@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using ZswBlog.DTO;
-using ZswBlog.Entity.DbContext;
+using ZswBlog.Entity;
 
 namespace ZswBlog.Common.Profiles
 {

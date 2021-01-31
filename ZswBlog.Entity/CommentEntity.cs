@@ -4,13 +4,13 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace ZswBlog.Entity.DbContext
+namespace ZswBlog.Entity
 {
     /// <summary>
     /// 文章评论实体对象
     /// </summary>
     [Table("tab_comment")]
-    public class CommentEntity
+    public class CommentEntity : BaseEntity
     {
         /// <summary>
         /// 评论id
@@ -39,11 +39,11 @@ namespace ZswBlog.Entity.DbContext
         /// 目标用户
         /// </summary>
         [ForeignKey("targetUser")]
-        public Nullable<int> targetUserId { get; set; }
+        public int? targetUserId { get; set; }
         /// <summary>
         /// 目标评论
         /// </summary>
-        public Nullable<int> targetId { get; set; }
+        public int? targetId { get; set; }
         /// <summary>
         /// 评论位置
         /// </summary>

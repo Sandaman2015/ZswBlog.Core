@@ -4,13 +4,13 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace ZswBlog.Entity.DbContext
+namespace ZswBlog.Entity
 {
     /// <summary>
     /// QQ互联用户信息
     /// </summary>
     [Table("tab_qq_userinfo")]
-    public class QQUserInfoEntity
+    public class QQUserInfoEntity : BaseEntity
     {
         /// <summary>
         /// 自增主键

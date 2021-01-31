@@ -35,7 +35,8 @@ namespace ZswBlog.Core.Controllers
         [FunctionDescription("根据类型Id获取类型详情")]
         public async Task<ActionResult<CategoryDTO>> GetCategoryById(int id)
         {
-            return await Task.Run(() => _categoryService.GetCategoryByIdAsync(id));
+            var data = await _categoryService.GetCategoryByIdAsync(id);
+            return Ok(data);
         }
 
         /// <summary>
@@ -47,7 +48,8 @@ namespace ZswBlog.Core.Controllers
         [FunctionDescription("获取所有文章类型")]
         public async Task<ActionResult<List<CategoryDTO>>> GetAllCategory()
         {
-            return await Task.Run(() => _categoryService.GetAllCategoriesAsync());
+            var data =await Task.Run(() => _categoryService.GetAllCategoriesAsync());
+            return Ok(data);
         }
     }
 }

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
 using ZswBlog.Common;
 using ZswBlog.Common.Enums;
-using ZswBlog.Entity.DbContext;
+using ZswBlog.Entity;
 using ZswBlog.IServices;
 
 namespace ZswBlog.Core.config

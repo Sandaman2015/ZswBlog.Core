@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using ZswBlog.Common;
 using ZswBlog.DTO;
-using ZswBlog.Entity.DbContext;
+using ZswBlog.Entity;
 using ZswBlog.IRepository;
 using ZswBlog.IServices;
 
@@ -28,25 +28,18 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<PageDTO<ActionLogEntity>> GetActionListByPage(int limit, int pageIndex, int logType, string dimTitle)
         {
-            return await Task.Run(() =>
+            Expression<Func<ActionLogEntity, bool>> expression = t => true;
+            if (logType != 0)
             {
-                Expression<Func<ActionLogEntity, bool>> expression = t => true;
-                if (logType != 0)
-                {
-                    expression = expression.And(a => a.logType == logType);
-                }
-                if (!string.IsNullOrEmpty(dimTitle))
-                {
-                    expression = expression.And(a => a.actionDetail.Contains(dimTitle));
-                }
-                var actionLogList = ActionLogRepository.GetModelsByPage(limit, pageIndex, true,
-                    a => a.createDate, expression,
-                    out var pageCount).ToList();
-                return new PageDTO<ActionLogEntity>(limit,
-                    pageIndex,
-                    pageCount,
-                    actionLogList);
-            });
+                expression = expression.And(a => a.logType == logType);
+            }
+            if (!string.IsNullOrEmpty(dimTitle))
+            {
+                expression = expression.And(a => a.actionDetail.Contains(dimTitle));
+            }
+            PageEntity<ActionLogEntity> pageEntity = await ActionLogRepository.GetModelsByPageAsync(limit, pageIndex, false,
+                a => a.createDate, expression);
+            return new PageDTO<ActionLogEntity>(pageIndex, limit, pageEntity.count, pageEntity.data.ToList());
         }
 
         /// <summary>

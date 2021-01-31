@@ -10,7 +10,7 @@ using Microsoft.Extensions.Configuration;
 using NETCore.Encrypt;
 using ZswBlog.Common;
 using ZswBlog.Core.config;
-using ZswBlog.Entity.DbContext;
+using ZswBlog.Entity;
 using ZswBlog.IServices;
 using ZswBlog.ThirdParty.AliyunOss;
 

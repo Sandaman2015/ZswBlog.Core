@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using ZswBlog.DTO;
+using ZswBlog.Entity;
 
 namespace ZswBlog.IRepository
 {
@@ -80,20 +82,22 @@ namespace ZswBlog.IRepository
         /// <param name="total"></param>
         /// <returns>返回一个排序后查询的列表和总计</returns>
         IQueryable<T> GetModelsByPage<TType>(int pageSize, int pageIndex, bool isAsc, Expression<Func<T, TType>> orderByLambda, Expression<Func<T, bool>> whereLambda, out int total);
-       
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TType"></typeparam>
+        /// <param name="pageSize"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="isAsc"></param>
+        /// <returns></returns>
+        Task<PageEntity<T>> GetModelsByPageAsync<TType>(int pageSize, int pageIndex, bool isAsc, Expression<Func<T, TType>> orderByLambda, Expression<Func<T, bool>> whereLambda);
+
         /// <summary>
         /// 根据条件获取实体数量
         /// </summary>
         /// <param name="whereLambda"></param>
         /// <returns></returns>
         Task<int> GetModelsCountByConditionAsync(Expression<Func<T, bool>> whereLambda);
-
-        /// <summary>
-        /// 过滤实体条件
-        /// </summary>
-        /// <param name="queryable">过滤实体</param>
-        /// <param name="whereLambda">条件</param>
-        /// <returns></returns>
-        Task<IQueryable<T>> FilterModelsByQueryable(IQueryable<T> queryable, Expression<Func<T, bool>> whereLambda);
     }
 }

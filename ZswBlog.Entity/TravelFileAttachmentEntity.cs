@@ -4,13 +4,13 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace ZswBlog.Entity.DbContext
+namespace ZswBlog.Entity
 {
     /// <summary>
     /// 旅行附件中间实体对象
     /// </summary>
     [Table("tab_middle_travel_file_attachment")]
-    public class TravelFileAttachmentEntity
+    public class TravelFileAttachmentEntity : BaseEntity
     {
         /// <summary>
         /// 中间表id
