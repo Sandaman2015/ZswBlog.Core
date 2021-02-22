@@ -37,7 +37,7 @@ namespace ZswBlog.Services
             {
                 expression = expression.And(a => a.actionDetail.Contains(dimTitle));
             }
-            PageEntity<ActionLogEntity> pageEntity = await ActionLogRepository.GetModelsByPageAsync(limit, pageIndex, false,
+            var pageEntity = await ActionLogRepository.GetModelsByPageAsync(limit, pageIndex, false,
                 a => a.createDate, expression);
             return new PageDTO<ActionLogEntity>(pageIndex, limit, pageEntity.count, pageEntity.data.ToList());
         }
