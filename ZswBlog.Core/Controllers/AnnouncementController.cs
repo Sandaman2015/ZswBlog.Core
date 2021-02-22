@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Routing;
 using ZswBlog.Common;
-using ZswBlog.Core.config;
 using ZswBlog.DTO;
 using ZswBlog.IServices;
 
@@ -66,6 +65,23 @@ namespace ZswBlog.Core.Controllers
         {
             var announcements = await _announcementService.GetAllAnnouncementAsync();
             return Ok(announcements);
+        }
+
+        /// <summary>
+        /// 后台管理-分页获取通知公告列表
+        /// </summary>
+        /// <param name="limit">页码</param>
+        /// <param name="pageIndex">页数</param>
+        /// <returns></returns>
+        [Route("/api/announcement/admin/get/page")]
+        [Authorize]
+        [HttpGet]
+        [FunctionDescription("后台管理-分页获取通知公告列表")]
+        public async Task<ActionResult<PageDTO<AnnouncementDTO>>> GetAnnouncementListByPage([FromQuery] int limit,
+            [FromQuery] int pageIndex)
+        {
+            var articles = await _announcementService.GetAnnouncementAsyncByPage(limit, pageIndex);
+            return Ok(articles);
         }
     }
 }

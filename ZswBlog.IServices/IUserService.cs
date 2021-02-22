@@ -32,16 +32,26 @@ namespace ZswBlog.IServices
         /// <summary>
         /// 根据条件获取用户
         /// </summary>
-        /// <param name="whereLambda"></param>
+        /// <param name="whereLambda">条件</param>
         /// <returns></returns>
         Task<UserEntity> GetUserByConditionAsync(Expression<Func<UserEntity, bool>> whereLambda);
 
         /// <summary>
         /// 验证用户名和密码
         /// </summary>
-        /// <param name="userName"></param>
-        /// <param name="password"></param>
+        /// <param name="userName">用户名</param>
+        /// <param name="password">密码</param>
         /// <returns></returns>
         Task<UserEntity> ValidatePasswordAsync(string userName, string password);
+
+        /// <summary>
+        /// 分页获取登陆人员列表
+        /// </summary>
+        /// <param name="pageIndex">页数</param>
+        /// <param name="pageSize">页码</param>
+        /// <param name="nickName">模糊昵称</param>
+        /// <param name="disabled">禁用</param>
+        /// <returns></returns>
+        Task<PageDTO<UserDTO>> GetUserListByPage(int pageIndex, int pageSize, string nickName, bool disabled);
     }
 }

@@ -1,9 +1,4 @@
-﻿using Autofac.Extras.DynamicProxy;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using ZswBlog.Common.AopConfig;
+﻿using System.Threading.Tasks;
 using ZswBlog.IRepository;
 using ZswBlog.IServices;
 
@@ -11,7 +6,7 @@ namespace ZswBlog.Services
 {
     public abstract class BaseService<T, D> : IBaseService<T> where T : class, new() where D : IBaseRepository<T>
     {
-        public IBaseRepository<T> Repository { get; set; }
+        public D Repository { get; set; }
 
         public virtual async Task<bool> AddEntityAsync(T t)
         {

@@ -10,9 +10,9 @@ using ZswBlog.IServices;
 
 namespace ZswBlog.Services
 {
-    public class CategoryService : BaseService<CategoryEntity, ICategoryRepoistory>, ICategoryService
+    public class CategoryService : BaseService<CategoryEntity, ICategoryRepository>, ICategoryService
     {
-        public ICategoryRepoistory CategoryRepository { get; set; }
+        public ICategoryRepository CategoryRepository { get; set; }
         public IArticleService ArticleService { get; set; }
         public IMapper Mapper { get; set; }
 

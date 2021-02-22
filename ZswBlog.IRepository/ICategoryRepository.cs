@@ -5,7 +5,7 @@ using ZswBlog.Entity;
 
 namespace ZswBlog.IRepository
 {
-    public interface ICategoryRepoistory : IBaseRepository<CategoryEntity>
+    public interface ICategoryRepository : IBaseRepository<CategoryEntity>
     {
     }
 }

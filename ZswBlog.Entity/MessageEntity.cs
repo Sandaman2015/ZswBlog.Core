@@ -48,6 +48,12 @@ namespace ZswBlog.Entity
         /// 浏览器
         /// </summary>
         public string browser { get; set; }
+
+        /// <summary>
+        /// 是否显示
+        /// </summary>
+        public bool isShow { get; set; }
+
         /// <summary>
         /// 留言用户
         /// </summary>
@@ -56,5 +62,7 @@ namespace ZswBlog.Entity
         /// 目标用户
         /// </summary>
         public virtual UserEntity targetUser { get; set; }
+        
+        
     }
 }

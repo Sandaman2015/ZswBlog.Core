@@ -10,9 +10,9 @@ using ZswBlog.ThirdParty;
 
 namespace ZswBlog.Services
 {
-    public class QQUserInfoService : BaseService<QQUserInfoEntity, IQQUserInfoRepoistory>, IQQUserInfoService
+    public class QQUserInfoService : BaseService<QQUserInfoEntity, IQQUserInfoRepository>, IQQUserInfoService
     {
-        public IQQUserInfoRepoistory UserInfoRepository { get; set; }
+        public IQQUserInfoRepository UserInfoRepository { get; set; }
 
         public IUserService UserService { get; set; }
 

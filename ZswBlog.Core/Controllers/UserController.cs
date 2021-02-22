@@ -75,6 +75,25 @@ namespace ZswBlog.Core.Controllers
         }
 
         /// <summary>
+        /// 后台管理-分页获取登陆人员列表
+        /// </summary>
+        /// <param name="pageIndex">页数</param>
+        /// <param name="pageSize">页码</param>
+        /// <param name="nickName">模糊昵称</param>
+        /// <param name="disabled">禁用</param>
+        /// <returns></returns>
+        [Route("/api/user/admin/get/page")]
+        [HttpGet]
+        [Authorize]
+        [FunctionDescription("后台管理-分页获取登陆人员列表")]
+        public async Task<ActionResult<PageDTO<UserDTO>>> GetUserListByPage([FromQuery] int pageIndex,
+            [FromQuery] int pageSize, string nickName, bool disabled)
+        {
+            var pageList = await _userService.GetUserListByPage(pageIndex, pageSize, nickName, disabled);
+            return Ok(pageList);
+        }
+
+        /// <summary>
         /// 获取QQ登录用户信息
         /// </summary>
         /// <param name="accessToken">QQ的Token</param>
@@ -91,7 +110,7 @@ namespace ZswBlog.Core.Controllers
             if (userDto == null)
             {
                 jsonResult = "本次登录没有找到您的信息，不如刷新试试重新登录吧";
-                returnData = new { msg = jsonResult, url = returnUrl, code = 400 };
+                returnData = new {msg = jsonResult, url = returnUrl, code = 400};
             }
             else
             {
@@ -103,8 +122,9 @@ namespace ZswBlog.Core.Controllers
 
                 jsonResult = "登录成功！欢迎您：" + userDto.nickName;
                 returnData = new
-                { msg = jsonResult, code = 200, user = userDto, userEmail = userDto.email, url = returnUrl };
+                    {msg = jsonResult, code = 200, user = userDto, userEmail = userDto.email, url = returnUrl};
             }
+
             return Ok(returnData);
         }
 
@@ -118,12 +138,13 @@ namespace ZswBlog.Core.Controllers
         [FunctionDescription("根据QQ的Token获取QQ用户信息")]
         public async Task<ActionResult<dynamic>> GetUserInfoByAccessToken()
         {
-            dynamic returnValue = new { url = "/admin/login", msg = "请重新登录！" };
+            dynamic returnValue = new {url = "/admin/login", msg = "请重新登录！"};
             var bearer = HttpContext.Request.Headers["Authorization"].FirstOrDefault();
             if (string.IsNullOrEmpty(bearer) || !bearer.Contains("Bearer"))
             {
                 return returnValue;
             }
+
             var jwt = bearer.Split(' ');
             var tokenObj = new JwtSecurityToken(jwt[1]);
             var claimsIdentity = new ClaimsIdentity(tokenObj.Claims);

@@ -48,5 +48,10 @@ namespace ZswBlog.Entity
         /// 结束推送时间
         /// </summary>
         public DateTime endPushDate { get; set; }
+
+        /// <summary>
+        /// 是否显示
+        /// </summary>
+        public bool isShow { get; set; }
     }
 }
