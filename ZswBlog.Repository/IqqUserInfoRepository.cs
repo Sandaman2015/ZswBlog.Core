@@ -6,7 +6,7 @@ using ZswBlog.IRepository;
 
 namespace ZswBlog.Repository
 {
-    public class QQUserInfoRepoistory : BaseRepository<QQUserInfoEntity>, IQQUserInfoRepoistory, IBaseRepository<QQUserInfoEntity>
+    public class IqqUserInfoRepository : BaseRepository<QQUserInfoEntity>, IQQUserInfoRepository, IBaseRepository<QQUserInfoEntity>
     {
     }
 }

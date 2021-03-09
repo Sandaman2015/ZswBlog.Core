@@ -6,7 +6,7 @@ using ZswBlog.IRepository;
 
 namespace ZswBlog.Repository
 {
-    public class CategoryRepoistory : BaseRepository<CategoryEntity>, ICategoryRepoistory, IBaseRepository<CategoryEntity>
+    public class CategoryRepository : BaseRepository<CategoryEntity>, ICategoryRepository, IBaseRepository<CategoryEntity>
     {
     }
 }

@@ -5,5 +5,5 @@ using ZswBlog.Entity;
 
 namespace ZswBlog.IRepository
 {
-    public interface ITravelFileAttachmentRepoistory : IBaseRepository<TravelFileAttachmentEntity> { }
+    public interface ITravelFileAttachmentRepository : IBaseRepository<TravelFileAttachmentEntity> { }
 }

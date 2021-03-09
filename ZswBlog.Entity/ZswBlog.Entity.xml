@@ -89,6 +89,11 @@
             结束推送时间
             </summary>
         </member>
+        <member name="P:ZswBlog.Entity.AnnouncementEntity.isShow">
+            <summary>
+            是否显示
+            </summary>
+        </member>
         <member name="T:ZswBlog.Entity.ArticleEntity">
             <summary>
             文章实体对象
@@ -302,6 +307,11 @@
         <member name="P:ZswBlog.Entity.CommentEntity.browser">
             <summary>
             浏览器
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.CommentEntity.isShow">
+            <summary>
+            是否显示
             </summary>
         </member>
         <member name="P:ZswBlog.Entity.CommentEntity.user">
@@ -585,6 +595,11 @@
         <member name="P:ZswBlog.Entity.MessageEntity.browser">
             <summary>
             浏览器
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.MessageEntity.isShow">
+            <summary>
+            是否显示
             </summary>
         </member>
         <member name="P:ZswBlog.Entity.MessageEntity.user">

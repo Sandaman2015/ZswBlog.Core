@@ -5,5 +5,5 @@ using ZswBlog.Entity;
 
 namespace ZswBlog.IRepository
 {
-    public interface IQQUserInfoRepoistory : IBaseRepository<QQUserInfoEntity> { }
+    public interface IQQUserInfoRepository : IBaseRepository<QQUserInfoEntity> { }
 }

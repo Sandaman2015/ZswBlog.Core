@@ -1,22 +1,20 @@
-﻿using Autofac.Extras.DynamicProxy;
-using AutoMapper;
+﻿using AutoMapper;
 using NETCore.Encrypt;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using ZswBlog.Common.AopConfig;
+using AspectCore.Configuration;
+using ZswBlog.Common;
 using ZswBlog.DTO;
 using ZswBlog.Entity;
 using ZswBlog.IRepository;
 using ZswBlog.IServices;
 using ZswBlog.Query;
-using ZswBlog.ThirdParty;
 
 namespace ZswBlog.Services
 {
-    // [Intercept(typeof(EnableTransaction))]
     public class UserService : BaseService<UserEntity, IUserRepository>, IUserService
     {
         public IUserRepository UserRepository { get; set; }
@@ -117,6 +115,37 @@ namespace ZswBlog.Services
             var userEntity =
                 await UserRepository.GetSingleModelAsync(a => a.loginName == userName && a.password == password);
             return userEntity;
+        }
+
+        /// <summary>
+        /// 分页获取用户人员
+        /// </summary>
+        /// <param name="pageIndex">页数</param>
+        /// <param name="pageSize">页码</param>
+        /// <param name="nickName">模糊名称</param>
+        /// <param name="disabled">是否禁用</param>
+        /// <returns></returns>
+        public async Task<PageDTO<UserDTO>> GetUserListByPage(int pageIndex, int pageSize, string nickName,
+            bool disabled)
+        {
+            return await Task.Run(() =>
+            {
+                Expression<Func<UserEntity, bool>> expression = t => true;
+                if (string.IsNullOrEmpty(nickName))
+                {
+                    expression = expression.And(a => a.nickName.Matches(nickName));
+                }
+
+                if (disabled)
+                {
+                    expression = expression.And(a => a.disabled);
+                }
+
+                var pageList = UserRepository.GetModelsByPage(pageSize, pageIndex, false, a => a.createDate, expression,
+                    out var total);
+                var list = Mapper.Map<List<UserDTO>>(pageList);
+                return new PageDTO<UserDTO>(pageIndex, pageSize, total, list);
+            });
         }
     }
 }

@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using ZswBlog.DTO;
 using ZswBlog.Entity;
@@ -27,6 +26,24 @@ namespace ZswBlog.Services
         }
 
         /// <summary>
+        /// 分页获取通知公告
+        /// </summary>
+        /// <param name="pageIndex">页数</param>
+        /// <param name="pageSize">页码</param>
+        /// <returns></returns>
+        public Task<PageDTO<AnnouncementDTO>> GetAnnouncementAsyncByPage(int pageIndex, int pageSize)
+        {
+            return Task.Run(() =>
+            {
+                var announcements = AnnouncementRepository.GetModelsByPage(pageSize, pageIndex, true, a => a.createDate,
+                    a => a.endPushDate < DateTime.Now, out var total);
+                var list = Mapper.Map<List<AnnouncementDTO>>(announcements.ToList());
+                return new PageDTO<AnnouncementDTO>(pageIndex, pageSize, total, list);
+            });
+        }
+
+
+        /// <summary>
         /// 获取指定的置顶通知公告
         /// </summary>
         /// <param name="count"></param>
@@ -34,7 +51,9 @@ namespace ZswBlog.Services
         public async Task<List<AnnouncementDTO>> GetAnnouncementsOnTopAsync(int count)
         {
             var announcements =
-                await AnnouncementRepository.GetModelsAsync(a => a.isTop && a.endPushDate < DateTime.Now);
+                await AnnouncementRepository.GetModelsAsync(a => a.isTop && a.endPushDate < DateTime.Now
+                                                                         && a.isShow
+                );
             return Mapper.Map<List<AnnouncementDTO>>(announcements.Take(count).ToList());
         }
 
@@ -44,7 +63,9 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<List<AnnouncementDTO>> GetPushAnnouncementAsync()
         {
-            var announcements = await AnnouncementRepository.GetModelsAsync(a => a.endPushDate > DateTime.Now);
+            var announcements = await AnnouncementRepository.GetModelsAsync(a => a.endPushDate > DateTime.Now
+                && a.isShow
+            );
             return Mapper.Map<List<AnnouncementDTO>>(announcements.ToList());
         }
     }
