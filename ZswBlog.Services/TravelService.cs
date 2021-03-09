@@ -2,7 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
+using ZswBlog.Common;
 using ZswBlog.DTO;
 using ZswBlog.Entity;
 using ZswBlog.IRepository;
@@ -15,10 +17,15 @@ namespace ZswBlog.Services
         public ITravelRepository TravelRepository { get; set; }
         public IMapper Mapper { get; set; }
 
-        public async Task<PageDTO<TravelDTO>> GetTravelsByPageAsync(int pageSize, int pageIndex)
+        public async Task<PageDTO<TravelDTO>> GetTravelsByPageAsync(int pageSize, int pageIndex, bool isShow)
         {
+            Expression<Func<TravelEntity, bool>> expression = a => true;
+            if (isShow)
+            {
+                expression = expression.And(a => a.isShow == isShow);
+            }
             var travels = await TravelRepository.GetModelsByPageAsync(pageSize, pageIndex, false, a => a.createDate,
-                a => a.id != 0 && a.isShow);
+                expression);
             var travelDtoList = Mapper.Map<List<TravelDTO>>(travels.data.ToList());
             return new PageDTO<TravelDTO>(pageIndex, pageSize, travels.count, travelDtoList);
         }

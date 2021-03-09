@@ -11,7 +11,7 @@ namespace ZswBlog.IServices
         /// 获取所有的旅行分享信息
         /// </summary>
         /// <returns></returns>
-        Task<PageDTO<TravelDTO>> GetTravelsByPageAsync(int pageSize, int pageIndex);
+        Task<PageDTO<TravelDTO>> GetTravelsByPageAsync(int pageSize, int pageIndex, bool isShow);
         Task<TravelDTO> GetTravelAsync(int tId);
     }
 }
