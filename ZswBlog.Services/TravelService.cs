@@ -30,13 +30,13 @@ namespace ZswBlog.Services
             return new PageDTO<TravelDTO>(pageIndex, pageSize, travels.count, travelDtoList);
         }
 
-        public async Task<TravelDTO> GetTravelAsync(int tId)
+        public async Task<TravelDTO> GetTravelByIdAsync(int tId)
         {
             var travel = await TravelRepository.GetSingleModelAsync(t => t.id == tId);
             return Mapper.Map<TravelDTO>(travel);
         }
 
-        public async Task<bool> RemoveEntityAsync(int tId)
+        public async Task<bool> RemoveTravelAsync(int tId)
         {
             var t = new TravelEntity() { id = tId };
             return await TravelRepository.DeleteAsync(t);

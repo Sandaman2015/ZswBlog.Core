@@ -12,6 +12,17 @@ namespace ZswBlog.IServices
         /// </summary>
         /// <returns></returns>
         Task<PageDTO<TravelDTO>> GetTravelsByPageAsync(int pageSize, int pageIndex, bool isShow);
-        Task<TravelDTO> GetTravelAsync(int tId);
+        /// <summary>
+        /// 根据编码获取旅行分享详情
+        /// </summary>
+        /// <param name="tId"></param>
+        /// <returns></returns>
+        Task<TravelDTO> GetTravelByIdAsync(int tId);
+        /// <summary>
+        /// 删除分享编码
+        /// </summary>
+        /// <param name="tId"></param>
+        /// <returns></returns>
+        Task<bool> RemoveTravelAsync(int tId);
     }
 }
