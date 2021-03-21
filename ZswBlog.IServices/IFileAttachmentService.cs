@@ -19,6 +19,13 @@ namespace ZswBlog.IServices
         /// <param name="id"></param>
         /// <returns></returns>
         Task<FileAttachmentEntity> GetAttachmentByIdAsync(int id);
+
+        /// <summary>
+        /// 移除所有关联
+        /// </summary>
+        /// <param name="imgName"></param>
+        /// <returns></returns>
+        Task<bool> RemoveAllRelationByAttachmentName(string imgName);
         
     }
 }

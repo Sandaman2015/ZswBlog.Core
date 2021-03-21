@@ -354,6 +354,41 @@
             评论子集
             </summary>
         </member>
+        <member name="T:ZswBlog.DTO.FileAttachmentDTO">
+            <summary>
+            附件对象
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.FileAttachmentDTO.id">
+            <summary>
+            附件编码
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.FileAttachmentDTO.createDate">
+            <summary>
+            附件上传时间
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.FileAttachmentDTO.operatorId">
+            <summary>
+            操作人
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.FileAttachmentDTO.name">
+            <summary>
+            附件名称
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.FileAttachmentDTO.fileExt">
+            <summary>
+            附件后缀
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.FileAttachmentDTO.url">
+            <summary>
+            附件路径
+            </summary>
+        </member>
         <member name="T:ZswBlog.DTO.FriendLinkDTO">
             <summary>
             友情链接DTO
@@ -512,6 +547,11 @@
         <member name="T:ZswBlog.DTO.MessageTreeDTO">
             <summary>
             留言树DTO
+            </summary>
+        </member>
+        <member name="M:ZswBlog.DTO.MessageTreeDTO.#ctor">
+            <summary>
+            初始化构造
             </summary>
         </member>
         <member name="P:ZswBlog.DTO.MessageTreeDTO.id">
@@ -744,9 +784,14 @@
             是否显示1不显示,0显示
             </summary>
         </member>
-        <member name="P:ZswBlog.DTO.TravelDTO.priview">
+        <member name="P:ZswBlog.DTO.TravelDTO.createBy">
             <summary>
-            预览
+            发布端
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.TravelDTO.imgList">
+            <summary>
+            附件列表
             </summary>
         </member>
         <member name="T:ZswBlog.DTO.UserDTO">

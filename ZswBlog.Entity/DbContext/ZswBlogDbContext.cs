@@ -123,6 +123,7 @@ namespace ZswBlog.Entity.DbContext
         /// <param name="modelBuilder"></param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            //文章标签多对多外键关联
             modelBuilder.Entity<ArticleTagEntity>()
                 .HasKey(t => new { t.articleId, t.tagId });
 
@@ -135,6 +136,20 @@ namespace ZswBlog.Entity.DbContext
                 .HasOne(pt => pt.tag)
                 .WithMany(t => t.articleTags)
                 .HasForeignKey(pt => pt.tagId);
+
+            //旅行分享多对多外键关联
+            modelBuilder.Entity<TravelFileAttachmentEntity>()
+                .HasKey(t => new { t.travelId, t.fileAttachmentId });
+
+            modelBuilder.Entity<TravelFileAttachmentEntity>()
+                .HasOne(pt => pt.travel)
+                .WithMany(p => p.imgList)
+                .HasForeignKey(pt => pt.travelId);
+
+            modelBuilder.Entity<TravelFileAttachmentEntity>()
+                .HasOne(pt => pt.fileAttachment)
+                .WithMany(t => t.travelFileAttachments)
+                .HasForeignKey(pt => pt.fileAttachmentId);
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);

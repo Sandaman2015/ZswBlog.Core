@@ -10,6 +10,13 @@ namespace ZswBlog.DTO
     public partial class MessageTreeDTO
     {
         /// <summary>
+        /// 初始化构造
+        /// </summary>
+        public MessageTreeDTO()
+        {
+            children = new List<MessageTreeDTO>();
+        }
+        /// <summary>
         /// 留言id
         /// </summary>
         public int id { get; set; }

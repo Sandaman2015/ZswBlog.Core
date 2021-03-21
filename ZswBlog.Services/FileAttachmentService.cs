@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 using ZswBlog.Entity;
 using ZswBlog.IRepository;
@@ -10,6 +12,8 @@ namespace ZswBlog.Services
         IFileAttachmentService
     {
         public IFileAttachmentRepository FileAttachmentRepository { get; set; }
+
+        public ITravelFileAttachmentService TravelFileAttachmentService { get; set; }
 
         /// <summary>
         /// 根据id获取附件对象
@@ -30,6 +34,17 @@ namespace ZswBlog.Services
         {
             var file = await FileAttachmentRepository.GetSingleModelAsync(a => a.id == id);
             return file.path;
+        }
+
+        public virtual async Task<bool> RemoveAllRelationByAttachmentName(string imgName)
+        {
+            var list = await FileAttachmentRepository.GetModelsAsync(a => a.fileName == imgName);
+            var queryList = await list.ToListAsync();
+            foreach (var item in queryList)
+            {
+                await TravelFileAttachmentService.RemoveAllFileRelationAsync(item.id);
+            }
+            return await FileAttachmentRepository.DeleteListAsync(queryList);
         }
     }
 }

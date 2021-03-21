@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ZswBlog.Common;
 using ZswBlog.DTO;
 using ZswBlog.Entity;
 using ZswBlog.IServices;
+using ZswBlog.Query;
 
 namespace ZswBlog.Core.Controllers
 {
@@ -16,14 +18,19 @@ namespace ZswBlog.Core.Controllers
     public class TravelController : ControllerBase
     {
         private readonly ITravelService _travelService;
-
+        private readonly IMapper _mapper;
+        private readonly ITravelFileAttachmentService _travelFileAttachmentService;
         /// <summary>
         /// 默认构造函数
         /// </summary>
         /// <param name="travelService"></param>
-        public TravelController(ITravelService travelService)
+        /// <param name="mapper"></param>
+        /// <param name="travelFileAttachmentService"></param>
+        public TravelController(ITravelService travelService, IMapper mapper, ITravelFileAttachmentService travelFileAttachmentService)
         {
             _travelService = travelService;
+            _mapper = mapper;
+            _travelFileAttachmentService = travelFileAttachmentService;
         }
 
         /// <summary>
@@ -57,19 +64,74 @@ namespace ZswBlog.Core.Controllers
         }
 
         /// <summary>
+        /// 根据id获取分享详情
+        /// </summary>
+        /// <param name="id">分享详情</param>
+        /// <returns></returns>
+        [Route("/api/travel/admin/get/{id}")]
+        [HttpGet]
+        [FunctionDescription("后台管理-根据主键编码获取分享详情")]
+        public async Task<ActionResult<TravelDTO>> GetAdminTravel([FromRoute] int id) {
+           TravelDTO travelDTO =  await _travelService.GetTravelByIdAsync(id);
+            return Ok(travelDTO);
+        }
+
+        /// <summary>
         /// 后台管理保存旅行分享
         /// </summary>
-        /// <param name="entity">保存对象</param>
+        /// <param name="query">保存对象</param>
         /// <returns></returns>
         [Route("/api/travel/admin/save")]
-        [HttpGet]
+        [HttpPost]
         [FunctionDescription("后台管理-保存分享信息")]
-        public async Task<ActionResult<bool>> SaveTralvel(TravelEntity entity)
+        public async Task<ActionResult<bool>> SaveTralvel(TravelSaveQuery query)
         {
+            TravelEntity entity = _mapper.Map<TravelEntity>(query);
             entity.createDate = DateTime.Now;
             entity.isShow = true;
             entity.operatorId = -1;
             bool flag = await _travelService.AddEntityAsync(entity);
+            //保存附件关联
+            if (query.imgList.Count > 0)
+            {
+                foreach (var item in query.imgList)
+                {
+                    _travelFileAttachmentService.AddEntityAsync(new TravelFileAttachmentEntity
+                    {
+                        fileAttachmentId = item,
+                        travelId = query.id
+                    });
+                }
+            }
+            return Ok(flag);
+        }
+
+
+        /// <summary>
+        /// 后台管理更新旅行分享
+        /// </summary>
+        /// <param name="query">更新对象</param>
+        /// <returns></returns>
+        [Route("/api/travel/admin/update")]
+        [HttpPost]
+        [FunctionDescription("后台管理-更新分享信息")]
+        public async Task<ActionResult<bool>> UpdateTralvel(TravelSaveQuery query)
+        {
+            TravelEntity entity = _mapper.Map<TravelEntity>(query);
+            bool flag = await _travelService.UpdateEntityAsync(entity);
+            //保存附件关联
+            if (query.imgList.Count > 0)
+            {
+                //删除所有关联
+                _travelFileAttachmentService.RemoveAllTravelRelationAsync(query.id);
+                foreach (var item in query.imgList) {
+                    _travelFileAttachmentService.AddEntityAsync(new TravelFileAttachmentEntity
+                    {
+                        fileAttachmentId = item,
+                        travelId = query.id
+                    });
+                }
+            }
             return Ok(flag);
         }
 
@@ -79,7 +141,7 @@ namespace ZswBlog.Core.Controllers
         /// <param name="id">分享编码</param>
         /// <returns></returns>
         [Route("/api/travel/admin/remove/{id}")]
-        [HttpGet]
+        [HttpDelete]
         [FunctionDescription("后台管理-删除分享信息")]
         public async Task<ActionResult<bool>> RremoveTralvel([FromRoute]int id)
         {

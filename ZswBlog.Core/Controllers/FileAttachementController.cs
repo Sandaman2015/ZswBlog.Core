@@ -80,7 +80,7 @@ namespace ZswBlog.Core.Controllers
                 fileAttachmentEntities.Add(attachmentEntity);
             }
 
-            return Ok(new {count = successCount, result = fileAttachmentEntities});
+            return Ok(new { count = successCount, result = fileAttachmentEntities });
         }
 
         /// <summary>
@@ -91,15 +91,17 @@ namespace ZswBlog.Core.Controllers
         [HttpDelete]
         [Authorize]
         [FunctionDescription("删除图片列表")]
-        public async Task<ActionResult<bool>> DeleteImageList([FromForm] string[] fileNames)
+        public async Task<ActionResult<bool>> DeleteImageList([FromQuery] string fileName, [FromQuery] string fileExt)
         {
-            return await Task.Run(() =>
-            {
+                List<string> fileList = new List<string>
+                {
+                    "attachment/" + fileName + fileExt
+                };
                 //简单模式批量删除文件
-                var flag = FileHelper.DeleteObject(fileNames.ToList());
-                dynamic rtValue = new {flag, msg = "删除成功"};
+                var flag = FileHelper.DeleteObject(fileList);
+                flag = flag && await _fileAttachmentService.RemoveAllRelationByAttachmentName(fileName);
+                dynamic rtValue = new { flag, msg = "删除成功" };
                 return Ok(rtValue);
-            });
         }
     }
 }

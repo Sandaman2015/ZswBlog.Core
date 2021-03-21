@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using ZswBlog.DTO;
@@ -88,10 +89,10 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<PageDTO<MessageTreeDTO>> GetMessagesByRecursionAsync(int limit, int pageIndex)
         {
-            var messageTopEntities = await MessageRepository.GetModelsByPageAsync(limit, pageIndex, false, a => a.createDate,
-                a => a.targetId == 0 && a.targetUserId == null);
+            var messageTopEntities = MessageRepository.GetModelsByPage(limit, pageIndex, false, a => a.createDate,
+                a => (a.targetId == 0 && a.targetUserId == 0), out var total).ToList();
             var messageTreeList = new List<MessageTreeDTO>();
-            foreach (var item in messageTopEntities.data.ToList())
+            foreach (var item in messageTopEntities)
             {
                 var messageTree = Mapper.Map<MessageTreeDTO>(item);
                 await ConvertMessageTree(messageTree);
@@ -100,7 +101,7 @@ namespace ZswBlog.Services
                 messageTreeList.Add(messageTree);
             }
 
-            return new PageDTO<MessageTreeDTO>(pageIndex, limit, messageTopEntities.count, messageTreeList);
+            return new PageDTO<MessageTreeDTO>(pageIndex, limit, total, messageTreeList);
         }
 
         /// <summary>
@@ -122,7 +123,8 @@ namespace ZswBlog.Services
                 treeDto.targetUserName = targetUser.nickName;
             }
             var user = await RedisHelper.GetAsync<UserDTO>("ZswBlog:UserInfo:" + treeDto.userId);
-            if (user == null){
+            if (user == null)
+            {
                 user = await UserService.GetUserByIdAsync(treeDto.userId);
                 await RedisHelper.SetAsync("ZswBlog:UserInfo:" + treeDto.userId, user, 60 * 60 * 6);
             }

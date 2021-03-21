@@ -20,6 +20,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Pomelo.EntityFrameworkCore.MySql.Storage;
 
 namespace ZswBlog.Core
 {
@@ -92,6 +93,7 @@ namespace ZswBlog.Core
                 cfg.AddProfile<AnnouncementProfile>();
                 cfg.AddProfile<TravelProfile>();
                 cfg.AddProfile<TagProfile>();
+                cfg.AddProfile<FileAttachmentProfile>();
             }));
 
             //添加全局返回结果，异常处理，参数验证，日志记录
@@ -115,11 +117,17 @@ namespace ZswBlog.Core
             var writleConnection = Configuration.GetConnectionString("MasterMysqlConnection");
             Logger.LogInformation($"读取数据库配置连接地址：{readConnection}");
             Logger.LogInformation($"更新数据库配置连接地址：{writleConnection}");
-            services.AddDbContext<WritleDbContext>(options => options.UseMySql(writleConnection));
-            services.AddDbContext<ReadDbContext>(options => options.UseMySql(readConnection)
-                .UseLoggerFactory(LogFactory)
-            );
+            //ServerVersion serverVersion1 = ServerVersion.AutoDetect(writleConnection);
+            //services.AddDbContext<WritleDbContext>(options => options.UseMySql(writleConnection, serverVersion1)
+            //.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking).UseLoggerFactory(LogFactory), ServiceLifetime.Scoped);
 
+            //ServerVersion serverVersion2 = ServerVersion.AutoDetect(readConnection);
+            //services.AddDbContext<ReadDbContext>(options => options.UseMySql(readConnection, serverVersion2)
+            //.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking).UseLoggerFactory(LogFactory), ServiceLifetime.Transient);
+
+            ServerVersion serverVersion3 = ServerVersion.AutoDetect(readConnection);
+            services.AddDbContext<ZswBlogDbContext>(options => options.UseMySql(readConnection, serverVersion3)
+            .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking).UseLoggerFactory(LogFactory), ServiceLifetime.Transient);
 
             //初始化 RedisHelper
             var redisConnection = Configuration.GetConnectionString("RedisConnectionString");

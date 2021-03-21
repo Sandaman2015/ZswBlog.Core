@@ -12,6 +12,9 @@ namespace ZswBlog.Entity
     [Table("tab_tag")]
     public class TagEntity : BaseEntity
     {
+        /// <summary>
+        /// 初始化构造
+        /// </summary>
         public TagEntity()
         {
             this.articleTags = new List<ArticleTagEntity>();

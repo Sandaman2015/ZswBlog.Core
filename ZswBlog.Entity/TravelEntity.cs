@@ -40,8 +40,13 @@ namespace ZswBlog.Entity
         public bool isShow { get; set; }
 
         /// <summary>
-        /// 预览
+        /// 通过创建
         /// </summary>
-        public string priview { get; set; }
+        public string createBy{get;set;}
+
+        /// <summary>
+        /// 多对多外键
+        /// </summary>
+        public virtual List<TravelFileAttachmentEntity> imgList { get; set; }
     }
 }

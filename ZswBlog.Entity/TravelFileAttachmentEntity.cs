@@ -34,5 +34,17 @@ namespace ZswBlog.Entity
         /// 上传附件id
         /// </summary>
         public int fileAttachmentId { get; set; }
+
+        /// <summary>
+        /// 多对多外键
+        /// </summary>
+        [ForeignKey("travelId")]
+        public virtual TravelEntity travel { get; set; }
+
+        /// <summary>
+        /// 多对多外键
+        /// </summary>
+        [ForeignKey("fileAttachmentId")]
+        public virtual FileAttachmentEntity fileAttachment { get; set; }
     }
 }

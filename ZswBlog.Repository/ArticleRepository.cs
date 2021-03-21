@@ -14,7 +14,7 @@ namespace ZswBlog.Repository
     {
         public async override Task<PageEntity<ArticleEntity>> GetModelsByPageAsync<TType>(int pageSize, int pageIndex, bool isAsc, Expression<Func<ArticleEntity, TType>> orderByLambda, Expression<Func<ArticleEntity, bool>> whereLambda)
         {
-            var result = ReadDbContext.Set<ArticleEntity>().Where(whereLambda);
+            var result = DbContext.Set<ArticleEntity>().Where(whereLambda);
             var total = await result.CountAsync();
             var data = isAsc
                 ? result.OrderBy(orderByLambda).Skip((pageIndex - 1) * pageSize).Take(pageSize).Include(a => a.category).Include(a => a.articleTags).ThenInclude(a => a.tag)

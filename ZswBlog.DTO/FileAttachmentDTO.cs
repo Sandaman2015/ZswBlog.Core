@@ -1,22 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
-namespace ZswBlog.Entity
+namespace ZswBlog.DTO
 {
     /// <summary>
-    /// 上传附件实体对象
+    /// 附件对象
     /// </summary>
-    [Table("tab_file_attachment")]
-    public class FileAttachmentEntity : BaseEntity
+    public class FileAttachmentDTO
     {
         /// <summary>
-        /// 附件id
+        /// 附件编码
         /// </summary>
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int id { get; set; }
         /// <summary>
         /// 附件上传时间
@@ -29,7 +26,7 @@ namespace ZswBlog.Entity
         /// <summary>
         /// 附件名称
         /// </summary>
-        public string fileName { get; set; }
+        public string name { get; set; }
         /// <summary>
         /// 附件后缀
         /// </summary>
@@ -37,11 +34,7 @@ namespace ZswBlog.Entity
         /// <summary>
         /// 附件路径
         /// </summary>
-        public string path { get; set; }
-        /// <summary>
-        /// 关联外键
-        /// </summary>
-        public virtual List<TravelFileAttachmentEntity> travelFileAttachments { get; set; }
+        public string url { get; set; }
 
     }
 }

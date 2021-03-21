@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,24 +17,31 @@ namespace ZswBlog.Services
     {
         public ITravelRepository TravelRepository { get; set; }
         public IMapper Mapper { get; set; }
+        public ITravelFileAttachmentService _travelFileAttachmentService { get; set; }
 
         public async Task<PageDTO<TravelDTO>> GetTravelsByPageAsync(int pageSize, int pageIndex, bool isShow)
         {
-            Expression<Func<TravelEntity, bool>> expression = a => true;
-            if (isShow)
+            return await Task.Run(() =>
             {
-                expression = expression.And(a => a.isShow == isShow);
-            }
-            var travels = await TravelRepository.GetModelsByPageAsync(pageSize, pageIndex, false, a => a.createDate,
-                expression);
-            var travelDtoList = Mapper.Map<List<TravelDTO>>(travels.data.ToList());
-            return new PageDTO<TravelDTO>(pageIndex, pageSize, travels.count, travelDtoList);
+                Expression<Func<TravelEntity, bool>> expression = a => true;
+                if (isShow)
+                {
+                    expression = expression.And(a => a.isShow == isShow);
+                }
+                var travels = TravelRepository.GetModelsByPage(pageSize, pageIndex, false, a => a.createDate,
+                    expression, out var total).Include(a => a.imgList).ThenInclude(a=>a.fileAttachment).ToList();
+                var travelDtoList = Mapper.Map<List<TravelDTO>>(travels);
+                return new PageDTO<TravelDTO>(pageIndex, pageSize, total, travelDtoList);
+            });
         }
 
         public async Task<TravelDTO> GetTravelByIdAsync(int tId)
         {
             var travel = await TravelRepository.GetSingleModelAsync(t => t.id == tId);
-            return Mapper.Map<TravelDTO>(travel);
+            TravelDTO travelDTO =  Mapper.Map<TravelDTO>(travel);
+            List<FileAttachmentEntity> fileAttachments = await _travelFileAttachmentService.GetTravelFileListByTravelId(travel.id);
+            travelDTO.imgList = Mapper.Map<List<FileAttachmentDTO>>(fileAttachments);
+            return travelDTO;
         }
 
         public async Task<bool> RemoveTravelAsync(int tId)

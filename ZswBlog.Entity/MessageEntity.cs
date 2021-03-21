@@ -29,17 +29,15 @@ namespace ZswBlog.Entity
         /// <summary>
         /// 用户id
         /// </summary>
-        [ForeignKey("user")]
         public int userId { get; set; }
         /// <summary>
         /// 目标留言用户
         /// </summary>
-        [ForeignKey("targetUser")]
-        public int? targetUserId { get; set; }
+        public Nullable<int> targetUserId { get; set; }
         /// <summary>
         /// 目标留言id
         /// </summary>
-        public int? targetId { get; set; }
+        public Nullable<int> targetId { get; set; }
         /// <summary>
         /// 留言位置
         /// </summary>
@@ -52,15 +50,17 @@ namespace ZswBlog.Entity
         /// <summary>
         /// 是否显示
         /// </summary>
-        public bool isShow { get; set; }
+        public Nullable<bool> isShow { get; set; }
 
         /// <summary>
         /// 留言用户
         /// </summary>
+        [ForeignKey("userId")]
         public virtual UserEntity user { get; set; }
         /// <summary>
         /// 目标用户
         /// </summary>
+        [ForeignKey("targetUserId")]
         public virtual UserEntity targetUser { get; set; }
         
         

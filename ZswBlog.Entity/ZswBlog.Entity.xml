@@ -99,6 +99,11 @@
             文章实体对象
             </summary>
         </member>
+        <member name="M:ZswBlog.Entity.ArticleEntity.#ctor">
+            <summary>
+            初始化构造
+            </summary>
+        </member>
         <member name="P:ZswBlog.Entity.ArticleEntity.id">
             <summary>
             文章id
@@ -507,6 +512,11 @@
             附件路径
             </summary>
         </member>
+        <member name="P:ZswBlog.Entity.FileAttachmentEntity.travelFileAttachments">
+            <summary>
+            关联外键
+            </summary>
+        </member>
         <member name="T:ZswBlog.Entity.FriendLinkEntity">
             <summary>
             友情链接实体对象
@@ -732,6 +742,11 @@
             标签实体对象
             </summary>
         </member>
+        <member name="M:ZswBlog.Entity.TagEntity.#ctor">
+            <summary>
+            初始化构造
+            </summary>
+        </member>
         <member name="P:ZswBlog.Entity.TagEntity.id">
             <summary>
             标签id
@@ -822,9 +837,14 @@
             是否显示1不显示,0显示
             </summary>
         </member>
-        <member name="P:ZswBlog.Entity.TravelEntity.priview">
+        <member name="P:ZswBlog.Entity.TravelEntity.createBy">
             <summary>
-            预览
+            通过创建
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.TravelEntity.imgList">
+            <summary>
+            多对多外键
             </summary>
         </member>
         <member name="T:ZswBlog.Entity.TravelFileAttachmentEntity">
@@ -855,6 +875,16 @@
         <member name="P:ZswBlog.Entity.TravelFileAttachmentEntity.fileAttachmentId">
             <summary>
             上传附件id
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.TravelFileAttachmentEntity.travel">
+            <summary>
+            多对多外键
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Entity.TravelFileAttachmentEntity.fileAttachment">
+            <summary>
+            多对多外键
             </summary>
         </member>
         <member name="T:ZswBlog.Entity.UserEntity">
