@@ -7,6 +7,7 @@ using ZswBlog.DTO;
 using ZswBlog.IRepository;
 using ZswBlog.IServices;
 using ZswBlog.Entity;
+using Microsoft.EntityFrameworkCore;
 
 namespace ZswBlog.Services
 {
@@ -42,17 +43,12 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<List<TagDTO>> GetTagListByArticleIdAsync(int articleId)
         {
-            var articleTags =
-                await ArticleTagRepository.GetModelsAsync(a => a.articleId == articleId);
-            var tags = new List<TagEntity>();
-            foreach (var item in articleTags.ToList())
-            {
-                var tag = await TagRepository.GetSingleModelAsync(a => a.id == item.tagId);
-                tags.Add(tag);
-            }
-
-            var tagDtOs = Mapper.Map<List<TagDTO>>(tags);
-            return tagDtOs;
+            var articleTags = await ArticleTagRepository.GetModelsAsync(a => a.articleId == articleId);
+            List<ArticleTagEntity> articleTagEntities =  articleTags.ToList();
+            List<int> ids =  articleTagEntities.Select(e => e.tagId).ToList();
+            var tags = await TagRepository.GetModelsAsync(a => ids.Contains(a.id));
+            List<TagEntity> tagEntitys = await tags.ToListAsync();
+            return Mapper.Map<List<TagDTO>>(tagEntitys);;
         }
 
         /// <summary>

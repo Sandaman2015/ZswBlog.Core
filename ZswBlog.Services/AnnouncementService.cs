@@ -31,9 +31,9 @@ namespace ZswBlog.Services
         /// <param name="pageIndex">页数</param>
         /// <param name="pageSize">页码</param>
         /// <returns></returns>
-        public Task<PageDTO<AnnouncementDTO>> GetAnnouncementAsyncByPage(int pageIndex, int pageSize)
+        public async Task<PageDTO<AnnouncementDTO>> GetAnnouncementAsyncByPage(int pageIndex, int pageSize)
         {
-            return Task.Run(() =>
+            return await Task.Run(() =>
             {
                 var announcements = AnnouncementRepository.GetModelsByPage(pageSize, pageIndex, true, a => a.createDate,
                     a => a.endPushDate < DateTime.Now, out var total);

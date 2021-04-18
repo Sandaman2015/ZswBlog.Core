@@ -30,6 +30,6 @@ namespace ZswBlog.Query
         /// <summary>
         /// 附件列表
         /// </summary>
-        public List<int> imgList { get; set; }
+        public int[] fileList { get; set; }
     }
 }

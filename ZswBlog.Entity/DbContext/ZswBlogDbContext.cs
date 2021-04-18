@@ -130,12 +130,14 @@ namespace ZswBlog.Entity.DbContext
             modelBuilder.Entity<ArticleTagEntity>()
                 .HasOne(pt => pt.article)
                 .WithMany(p => p.articleTags)
-                .HasForeignKey(pt => pt.articleId);
+                .HasForeignKey(pt => pt.articleId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<ArticleTagEntity>()
                 .HasOne(pt => pt.tag)
                 .WithMany(t => t.articleTags)
-                .HasForeignKey(pt => pt.tagId);
+                .HasForeignKey(pt => pt.tagId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             //旅行分享多对多外键关联
             modelBuilder.Entity<TravelFileAttachmentEntity>()
@@ -144,12 +146,14 @@ namespace ZswBlog.Entity.DbContext
             modelBuilder.Entity<TravelFileAttachmentEntity>()
                 .HasOne(pt => pt.travel)
                 .WithMany(p => p.imgList)
-                .HasForeignKey(pt => pt.travelId);
+                .HasForeignKey(pt => pt.travelId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<TravelFileAttachmentEntity>()
                 .HasOne(pt => pt.fileAttachment)
                 .WithMany(t => t.travelFileAttachments)
-                .HasForeignKey(pt => pt.fileAttachmentId);
+                .HasForeignKey(pt => pt.fileAttachmentId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);

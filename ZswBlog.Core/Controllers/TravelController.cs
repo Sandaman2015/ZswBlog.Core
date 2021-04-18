@@ -92,14 +92,16 @@ namespace ZswBlog.Core.Controllers
             entity.operatorId = -1;
             bool flag = await _travelService.AddEntityAsync(entity);
             //保存附件关联
-            if (query.imgList.Count > 0)
+            if (query.fileList.Length > 0)
             {
-                foreach (var item in query.imgList)
+                foreach (var item in query.fileList)
                 {
-                    _travelFileAttachmentService.AddEntityAsync(new TravelFileAttachmentEntity
+                    await _travelFileAttachmentService.AddEntityAsync(new TravelFileAttachmentEntity
                     {
+                        createDate = DateTime.Now,
                         fileAttachmentId = item,
-                        travelId = query.id
+                        travelId = entity.id,
+                        operatorId = -1
                     });
                 }
             }
@@ -118,17 +120,20 @@ namespace ZswBlog.Core.Controllers
         public async Task<ActionResult<bool>> UpdateTralvel(TravelSaveQuery query)
         {
             TravelEntity entity = _mapper.Map<TravelEntity>(query);
+            entity.operatorId = -1;
+            entity.createDate = DateTime.Now;
             bool flag = await _travelService.UpdateEntityAsync(entity);
             //保存附件关联
-            if (query.imgList.Count > 0)
+            if (query.fileList.Length > 0)
             {
-                //删除所有关联
-                _travelFileAttachmentService.RemoveAllTravelRelationAsync(query.id);
-                foreach (var item in query.imgList) {
-                    _travelFileAttachmentService.AddEntityAsync(new TravelFileAttachmentEntity
+                await _travelFileAttachmentService.RemoveAllTravelRelationAsync(entity.id);
+                foreach (var item in query.fileList) {
+                    await _travelFileAttachmentService.AddEntityAsync(new TravelFileAttachmentEntity
                     {
+                        createDate = DateTime.Now,
                         fileAttachmentId = item,
-                        travelId = query.id
+                        travelId = query.id,
+                        operatorId = -1
                     });
                 }
             }

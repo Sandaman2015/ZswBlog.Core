@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Aliyun.OSS;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,8 +11,10 @@ using Microsoft.Extensions.Configuration;
 using NETCore.Encrypt;
 using ZswBlog.Common;
 using ZswBlog.Core.config;
+using ZswBlog.DTO;
 using ZswBlog.Entity;
 using ZswBlog.IServices;
+using ZswBlog.Query;
 using ZswBlog.ThirdParty.AliyunOss;
 
 namespace ZswBlog.Core.Controllers
@@ -43,14 +46,12 @@ namespace ZswBlog.Core.Controllers
         /// 上传文件
         /// </summary>
         /// <param name="files"></param>
-        /// <param name="operatorId"></param>
         /// <returns></returns>
         [Route("/api/attachment/upload/image")]
         [HttpPost]
         [Authorize]
         [FunctionDescription("上传文件")]
-        public async Task<ActionResult<List<FileAttachmentEntity>>> UploadImageList(List<IFormFile> files,
-            [FromQuery] int operatorId)
+        public async Task<ActionResult<List<FileAttachmentEntity>>> UploadImageList(List<IFormFile> files)
         {
             var fileAttachmentEntities = new List<FileAttachmentEntity>();
             var successCount = 0;
@@ -69,7 +70,7 @@ namespace ZswBlog.Core.Controllers
                 {
                     createDate = DateTime.Now,
                     fileExt = fileType,
-                    operatorId = operatorId,
+                    operatorId = -1,
                     fileName = fileName,
                     //文件获取的路径返回
                     path = "https://" + _bucketName + "." + _endPoint + "/" + filepath
@@ -84,6 +85,19 @@ namespace ZswBlog.Core.Controllers
         }
 
         /// <summary>
+        /// 获取所有图片列表
+        /// </summary>
+        [Route("/api/attachment/get/all")]
+        [HttpGet]
+        [Authorize]
+        [FunctionDescription("获取所有图片列表")]
+        public async Task<ActionResult<PageDTO<FileAttachmentEntity>>> GetAllMutipartListByPage([FromQuery] PageQuery page)
+        {
+            PageDTO<FileAttachmentEntity> files = await _fileAttachmentService.GetFileAttachmentListByPageAsync(page.pageIndex, page.pageSize);
+            return Ok(files);
+        }
+
+        /// <summary>
         /// 删除图片列表
         /// </summary>
         /// <returns></returns>
@@ -91,17 +105,18 @@ namespace ZswBlog.Core.Controllers
         [HttpDelete]
         [Authorize]
         [FunctionDescription("删除图片列表")]
-        public async Task<ActionResult<bool>> DeleteImageList([FromQuery] string fileName, [FromQuery] string fileExt)
+        public async Task<ActionResult<bool>> DeleteImageList(
+            [FromQuery] string prefix, [FromQuery] string fileName, [FromQuery] string fileExt)
         {
-                List<string> fileList = new List<string>
+            List<string> fileList = new List<string>
                 {
-                    "attachment/" + fileName + fileExt
+                    prefix + fileName + fileExt
                 };
-                //简单模式批量删除文件
-                var flag = FileHelper.DeleteObject(fileList);
-                flag = flag && await _fileAttachmentService.RemoveAllRelationByAttachmentName(fileName);
-                dynamic rtValue = new { flag, msg = "删除成功" };
-                return Ok(rtValue);
+            //简单模式批量删除文件
+            var flag = FileHelper.DeleteObject(fileList);
+            flag = flag && await _fileAttachmentService.RemoveAllRelationByAttachmentName(fileName);
+            dynamic rtValue = new { flag, msg = "删除成功" };
+            return Ok(rtValue);
         }
     }
 }

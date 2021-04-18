@@ -106,7 +106,7 @@ namespace ZswBlog.Services
                 throw new Exception("未找到文章");
             }
 
-            if (addVisit) AddArticleVisitAsync(article);
+            if (addVisit) await AddArticleVisitAsync(article);
             var articleDto = Mapper.Map<ArticleDTO>(article);
             articleDto.category = await CategoryService.GetCategoryByIdAsync(articleDto.categoryId);
             articleDto.tags = await ArticleTagService.GetTagListByArticleIdAsync(articleId);
@@ -123,10 +123,10 @@ namespace ZswBlog.Services
         /// 
         /// </summary>
         /// <param name="article"></param>
-        private async Task AddArticleVisitAsync(ArticleEntity article)
+        private async Task<bool> AddArticleVisitAsync(ArticleEntity article)
         {
             article.visits += 1;
-            await ArticleRepository.UpdateAsync(article);
+            return await ArticleRepository.UpdateAsync(article);
         }
 
         /// <summary>

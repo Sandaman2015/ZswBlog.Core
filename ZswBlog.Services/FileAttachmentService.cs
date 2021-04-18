@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ZswBlog.DTO;
 using ZswBlog.Entity;
 using ZswBlog.IRepository;
 using ZswBlog.IServices;
@@ -23,6 +25,12 @@ namespace ZswBlog.Services
         public async Task<FileAttachmentEntity> GetAttachmentByIdAsync(int id)
         {
             return await FileAttachmentRepository.GetSingleModelAsync(a => a.id == id);
+        }
+
+        public async Task<PageDTO<FileAttachmentEntity>> GetFileAttachmentListByPageAsync(int pageIndex, int pageSize)
+        {
+            List<FileAttachmentEntity> list = await FileAttachmentRepository.GetModelsByPage(pageSize, pageIndex, true, a=>a.createDate, a=> true, out var total).ToListAsync();
+            return new PageDTO<FileAttachmentEntity>(pageIndex, pageSize, total, list);
         }
 
         /// <summary>

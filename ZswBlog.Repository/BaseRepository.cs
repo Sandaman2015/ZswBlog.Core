@@ -54,7 +54,6 @@ namespace ZswBlog.Repository
 
         public virtual async Task<bool> UpdateAsync(T t)
         {
-            DbContext.Set<T>().Attach(t);
             DbContext.Set<T>().Update(t);
             return await DbContext.SaveChangesAsync() > 0;
         }
@@ -77,10 +76,19 @@ namespace ZswBlog.Repository
             Expression<Func<T, TType>> orderByLambda, Expression<Func<T, bool>> whereLambda, out int total)
         {
             var result = DbContext.Set<T>().Where(whereLambda);
-            total = result.Count();
-            return isAsc
-                ? result.OrderBy(orderByLambda).Skip((pageIndex - 1) * pageSize).Take(pageSize)
-                : result.OrderByDescending(orderByLambda).Skip((pageIndex - 1) * pageSize).Take(pageSize);
+            try
+            {
+                total = result.Count();
+                return isAsc
+                    ? result.OrderBy(orderByLambda).Skip((pageIndex - 1) * pageSize).Take(pageSize)
+                    : result.OrderByDescending(orderByLambda).Skip((pageIndex - 1) * pageSize).Take(pageSize);
+            }
+            catch (Exception ex) {
+                total = 0;
+                return isAsc
+                    ? result.OrderBy(orderByLambda).Skip((pageIndex - 1) * pageSize).Take(pageSize)
+                    : result.OrderByDescending(orderByLambda).Skip((pageIndex - 1) * pageSize).Take(pageSize);
+            }
         }
 
         public virtual async Task<T> GetSingleModelAsync(Expression<Func<T, bool>> whereLambda)

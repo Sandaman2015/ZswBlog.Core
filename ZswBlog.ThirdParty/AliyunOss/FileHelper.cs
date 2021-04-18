@@ -69,6 +69,7 @@ namespace ZswBlog.ThirdParty.AliyunOss
             AsyncUploadParts(bucketName, fileName, localFilePath, uploadId, partSize);
         }
 
+       
         /// <summary>
         /// 分片拷贝。
         /// </summary>
@@ -360,6 +361,32 @@ namespace ZswBlog.ThirdParty.AliyunOss
 
             return client.CompleteMultipartUpload(completeMultipartUploadRequest);
         }
+
+        /// <summary>
+        /// 获取所有文件列表
+        /// </summary>
+        /// <returns></returns>
+        public static List<OssObjectSummary> GetAllMutipartList()
+        {
+            string nextMarker = string.Empty;
+            List<OssObjectSummary> list = new List<OssObjectSummary>();
+            ObjectListing result;
+            do
+            {
+                // 每页列举的文件个数通过maxKeys指定，超过指定数将进行分页显示。
+                var listObjectsRequest = new ListObjectsRequest(bucketName)
+                {
+                    Marker = nextMarker,
+                    MaxKeys = 100
+                };
+                result = client.ListObjects(listObjectsRequest);
+                list.AddRange(result.ObjectSummaries);
+                nextMarker = result.NextMarker;
+            } while (result.IsTruncated);
+            return list;
+        }
+
+
         /// <summary>
         /// 删除指定的文件
         /// </summary>   
