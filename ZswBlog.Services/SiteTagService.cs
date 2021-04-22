@@ -52,5 +52,10 @@ namespace ZswBlog.Services
         {
             return await SiteTagRepository.GetModelsCountByConditionAsync(a => a.isShow);
         }
+
+        public async Task<bool> RemoveSiteTagById(SiteTagEntity tagEntity)
+        {
+            return await SiteTagRepository.DeleteAsync(tagEntity);
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ZswBlog.Common;
 using ZswBlog.Core.config;
@@ -61,6 +62,22 @@ namespace ZswBlog.Core.Controllers
             param.title = System.Web.HttpUtility.HtmlEncode(param.title);
             var flag = await _siteTagService.AddEntityAsync(param);
             return Ok(flag);
+        }
+
+        /// <summary>
+        /// 删除站点标签
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [Route("/api/siteTag/remove/{id}")]
+        [HttpDelete]
+        [Authorize]
+        [FunctionDescription("删除站点标签")]
+        public async Task<ActionResult<bool>> RemoveSiteTag([FromRoute]int id) {
+            SiteTagEntity tagEntity = new SiteTagEntity() {
+                id = id
+            };
+           return Ok(await _siteTagService.RemoveSiteTagById(tagEntity));
         }
     }
 }
