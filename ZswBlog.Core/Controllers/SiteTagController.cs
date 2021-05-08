@@ -57,7 +57,7 @@ namespace ZswBlog.Core.Controllers
         public async Task<ActionResult<bool>> SaveSiteTag(SiteTagEntity param)
         {
             param.createDate = DateTime.Now;
-            param.isShow = false;
+            param.isShow = true;
             param.like = 0;
             param.title = System.Web.HttpUtility.HtmlEncode(param.title);
             var flag = await _siteTagService.AddEntityAsync(param);

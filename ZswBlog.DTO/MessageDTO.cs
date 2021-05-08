@@ -59,5 +59,9 @@ namespace ZswBlog.DTO
         /// 目标用户头像
         /// </summary>
         public string targetUserPortrait { get; set; }
+       /// <summary>
+       /// 所属ip
+       /// </summary>
+        public string ip { get; set; }
     }
 }

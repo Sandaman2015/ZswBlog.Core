@@ -62,6 +62,11 @@ namespace ZswBlog.Entity
         /// </summary>
         [ForeignKey("targetUserId")]
         public virtual UserEntity targetUser { get; set; }
+
+        /// <summary>
+        /// 所属ip
+        /// </summary>
+        public virtual string ip { get; set; }
         
         
     }

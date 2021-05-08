@@ -41,5 +41,14 @@ namespace ZswBlog.Services
             var category = await CategoryRepository.GetSingleModelAsync(c => c.id == tId);
             return Mapper.Map<CategoryDTO>(category);
         }
+        /// <summary>
+        /// 根据编码删除分类
+        /// </summary>
+        /// <param name="tid">分类编码</param>
+        /// <returns></returns>
+        public async Task<bool> RemoveCatergoryByIdAsync(int tid) {
+            CategoryEntity entity = new CategoryEntity() { id = tid };
+            return await CategoryRepository.DeleteAsync(entity);
+        }
     }
 }

@@ -72,5 +72,9 @@ namespace ZswBlog.DTO
         /// 留言子集
         /// </summary>
         public List<MessageTreeDTO> children { get; set; }
+        /// <summary>
+        /// 所属ip
+        /// </summary>
+        public string ip { get; set; }
     }
 }

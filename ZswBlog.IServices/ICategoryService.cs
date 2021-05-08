@@ -18,6 +18,12 @@ namespace ZswBlog.IServices
         /// 根据Id获取单个分类
         /// </summary>
         /// <returns></returns>
-        Task<CategoryDTO> GetCategoryByIdAsync(int tId);       
+        Task<CategoryDTO> GetCategoryByIdAsync(int tId);
+        /// <summary>
+        /// 根据编码删除文章分类
+        /// </summary>
+        /// <param name="tid">文章分类id</param>
+        /// <returns></returns>
+        Task<bool> RemoveCatergoryByIdAsync(int tid);
     }
 }

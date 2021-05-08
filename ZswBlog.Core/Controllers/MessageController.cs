@@ -78,6 +78,7 @@ namespace ZswBlog.Core.Controllers
                 {
                     var ip = Request.HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
                     param.location = ip;
+                    param.ip = ip;
                 }
             }
 

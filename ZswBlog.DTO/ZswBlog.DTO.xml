@@ -544,6 +544,11 @@
             目标用户头像
             </summary>
         </member>
+        <member name="P:ZswBlog.DTO.MessageDTO.ip">
+            <summary>
+            所属ip
+            </summary>
+        </member>
         <member name="T:ZswBlog.DTO.MessageTreeDTO">
             <summary>
             留言树DTO
@@ -617,6 +622,11 @@
         <member name="P:ZswBlog.DTO.MessageTreeDTO.children">
             <summary>
             留言子集
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.MessageTreeDTO.ip">
+            <summary>
+            所属ip
             </summary>
         </member>
         <member name="T:ZswBlog.DTO.MusicDTO">

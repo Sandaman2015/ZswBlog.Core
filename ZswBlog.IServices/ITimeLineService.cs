@@ -12,5 +12,11 @@ namespace ZswBlog.IServices
         /// </summary>
         /// <returns></returns>
         Task<List<TimeLineDTO>> GetTimeLineListAsync();
+        /// <summary>
+        /// 删除对象
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<bool> RemoveEntityAsync(int id);
     }
 }
