@@ -46,7 +46,7 @@ namespace ZswBlog.Services
 
         public virtual async Task<bool> RemoveAllRelationByAttachmentName(string imgName)
         {
-            var list = await FileAttachmentRepository.GetModelsAsync(a => a.fileName == imgName);
+            var list = FileAttachmentRepository.GetModels(a => a.fileName == imgName);
             var queryList = await list.ToListAsync();
             foreach (var item in queryList)
             {

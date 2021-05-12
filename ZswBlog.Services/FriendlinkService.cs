@@ -21,8 +21,11 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<List<FriendLinkDTO>> GetAllFriendLinksAsync()
         {
-                var friendLinks = await FriendLinkRepository.GetModelsAsync(a => a.id != 0);
+            return await Task.Run(() =>
+            {
+                var friendLinks = FriendLinkRepository.GetModels(a => a.id != 0);
                 return Mapper.Map<List<FriendLinkDTO>>(friendLinks.ToList());
+            });
         }
 
         /// <summary>
@@ -32,11 +35,15 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<List<FriendLinkDTO>> GetFriendLinksByIsShowAsync(bool isShow)
         {
-                var friendLinks = await FriendLinkRepository.GetModelsAsync(a => a.id != 0);
+
+            return await Task.Run(() =>
+            {
+                var friendLinks = FriendLinkRepository.GetModels(a => a.id != 0);
                 var friendLinkList = isShow
                     ? friendLinks.Where(a => a.isShow).ToList()
                     : friendLinks.Where(a => !a.isShow).ToList();
                 return Mapper.Map<List<FriendLinkDTO>>(friendLinkList);
+            });
         }
 
         /// <summary>

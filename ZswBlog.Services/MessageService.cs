@@ -39,11 +39,13 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<bool> IsExistsMessageOnNewestByUserId(int userId)
         {
-            var messages = await MessageRepository.GetModelsAsync(a => a.userId == userId);
-
-            if (messages.OrderByDescending(a => a.createDate).ToList().Count <= 0) return true;
-            var timeSpan = DateTime.Now - messages.OrderByDescending(a => a.createDate).ToList()[0].createDate;
-            return timeSpan.TotalMinutes > 1;
+            return await Task.Run(() =>
+            {
+                var messages =  MessageRepository.GetModels(a => a.userId == userId);
+                if (messages.OrderByDescending(a => a.createDate).ToList().Count <= 0) return true;
+                var timeSpan = DateTime.Now - messages.OrderByDescending(a => a.createDate).ToList()[0].createDate;
+                return timeSpan.TotalMinutes > 1;
+            });
         }
 
         /// <summary>

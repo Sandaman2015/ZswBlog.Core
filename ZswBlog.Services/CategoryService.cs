@@ -22,7 +22,7 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<List<CategoryDTO>> GetAllCategoriesAsync()
         {
-            var categories = await CategoryRepository.GetModelsAsync(c => c.id != 0);
+            var categories =  CategoryRepository.GetModels(c => c.id != 0);
             var dToList = Mapper.Map<List<CategoryDTO>>(categories.ToList());
             foreach (var item in dToList)
             {

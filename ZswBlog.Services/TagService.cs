@@ -20,8 +20,11 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<List<TagDTO>> GetAllTagAsync()
         {
-            var tags = await TagRepository.GetModelsAsync(a => a.id != 0);
-            return Mapper.Map<List<TagDTO>>(tags.ToList());
+            return await Task.Run(() =>
+            {
+                var tags = TagRepository.GetModels(a => a.id != 0);
+                return Mapper.Map<List<TagDTO>>(tags.ToList());
+            });
         }
 
         /// <summary>

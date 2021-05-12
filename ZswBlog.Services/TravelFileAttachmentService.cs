@@ -19,7 +19,7 @@ namespace ZswBlog.Services
 
         public async Task<List<FileAttachmentEntity>> GetTravelFileListByTravelId(int travelId)
         {
-            var travelImgList = await travelFileAttachmentRepository.GetModelsAsync(a => a.travelId == travelId);
+            var travelImgList =  travelFileAttachmentRepository.GetModels(a => a.travelId == travelId);
             var imgList = new List<FileAttachmentEntity>();
             foreach (var item in travelImgList) {
                 FileAttachmentEntity fileAttachment = await fileAttachmentRepository.GetSingleModelAsync(a => a.id == item.fileAttachmentId);
@@ -30,14 +30,14 @@ namespace ZswBlog.Services
 
         public virtual async Task<bool> RemoveAllFileRelationAsync(int fileAttachmentId)
         {
-            var travelImgList = await travelFileAttachmentRepository.GetModelsAsync(a => a.fileAttachmentId == fileAttachmentId);
+            var travelImgList = travelFileAttachmentRepository.GetModels(a => a.fileAttachmentId == fileAttachmentId);
             var queryList = await travelImgList.ToListAsync();
             return await travelFileAttachmentRepository.DeleteListAsync(queryList);
         }
 
         public async Task<bool> RemoveAllTravelRelationAsync(int travelId)
         {
-            var travelImgList = await travelFileAttachmentRepository.GetModelsAsync(a => a.travelId == travelId);
+            var travelImgList = travelFileAttachmentRepository.GetModels(a => a.travelId == travelId);
             return await travelFileAttachmentRepository.DeleteListAsync(travelImgList);
         }
     }

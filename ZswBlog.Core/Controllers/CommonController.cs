@@ -4,11 +4,13 @@ using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ZswBlog.Common;
 using ZswBlog.Common.Util;
 using ZswBlog.Core.config;
 using ZswBlog.DTO;
+using ZswBlog.DTO.config;
 using ZswBlog.IServices;
 using ZswBlog.ThirdParty.Music;
 
@@ -71,6 +73,100 @@ namespace ZswBlog.Core.Controllers
             musicDtOs = await MusicHelper.GetMusicListByCount(50);
             await RedisHelper.SetAsync("ZswBlog:Common:MusicList", musicDtOs, 2400);
             return Ok(musicDtOs);
+        }
+
+        /// <summary>
+        /// 获取详情页面的图片配置列表
+        /// </summary>
+        /// <returns></returns>
+        [Route("/api/config/get/details")]
+        [HttpGet]
+        [FunctionDescription("获取详情页面的图片配置列表")]
+        public async Task<ActionResult<List<BaseConfigDTO>>> GetDetailsImagesConfig()
+        {
+            var filepath = Path.Combine(Directory.GetCurrentDirectory(), "config/detailsPic.json");
+            JObject jObject = await JsonFileHelper.GetConfig<JObject>(filepath);            
+            string data = jObject.GetValue("data").ToString();
+            List<BaseConfigDTO> baseConfigs = JsonConvert.DeserializeObject<List<BaseConfigDTO>>(data);
+            return Ok(baseConfigs);
+        }
+
+        /// <summary>
+        /// 更新详情页面的图片配置列表
+        /// </summary>
+        /// <returns></returns>
+        [Route("/api/config/admin/update/details")]
+        [HttpPost]
+        //[Authorize]
+        [FunctionDescription("更新详情页面的图片配置列表")]
+        public async Task<ActionResult<bool>> UpdateDetailsImagesConfig(List<BaseConfigDTO> data)
+        {
+            var filepath = Path.Combine(Directory.GetCurrentDirectory(), "config/detailsPic.json");
+            bool flag  = await JsonFileHelper.SetConfig(filepath, data);
+            return Ok(flag);
+        }
+
+        /// <summary>
+        /// 更新插图页面的图片配置列表
+        /// </summary>
+        /// <returns></returns>
+        [Route("/api/config/admin/update/illustration")]
+        [HttpPost]
+        //[Authorize]
+        [FunctionDescription("更新插图页面的图片配置列表")]
+        public async Task<ActionResult<bool>> UpdateIllustrationImagesConfig(List<BaseConfigDTO> data)
+        {
+            var filepath = Path.Combine(Directory.GetCurrentDirectory(), "config/illustration.json");
+            bool flag = await JsonFileHelper.SetConfig(filepath, data);
+            return Ok(flag);
+        }
+
+        /// <summary>
+        /// 更新首页的配置详情
+        /// </summary>
+        /// <param name="data">配置详情</param>
+        /// <returns></returns>
+        [Route("/api/config/admin/update/index")]
+        [HttpPost]
+        //[Authorize]
+        [FunctionDescription("更新首页的配置详情")]
+        public async Task<ActionResult<bool>> UpdateIndexVideoOrImageConfig(IndexVideoConfigDTO data)
+        {
+            var filepath = Path.Combine(Directory.GetCurrentDirectory(), "config/indexVideo.json");
+            bool flag = await JsonFileHelper.SetConfig(filepath, data);
+            return Ok(flag);
+        }
+
+        /// <summary>
+        /// 获取首页的配置详情
+        /// </summary>
+        /// <returns></returns>
+        [Route("/api/config/get/index")]
+        [HttpGet]
+        [FunctionDescription("获取首页的配置详情")]
+        public async Task<ActionResult<IndexVideoConfigDTO>> GetIndexVideoOrImageConfig()
+        {
+            var filepath = Path.Combine(Directory.GetCurrentDirectory(), "config/indexVideo.json");
+            JObject jObject = await JsonFileHelper.GetConfig<JObject>(filepath);
+            string data = jObject.GetValue("data").ToString();
+            IndexVideoConfigDTO baseConfigs = JsonConvert.DeserializeObject<IndexVideoConfigDTO>(data);
+            return Ok(baseConfigs);
+        }
+
+        /// <summary>
+        /// 获取背景插图的配置列表
+        /// </summary>
+        /// <returns></returns>
+        [Route("/api/config/get/illustration")]
+        [HttpGet]
+        [FunctionDescription("获取背景插图的配置列表")]
+        public async Task<ActionResult<List<BaseConfigDTO>>> GetIllustrationImagesConfig()
+        {
+            var filepath = Path.Combine(Directory.GetCurrentDirectory(), "config/illustration.json");
+            JObject jObject = await JsonFileHelper.GetConfig<JObject>(filepath);
+            string data = jObject.GetValue("data").ToString();
+            List < BaseConfigDTO > baseConfigs = JsonConvert.DeserializeObject< List < BaseConfigDTO >> (data);
+            return Ok(baseConfigs);
         }
 
         /// <summary>

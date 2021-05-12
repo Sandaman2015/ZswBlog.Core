@@ -21,8 +21,11 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<List<AnnouncementDTO>> GetAllAnnouncementAsync()
         {
-            var announcements = await AnnouncementRepository.GetModelsAsync(a => a.id != 0);
-            return Mapper.Map<List<AnnouncementDTO>>(announcements.ToList());
+            return await Task.Run(() =>
+            {
+                var announcements = AnnouncementRepository.GetModels(a => a.id != 0);
+                return Mapper.Map<List<AnnouncementDTO>>(announcements.ToList());
+            });
         }
 
         /// <summary>
@@ -50,11 +53,14 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<List<AnnouncementDTO>> GetAnnouncementsOnTopAsync(int count)
         {
-            var announcements =
-                await AnnouncementRepository.GetModelsAsync(a => a.isTop && a.endPushDate < DateTime.Now
+            return await Task.Run(() =>
+            {
+                var announcements =
+                 AnnouncementRepository.GetModels(a => a.isTop && a.endPushDate < DateTime.Now
                                                                          && a.isShow
                 );
-            return Mapper.Map<List<AnnouncementDTO>>(announcements.Take(count).ToList());
+                return Mapper.Map<List<AnnouncementDTO>>(announcements.Take(count).ToList());
+            });
         }
 
         /// <summary>
@@ -63,10 +69,12 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<List<AnnouncementDTO>> GetPushAnnouncementAsync()
         {
-            var announcements = await AnnouncementRepository.GetModelsAsync(a => a.endPushDate > DateTime.Now
-                && a.isShow
-            );
-            return Mapper.Map<List<AnnouncementDTO>>(announcements.ToList());
+            return await Task.Run(() =>
+            {
+                var announcements =  AnnouncementRepository.GetModels(a => a.endPushDate > DateTime.Now
+                && a.isShow);
+                return Mapper.Map<List<AnnouncementDTO>>(announcements.ToList());
+            });
         }
     }
 }

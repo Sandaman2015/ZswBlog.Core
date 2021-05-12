@@ -68,10 +68,8 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<List<ArticleDTO>> GetArticlesByDimTitleAsync(string dimTitle, bool isShow)
         {
-            var articles =
-                (await ArticleRepository.GetModelsAsync(a =>
-                    a.title.Contains(dimTitle) && isShow ? a.isShow == true : a.id > 0))
-                .Include(c => c.category);
+            var articles = ArticleRepository.GetModels(a =>
+                    a.title.Contains(dimTitle) && isShow ? a.isShow == true : a.id > 0).Include(c => c.category);
             var articleDtoList = Mapper.Map<List<ArticleDTO>>(articles.ToList().Where(a => a.isShow));
             foreach (var articleDto in articleDtoList)
             {
@@ -181,14 +179,17 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<List<ArticleDTO>> GetArticlesByNearSaveAsync(int count)
         {
-            var articles = (await ArticleRepository.GetModelsAsync(a => a.isShow)).Include(c => c.category);
-            var articleDtoList =
-                Mapper.Map<List<ArticleDTO>>(articles.OrderByDescending(a => a.createDate).Take(count).ToList());
-            foreach (var articleDto in articleDtoList)
+            return await Task.Run(() =>
             {
-                articleDto.content = StringHelper.ReplaceTag(articleDto.content, 500);
-            }
-            return articleDtoList;
+                var articles = ArticleRepository.GetModels(a => a.isShow).Include(c => c.category);
+                var articleDtoList =
+                    Mapper.Map<List<ArticleDTO>>(articles.OrderByDescending(a => a.createDate).Take(count).ToList());
+                foreach (var articleDto in articleDtoList)
+                {
+                    articleDto.content = StringHelper.ReplaceTag(articleDto.content, 500);
+                }
+                return articleDtoList;
+            });
         }
 
         /// <summary>
@@ -197,8 +198,11 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<List<ArticleDTO>> GetArticlesByLikeAsync(int likeCount)
         {
-            var articles = await ArticleRepository.GetModelsAsync(a => a.isShow);
-            return Mapper.Map<List<ArticleDTO>>(articles.OrderByDescending(a => a.like).Take(likeCount).ToList());
+            return await Task.Run(() =>
+            {
+                var articles = ArticleRepository.GetModels(a => a.isShow);
+                return Mapper.Map<List<ArticleDTO>>(articles.OrderByDescending(a => a.like).Take(likeCount).ToList());
+            });
         }
 
         /// <summary>
@@ -207,8 +211,11 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<List<ArticleDTO>> GetArticlesByVisitAsync(int visitCount)
         {
-            var articles = await ArticleRepository.GetModelsAsync(a => a.isShow);
-            return Mapper.Map<List<ArticleDTO>>(articles.OrderByDescending(a => a.visits).Take(visitCount).ToList());
+            return await Task.Run(() =>
+            {
+                var articles = ArticleRepository.GetModels(a => a.isShow);
+                return Mapper.Map<List<ArticleDTO>>(articles.OrderByDescending(a => a.visits).Take(visitCount).ToList());
+            });
         }
 
         /// <summary>
@@ -217,8 +224,11 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<List<ArticleDTO>> GetAllArticlesAsync()
         {
-            var articles = await ArticleRepository.GetModelsAsync(a => a.id != 0);
-            return Mapper.Map<List<ArticleDTO>>(articles.OrderByDescending(a => a.createDate).ToList());
+            return await Task.Run(() =>
+            {
+                var articles =  ArticleRepository.GetModels(a => a.id != 0);
+                return Mapper.Map<List<ArticleDTO>>(articles.OrderByDescending(a => a.createDate).ToList());
+            });
         }
 
         /// <summary>

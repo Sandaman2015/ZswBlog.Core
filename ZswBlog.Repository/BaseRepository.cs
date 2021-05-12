@@ -67,9 +67,9 @@ namespace ZswBlog.Repository
             return await DbContext.SaveChangesAsync() > 0;
         }
 
-        public virtual async Task<IQueryable<T>> GetModelsAsync(Expression<Func<T, bool>> whereLambda)
+        public virtual IQueryable<T> GetModels(Expression<Func<T, bool>> whereLambda)
         {
-            return await Task.Run(() => DbContext.Set<T>().Where(whereLambda));
+            return DbContext.Set<T>().Where(whereLambda);
         }
 
         public virtual  IQueryable<T> GetModelsByPage<TType>(int pageSize, int pageIndex, bool isAsc,

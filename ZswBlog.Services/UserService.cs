@@ -23,8 +23,11 @@ namespace ZswBlog.Services
 
         public async Task<List<UserDTO>> GetAllUsersAsync()
         {
-            var users = await UserRepository.GetModelsAsync(a => a.id != 0);
-            return Mapper.Map<List<UserDTO>>(users.ToList());
+            return await Task.Run(() =>
+            {
+                var users = UserRepository.GetModels(a => a.id != 0);
+                return Mapper.Map<List<UserDTO>>(users.ToList());
+            });
         }
 
         public async Task<UserDTO> GetUserByOpenIdAsync(string openId)
@@ -93,8 +96,12 @@ namespace ZswBlog.Services
 
         public async Task<List<UserDTO>> GetUsersNearVisitAsync(int count)
         {
-            var users = await Repository.GetModelsAsync(a => a.id != 0);
-            return Mapper.Map<List<UserDTO>>(users.OrderByDescending(a => a.createDate).Take(count).ToList());
+
+            return await Task.Run(() =>
+            {
+                var users =  Repository.GetModels(a => a.id != 0);
+                return Mapper.Map<List<UserDTO>>(users.OrderByDescending(a => a.createDate).Take(count).ToList());
+            });
         }
 
         public virtual async Task<bool> RemoveEntityAsync(int tId)

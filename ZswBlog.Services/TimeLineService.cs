@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,8 +33,10 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<List<TimeLineDTO>> GetTimeLineListAsync()
         {
-            var timeLines = await TimeLineRepository.GetModelsAsync(a => a.id != 0);
-            return Mapper.Map<List<TimeLineDTO>>(timeLines.OrderByDescending(a => a.createDate).ToList());
+            var timeLines = TimeLineRepository.GetModels(a => a.id != 0);
+            var list = await timeLines.OrderByDescending(a => a.createDate).ToListAsync();
+            return Mapper.Map<List<TimeLineDTO>>(list);
         }
+
     }
 }

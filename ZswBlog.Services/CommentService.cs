@@ -34,8 +34,11 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<List<CommentDTO>> GetAllCommentsAsync()
         {
-            var comments = await Repository.GetModelsAsync(a => a.id != 0);
-            return Mapper.Map<List<CommentDTO>>(comments.ToList());
+            return await Task.Run(() =>
+            {
+                var comments = Repository.GetModels(a => a.id != 0);
+                return Mapper.Map<List<CommentDTO>>(comments.ToList());
+            });
         }
 
         /// <summary>
@@ -45,8 +48,11 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<List<CommentDTO>> GetCommentsByTargetIdAsync(int targetId)
         {
-            var comments = await Repository.GetModelsAsync(a => a.targetId == targetId);
-            return Mapper.Map<List<CommentDTO>>(comments.ToList());
+            return await Task.Run(() =>
+            {
+                var comments = Repository.GetModels(a => a.targetId == targetId);
+                return Mapper.Map<List<CommentDTO>>(comments.ToList());
+            });
         }
 
         /// <summary>
@@ -84,8 +90,11 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<List<CommentDTO>> GetCommentsOnNotReplyAsync(int articleId)
         {
-            var comments = await Repository.GetModelsAsync(a => a.id == 0 && a.articleId == articleId);
-            return Mapper.Map<List<CommentDTO>>(comments.ToList());
+            return await Task.Run(() =>
+            {
+                var comments =  Repository.GetModels(a => a.id == 0 && a.articleId == articleId);
+                return Mapper.Map<List<CommentDTO>>(comments.ToList());
+            });
         }
 
         /// <summary>
@@ -119,11 +128,14 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<bool> IsExistsCommentOnNewestByUserIdAsync(int userId)
         {
-            var comments = await Repository.GetModelsAsync(a => a.userId == userId);
-            if (comments.OrderByDescending(a => a.createDate).ToList().Count <= 0) return true;
-            var timeSpan = DateTime.Now - comments.OrderByDescending(a => a.createDate).ToList()[0].createDate;
-            var flag = timeSpan.TotalMinutes > 1;
-            return flag;
+            return await Task.Run(() =>
+            {
+                var comments =  Repository.GetModels(a => a.userId == userId);
+                if (comments.OrderByDescending(a => a.createDate).ToList().Count <= 0) return true;
+                var timeSpan = DateTime.Now - comments.OrderByDescending(a => a.createDate).ToList()[0].createDate;
+                var flag = timeSpan.TotalMinutes > 1;
+                return flag;
+            });
         }
 
         /// <summary>

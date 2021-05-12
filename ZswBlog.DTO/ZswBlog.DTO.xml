@@ -354,6 +354,36 @@
             评论子集
             </summary>
         </member>
+        <member name="T:ZswBlog.DTO.config.BaseConfigDTO">
+            <summary>
+            基本配置类
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.config.BaseConfigDTO.src">
+            <summary>
+            源
+            </summary>
+        </member>
+        <member name="T:ZswBlog.DTO.config.IndexVideoConfigDTO">
+            <summary>
+            首页配置对象
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.config.IndexVideoConfigDTO.videosrc">
+            <summary>
+            视频路径
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.config.IndexVideoConfigDTO.poster">
+            <summary>
+            视频简照
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.config.IndexVideoConfigDTO.volume">
+            <summary>
+            初始音量
+            </summary>
+        </member>
         <member name="T:ZswBlog.DTO.FileAttachmentDTO">
             <summary>
             附件对象

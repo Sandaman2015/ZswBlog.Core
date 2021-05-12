@@ -208,13 +208,16 @@ namespace ZswBlog.Common.Util
         /// <returns></returns>
         public static async Task<bool> SetConfig<T>(string fileName, T data)
         {
-            return await Task.Run(() =>
+            JsonFileHelper jsonFileHelper = new JsonFileHelper(fileName);
+            Dictionary<string, T> json = new Dictionary<string, T>
             {
-                JsonFileHelper jsonFileHelper = new JsonFileHelper(fileName);
-                jsonFileHelper.Write<T>(data);
-                T jObject = jsonFileHelper.Read<T>();
-                return jObject != null && !jObject.Equals(data);
-            });
+                { "data", data }
+            };
+            jsonFileHelper.Write(json);
+            JObject jObject = await GetConfig<JObject>(fileName);
+            string str = jObject.GetValue("data").ToString();
+            T baseConfigs = JsonConvert.DeserializeObject<T>(str);
+            return baseConfigs != null && !baseConfigs.Equals(data);
         }
     }
 }

@@ -68,7 +68,7 @@ namespace ZswBlog.IRepository
         /// </summary>
         /// <param name="whereLambda">GetModels里面的是一个实体类=>实体类的成员属性判断后返回tolist<实体成员></param>
         /// <returns></returns>
-        Task<IQueryable<T>> GetModelsAsync(Expression<Func<T, bool>> whereLambda);
+        IQueryable<T> GetModels(Expression<Func<T, bool>> whereLambda);
 
         /// <summary>
         /// 返回一个查询后的列表

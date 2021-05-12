@@ -22,9 +22,13 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<List<SiteTagDTO>> GetSiteTagsByIsShowAsync(bool isShow)
         {
-            var siteTags = await SiteTagRepository.GetModelsAsync(a => a.id != 0);
-            var siteTagList = isShow ? siteTags.Where(a => a.isShow).ToList() : siteTags.Where(a => !a.isShow).ToList();
-            return Mapper.Map<List<SiteTagDTO>>(siteTagList);
+
+            return await Task.Run(() =>
+            {
+                var siteTags = SiteTagRepository.GetModels(a => a.id != 0);
+                var siteTagList = isShow ? siteTags.Where(a => a.isShow).ToList() : siteTags.Where(a => !a.isShow).ToList();
+                return Mapper.Map<List<SiteTagDTO>>(siteTagList);
+            });
         }
 
         /// <summary>
@@ -33,8 +37,12 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<List<SiteTagDTO>> GetAllSiteTagsAsync()
         {
-            var siteTags = await SiteTagRepository.GetModelsAsync(a => a.isShow);
-            return Mapper.Map<List<SiteTagDTO>>(siteTags.OrderByDescending(a => a.createDate).Take(30).ToList());
+
+            return await Task.Run(() =>
+            {
+                var siteTags = SiteTagRepository.GetModels(a => a.isShow);
+                return Mapper.Map<List<SiteTagDTO>>(siteTags.OrderByDescending(a => a.createDate).Take(30).ToList());
+            });
         }
 
         /// <summary>

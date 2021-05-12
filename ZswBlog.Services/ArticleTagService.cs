@@ -27,13 +27,15 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<PageDTO<ArticleDTO>> GetArticleListIdByTagIdAsync(int limit, int pageIndex, int tagId)
         {
-            var articleTags = ArticleTagRepository.GetModelsByPage(limit, pageIndex, false,
+            return await Task.Run(() =>
+            {
+                var articleTags = ArticleTagRepository.GetModelsByPage(limit, pageIndex, false,
                 a => a.id, a => a.id == tagId, out var pageCount);
-            var articles =
-                await ArticleRepository.GetModelsAsync(
-                    a => articleTags.Select(c => c.articleId).ToList().Contains(a.id));
-            var articleDtOs = Mapper.Map<List<ArticleDTO>>(articles.ToList());
-            return new PageDTO<ArticleDTO>(pageIndex, limit, pageCount, articleDtOs);
+                var articles = ArticleRepository.GetModels(
+                        a => articleTags.Select(c => c.articleId).ToList().Contains(a.id));
+                var articleDtOs = Mapper.Map<List<ArticleDTO>>(articles.ToList());
+                return new PageDTO<ArticleDTO>(pageIndex, limit, pageCount, articleDtOs);
+            });
         }
 
         /// <summary>
@@ -43,10 +45,10 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<List<TagDTO>> GetTagListByArticleIdAsync(int articleId)
         {
-            var articleTags = await ArticleTagRepository.GetModelsAsync(a => a.articleId == articleId);
+            var articleTags =  ArticleTagRepository.GetModels(a => a.articleId == articleId);
             List<ArticleTagEntity> articleTagEntities =  articleTags.ToList();
             List<int> ids =  articleTagEntities.Select(e => e.tagId).ToList();
-            var tags = await TagRepository.GetModelsAsync(a => ids.Contains(a.id));
+            var tags =  TagRepository.GetModels(a => ids.Contains(a.id));
             List<TagEntity> tagEntitys = await tags.ToListAsync();
             return Mapper.Map<List<TagDTO>>(tagEntitys);;
         }
@@ -58,8 +60,7 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<bool> RemoveAlreadyExistArticleTagAsync(int articleId)
         {
-            var articleTags =
-                await ArticleTagRepository.GetModelsAsync(a => a.articleId == articleId);
+            var articleTags = ArticleTagRepository.GetModels(a => a.articleId == articleId);
             foreach (var item in articleTags.ToList())
             {
                 await ArticleTagRepository.DeleteAsync(item);
