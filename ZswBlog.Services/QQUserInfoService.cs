@@ -2,6 +2,7 @@
 using NETCore.Encrypt;
 using System;
 using System.Threading.Tasks;
+using ZswBlog.Common.Exception;
 using ZswBlog.DTO;
 using ZswBlog.Entity;
 using ZswBlog.IRepository;
@@ -72,7 +73,7 @@ namespace ZswBlog.Services
                 user = await UserService.GetUserByConditionAsync(a => a.id == alreadyLoginUser.userId && a.disabled == false);
                 if (user == null)
                 {
-                    throw new Exception("该用户被禁止登陆！");
+                    throw new BusinessException("该用户被禁止登陆！", 401);
                 }
                 user.lastLoginDate = DateTime.Now;
                 user.loginCount += 1;

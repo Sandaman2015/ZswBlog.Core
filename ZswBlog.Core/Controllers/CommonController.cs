@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
@@ -97,9 +98,9 @@ namespace ZswBlog.Core.Controllers
         /// <returns></returns>
         [Route("/api/config/admin/update/details")]
         [HttpPost]
-        //[Authorize]
+        [Authorize]
         [FunctionDescription("更新详情页面的图片配置列表")]
-        public async Task<ActionResult<bool>> UpdateDetailsImagesConfig(List<BaseConfigDTO> data)
+        public async Task<ActionResult<bool>> UpdateDetailsImagesConfig([FromBody]List<BaseConfigDTO> data)
         {
             var filepath = Path.Combine(Directory.GetCurrentDirectory(), "config/detailsPic.json");
             bool flag  = await JsonFileHelper.SetConfig(filepath, data);
@@ -112,9 +113,9 @@ namespace ZswBlog.Core.Controllers
         /// <returns></returns>
         [Route("/api/config/admin/update/illustration")]
         [HttpPost]
-        //[Authorize]
+        [Authorize]
         [FunctionDescription("更新插图页面的图片配置列表")]
-        public async Task<ActionResult<bool>> UpdateIllustrationImagesConfig(List<BaseConfigDTO> data)
+        public async Task<ActionResult<bool>> UpdateIllustrationImagesConfig([FromBody] List<BaseConfigDTO> data)
         {
             var filepath = Path.Combine(Directory.GetCurrentDirectory(), "config/illustration.json");
             bool flag = await JsonFileHelper.SetConfig(filepath, data);
@@ -128,9 +129,9 @@ namespace ZswBlog.Core.Controllers
         /// <returns></returns>
         [Route("/api/config/admin/update/index")]
         [HttpPost]
-        //[Authorize]
+        [Authorize]
         [FunctionDescription("更新首页的配置详情")]
-        public async Task<ActionResult<bool>> UpdateIndexVideoOrImageConfig(IndexVideoConfigDTO data)
+        public async Task<ActionResult<bool>> UpdateIndexVideoOrImageConfig([FromBody] IndexVideoConfigDTO data)
         {
             var filepath = Path.Combine(Directory.GetCurrentDirectory(), "config/indexVideo.json");
             bool flag = await JsonFileHelper.SetConfig(filepath, data);

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using ZswBlog.Common;
+using ZswBlog.Common.Exception;
 
 namespace ZswBlog.Core.config
 {

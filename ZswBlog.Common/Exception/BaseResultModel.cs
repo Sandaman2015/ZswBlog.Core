@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ZswBlog.Common
+namespace ZswBlog.Common.Exception
 {
     public class BaseResultModel
     {

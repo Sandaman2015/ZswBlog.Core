@@ -6,6 +6,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using ZswBlog.Common;
+using ZswBlog.Common.Exception;
 using ZswBlog.Common.Util;
 using ZswBlog.DTO;
 using ZswBlog.Entity;
@@ -101,7 +102,7 @@ namespace ZswBlog.Services
 
             if (article == null)
             {
-                throw new Exception("未找到文章");
+                throw new BusinessException("未找到文章", 404);
             }
 
             if (addVisit) await AddArticleVisitAsync(article);

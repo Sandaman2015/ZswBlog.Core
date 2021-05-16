@@ -9,7 +9,6 @@ MAINTAINER Sandaman2015@163.com
 FROM mcr.microsoft.com/dotnet/sdk:5.0-buster-slim AS build
 WORKDIR /src
 COPY ["ZswBlog.Core/ZswBlog.Core.csproj", "ZswBlog.Core/"]
-COPY ["ZswBlog.Core/ZswBlog.Core/config", "ZswBlog.Core/config"]
 COPY ["ZswBlog.Query/ZswBlog.Query.csproj", "ZswBlog.Query/"]
 COPY ["ZswBlog.IRepository/ZswBlog.IRepository.csproj", "ZswBlog.IRepository/"]
 COPY ["ZswBlog.DTO/ZswBlog.DTO.csproj", "ZswBlog.DTO/"]
@@ -25,6 +24,7 @@ WORKDIR "/src/ZswBlog.Core"
 RUN dotnet build "ZswBlog.Core.csproj" -c Release -o /app/build
 
 FROM build AS publish
+COPY ["ZswBlog.Core/config", "/app/config"]
 RUN dotnet publish "ZswBlog.Core.csproj" -c Release -o /app/publish
 
 FROM base AS final

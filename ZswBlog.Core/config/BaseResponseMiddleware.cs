@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
 using ZswBlog.Common.Enums;
+using ZswBlog.Common.Exception;
 using ZswBlog.Entity;
 using ZswBlog.IServices;
 
@@ -52,6 +53,10 @@ namespace ZswBlog.Core.config
                 try
                 {
                     await _next(context);
+                }
+                catch (BusinessException ex) {
+                    ErrorLogToDataBase(ex.Message, ip.ToString(), context.Request.Path);
+                    await HandleExceptionAsync(context, (int)ex.exModel.Code, ex.exModel.Message, ip.ToString());
                 }
                 catch (Exception ex)
                 {

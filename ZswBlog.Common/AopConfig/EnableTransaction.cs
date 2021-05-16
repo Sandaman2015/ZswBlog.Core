@@ -39,7 +39,7 @@ namespace ZswBlog.Common.AopConfig
                 scope.Complete();
                 logger.LogInformation("事务提交成功");
             }
-            catch (Exception ex)
+            catch (System.Exception ex)
             {
                 logger.LogError("记录事务错误日志：类名：" + className + "，方法名：" + methodName + "，错误信息：" + ex.Message);
             }

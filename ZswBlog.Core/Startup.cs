@@ -126,8 +126,15 @@ namespace ZswBlog.Core
             //.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking).UseLoggerFactory(LogFactory), ServiceLifetime.Transient);
 
             ServerVersion serverVersion3 = ServerVersion.AutoDetect(readConnection);
-            services.AddDbContext<ZswBlogDbContext>(options => options.UseMySql(readConnection, serverVersion3)
-            .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking).UseLoggerFactory(LogFactory), ServiceLifetime.Transient);
+            services.AddDbContext<ZswBlogDbContext>(options => options.UseMySql(readConnection, serverVersion3,
+                 builder =>
+                 {
+                     builder.EnableRetryOnFailure(
+                         maxRetryCount: 5,
+                         maxRetryDelay: TimeSpan.FromSeconds(30),
+                         errorNumbersToAdd: null);
+                 })
+            .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking).UseLoggerFactory(LogFactory)).AddTransient<ZswBlogDbContext>();
 
             //≥ı ºªØ RedisHelper
             var redisConnection = Configuration.GetConnectionString("RedisConnectionString");

@@ -1,9 +1,12 @@
 ﻿using Autofac;
 using Autofac.Extras.DynamicProxy;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.Reflection;
 using ZswBlog.Common.AopConfig;
+using ZswBlog.Entity.DbContext;
 
 namespace ZswBlog.Core.config
 {
@@ -12,6 +15,21 @@ namespace ZswBlog.Core.config
     /// </summary>
     public class ConfigureAutofac : Autofac.Module
     {
+
+        /// <summary>
+        /// 配置访问属性
+        /// </summary>
+        private IConfiguration Configuration { get; }
+
+        public ConfigureAutofac()
+        {
+
+        }
+        public ConfigureAutofac(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+
         /// <summary>
         /// 控制反转
         /// </summary>
@@ -42,6 +60,7 @@ namespace ZswBlog.Core.config
             var thirdParty = Assembly.Load("ZswBlog.ThirdParty");
             builder.RegisterAssemblyTypes(thirdParty)
                 .AsSelf().PropertiesAutowired().SingleInstance();
+           
             ////注册仓储，所有IRepository接口到Repository的映射
             //builder.RegisterGeneric(typeof(Repository))
             //    //InstancePerDependency：默认模式，每次调用，都会重新实例化对象；每次请求都创建一个新的对象；

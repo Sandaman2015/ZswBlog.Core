@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ZswBlog.Common.Exception;
 
 namespace ZswBlog.Common.Util
 {
@@ -68,7 +69,7 @@ namespace ZswBlog.Common.Util
             }
             catch (System.Exception ex)
             {
-                throw ex;
+                throw new BusinessException(ex.Message, 500);
             }
             return default(T);
         }
@@ -107,7 +108,7 @@ namespace ZswBlog.Common.Util
             }
             catch (System.Exception ex)
             {
-                throw ex;
+                throw new BusinessException(ex.Message, 500);
             }
             return default(List<T>);
         }
@@ -148,8 +149,7 @@ namespace ZswBlog.Common.Util
             }
             catch (System.Exception ex)
             {
-
-                throw ex;
+                throw new BusinessException(ex.Message, 500);
             }
         }
 
@@ -177,8 +177,7 @@ namespace ZswBlog.Common.Util
             }
             catch (System.Exception ex)
             {
-
-                throw ex;
+                throw new BusinessException(ex.Message, 500);
             }
         }
 

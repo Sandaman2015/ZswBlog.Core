@@ -105,15 +105,12 @@ namespace ZswBlog.Repository
 
         public virtual async Task<PageEntity<T>> GetModelsByPageAsync<TType>(int pageSize, int pageIndex, bool isAsc, Expression<Func<T, TType>> orderByLambda, Expression<Func<T, bool>> whereLambda)
         {
-            return await Task.Run(() =>
-            {
                 var result = DbContext.Set<T>().Where(whereLambda);
-                var total = result.AsNoTracking().Count();
+                var total = await result.CountAsync();
                 var data = isAsc
                     ? result.OrderBy(orderByLambda).Skip((pageIndex - 1) * pageSize).Take(pageSize)
                     : result.OrderByDescending(orderByLambda).Skip((pageIndex - 1) * pageSize).Take(pageSize);
                 return new PageEntity<T>(pageIndex, pageSize, total, data);
-            });
         }
     }
 }
