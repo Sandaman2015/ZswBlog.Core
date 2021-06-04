@@ -48,5 +48,14 @@ namespace ZswBlog.Services
             var tag = await TagRepository.GetSingleModelAsync(a => a.id == tId);
             return await TagRepository.DeleteAsync(tag);
         }
+
+        public async Task<bool> RemoveTagByIdAsync(int id)
+        {
+            TagEntity entity = new TagEntity()
+            {
+                id = id
+            };
+            return await TagRepository.DeleteAsync(entity);
+        }
     }
 }

@@ -19,5 +19,12 @@ namespace ZswBlog.IServices
         /// <param name="id"></param>
         /// <returns></returns>
         Task<TagDTO> GetTagByIdAsync(int id);
+
+        /// <summary>
+        /// 删除文章标签
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<bool> RemoveTagByIdAsync(int id);
     }
 }

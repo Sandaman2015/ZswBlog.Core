@@ -1,9 +1,12 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ZswBlog.Common;
 using ZswBlog.Core.config;
 using ZswBlog.DTO;
+using ZswBlog.Entity;
 using ZswBlog.IServices;
 
 namespace ZswBlog.Core.Controllers
@@ -63,6 +66,35 @@ namespace ZswBlog.Core.Controllers
         {
             var pageDto = await _articleTagService.GetArticleListIdByTagIdAsync(limit, pageIndex, tagId);
             return Ok(pageDto);
+        }
+
+        /// <summary>
+        /// 保存文章标签
+        /// </summary>
+        /// <param name="tagEntity">标签对象</param>
+        /// <returns></returns>
+        [Route(template: "/api/tag/admin/save")]
+        [HttpPost]
+        [Authorize]
+        [FunctionDescription("新增文章标签")]
+        public async Task<ActionResult<bool>> SaveTag([FromBody]TagEntity tagEntity) {
+            tagEntity.createDate = DateTime.Now;
+            tagEntity.operatorId = -1;
+            return Ok(await _tagService.AddEntityAsync(tagEntity));
+        }
+
+        /// <summary>
+        /// 删除文章标签
+        /// </summary>
+        /// <param name="tagId">标签对象Id</param>
+        /// <returns></returns>
+        [Route(template: "/api/tag/admin/remove/{tagId}")]
+        [HttpDelete]
+        [Authorize]
+        [FunctionDescription("删除文章标签")]
+        public async Task<ActionResult<bool>> RemoveTag([FromRoute]int tagId)
+        {
+            return Ok(await _tagService.RemoveTagByIdAsync(tagId));
         }
     }
 }
