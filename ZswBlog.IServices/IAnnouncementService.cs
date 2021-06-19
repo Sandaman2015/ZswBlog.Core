@@ -32,5 +32,12 @@ namespace ZswBlog.IServices
         /// <param name="pageSize"></param>
         /// <returns></returns>
         Task<PageDTO<AnnouncementDTO>> GetAnnouncementAsyncByPage(int pageIndex, int pageSize);
+
+        /// <summary>
+        /// 删除通知公告
+        /// </summary>
+        /// <param name="announcement"></param>
+        /// <returns></returns>
+        Task<bool> RemoveAnnouncementByIdAsync(AnnouncementEntity announcement);
     }
 }

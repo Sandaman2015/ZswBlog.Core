@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ZswBlog.Common;
 using ZswBlog.DTO;
+using ZswBlog.Entity;
 using ZswBlog.IServices;
 
 namespace ZswBlog.Core.Controllers
@@ -82,6 +84,42 @@ namespace ZswBlog.Core.Controllers
         {
             var articles = await _announcementService.GetAnnouncementAsyncByPage(limit, pageIndex);
             return Ok(articles);
+        }
+
+        /// <summary>
+        /// 添加通知公告对象
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        [Route("/api/announcement/admin/save")]
+        [Authorize]
+        [HttpPost]
+        [FunctionDescription("后台管理-添加通知公告")]
+        public async Task<ActionResult<bool>> SaveAnnouncement([FromBody] AnnouncementEntity entity)
+        {
+            entity.createDate = DateTime.Now;
+            entity.isShow = true;
+            var flag = await _announcementService.AddEntityAsync(entity);
+            return Ok(flag);
+        }
+
+        /// <summary>
+        /// 根据主键删除通知公告
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [Route("/api/announcement/admin/remove/{id}")]
+        [Authorize]
+        [HttpDelete]
+        [FunctionDescription("后台管理-删除通知公告")]
+        public async Task<ActionResult<bool>> RemoveAnnouncement([FromRoute] int id)
+        {
+            AnnouncementEntity entity = new AnnouncementEntity
+            {
+                id = id
+            };
+            var flag = await _announcementService.RemoveAnnouncementByIdAsync(entity);
+            return Ok(flag);
         }
     }
 }

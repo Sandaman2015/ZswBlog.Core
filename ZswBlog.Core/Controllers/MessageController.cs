@@ -89,7 +89,7 @@ namespace ZswBlog.Core.Controllers
             if (param.targetId == 0 || param.targetUserId == null) return Ok(flag);
             var toMessage = await _messageService.GetMessageByIdAsync(param.targetId.Value);
             var fromMessage = await _messageService.GetMessageByIdAsync(param.id);
-            var isSendReplyEmail = _emailHelper.ReplySendEmail(toMessage, fromMessage, SendEmailType.回复留言);
+            var isSendReplyEmail = await _emailHelper.ReplySendEmailAsync(toMessage, fromMessage, SendEmailType.回复留言);
             flag = isSendReplyEmail;
             return Ok(flag);
         }

@@ -76,5 +76,10 @@ namespace ZswBlog.Services
                 return Mapper.Map<List<AnnouncementDTO>>(announcements.ToList());
             });
         }
+
+        public async Task<bool> RemoveAnnouncementByIdAsync(AnnouncementEntity announcement)
+        {
+            return await AnnouncementRepository.DeleteAsync(announcement);
+        }
     }
 }

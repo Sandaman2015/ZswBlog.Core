@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using ZswBlog.Common.Exception;
 using ZswBlog.DTO;
 using ZswBlog.Entity;
 using ZswBlog.IRepository;
@@ -25,11 +26,8 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<MessageDTO> GetMessageByIdAsync(int messageId)
         {
-            return await Task.Run(() =>
-            {
-                var message = MessageRepository.GetSingleModelAsync(a => a.id == messageId);
-                return Mapper.Map<MessageDTO>(message);
-            });
+            var message = await MessageRepository.GetSingleModelAsync(a => a.id == messageId);
+            return Mapper.Map<MessageDTO>(message);
         }
 
         /// <summary>
@@ -41,7 +39,7 @@ namespace ZswBlog.Services
         {
             return await Task.Run(() =>
             {
-                var messages =  MessageRepository.GetModels(a => a.userId == userId);
+                var messages = MessageRepository.GetModels(a => a.userId == userId);
                 if (messages.OrderByDescending(a => a.createDate).ToList().Count <= 0) return true;
                 var timeSpan = DateTime.Now - messages.OrderByDescending(a => a.createDate).ToList()[0].createDate;
                 return timeSpan.TotalMinutes > 1;
@@ -62,11 +60,12 @@ namespace ZswBlog.Services
                 // 判断用户是否为空
                 if (user == null) return false;
                 t.location = LocationHelper.GetLocation(t.location);
+                t.isShow = true;
                 flag = await MessageRepository.AddAsync(t);
             }
             else
             {
-                throw new Exception("你已经在一分钟前提交过一次了");
+                throw new BusinessException("你已经在一分钟前提交过一次了", 200);
             }
 
             return flag;

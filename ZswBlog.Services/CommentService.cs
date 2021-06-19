@@ -111,6 +111,7 @@ namespace ZswBlog.Services
                 // 判断用户是否为空
                 if (user == null) return false;
                 t.location = LocationHelper.GetLocation(t.location);
+                t.isShow = true;
                 flag = await CommentRepository.AddAsync(t);
             }
             else

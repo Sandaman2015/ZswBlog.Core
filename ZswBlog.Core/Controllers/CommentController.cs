@@ -75,7 +75,7 @@ namespace ZswBlog.Core.Controllers
             if (param.targetId == 0 || param.targetUserId == null) return Ok(flag);
             var toComment = await _commentService.GetCommentByIdAsync(param.targetId.Value);
             var fromComment = await _commentService.GetCommentByIdAsync(param.id);
-            flag = _emailHelper.ReplySendEmail(toComment, fromComment, SendEmailType.回复评论);
+            flag = await _emailHelper.ReplySendEmailAsync(toComment, fromComment, SendEmailType.回复评论);
             return Ok(flag);
         }
     }

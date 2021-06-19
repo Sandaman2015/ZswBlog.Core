@@ -3,6 +3,7 @@ using System.Text;
 using ZswBlog.DTO;
 using ZswBlog.IServices;
 using ZswBlog.Common.Util;
+using System.Threading.Tasks;
 
 namespace ZswBlog.ThirdParty.Email
 {
@@ -56,11 +57,12 @@ namespace ZswBlog.ThirdParty.Email
         /// <param name="from"></param>
         /// <param name="sendEmailType"></param>
         /// <returns></returns>
-        public bool ReplySendEmail(dynamic to, dynamic from, SendEmailType sendEmailType)
+        public async Task<bool> ReplySendEmailAsync(dynamic to, dynamic from, SendEmailType sendEmailType)
         {            
+
             var messageFrom = new MailAddress(SendEmailAddress); //发件人邮箱地址 
-            UserDTO targetUser = UserService.GetUserByIdAsync(to.userId);
-            UserDTO user = UserService.GetUserByIdAsync(from.userId);
+            UserDTO targetUser = await UserService.GetUserByIdAsync(to.userId);
+            UserDTO user = await UserService.GetUserByIdAsync(from.userId);
             var messageTo = targetUser.email; //收件人邮箱地址 
             var messageSubject =  SiteName + "博客回复通知"; //邮件主题    
             string content;//目标的内容
@@ -70,9 +72,9 @@ namespace ZswBlog.ThirdParty.Email
             if (sendEmailType == SendEmailType.回复评论)
             {
                 //评论回复
-                var replyMessage = CommentService.GetCommentByIdAsync(from.id);
+                var replyMessage = await CommentService.GetCommentByIdAsync(from.id);
                 replyContent = replyMessage.content;
-                var message = CommentService.GetCommentByIdAsync(to.id);
+                var message = await CommentService.GetCommentByIdAsync(to.id);
                 content = message.content;
                 int articleId = message.articleId;
                 url += "/details/" + articleId;
@@ -80,9 +82,9 @@ namespace ZswBlog.ThirdParty.Email
             else
             {
                 //留言回复
-                var replyMessage = MessageService.GetMessageByIdAsync(from.id);
+                var replyMessage = await MessageService.GetMessageByIdAsync(from.id);
                 replyContent = replyMessage.content;
-                var message = MessageService.GetMessageByIdAsync(to.id);
+                var message = await MessageService.GetMessageByIdAsync(to.id);
                 content = message.content;
                 url += "/leacots";
             }
