@@ -62,6 +62,7 @@ namespace ZswBlog.Core.Controllers
         /// <returns></returns>
         [Route(("/api/announcement/get/all"))]
         [HttpGet]
+        [Authorize]
         [FunctionDescription("获取所有的通知公告")]
         public async Task<ActionResult<List<AnnouncementDTO>>> GetAllAnnouncements()
         {
@@ -82,8 +83,8 @@ namespace ZswBlog.Core.Controllers
         public async Task<ActionResult<PageDTO<AnnouncementDTO>>> GetAnnouncementListByPage([FromQuery] int limit,
             [FromQuery] int pageIndex)
         {
-            var articles = await _announcementService.GetAnnouncementAsyncByPage(limit, pageIndex);
-            return Ok(articles);
+            var announcementPage = await _announcementService.GetAnnouncementAsyncByPage(pageIndex, limit);
+            return Ok(announcementPage);
         }
 
         /// <summary>
@@ -99,6 +100,7 @@ namespace ZswBlog.Core.Controllers
         {
             entity.createDate = DateTime.Now;
             entity.isShow = true;
+            entity.operatorId = -1;
             var flag = await _announcementService.AddEntityAsync(entity);
             return Ok(flag);
         }

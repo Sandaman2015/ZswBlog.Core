@@ -29,6 +29,28 @@ namespace ZswBlog.Services
         }
 
         /// <summary>
+        /// 获取友情链接详情
+        /// </summary>
+        /// <param name="tId"></param>
+        /// <returns></returns>
+        public async Task<FriendLinkDTO> GetFriendLinkByIdAsync(int tId)
+        {
+            var friendLink = await FriendLinkRepository.GetSingleModelAsync(a => a.id == tId);
+            return Mapper.Map<FriendLinkDTO>(friendLink);
+        }
+
+        public async Task<PageDTO<FriendLinkDTO>> GetFriendLinkListByPageAsync(int limit, int pageIndex)
+        {
+            return await Task.Run(() =>
+            {
+                var friendLinks = FriendLinkRepository.GetModelsByPage(limit, pageIndex, true, a => a.createDate,
+                    a =>a.id!=0, out var total);
+                var list = Mapper.Map<List<FriendLinkDTO>>(friendLinks.ToList());
+                return new PageDTO<FriendLinkDTO>(pageIndex, limit, total, list);
+            });
+        }
+
+        /// <summary>
         /// 根据禁用显示友情链接
         /// </summary>
         /// <param name="isShow"></param>
@@ -51,10 +73,20 @@ namespace ZswBlog.Services
         /// </summary>
         /// <param name="tId"></param>
         /// <returns></returns>
-        public async Task<bool> RemoveEntityAsync(int tId)
+        public async Task<bool> RemoveFriendLinkByIdAsync(int tId)
         {
-            var friendLink = await FriendLinkRepository.GetSingleModelAsync(a => a.id == tId);
+            var friendLink = new FriendLinkEntity { id = tId};
             return await FriendLinkRepository.DeleteAsync(friendLink);
+        }
+
+        /// <summary>
+        /// 更新友情连接
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public async Task<bool> UpdateFriendLinkAsync(FriendLinkEntity entity)
+        {
+            return await FriendLinkRepository.UpdateAsync(entity);
         }
     }
 }

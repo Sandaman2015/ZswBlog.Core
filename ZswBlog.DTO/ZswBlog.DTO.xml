@@ -279,6 +279,21 @@
             目标用户头像
             </summary>
         </member>
+        <member name="P:ZswBlog.DTO.CommentDTO.user">
+            <summary>
+            映射对象
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CommentDTO.targetUser">
+            <summary>
+            映射对象
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.CommentDTO.isShow">
+            <summary>
+            是否显示
+            </summary>
+        </member>
         <member name="T:ZswBlog.DTO.CommentTreeDTO">
             <summary>
             评论树
@@ -577,6 +592,21 @@
         <member name="P:ZswBlog.DTO.MessageDTO.ip">
             <summary>
             所属ip
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.MessageDTO.user">
+            <summary>
+            映射对象
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.MessageDTO.targetUser">
+            <summary>
+            映射对象
+            </summary>
+        </member>
+        <member name="P:ZswBlog.DTO.MessageDTO.isShow">
+            <summary>
+            是否显示
             </summary>
         </member>
         <member name="T:ZswBlog.DTO.MessageTreeDTO">

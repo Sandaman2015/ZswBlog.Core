@@ -16,11 +16,18 @@ namespace ZswBlog.ThirdParty.Music
     {
         private static readonly string BaseMusicUrl;
         private static readonly string SongMusicUrl;
+        private static readonly string MusicLoginName;
+        private static readonly string MusicPassword;
 
         static MusicHelper()
         {
             BaseMusicUrl = ConfigHelper.GetValue("MusicBaseUrl");
             SongMusicUrl = ConfigHelper.GetValue("SongBaseUrl");
+            MusicLoginName = ConfigHelper.GetValue("MusicLoginName");
+            MusicPassword = ConfigHelper.GetValue("MusicPassword");
+            //登录详情
+            var cloudMusicLogin = string.Format(BaseMusicUrl + "/login?email={0}&password={1}", MusicLoginName, MusicPassword);
+            RequestHelper.HttpGet(BaseMusicUrl+ cloudMusicLogin, Encoding.UTF8);
         }
 
         public static async Task<List<MusicDTO>> GetMusicListByCount(int count)

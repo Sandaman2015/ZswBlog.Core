@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ZswBlog.DTO
 {
@@ -22,6 +23,7 @@ namespace ZswBlog.DTO
         /// <summary>
         /// 用户id
         /// </summary>
+        [NotMapped]
         public int userId { get; set; }
         /// <summary>
         /// 所属文章id
@@ -30,6 +32,7 @@ namespace ZswBlog.DTO
         /// <summary>
         /// 目标用户
         /// </summary>
+        [NotMapped]
         public int targetUserId { get; set; }
         /// <summary>
         /// 目标评论
@@ -64,5 +67,20 @@ namespace ZswBlog.DTO
         /// 目标用户头像
         /// </summary>
         public string targetUserPortrait { get; set; }
+        /// <summary>
+        /// 映射对象
+        /// </summary>
+        [NotMapped]
+        public virtual UserDTO user { get; set; }
+        /// <summary>
+        /// 映射对象
+        /// </summary>
+        [NotMapped]
+        public virtual UserDTO targetUser { get; set; }
+        /// <summary>
+        /// 是否显示
+        /// </summary>
+        [NotMapped]
+        public Nullable<bool> isShow { get; set; }
     }
 }

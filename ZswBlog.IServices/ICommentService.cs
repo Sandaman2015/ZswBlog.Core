@@ -19,7 +19,7 @@ namespace ZswBlog.IServices
         /// 获取所有评论
         /// </summary>
         /// <returns></returns>
-        Task<List<CommentDTO>> GetAllCommentsAsync();
+        Task<PageDTO<CommentDTO>> GetAllCommentListByPageAsync(int limit, int pageIndex);
         /// <summary>
         /// 根据父评论Id获取父评论下的所有评论
         /// </summary>
@@ -55,10 +55,17 @@ namespace ZswBlog.IServices
         /// <returns></returns>
         Task<PageDTO<CommentTreeDTO>> GetCommentsByRecursionAsync(int limit, int pageIndex, int articleId);
         /// <summary>
-        /// 
+        /// 添加评论
         /// </summary>
         /// <param name="t"></param>
         /// <returns></returns>
         Task<bool> AddCommentAsync(CommentEntity t);
+
+        /// <summary>
+        /// 删除评论
+        /// </summary>
+        /// <param name="tId"></param>
+        /// <returns></returns>
+        Task<bool> RemoveCommentByIdAsync(int tId);
     }
 }

@@ -63,5 +63,22 @@ namespace ZswBlog.DTO
        /// 所属ip
        /// </summary>
         public string ip { get; set; }
+
+        /// <summary>
+        /// 映射对象
+        /// </summary>
+        [NotMapped]
+        public virtual UserDTO user { get; set; }
+        /// <summary>
+        /// 映射对象
+        /// </summary>
+        [NotMapped]
+        public virtual UserDTO targetUser { get; set; }
+
+        /// <summary>
+        /// 是否显示
+        /// </summary>
+        [NotMapped]
+        public Nullable<bool> isShow { get; set; }
     }
 }

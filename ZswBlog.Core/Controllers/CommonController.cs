@@ -179,8 +179,8 @@ namespace ZswBlog.Core.Controllers
         public async Task<ActionResult> GetInitData()
         {
             //首页的数据初始化数据
-            //var initDataDto = await RedisHelper.GetAsync<IndexInitDataDTO>("ZswBlog:Common:InitData");
-            //if (initDataDto != null) return Ok(initDataDto);
+            var initDataDto = await RedisHelper.GetAsync<IndexInitDataDTO>("ZswBlog:Common:InitData");
+            if (initDataDto != null) return Ok(initDataDto);
             var articles = await _articleService.GetArticlesByNearSaveAsync(3);
             var messages = await _messageService.GetMessageOnNearSaveAsync(10);
             var date1 = DateTime.Parse("2019-10-08 00:00:00");
@@ -190,7 +190,7 @@ namespace ZswBlog.Core.Controllers
             var timeCount = sp.Days;
             var articleCount = await _articleService.GetEntitiesCountAsync();
             var visitCount = await GetVisit();
-            var initDataDto = new IndexInitDataDTO()
+            initDataDto = new IndexInitDataDTO()
             {
                 DataCount = new CountData()
                 {
@@ -202,8 +202,7 @@ namespace ZswBlog.Core.Controllers
                 Articles = articles,
                 Messages = messages
             };
-            //await RedisHelper.SetAsync("ZswBlog:Common:InitData", initDataDto, 60 * 60 * 3);
-
+            await RedisHelper.SetAsync("ZswBlog:Common:InitData", initDataDto, 60 * 2);
             return Ok(initDataDto);
         }
 

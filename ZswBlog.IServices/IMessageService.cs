@@ -31,10 +31,24 @@ namespace ZswBlog.IServices
         /// <returns></returns>
         Task<List<MessageDTO>> GetMessageOnNearSaveAsync(int count);
         /// <summary>
-        /// 
+        /// 添加留言
         /// </summary>
         /// <param name="t"></param>
         /// <returns></returns>
         Task<bool> AddMessageAsync(MessageEntity t);
+        /// <summary>
+        /// 分页获取所有留言
+        /// </summary>
+        /// <param name="limit"></param>
+        /// <param name="pageIndex"></param>
+        /// <returns></returns>
+        Task<PageDTO<MessageDTO>> GetAllMessageListByPageAsync(int limit, int pageIndex);
+
+        /// <summary>
+        /// 删除留言
+        /// </summary>
+        /// <param name="tId"></param>
+        /// <returns></returns>
+        Task<bool> RemoveMessageByIdAsync(int tId);
     }
 }

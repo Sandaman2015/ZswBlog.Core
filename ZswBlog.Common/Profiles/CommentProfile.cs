@@ -21,6 +21,7 @@ namespace ZswBlog.Common.Profiles
             CreateMap<CommentEntity,CommentDTO>();
             CreateMap<CommentEntity,CommentTreeDTO>();
             CreateMap<CommentDTO, CommentTreeDTO>();
+            CreateMap<CommentDTO, CommentEntity>();
         }
     }
 }

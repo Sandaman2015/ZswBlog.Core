@@ -39,7 +39,7 @@ namespace ZswBlog.Services
             return await Task.Run(() =>
             {
                 var announcements = AnnouncementRepository.GetModelsByPage(pageSize, pageIndex, true, a => a.createDate,
-                    a => a.endPushDate < DateTime.Now, out var total);
+                    a => a.endPushDate >= DateTime.Now, out var total);
                 var list = Mapper.Map<List<AnnouncementDTO>>(announcements.ToList());
                 return new PageDTO<AnnouncementDTO>(pageIndex, pageSize, total, list);
             });

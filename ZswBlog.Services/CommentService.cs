@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,15 +30,17 @@ namespace ZswBlog.Services
         }
 
         /// <summary>
-        /// 获取所有
+        /// 分页获取所有评论
         /// </summary>
         /// <returns></returns>
-        public async Task<List<CommentDTO>> GetAllCommentsAsync()
+        public async Task<PageDTO<CommentDTO>> GetAllCommentListByPageAsync(int limit, int pageIndex)
         {
             return await Task.Run(() =>
             {
-                var comments = Repository.GetModels(a => a.id != 0);
-                return Mapper.Map<List<CommentDTO>>(comments.ToList());
+                var comments = Repository.GetModelsByPage(limit, pageIndex, false, (a => a.id),
+                    (a => a.id != 0), out var pageCount).Include(a => a.user).Include(a => a.targetUser);
+                var commentDtOs = Mapper.Map<List<CommentDTO>>(comments.ToList());
+                return new PageDTO<CommentDTO>(pageIndex, limit, pageCount, commentDtOs);
             });
         }
 
@@ -80,7 +83,7 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<bool> RemoveEntityAsync(int tId)
         {
-            return await Repository.DeleteAsync(new CommentEntity {id = tId});
+            return await Repository.DeleteAsync(new CommentEntity { id = tId });
         }
 
         /// <summary>
@@ -92,7 +95,7 @@ namespace ZswBlog.Services
         {
             return await Task.Run(() =>
             {
-                var comments =  Repository.GetModels(a => a.id == 0 && a.articleId == articleId);
+                var comments = Repository.GetModels(a => a.id == 0 && a.articleId == articleId);
                 return Mapper.Map<List<CommentDTO>>(comments.ToList());
             });
         }
@@ -131,7 +134,7 @@ namespace ZswBlog.Services
         {
             return await Task.Run(() =>
             {
-                var comments =  Repository.GetModels(a => a.userId == userId);
+                var comments = Repository.GetModels(a => a.userId == userId);
                 if (comments.OrderByDescending(a => a.createDate).ToList().Count <= 0) return true;
                 var timeSpan = DateTime.Now - comments.OrderByDescending(a => a.createDate).ToList()[0].createDate;
                 var flag = timeSpan.TotalMinutes > 1;
@@ -151,7 +154,7 @@ namespace ZswBlog.Services
             var comments = await CommentRepository.GetModelsByPageAsync(limit, pageIndex, false, a => a.createDate,
                 c => c.articleId == articleId && c.targetId == 0);
             var commentDtoList = new List<CommentTreeDTO>();
-             foreach (var item in comments.data.ToList())
+            foreach (var item in comments.data.ToList())
             {
                 var commentTree = Mapper.Map<CommentTreeDTO>(item);
                 await ConvertCommentTree(commentTree);
@@ -191,6 +194,15 @@ namespace ZswBlog.Services
 
             treeDto.userPortrait = user.portrait;
             treeDto.userName = user.nickName;
+        }
+
+        public async Task<bool> RemoveCommentByIdAsync(int tId)
+        {
+            var data = new CommentEntity()
+            {
+                id = tId
+            };
+            return await CommentRepository.DeleteAsync(data);
         }
     }
 }

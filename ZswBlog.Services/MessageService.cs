@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -136,6 +137,30 @@ namespace ZswBlog.Services
         public async Task<List<MessageDTO>> GetMessageOnNearSaveAsync(int count)
         {
             return await Task.Run(() => MessageRepository.GetMessageOnNearSaveAsync(count));
+        }
+
+        /// <summary>
+        /// 分页获取所有评论
+        /// </summary>
+        /// <returns></returns>
+        public async Task<PageDTO<MessageDTO>> GetAllMessageListByPageAsync(int limit, int pageIndex)
+        {
+            return await Task.Run(() =>
+            {
+                var comments = MessageRepository.GetModelsByPage(limit, pageIndex, false, (a => a.id),
+                    (a => a.id != 0), out var pageCount).Include(a => a.user).Include(a => a.targetUser);
+                var commentDtOs = Mapper.Map<List<MessageDTO>>(comments.ToList());
+                return new PageDTO<MessageDTO>(pageIndex, limit, pageCount, commentDtOs);
+            });
+        }
+
+        public async Task<bool> RemoveMessageByIdAsync(int tId)
+        {
+            var data = new MessageEntity()
+            {
+                id = tId
+            };
+            return await MessageRepository.DeleteAsync(data);
         }
     }
 }
