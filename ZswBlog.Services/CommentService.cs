@@ -152,7 +152,7 @@ namespace ZswBlog.Services
         public async Task<PageDTO<CommentTreeDTO>> GetCommentsByRecursionAsync(int limit, int pageIndex, int articleId)
         {
             var comments = await CommentRepository.GetModelsByPageAsync(limit, pageIndex, false, a => a.createDate,
-                c => c.articleId == articleId && c.targetId == 0);
+                c => c.articleId == articleId && c.targetId == 0 && c.isShow && c.targetUserId == 0);
             var commentDtoList = new List<CommentTreeDTO>();
             foreach (var item in comments.data.ToList())
             {

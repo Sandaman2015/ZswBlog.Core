@@ -2,7 +2,7 @@ version: '3.4'
 
 services:
   zswblog.core:
-    image: ${DOCKER_REGISTRY-}zswblogcore:latest-14
+    image: ${DOCKER_REGISTRY-}zswblogcore:latest-15
     build:
       context: .
       dockerfile: ZswBlog.Core/Dockerfile

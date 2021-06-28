@@ -60,7 +60,7 @@ namespace ZswBlog.Services
             {
                 // 判断用户是否为空
                 if (user == null) return false;
-                t.location = LocationHelper.GetLocation(t.location);
+                t.location = LocationHelper.GetLocation(t.ip);
                 t.isShow = true;
                 flag = await MessageRepository.AddAsync(t);
             }
@@ -92,7 +92,7 @@ namespace ZswBlog.Services
         public async Task<PageDTO<MessageTreeDTO>> GetMessagesByRecursionAsync(int limit, int pageIndex)
         {
             var messageTopEntities = MessageRepository.GetModelsByPage(limit, pageIndex, false, a => a.createDate,
-                a => (a.targetId == 0 && a.targetUserId == 0), out var total).ToList();
+                a => (a.targetId == 0 && a.targetUserId == 0&& a.isShow.Value), out var total).ToList();
             var messageTreeList = new List<MessageTreeDTO>();
             foreach (var item in messageTopEntities)
             {

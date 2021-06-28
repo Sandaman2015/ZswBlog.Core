@@ -77,7 +77,7 @@ namespace ZswBlog.ThirdParty.Email
                 var message = await CommentService.GetCommentByIdAsync(to.id);
                 content = message.content;
                 int articleId = message.articleId;
-                url += "/details/" + articleId;
+                url += "/web/article-details/" + articleId;
             }
             else
             {
@@ -86,7 +86,7 @@ namespace ZswBlog.ThirdParty.Email
                 replyContent = replyMessage.content;
                 var message = await MessageService.GetMessageByIdAsync(to.id);
                 content = message.content;
-                url += "/leacots";
+                url += "/web/message";
             }
             //邮件内容
             var messageBody = "<div id=\"contentDiv\" onmouseover=\"getTop().stopPropagation(event);\" onclick=\"getTop().preSwapLink(event, 'spam', 'ZC3011-yZb5lAAS2SKCSSF8palnY9a');";

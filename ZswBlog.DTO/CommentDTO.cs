@@ -23,7 +23,6 @@ namespace ZswBlog.DTO
         /// <summary>
         /// 用户id
         /// </summary>
-        [NotMapped]
         public int userId { get; set; }
         /// <summary>
         /// 所属文章id
@@ -32,7 +31,6 @@ namespace ZswBlog.DTO
         /// <summary>
         /// 目标用户
         /// </summary>
-        [NotMapped]
         public int targetUserId { get; set; }
         /// <summary>
         /// 目标评论
@@ -80,7 +78,6 @@ namespace ZswBlog.DTO
         /// <summary>
         /// 是否显示
         /// </summary>
-        [NotMapped]
         public Nullable<bool> isShow { get; set; }
     }
 }

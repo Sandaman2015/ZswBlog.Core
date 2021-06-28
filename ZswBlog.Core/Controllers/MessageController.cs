@@ -76,18 +76,9 @@ namespace ZswBlog.Core.Controllers
         [FunctionDescription("添加留言")]
         public async Task<ActionResult> SaveMessage([FromBody] MessageEntity param)
         {
-            // 获取IP地址
-            if (param.location != null)
-            {
-                if (Request.HttpContext.Connection.RemoteIpAddress != null)
-                {
-                    var ip = Request.HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
-                    param.location = ip;
-                    param.ip = ip;
-                }
-            }
             param.createDate = DateTime.Now;
             param.targetId ??= 0;
+            param.targetUserId ??= 0;
             var flag = await _messageService.AddMessageAsync(param);
             // 发送邮件
             if (param.targetId == 0 || param.targetUserId == null) return Ok(flag);

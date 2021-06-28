@@ -63,16 +63,6 @@ namespace ZswBlog.Core.Controllers
         [FunctionDescription("添加文章评论")]
         public async Task<ActionResult> SaveMessage([FromBody] CommentEntity param)
         {
-            // 获取IP地址
-            if (param.location != null)
-            {
-                if (Request.HttpContext.Connection.RemoteIpAddress != null)
-                {
-                    var ip = Request.HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
-                    param.location = ip;
-                }
-            }
-
             param.createDate = DateTime.Now;
             param.targetId ??= 0;
             var flag = await _commentService.AddCommentAsync(param);
