@@ -1,7 +1,7 @@
 version: '3.1'
 services:
     zswblogcore:
-      image: registry.cn-hangzhou.aliyuncs.com/zswblogcore/zswblogcore:latest-7
+      image: registry.cn-hangzhou.aliyuncs.com/zswblogcore/zswblogcore:latest-8
       container_name: zswblog
       environment:
         - ASPNETCORE_URLS=http://+:8004
@@ -16,6 +16,7 @@ services:
         # 腾讯位置开发者AppSecret
         - LOCATIONKEY=HIQBZ-WNQKK-6VZJ7-AR3XK-HEVAK-5DBXD
         # 邮箱服务
+        - ENV EMAILRETURNBACKURL=http://www.zswblog.xyz
         - EMAILSENDADDRESS=1761317983@qq.com
         - EMAILSECRETKEY=emqwtiqpmrpccbae
         # 网易云音乐站服务

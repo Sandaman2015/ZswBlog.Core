@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using System.Linq;
 using System.Threading.Tasks;
 using ZswBlog.Common.Util;
+using ZswBlog.Common.Exception;
 
 namespace ZswBlog.ThirdParty.Music
 {
@@ -25,17 +26,22 @@ namespace ZswBlog.ThirdParty.Music
             SongMusicUrl = ConfigHelper.GetValue("SongBaseUrl");
             MusicLoginName = ConfigHelper.GetValue("MusicLoginName");
             MusicPassword = ConfigHelper.GetValue("MusicPassword");
-            //登录详情
-            var cloudMusicLogin = string.Format(BaseMusicUrl + "/login?email={0}&password={1}", MusicLoginName, MusicPassword);
-            RequestHelper.HttpGet(BaseMusicUrl+ cloudMusicLogin, Encoding.UTF8);
         }
 
         public static async Task<List<MusicDTO>> GetMusicListByCount(int count)
         {
             return await Task.Run(() =>
             {
-                var url = ConfigHelper.GetValue("MusicBaseSite");
-                var jsonResult = RequestHelper.HttpGet(BaseMusicUrl + url, Encoding.UTF8);
+                //登录详情
+                var cloudMusicLogin = string.Format(BaseMusicUrl + "/login?email={0}&password={1}", MusicLoginName, MusicPassword);
+                var loginDetail = RequestHelper.HttpGet(cloudMusicLogin, Encoding.UTF8);
+                MusicLoginDetails details = JsonConvert.DeserializeObject<MusicLoginDetails>(loginDetail);
+                if (details == null) {
+                    throw new BusinessException("网易云登录请求失败", 401);
+                }
+                var authKey = "&cookie=" + details.cookie;
+                var url = BaseMusicUrl + ConfigHelper.GetValue("MusicBaseSite") + authKey;
+                var jsonResult = RequestHelper.HttpGet(url, Encoding.UTF8);
                 var musicList = JsonConvert.DeserializeObject<MusicList>(jsonResult);
                 var musicDtOs = new List<MusicDTO>();
                 var musicTracks = musicList.playlist.trackIds;
@@ -44,12 +50,12 @@ namespace ZswBlog.ThirdParty.Music
                 {
                     count--;
                     //获取歌曲详情
-                    var songsData = string.Format(BaseMusicUrl + "/song/detail?ids={0}", tracks.id);
+                    var songsData = string.Format(BaseMusicUrl + "/song/detail?ids={0}", tracks.id) + authKey;
                     var dataResult = RequestHelper.HttpGet(songsData, Encoding.UTF8);
                     var musicSongs = JsonConvert.DeserializeObject<MusicSongs>(dataResult);
 
                     //获取歌曲歌词
-                    var songsLyric = string.Format(BaseMusicUrl + "/lyric?id={0}", tracks.id);
+                    var songsLyric = string.Format(BaseMusicUrl + "/lyric?id={0}", tracks.id) + authKey;
                     var lyricResult = RequestHelper.HttpGet(songsLyric, Encoding.UTF8);
                     var musicLyric = JsonConvert.DeserializeObject<Musiclyric>(lyricResult);
 
