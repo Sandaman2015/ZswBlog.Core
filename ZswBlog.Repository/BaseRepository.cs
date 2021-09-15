@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using ZswBlog.Common.Exception;
 using ZswBlog.DTO;
 using ZswBlog.Entity;
 using ZswBlog.Entity.DbContext;
@@ -84,10 +85,7 @@ namespace ZswBlog.Repository
                     : result.OrderByDescending(orderByLambda).Skip((pageIndex - 1) * pageSize).Take(pageSize);
             }
             catch (Exception ex) {
-                total = 0;
-                return isAsc
-                    ? result.OrderBy(orderByLambda).Skip((pageIndex - 1) * pageSize).Take(pageSize)
-                    : result.OrderByDescending(orderByLambda).Skip((pageIndex - 1) * pageSize).Take(pageSize);
+                throw new BusinessException("查询执行错误:"+ ex.Message, 500);
             }
         }
 

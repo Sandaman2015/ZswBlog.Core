@@ -118,7 +118,7 @@ namespace ZswBlog.Core.Controllers
             //遍历添加文章标签
             foreach (var id in article.tagIdList)
             {
-                _articleTagService.AddEntityAsync(new ArticleTagEntity()
+                await _articleTagService.AddEntityAsync(new ArticleTagEntity()
                 {
                     articleId = articleEntity.id,
                     createDate = articleEntity.createDate,
@@ -143,7 +143,7 @@ namespace ZswBlog.Core.Controllers
             var flag = await _articleService.RemoveArticleAsync(id);
             return Ok(flag);
         }
-        
+
         /// <summary>
         /// 后台管理-禁用文章
         /// </summary>
@@ -162,7 +162,7 @@ namespace ZswBlog.Core.Controllers
             var flag = await _articleService.UpdateEntityAsync(articleDetail);
             return Ok(flag);
         }
-        
+
         /// <summary>
         /// 后台管理-获取文章详情
         /// </summary>

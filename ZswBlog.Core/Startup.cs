@@ -108,7 +108,7 @@ namespace ZswBlog.Core
             {
                 configure.JsonSerializerOptions.Converters.Add(new DatetimeJsonConverter());
             }).AddNewtonsoftJson(
-                // 
+                //
                 option => option.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore
             );
 

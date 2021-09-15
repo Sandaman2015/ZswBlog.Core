@@ -15,7 +15,7 @@ namespace ZswBlog.Core
         /// </summary>
         /// <param name="args"></param>
         public static void Main(string[] args)
-        {            
+        {
             CreateHostBuilder(args).Build().Run();
         }
         /// <summary>
@@ -31,8 +31,8 @@ namespace ZswBlog.Core
                 }).UseServiceProviderFactory(new AutofacServiceProviderFactory())
             .ConfigureLogging((hostingContext, logging) =>
                 {
-            logging.ClearProviders(); //去掉默认添加的日志提供程序                                              
-            logging.AddConsole();//添加控制台输出                    
+            logging.ClearProviders(); //去掉默认添加的日志提供程序
+            logging.AddConsole();//添加控制台输出
             //logging.AddDebug();//添加调试输出
         });
 
