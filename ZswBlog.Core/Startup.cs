@@ -133,8 +133,7 @@ namespace ZswBlog.Core
                          maxRetryCount: 5,
                          maxRetryDelay: TimeSpan.FromSeconds(30),
                          errorNumbersToAdd: null);
-                 })
-            .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking).UseLoggerFactory(LogFactory)).AddTransient<ZswBlogDbContext>();
+                 }).UseLoggerFactory(LogFactory)).AddTransient<ZswBlogDbContext>();
 
             //≥ı ºªØ RedisHelper
             var redisConnection = Configuration.GetConnectionString("RedisConnectionString");

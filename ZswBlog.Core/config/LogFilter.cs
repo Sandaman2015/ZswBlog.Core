@@ -71,7 +71,10 @@ namespace ZswBlog.Core.config
                 operatorId = "admin",
                 logType = (int)LogTypeEnum.INFO
             };
-            _actionLogService.AddEntityAsync(action);
+            Task.Run(async () =>
+            {
+                await _actionLogService.AddEntityAsync(action);
+            });
         }
 
         /// <summary>
