@@ -100,9 +100,9 @@ namespace ZswBlog.Core.Controllers
         [Authorize]
         [HttpDelete]
         [FunctionDescription("后台管理-删除留言")]
-        public async Task<ActionResult<bool>> RemoveComment([FromRoute] int id)
+        public ActionResult<bool> RemoveComment([FromRoute] int id)
         {
-            var flag = await _commentService.RemoveCommentByIdAsync(id);
+            var flag = _commentService.RemoveCommentById(id);
             return Ok(flag);
         }
 
@@ -121,7 +121,7 @@ namespace ZswBlog.Core.Controllers
             CommentDTO comment = await _commentService.GetCommentByIdAsync(id);
             CommentEntity commentEntity = _mapper.Map<CommentEntity>(comment);
             commentEntity.isShow = isShow;
-            var flag = await _commentService.UpdateEntityAsync(commentEntity);
+            var flag = _commentService.UpdateEntity(commentEntity);
             return Ok(flag);
         }
     }

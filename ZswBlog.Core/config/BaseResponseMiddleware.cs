@@ -99,7 +99,7 @@ namespace ZswBlog.Core.config
                 operatorId = "admin",
                 logType = (int)LogTypeEnum.ERROR
             };
-            _actionLogService.AddEntityAsync(action);
+            _actionLogService.AddEntity(action);
         }
 
         /// <summary>

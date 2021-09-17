@@ -77,10 +77,11 @@ namespace ZswBlog.Core.Controllers
         [HttpPost]
         [Authorize]
         [FunctionDescription("新增文章标签")]
-        public async Task<ActionResult<bool>> SaveTag([FromBody]TagEntity tagEntity) {
+        public ActionResult<bool> SaveTag([FromBody] TagEntity tagEntity)
+        {
             tagEntity.createDate = DateTime.Now;
             tagEntity.operatorId = -1;
-            return Ok(await _tagService.AddEntityAsync(tagEntity));
+            return Ok(_tagService.AddEntity(tagEntity));
         }
 
         /// <summary>
@@ -92,9 +93,9 @@ namespace ZswBlog.Core.Controllers
         [HttpDelete]
         [Authorize]
         [FunctionDescription("删除文章标签")]
-        public async Task<ActionResult<bool>> RemoveTag([FromRoute]int tagId)
+        public ActionResult<bool> RemoveTag([FromRoute] int tagId)
         {
-            return Ok(await _tagService.RemoveTagByIdAsync(tagId));
+            return Ok(_tagService.RemoveTagById(tagId));
         }
     }
 }

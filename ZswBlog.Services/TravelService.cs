@@ -44,10 +44,10 @@ namespace ZswBlog.Services
             return travelDTO;
         }
 
-        public async Task<bool> RemoveTravelAsync(int tId)
+        public bool RemoveTravel(int tId)
         {
             var t = new TravelEntity() { id = tId };
-            return await TravelRepository.DeleteAsync(t);
+            return TravelRepository.Delete(t);
         }
     }
 }

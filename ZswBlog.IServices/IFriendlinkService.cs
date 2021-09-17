@@ -30,13 +30,13 @@ namespace ZswBlog.IServices
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        Task<bool> UpdateFriendLinkAsync(FriendLinkEntity entity);
+        bool UpdateFriendLink(FriendLinkEntity entity);
         /// <summary>
         /// 删除友情连接
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<bool> RemoveFriendLinkByIdAsync(int tId);
+        bool RemoveFriendLinkById(int tId);
         /// <summary>
         /// 获取友情链接详情
         /// </summary>

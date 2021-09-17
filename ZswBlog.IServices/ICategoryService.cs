@@ -24,6 +24,6 @@ namespace ZswBlog.IServices
         /// </summary>
         /// <param name="tid">文章分类id</param>
         /// <returns></returns>
-        Task<bool> RemoveCatergoryByIdAsync(int tid);
+        bool RemoveCatergoryById(int tid);
     }
 }

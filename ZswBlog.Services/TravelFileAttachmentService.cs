@@ -32,13 +32,13 @@ namespace ZswBlog.Services
         {
             var travelImgList = travelFileAttachmentRepository.GetModels(a => a.fileAttachmentId == fileAttachmentId);
             var queryList = await travelImgList.ToListAsync();
-            return await travelFileAttachmentRepository.DeleteListAsync(queryList);
+            return travelFileAttachmentRepository.DeleteList(queryList);
         }
 
-        public async Task<bool> RemoveAllTravelRelationAsync(int travelId)
+        public bool RemoveAllTravelRelation(int travelId)
         {
             var travelImgList = travelFileAttachmentRepository.GetModels(a => a.travelId == travelId);
-            return await travelFileAttachmentRepository.DeleteListAsync(travelImgList);
+            return travelFileAttachmentRepository.DeleteList(travelImgList);
         }
     }
 }

@@ -58,12 +58,12 @@ namespace ZswBlog.Services
         /// </summary>
         /// <param name="articleId"></param>
         /// <returns></returns>
-        public async Task<bool> RemoveAlreadyExistArticleTagAsync(int articleId)
+        public bool RemoveAlreadyExistArticleTag(int articleId)
         {
             var articleTags = ArticleTagRepository.GetModels(a => a.articleId == articleId);
             foreach (var item in articleTags.ToList())
             {
-                await ArticleTagRepository.DeleteAsync(item);
+                ArticleTagRepository.Delete(item);
             }
             return true;
         }

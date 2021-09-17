@@ -10,6 +10,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using NETCore.Encrypt;
 using ZswBlog.Common;
 using ZswBlog.Common.Util;
@@ -32,6 +33,11 @@ namespace ZswBlog.Core.Controllers
 
         private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
+        private static readonly ILogger Logger = LoggerFactory.Create(build =>
+        {
+            build.AddConsole(); // 用于控制台程序的输出
+            build.AddDebug(); // 用于VS调试，输出窗口的输出
+        }).CreateLogger("UserController");
 
         /// <summary>
         /// 默认构造函数
@@ -79,7 +85,7 @@ namespace ZswBlog.Core.Controllers
             var userInfo = await _userService.GetUserByIdAsync(user.id);
             userInfo.email = user.email;
             user = _mapper.Map<UserEntity>(userInfo);
-            var flag = await _userService.UpdateEntityAsync(user);
+            var flag = _userService.UpdateEntity(user);
             return Ok(flag);
         }
 
@@ -133,6 +139,7 @@ namespace ZswBlog.Core.Controllers
             string code = statusCode.Substring(0, 8);
             string encryotStr = statusCode.Substring(8);
             string callBackUrl = HttpUtility.UrlDecode(encryotStr);
+            Logger.LogInformation(String.Format("用户登录跳转地址：{0}", callBackUrl));
             return await QQLoginByAccessToken(accessToken, callBackUrl);
         }
 

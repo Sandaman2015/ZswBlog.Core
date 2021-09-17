@@ -28,6 +28,6 @@ namespace ZswBlog.IServices
         /// </summary>
         /// <param name="articleId">文章编号</param>
         /// <returns></returns>
-        Task<bool> RemoveAlreadyExistArticleTagAsync(int articleId);
+        bool RemoveAlreadyExistArticleTag(int articleId);
     }
 }

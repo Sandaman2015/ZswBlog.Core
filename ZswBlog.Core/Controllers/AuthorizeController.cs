@@ -66,13 +66,13 @@ namespace ZswBlog.Core.Controllers
                 _jwtSettings.Audience,
                 claims,
                 DateTime.Now,
-                DateTime.Now.AddSeconds(1800),
+                DateTime.Now.AddDays(7),
                 creds);
             //获取JWT生成的Token
             respData = new
             {
                 flag = true,
-                express = DateTime.Now.AddSeconds(1800),
+                express = DateTime.Now.AddDays(7),
                 accessToken = new JwtSecurityTokenHandler().WriteToken(token)
             };
             return Ok(respData);

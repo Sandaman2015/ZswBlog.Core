@@ -17,6 +17,6 @@ namespace ZswBlog.IServices
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<bool> RemoveEntityAsync(int id);
+        bool RemoveEntity(int id);
     }
 }

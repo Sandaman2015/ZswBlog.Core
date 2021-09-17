@@ -77,9 +77,9 @@ namespace ZswBlog.Services
             });
         }
 
-        public async Task<bool> RemoveAnnouncementByIdAsync(AnnouncementEntity announcement)
+        public bool RemoveAnnouncementById(AnnouncementEntity announcement)
         {
-            return await AnnouncementRepository.DeleteAsync(announcement);
+            return AnnouncementRepository.Delete(announcement);
         }
     }
 }

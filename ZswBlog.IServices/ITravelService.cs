@@ -23,6 +23,6 @@ namespace ZswBlog.IServices
         /// </summary>
         /// <param name="tId"></param>
         /// <returns></returns>
-        Task<bool> RemoveTravelAsync(int tId);
+        bool RemoveTravel(int tId);
     }
 }

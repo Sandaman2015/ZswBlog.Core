@@ -38,24 +38,13 @@ namespace ZswBlog.Services
             return Mapper.Map<TagDTO>(tag);
         }
 
-        /// <summary>
-        /// 删除标签
-        /// </summary>
-        /// <param name="tId"></param>
-        /// <returns></returns>
-        public async Task<bool> RemoveEntityAsync(int tId)
-        {
-            var tag = await TagRepository.GetSingleModelAsync(a => a.id == tId);
-            return await TagRepository.DeleteAsync(tag);
-        }
-
-        public async Task<bool> RemoveTagByIdAsync(int id)
+        public bool RemoveTagById(int id)
         {
             TagEntity entity = new TagEntity()
             {
                 id = id
             };
-            return await TagRepository.DeleteAsync(entity);
+            return TagRepository.Delete(entity);
         }
     }
 }

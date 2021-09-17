@@ -52,7 +52,7 @@ namespace ZswBlog.Services
             {
                 await TravelFileAttachmentService.RemoveAllFileRelationAsync(item.id);
             }
-            return await FileAttachmentRepository.DeleteListAsync(queryList);
+            return FileAttachmentRepository.DeleteList(queryList);
         }
     }
 }

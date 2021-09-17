@@ -115,25 +115,25 @@ namespace ZswBlog.Core
             //Mysql连接池
             var readConnection = Configuration.GetConnectionString("ClusterMysqlConnection");
             var writleConnection = Configuration.GetConnectionString("MasterMysqlConnection");
-            Logger.LogInformation($"读取数据库配置连接地址：{readConnection}");
-            Logger.LogInformation($"更新数据库配置连接地址：{writleConnection}");
-            //ServerVersion serverVersion1 = ServerVersion.AutoDetect(writleConnection);
-            //services.AddDbContext<WritleDbContext>(options => options.UseMySql(writleConnection, serverVersion1)
-            //.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking).UseLoggerFactory(LogFactory), ServiceLifetime.Scoped);
+            Logger.LogInformation($"从数据库配置连接地址：{readConnection}");
+            Logger.LogInformation($"主数据库配置连接地址：{writleConnection}");
+            ServerVersion serverVersion1 = ServerVersion.AutoDetect(writleConnection);
+            services.AddDbContext<WritleDbContext>(options => options.UseMySql(writleConnection, serverVersion1)
+            .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking).UseLoggerFactory(LogFactory), ServiceLifetime.Scoped);
 
-            //ServerVersion serverVersion2 = ServerVersion.AutoDetect(readConnection);
-            //services.AddDbContext<ReadDbContext>(options => options.UseMySql(readConnection, serverVersion2)
-            //.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking).UseLoggerFactory(LogFactory), ServiceLifetime.Transient);
+            ServerVersion serverVersion2 = ServerVersion.AutoDetect(readConnection);
+            services.AddDbContext<ReadDbContext>(options => options.UseMySql(readConnection, serverVersion2)
+            .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking).UseLoggerFactory(LogFactory), ServiceLifetime.Transient);
 
-            ServerVersion serverVersion3 = ServerVersion.AutoDetect(readConnection);
-            services.AddDbContext<ZswBlogDbContext>(options => options.UseMySql(readConnection, serverVersion3,
-                 builder =>
-                 {
-                     builder.EnableRetryOnFailure(
-                         maxRetryCount: 5,
-                         maxRetryDelay: TimeSpan.FromSeconds(30),
-                         errorNumbersToAdd: null);
-                 }).UseLoggerFactory(LogFactory)).AddTransient<ZswBlogDbContext>();
+            //ServerVersion serverVersion3 = ServerVersion.AutoDetect(readConnection);
+            //services.AddDbContext<ZswBlogDbContext>(options => options.UseMySql(readConnection, serverVersion3,
+            //     builder =>
+            //     {
+            //         builder.EnableRetryOnFailure(
+            //             maxRetryCount: 5,
+            //             maxRetryDelay: TimeSpan.FromSeconds(30),
+            //             errorNumbersToAdd: null);
+            //     }).UseLoggerFactory(LogFactory)).AddTransient<ZswBlogDbContext>();
 
             //初始化 RedisHelper
             var redisConnection = Configuration.GetConnectionString("RedisConnectionString");

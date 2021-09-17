@@ -36,9 +36,9 @@ namespace ZswBlog.Core.Controllers
         [Authorize]
         [HttpGet]
         [FunctionDescription("后台管理-分页获取操作列表")]
-        public async Task<ActionResult<PageDTO<ActionLogEntity>>> GetActionLogByPage(int limit, int pageIndex, int logType, string dimTitle)
+        public ActionResult<PageDTO<ActionLogEntity>> GetActionLogByPage(int limit, int pageIndex, int logType, string dimTitle)
         {
-            var actionList = await _actionLogService.GetActionListByPage(limit, pageIndex, logType, dimTitle);
+            var actionList = _actionLogService.GetActionListByPage(limit, pageIndex, logType, dimTitle);
             return Ok(actionList);
         }
 

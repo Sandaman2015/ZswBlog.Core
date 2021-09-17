@@ -85,7 +85,7 @@ namespace ZswBlog.Core.Controllers
         public async Task<ActionResult<List<BaseConfigDTO>>> GetDetailsImagesConfig()
         {
             var filepath = Path.Combine(Directory.GetCurrentDirectory(), "config/detailsPic.json");
-            JObject jObject = await JsonFileHelper.GetConfig<JObject>(filepath);            
+            JObject jObject = await JsonFileHelper.GetConfig<JObject>(filepath);
             string data = jObject.GetValue("data").ToString();
             List<BaseConfigDTO> baseConfigs = JsonConvert.DeserializeObject<List<BaseConfigDTO>>(data);
             return Ok(baseConfigs);
@@ -186,9 +186,9 @@ namespace ZswBlog.Core.Controllers
             var date1 = DateTime.Parse("2019-10-08 00:00:00");
             var date2 = DateTime.Now;
             var sp = date2.Subtract(date1);
-            var tagCount = await _tagService.GetAllSiteTagsCountAsync();
+            var tagCount = _tagService.GetAllSiteTagsCount();
             var timeCount = sp.Days;
-            var articleCount = await _articleService.GetEntitiesCountAsync();
+            var articleCount = _articleService.GetEntitiesCount();
             var visitCount = await GetVisit();
             initDataDto = new IndexInitDataDTO()
             {

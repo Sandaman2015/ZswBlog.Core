@@ -17,7 +17,7 @@ namespace ZswBlog.IServices
         /// <param name="logType"></param>
         /// <param name="dimTitle"></param>
         /// <returns></returns>
-        Task<PageDTO<ActionLogEntity>> GetActionListByPage(int limit, int pageIndex, int logType, string dimTitle);
+        PageDTO<ActionLogEntity> GetActionListByPage(int limit, int pageIndex, int logType, string dimTitle);
 
         /// <summary>
         /// 获取操作详情

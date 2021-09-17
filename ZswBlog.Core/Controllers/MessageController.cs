@@ -113,9 +113,9 @@ namespace ZswBlog.Core.Controllers
         [Authorize]
         [HttpDelete]
         [FunctionDescription("后台管理-删除留言")]
-        public async Task<ActionResult<bool>> RemoveMessage([FromRoute] int id)
+        public ActionResult<bool> RemoveMessage([FromRoute] int id)
         {
-            var flag = await _messageService.RemoveMessageByIdAsync(id);
+            var flag = _messageService.RemoveMessageById(id);
             return Ok(flag);
         }
 
@@ -134,7 +134,7 @@ namespace ZswBlog.Core.Controllers
             MessageDTO message = await _messageService.GetMessageByIdAsync(id);
             MessageEntity messageEntity = _mapper.Map<MessageEntity>(message);
             messageEntity.isShow = isShow;
-            var flag = await _messageService.UpdateEntityAsync(messageEntity);
+            var flag = _messageService.UpdateEntity(messageEntity);
             return Ok(flag);
         }
 

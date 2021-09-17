@@ -51,7 +51,7 @@ namespace ZswBlog.Core.Controllers
         [HttpPost]
         [Authorize]
         [FunctionDescription("上传文件")]
-        public async Task<ActionResult<List<FileAttachmentEntity>>> UploadImageList(List<IFormFile> files)
+        public ActionResult<List<FileAttachmentEntity>> UploadImageList(List<IFormFile> files)
         {
             var fileAttachmentEntities = new List<FileAttachmentEntity>();
             var successCount = 0;
@@ -75,7 +75,7 @@ namespace ZswBlog.Core.Controllers
                     //文件获取的路径返回
                     path = "https://" + _bucketName + "." + _endPoint + "/" + filepath
                 };
-                if (!await _fileAttachmentService.AddEntityAsync(attachmentEntity)) continue;
+                if (!_fileAttachmentService.AddEntity(attachmentEntity)) continue;
                 if (!FileHelper.PushImg(stream, filepath)) continue;
                 successCount++;
                 fileAttachmentEntities.Add(attachmentEntity);

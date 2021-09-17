@@ -12,24 +12,24 @@ namespace ZswBlog.Repository
     public class MessageRepository : BaseRepository<MessageEntity>, IMessageRepository, IBaseRepository<MessageEntity>
     {
         readonly static string _sqlField = "m.id,m.content,m.browser,m.location,m.userId,m.createDate,u.nickName as userName, u.portrait as userPortrait, null as targetUserPortrait, null as targetUserName, m.ip,m.isShow";
-        public async Task<List<MessageDTO>> GetMessageOnNoReplyAsync(int count)
+        public List<MessageDTO> GetMessageOnNoReply(int count)
         {
             var sql = string.Format("select {0} from tab_message m left join tab_user u on u.id = m.userId where m.targetId is null or m.targetId = 0 AND m.isShow = 1", _sqlField);
-            IQueryable<MessageDTO> messages = DbContext.Set<MessageDTO>().FromSqlRaw(sql, new object[0]);
-            return await messages.ToListAsync();
+            IQueryable<MessageDTO> messages = ReadDbContext.Set<MessageDTO>().FromSqlRaw(sql, new object[0]);
+            return messages.ToList();
         }
-        public async Task<List<MessageDTO>> GetMessageOnNearSaveAsync(int count)
+        public List<MessageDTO> GetMessageOnNearSave(int count)
         {
             var sql = string.Format("select {0} from tab_message m left join tab_user u on u.id = m.userId WHERE m.isShow = 1 order by createDate desc limit {1}", _sqlField, count);
-            IQueryable<MessageDTO> messages = DbContext.Set<MessageDTO>().FromSqlRaw(sql, new object[0]);
-            return await messages.ToListAsync();
+            IQueryable<MessageDTO> messages = ReadDbContext.Set<MessageDTO>().FromSqlRaw(sql, new object[0]);
+            return messages.ToList();
         }
 
-        public async Task<List<MessageDTO>> GetMessagesRecursiveAsync(int targetId)
+        public List<MessageDTO> GetMessagesRecursive(int targetId)
         {
             var sql = string.Format("WITH RECURSIVE temp AS(SELECT m.id, m.content, m.createDate, m.userId,m.ip, m.targetUserId, m.targetId, m.location, m.browser,m.isShow FROM tab_message m WHERE targetId = {0} UNION ALL SELECT  m.id, m.content, m.createDate, m.userId,m.ip, m.targetUserId, m.targetId, m.location, m.browser,m.isShow FROM tab_message m, temp t WHERE m.targetId = t.id) SELECT t.*,us.nickName AS targetUserName, us.portrait AS targetUserPortrait, u.nickName as userName, u.portrait AS userPortrait  FROM temp t LEFT JOIN tab_user u ON u.id = t.userId LEFT JOIN tab_user us ON us.id = t.targetUserId WHERE t.isShow = 1", targetId);
-            IQueryable<MessageDTO> messages = DbContext.Set<MessageDTO>().FromSqlRaw(sql);
-            return await messages.ToListAsync();
+            IQueryable<MessageDTO> messages = ReadDbContext.Set<MessageDTO>().FromSqlRaw(sql);
+            return messages.ToList();
         }
     }
 }

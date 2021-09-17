@@ -96,12 +96,12 @@ namespace ZswBlog.Core.Controllers
         [Authorize]
         [HttpPost]
         [FunctionDescription("后台管理-添加通知公告")]
-        public async Task<ActionResult<bool>> SaveAnnouncement([FromBody] AnnouncementEntity entity)
+        public ActionResult<bool> SaveAnnouncement([FromBody] AnnouncementEntity entity)
         {
             entity.createDate = DateTime.Now;
             entity.isShow = true;
             entity.operatorId = -1;
-            var flag = await _announcementService.AddEntityAsync(entity);
+            var flag = _announcementService.AddEntity(entity);
             return Ok(flag);
         }
 
@@ -114,13 +114,13 @@ namespace ZswBlog.Core.Controllers
         [Authorize]
         [HttpDelete]
         [FunctionDescription("后台管理-删除通知公告")]
-        public async Task<ActionResult<bool>> RemoveAnnouncement([FromRoute] int id)
+        public ActionResult<bool> RemoveAnnouncement([FromRoute] int id)
         {
             AnnouncementEntity entity = new AnnouncementEntity
             {
                 id = id
             };
-            var flag = await _announcementService.RemoveAnnouncementByIdAsync(entity);
+            var flag = _announcementService.RemoveAnnouncementById(entity);
             return Ok(flag);
         }
     }

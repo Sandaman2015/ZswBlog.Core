@@ -8,19 +8,19 @@ namespace ZswBlog.Services
     {
         public D Repository { get; set; }
 
-        public virtual async Task<bool> AddEntityAsync(T t)
+        public virtual bool AddEntity(T t)
         {
-            return await Repository.AddAsync(t);
+            return Repository.Add(t);
         }
 
-        public virtual async Task<int> GetEntitiesCountAsync()
+        public virtual int GetEntitiesCount()
         {
-            return await Repository.GetModelsCountByConditionAsync(null);
+            return Repository.GetModelsCountByCondition(null);
         }
 
-        public virtual async Task<bool> UpdateEntityAsync(T t)
+        public virtual bool UpdateEntity(T t)
         {
-            return await Repository.UpdateAsync(t);
+            return Repository.Update(t);
         }
     }
 }

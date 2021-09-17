@@ -5,8 +5,8 @@ namespace ZswBlog.IServices
 {
     public interface IBaseService<in T> where T : class, new()
     {
-        Task<bool> AddEntityAsync(T t);
-        Task<bool> UpdateEntityAsync(T t);
-        Task<int> GetEntitiesCountAsync();
+        bool AddEntity(T t);
+        bool UpdateEntity(T t);
+        int GetEntitiesCount();
     }
 }

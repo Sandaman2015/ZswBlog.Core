@@ -119,17 +119,17 @@ namespace ZswBlog.Services
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="article"></param>
-        private async Task<bool> AddArticleVisitAsync(ArticleEntity article)
+        private Task<bool> AddArticleVisitAsync(ArticleEntity article)
         {
             article.visits += 1;
-            return await ArticleRepository.UpdateAsync(article);
+            return Task.FromResult(ArticleRepository.Update(article));
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="articleId"></param>
         /// <returns></returns>
@@ -137,7 +137,7 @@ namespace ZswBlog.Services
         {
             var article = await ArticleRepository.GetSingleModelAsync(a => a.id == articleId);
             article.like += 1;
-            return await ArticleRepository.UpdateAsync(article);
+            return ArticleRepository.Update(article);
         }
 
         /// <summary>
@@ -147,18 +147,19 @@ namespace ZswBlog.Services
         /// <param name="pageIndex"></param>
         /// <param name="isShow"></param>
         /// <returns></returns>
-        public async Task<PageDTO<ArticleDTO>> GetArticlesByPageAndIsShowAsync(int limit, int pageIndex,int categoryId, bool isShow)
+        public PageDTO<ArticleDTO> GetArticlesByPageAndIsShow(int limit, int pageIndex, int categoryId, bool isShow)
         {
             PageEntity<ArticleEntity> articles;
-            Expression<Func<ArticleEntity, bool>> expression = a=> true;
-            if (categoryId != 0) {
+            Expression<Func<ArticleEntity, bool>> expression = a => true;
+            if (categoryId != 0)
+            {
                 expression = expression.And(a => a.categoryId == categoryId);
             }
             if (isShow)
             {
                 expression = expression.And(a => a.isShow == isShow);
             }
-            articles = await ArticleRepository.GetModelsByPageAsync(limit, pageIndex, false, a => a.createDate, expression);
+            articles = ArticleRepository.GetModelsByPage(limit, pageIndex, false, a => a.createDate, expression);
             articles.data
                 .OrderBy(a => a.isTop)
                 .ThenBy(a => a.topSort);
@@ -240,7 +241,7 @@ namespace ZswBlog.Services
         public async Task<bool> RemoveArticleAsync(int tId)
         {
             var article = await ArticleRepository.GetSingleModelAsync(a => a.id == tId);
-            return await Repository.DeleteAsync(article);
+            return Repository.Delete(article);
         }
 
         /// <summary>
@@ -248,10 +249,10 @@ namespace ZswBlog.Services
         /// </summary>
         /// <param name="categoryId"></param>
         /// <returns></returns>
-        public async Task<int> GetArticleCountByCategoryIdAsync(int categoryId)
+        public Task<int> GetArticleCountByCategoryIdAsync(int categoryId)
         {
-            return await ArticleRepository.GetModelsCountByConditionAsync(
-                a => a.categoryId == categoryId && a.isShow);
+            return Task.FromResult(ArticleRepository.GetModelsCountByCondition(
+                a => a.categoryId == categoryId && a.isShow));
         }
     }
 }

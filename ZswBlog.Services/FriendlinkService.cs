@@ -73,10 +73,10 @@ namespace ZswBlog.Services
         /// </summary>
         /// <param name="tId"></param>
         /// <returns></returns>
-        public async Task<bool> RemoveFriendLinkByIdAsync(int tId)
+        public bool RemoveFriendLinkById(int tId)
         {
-            var friendLink = new FriendLinkEntity { id = tId};
-            return await FriendLinkRepository.DeleteAsync(friendLink);
+            var friendLink = new FriendLinkEntity { id = tId };
+            return FriendLinkRepository.Delete(friendLink);
         }
 
         /// <summary>
@@ -84,9 +84,9 @@ namespace ZswBlog.Services
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public async Task<bool> UpdateFriendLinkAsync(FriendLinkEntity entity)
+        public bool UpdateFriendLink(FriendLinkEntity entity)
         {
-            return await FriendLinkRepository.UpdateAsync(entity);
+            return FriendLinkRepository.Update(entity);
         }
     }
 }

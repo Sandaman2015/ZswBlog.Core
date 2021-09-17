@@ -46,9 +46,10 @@ namespace ZswBlog.Services
         /// </summary>
         /// <param name="tid">分类编码</param>
         /// <returns></returns>
-        public async Task<bool> RemoveCatergoryByIdAsync(int tid) {
+        public bool RemoveCatergoryById(int tid)
+        {
             CategoryEntity entity = new CategoryEntity() { id = tid };
-            return await CategoryRepository.DeleteAsync(entity);
+            return CategoryRepository.Delete(entity);
         }
     }
 }

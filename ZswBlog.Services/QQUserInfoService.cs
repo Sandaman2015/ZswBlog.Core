@@ -17,7 +17,7 @@ namespace ZswBlog.Services
 
         public IUserService UserService { get; set; }
 
-        public IMapper Mapper { get; set; } 
+        public IMapper Mapper { get; set; }
 
 
         public async Task<QQUserInfoEntity> GetQQUserInfoByOpenIdAsync(string openId)
@@ -41,7 +41,8 @@ namespace ZswBlog.Services
             //判断是否存在重复登陆且已经注册的用户
             if (alreadyLoginUser == null)
             {
-                var defaultPwd = EncryptProvider.Md5("123456");//默认使用MD5加密密码         
+                //默认使用MD5加密密码
+                var defaultPwd = EncryptProvider.Md5("123456");
                 user = new UserEntity()
                 {
                     createDate = DateTime.Now,
@@ -53,7 +54,7 @@ namespace ZswBlog.Services
                     disabled = false,
                     password = defaultPwd
                 };
-                if (!await UserService.AddEntityAsync(user)) return null;
+                if (!UserService.AddEntity(user)) return null;
                 var entity = new QQUserInfoEntity()
                 {
                     openId = openId,
@@ -63,7 +64,7 @@ namespace ZswBlog.Services
                     figureurl_qq_1 = qqUserInfo.Figureurl_qq_1,
                     nickName = qqUserInfo.Nickname
                 };
-                if (await AddEntityAsync(entity))
+                if (AddEntity(entity))
                 {
                     return Mapper.Map<UserDTO>(user);
                 }
@@ -77,7 +78,7 @@ namespace ZswBlog.Services
                 }
                 user.lastLoginDate = DateTime.Now;
                 user.loginCount += 1;
-                await UserService.UpdateEntityAsync(user);
+                UserService.UpdateEntity(user);
                 return Mapper.Map<UserDTO>(user);
             }
             return null;
