@@ -84,19 +84,19 @@ namespace ZswBlog.Core.Controllers
         [Route("/api/travel/admin/save")]
         [HttpPost]
         [FunctionDescription("后台管理-保存分享信息")]
-        public async Task<ActionResult<bool>> SaveTralvel(TravelSaveQuery query)
+        public ActionResult<bool> SaveTralvel(TravelSaveQuery query)
         {
             TravelEntity entity = _mapper.Map<TravelEntity>(query);
             entity.createDate = DateTime.Now;
             entity.isShow = true;
             entity.operatorId = -1;
-            bool flag = await _travelService.AddEntityAsync(entity);
+            bool flag = _travelService.AddEntity(entity);
             //保存附件关联
             if (query.fileList.Length > 0)
             {
                 foreach (var item in query.fileList)
                 {
-                    await _travelFileAttachmentService.AddEntityAsync(new TravelFileAttachmentEntity
+                    _travelFileAttachmentService.AddEntity(new TravelFileAttachmentEntity
                     {
                         createDate = DateTime.Now,
                         fileAttachmentId = item,
@@ -117,18 +117,19 @@ namespace ZswBlog.Core.Controllers
         [Route("/api/travel/admin/update")]
         [HttpPost]
         [FunctionDescription("后台管理-更新分享信息")]
-        public async Task<ActionResult<bool>> UpdateTralvel(TravelSaveQuery query)
+        public ActionResult<bool> UpdateTralvel(TravelSaveQuery query)
         {
             TravelEntity entity = _mapper.Map<TravelEntity>(query);
             entity.operatorId = -1;
             entity.createDate = DateTime.Now;
-            bool flag = await _travelService.UpdateEntityAsync(entity);
+            bool flag = _travelService.UpdateEntity(entity);
             //保存附件关联
             if (query.fileList.Length > 0)
             {
-                await _travelFileAttachmentService.RemoveAllTravelRelationAsync(entity.id);
-                foreach (var item in query.fileList) {
-                    await _travelFileAttachmentService.AddEntityAsync(new TravelFileAttachmentEntity
+                _travelFileAttachmentService.RemoveAllTravelRelation(entity.id);
+                foreach (var item in query.fileList)
+                {
+                    _travelFileAttachmentService.AddEntity(new TravelFileAttachmentEntity
                     {
                         createDate = DateTime.Now,
                         fileAttachmentId = item,
@@ -148,9 +149,9 @@ namespace ZswBlog.Core.Controllers
         [Route("/api/travel/admin/remove/{id}")]
         [HttpDelete]
         [FunctionDescription("后台管理-删除分享信息")]
-        public async Task<ActionResult<bool>> RremoveTralvel([FromRoute]int id)
+        public ActionResult<bool> RremoveTralvel([FromRoute] int id)
         {
-            bool flag = await _travelService.RemoveTravelAsync(id);
+            bool flag = _travelService.RemoveTravel(id);
             return Ok(flag);
         }
     }

@@ -14,7 +14,7 @@ namespace ZswBlog.Common
         private static readonly FunctionDescriptionAttribute Default = new FunctionDescriptionAttribute();
 
         /// <summary>
-        /// on params constructor 
+        /// on params constructor
         /// </summary>
         public FunctionDescriptionAttribute() : this(string.Empty)
         {
@@ -30,27 +30,27 @@ namespace ZswBlog.Common
         }
 
         /// <summary>
-        /// get your function description when you are logging 
+        /// get your function description when you are logging
         /// </summary>
         public string Description => DescriptionValue;
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public string DescriptionValue { get; set; }
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
         public override bool Equals(object obj) =>
             obj is FunctionDescriptionAttribute other && other.Description == Description;
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <returns></returns>
         public override int GetHashCode() => Description?.GetHashCode() ?? 0;
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <returns></returns>
         public override bool IsDefaultAttribute() => Equals(Default);

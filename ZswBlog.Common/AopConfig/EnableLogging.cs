@@ -11,7 +11,7 @@ namespace ZswBlog.Common.AopConfig
     {
         public async override Task Invoke(AspectContext context, AspectDelegate next)
         {
-            Console.WriteLine("开始记录日志");            
+            Console.WriteLine("开始记录日志");
             await next.Invoke(context);
             Console.WriteLine("结束记录日志");
         }

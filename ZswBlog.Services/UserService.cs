@@ -53,7 +53,7 @@ namespace ZswBlog.Services
         /// </summary>
         /// <param name="t"></param>
         /// <returns></returns>
-        public virtual async Task<bool> AddEntityAsync(UserSaveQuery t)
+        public virtual bool AddEntity(UserSaveQuery t)
         {
             bool isOk;
             if (string.IsNullOrEmpty(t.accessToken) || string.IsNullOrEmpty(t.openId)) return false;
@@ -67,12 +67,12 @@ namespace ZswBlog.Services
                 user.nickName = t.nickName;
                 user.portrait = t.portrait;
                 infoEntity.userId = user.id;
-                isOk = await UserRepository.UpdateAsync(user) &&
-                       await UserQqInfoService.UpdateEntityAsync(infoEntity);
+                isOk = UserRepository.Update(user) &&
+                       UserQqInfoService.UpdateEntity(infoEntity);
             }
             else
-            {
-                var defaultPwd = EncryptProvider.Base64Encrypt("123456"); //默认使用MD5加密密码         
+            {//默认使用MD5加密密码
+                var defaultPwd = EncryptProvider.Base64Encrypt("123456");
                 user = new UserEntity
                 {
                     createDate = DateTime.Now,
@@ -88,7 +88,7 @@ namespace ZswBlog.Services
                 infoEntity.openId = t.openId;
                 infoEntity.nickName = t.nickName;
                 infoEntity.figureurl_qq_1 = t.portrait;
-                isOk = await UserRepository.AddAsync(user) && await UserQqInfoService.UpdateEntityAsync(infoEntity);
+                isOk = UserRepository.Add(user) && UserQqInfoService.UpdateEntity(infoEntity);
             }
 
             return isOk;
@@ -99,14 +99,14 @@ namespace ZswBlog.Services
 
             return await Task.Run(() =>
             {
-                var users =  Repository.GetModels(a => a.id != 0);
+                var users = Repository.GetModels(a => a.id != 0);
                 return Mapper.Map<List<UserDTO>>(users.OrderByDescending(a => a.createDate).Take(count).ToList());
             });
         }
 
-        public virtual async Task<bool> RemoveEntityAsync(int tId)
+        public virtual bool RemoveEntity(int tId)
         {
-            return await UserRepository.DeleteAsync(new UserEntity {id = tId});
+            return UserRepository.Delete(new UserEntity { id = tId });
         }
 
         /// <summary>

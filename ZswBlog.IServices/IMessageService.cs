@@ -49,6 +49,6 @@ namespace ZswBlog.IServices
         /// </summary>
         /// <param name="tId"></param>
         /// <returns></returns>
-        Task<bool> RemoveMessageByIdAsync(int tId);
+        bool RemoveMessageById(int tId);
     }
 }

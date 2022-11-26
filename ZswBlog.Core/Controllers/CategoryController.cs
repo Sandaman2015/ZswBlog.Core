@@ -32,7 +32,7 @@ namespace ZswBlog.Core.Controllers
         /// 根据类型Id获取类型详情
         /// </summary>
         /// <param name="id"></param>
-        /// <returns></returns> 
+        /// <returns></returns>
         [Route(template: "/api/category/get/{id}")]
         [HttpGet]
         [FunctionDescription("根据类型Id获取类型详情")]
@@ -63,8 +63,9 @@ namespace ZswBlog.Core.Controllers
         [HttpPost]
         [Authorize]
         [FunctionDescription("更新文章类型")]
-        public async Task<ActionResult<bool>> UpdateCategory([FromBody]CategoryEntity category) {
-            return Ok(await _categoryService.UpdateEntityAsync(category));
+        public ActionResult<bool> UpdateCategory([FromBody] CategoryEntity category)
+        {
+            return Ok(_categoryService.UpdateEntity(category));
         }
 
         /// <summary>
@@ -76,9 +77,9 @@ namespace ZswBlog.Core.Controllers
         [HttpDelete]
         [Authorize]
         [FunctionDescription("删除文章类型")]
-        public async Task<ActionResult<bool>> RemoveCategory([FromRoute]int id)
+        public ActionResult<bool> RemoveCategory([FromRoute] int id)
         {
-            return Ok(await _categoryService.RemoveCatergoryByIdAsync(id));
+            return Ok(_categoryService.RemoveCatergoryById(id));
         }
 
         /// <summary>
@@ -90,10 +91,10 @@ namespace ZswBlog.Core.Controllers
         [HttpPost]
         [Authorize]
         [FunctionDescription("新增文章类型")]
-        public async Task<ActionResult<bool>> SaveCategory([FromBody] CategoryEntity entity)
+        public ActionResult<bool> SaveCategory([FromBody] CategoryEntity entity)
         {
             entity.createDate = DateTime.Now;
-            return Ok(await _categoryService.AddEntityAsync(entity));
+            return Ok(_categoryService.AddEntity(entity));
         }
     }
 }

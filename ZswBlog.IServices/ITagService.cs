@@ -25,6 +25,6 @@ namespace ZswBlog.IServices
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<bool> RemoveTagByIdAsync(int id);
+        bool RemoveTagById(int id);
     }
 }

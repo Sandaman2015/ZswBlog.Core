@@ -54,8 +54,9 @@ namespace ZswBlog.Core.config
                 param += "\n,\t\t参数描述:" + key + "=" + value;
             }
 
-            if (context.HttpContext.Connection.RemoteIpAddress == null) return;
-            var ip = context.HttpContext.Connection.RemoteIpAddress.MapToIPv4();
+            if (context.HttpContext.Request.Headers == null) return;
+            var ip = context.HttpContext.Request.Headers["X-Forwarded-For"];
+            //.Connection.RemoteIpAddress.MapToIPv4();
             //日志记录
             Logger.LogInformation(
                 $"操作记录：{b.DescriptionValue}\n，\t请求参数：({param})\n\t]\n， \t操作时间：{DateTime.Now}\n, \tIP地址：{ip}");
@@ -69,8 +70,8 @@ namespace ZswBlog.Core.config
                 createDate = DateTime.Now,
                 operatorId = "admin",
                 logType = (int)LogTypeEnum.INFO
-            }; 
-            _actionLogService.AddEntityAsync(action);
+            };
+            _actionLogService.AddEntity(action);
         }
 
         /// <summary>
@@ -85,7 +86,7 @@ namespace ZswBlog.Core.config
             var attributes = t.GetMethod(actionName)?.GetCustomAttributes(typeof(T), true);
             if (attributes != null && attributes.Length > 0)
             {
-                return (T) attributes.GetValue(0);
+                return (T)attributes.GetValue(0);
             }
 
             return new T();

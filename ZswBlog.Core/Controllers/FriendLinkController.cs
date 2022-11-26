@@ -56,7 +56,7 @@ namespace ZswBlog.Core.Controllers
         [Route("/api/friendlink/save")]
         [HttpPost]
         [FunctionDescription("申请友情链接")]
-        public async Task<ActionResult> SaveFriendLink([FromBody] FriendLinkEntity param)
+        public ActionResult SaveFriendLink([FromBody] FriendLinkEntity param)
         {
             param.src = System.Web.HttpUtility.HtmlEncode(param.src);
             param.portrait = System.Web.HttpUtility.HtmlEncode(param.portrait);
@@ -64,7 +64,7 @@ namespace ZswBlog.Core.Controllers
             param.title = System.Web.HttpUtility.HtmlEncode(param.title);
             param.createDate = DateTime.Now;
             param.isShow = false;
-            var flag = await _friendLinkService.AddEntityAsync(param);
+            var flag = _friendLinkService.AddEntity(param);
             return Ok(flag);
         }
 
@@ -94,9 +94,9 @@ namespace ZswBlog.Core.Controllers
         [Authorize]
         [HttpPost]
         [FunctionDescription("后台管理-友情连接更新")]
-        public async Task<ActionResult<bool>> UpdateFriendLink([FromBody] FriendLinkEntity entity)
+        public ActionResult<bool> UpdateFriendLink([FromBody] FriendLinkEntity entity)
         {
-            var flag = await _friendLinkService.UpdateFriendLinkAsync(entity);
+            var flag = _friendLinkService.UpdateFriendLink(entity);
             return Ok(flag);
         }
 
@@ -109,9 +109,9 @@ namespace ZswBlog.Core.Controllers
         [Authorize]
         [HttpDelete]
         [FunctionDescription("后台管理-删除友情连接")]
-        public async Task<ActionResult<bool>> RemoveFriendLink([FromRoute] int id)
+        public ActionResult<bool> RemoveFriendLink([FromRoute] int id)
         {
-            var flag = await _friendLinkService.RemoveFriendLinkByIdAsync(id);
+            var flag = _friendLinkService.RemoveFriendLinkById(id);
             return Ok(flag);
         }
 
@@ -128,6 +128,6 @@ namespace ZswBlog.Core.Controllers
         {
             var friendLink = await _friendLinkService.GetFriendLinkByIdAsync(id);
             return Ok(friendLink);
-        } 
+        }
     }
 }

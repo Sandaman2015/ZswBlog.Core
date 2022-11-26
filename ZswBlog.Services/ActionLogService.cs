@@ -26,7 +26,7 @@ namespace ZswBlog.Services
         /// <param name="logType"></param>
         /// <param name="dimTitle"></param>
         /// <returns></returns>
-        public async Task<PageDTO<ActionLogEntity>> GetActionListByPage(int limit, int pageIndex, int logType, string dimTitle)
+        public PageDTO<ActionLogEntity> GetActionListByPage(int limit, int pageIndex, int logType, string dimTitle)
         {
             Expression<Func<ActionLogEntity, bool>> expression = t => true;
             if (logType != 0)
@@ -37,7 +37,7 @@ namespace ZswBlog.Services
             {
                 expression = expression.And(a => a.actionDetail.Contains(dimTitle));
             }
-            var pageEntity = await ActionLogRepository.GetModelsByPageAsync(limit, pageIndex, false,
+            var pageEntity = ActionLogRepository.GetModelsByPage(limit, pageIndex, false,
                 a => a.createDate, expression);
             return new PageDTO<ActionLogEntity>(pageIndex, limit, pageEntity.count, pageEntity.data.ToList());
         }

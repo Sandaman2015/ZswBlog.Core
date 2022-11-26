@@ -21,10 +21,13 @@ namespace ZswBlog.Services
         /// </summary>
         /// <param name="tId"></param>
         /// <returns></returns>
-        public async Task<bool> RemoveEntityAsync(int tId)
+        public bool RemoveEntity(int tId)
         {
-            var timeLine = await TimeLineRepository.GetSingleModelAsync(a => a.id == tId);
-            return await TimeLineRepository.DeleteAsync(timeLine);
+            TimeLineEntity timeLine = new TimeLineEntity()
+            {
+                id = tId,
+            };
+            return TimeLineRepository.Delete(timeLine);
         }
 
         /// <summary>

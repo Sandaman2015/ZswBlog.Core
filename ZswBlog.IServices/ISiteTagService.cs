@@ -22,12 +22,12 @@ namespace ZswBlog.IServices
         /// 获取所有站点标签数量
         /// </summary>
         /// <returns></returns>
-        Task<int> GetAllSiteTagsCountAsync();
+        int GetAllSiteTagsCount();
         /// <summary>
         /// 删除站点标签
         /// </summary>
         /// <param name="tagEntity">删除实体</param>
         /// <returns></returns>
-        Task<bool> RemoveSiteTagById(SiteTagEntity tagEntity);
+        bool RemoveSiteTagById(SiteTagEntity tagEntity);
     }
 }

@@ -6,6 +6,6 @@ using ZswBlog.Entity;
 namespace ZswBlog.IRepository
 {
     public interface ICommentRepository : IBaseRepository<CommentEntity> {
-        Task<List<CommentDTO>> GetCommentsRecursiveAsync(int targetId, int articleId);
+        List<CommentDTO> GetCommentsRecursive(int targetId, int articleId);
     }
 }

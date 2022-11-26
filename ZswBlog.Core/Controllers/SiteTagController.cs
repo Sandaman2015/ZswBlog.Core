@@ -54,13 +54,13 @@ namespace ZswBlog.Core.Controllers
         [Route("/api/siteTag/save")]
         [HttpPost]
         [FunctionDescription("添加站点标签")]
-        public async Task<ActionResult<bool>> SaveSiteTag(SiteTagEntity param)
+        public ActionResult<bool> SaveSiteTag(SiteTagEntity param)
         {
             param.createDate = DateTime.Now;
             param.isShow = true;
             param.like = 0;
             param.title = System.Web.HttpUtility.HtmlEncode(param.title);
-            var flag = await _siteTagService.AddEntityAsync(param);
+            var flag = _siteTagService.AddEntity(param);
             return Ok(flag);
         }
 
@@ -73,11 +73,13 @@ namespace ZswBlog.Core.Controllers
         [HttpDelete]
         [Authorize]
         [FunctionDescription("删除站点标签")]
-        public async Task<ActionResult<bool>> RemoveSiteTag([FromRoute]int id) {
-            SiteTagEntity tagEntity = new SiteTagEntity() {
+        public ActionResult<bool> RemoveSiteTag([FromRoute] int id)
+        {
+            SiteTagEntity tagEntity = new SiteTagEntity()
+            {
                 id = id
             };
-           return Ok(await _siteTagService.RemoveSiteTagById(tagEntity));
+            return Ok(_siteTagService.RemoveSiteTagById(tagEntity));
         }
     }
 }

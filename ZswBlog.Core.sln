@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30413.136
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31512.422
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZswBlog.Core", "ZswBlog.Core\ZswBlog.Core.csproj", "{5FED7A8F-FE6E-454E-A1E1-2B0EBDFB1859}"
 EndProject
@@ -24,6 +24,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZswBlog.Query", "ZswBlog.Query\ZswBlog.Query.csproj", "{A9A554DB-2855-400F-8781-723AA55D9A9A}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{E6130D3B-670E-4782-A00F-0B635B7CD2D1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZswBlog.Test", "..\ZswBlog.Test\ZswBlog.Test.csproj", "{2151A8CE-481B-48F9-8968-89706CBCC77E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -75,6 +77,10 @@ Global
 		{E6130D3B-670E-4782-A00F-0B635B7CD2D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E6130D3B-670E-4782-A00F-0B635B7CD2D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E6130D3B-670E-4782-A00F-0B635B7CD2D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2151A8CE-481B-48F9-8968-89706CBCC77E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2151A8CE-481B-48F9-8968-89706CBCC77E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2151A8CE-481B-48F9-8968-89706CBCC77E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2151A8CE-481B-48F9-8968-89706CBCC77E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

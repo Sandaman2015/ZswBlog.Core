@@ -81,9 +81,9 @@ namespace ZswBlog.Services
         /// </summary>
         /// <param name="tId"></param>
         /// <returns></returns>
-        public async Task<bool> RemoveEntityAsync(int tId)
+        public bool RemoveEntity(int tId)
         {
-            return await Repository.DeleteAsync(new CommentEntity { id = tId });
+            return Repository.Delete(new CommentEntity { id = tId });
         }
 
         /// <summary>
@@ -115,7 +115,7 @@ namespace ZswBlog.Services
                 if (user == null) return false;
                 t.location = await LocationHelper.GetLocation(t.location);
                 t.isShow = true;
-                flag = await CommentRepository.AddAsync(t);
+                flag = CommentRepository.Add(t);
             }
             else
             {
@@ -151,14 +151,14 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<PageDTO<CommentTreeDTO>> GetCommentsByRecursionAsync(int limit, int pageIndex, int articleId)
         {
-            var comments = await CommentRepository.GetModelsByPageAsync(limit, pageIndex, false, a => a.createDate,
+            var comments = CommentRepository.GetModelsByPage(limit, pageIndex, false, a => a.createDate,
                 c => c.articleId == articleId && c.targetId == 0 && c.isShow && c.targetUserId == 0);
             var commentDtoList = new List<CommentTreeDTO>();
             foreach (var item in comments.data.ToList())
             {
                 var commentTree = Mapper.Map<CommentTreeDTO>(item);
                 await ConvertCommentTree(commentTree);
-                var treeDtoList = await CommentRepository.GetCommentsRecursiveAsync(item.id, articleId);
+                var treeDtoList = CommentRepository.GetCommentsRecursive(item.id, articleId);
                 commentTree.children = Mapper.Map<List<CommentTreeDTO>>(treeDtoList.ToList());
                 commentDtoList.Add(commentTree);
             }
@@ -196,13 +196,13 @@ namespace ZswBlog.Services
             treeDto.userName = user.nickName;
         }
 
-        public async Task<bool> RemoveCommentByIdAsync(int tId)
+        public bool RemoveCommentById(int tId)
         {
             var data = new CommentEntity()
             {
                 id = tId
             };
-            return await CommentRepository.DeleteAsync(data);
+            return CommentRepository.Delete(data);
         }
     }
 }

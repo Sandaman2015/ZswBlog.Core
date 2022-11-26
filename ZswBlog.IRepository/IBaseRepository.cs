@@ -19,42 +19,42 @@ namespace ZswBlog.IRepository
         /// </summary>
         /// <param name="t"></param>
         /// <returns></returns>
-        Task<bool> AddAsync(T t);
+       bool Add(T t);
 
         /// <summary>
         /// 添加可遍历的对象
         /// </summary>
         /// <param name="t"></param>
         /// <returns></returns>
-        Task<bool> AddListAsync(IEnumerable<T> t);
+       bool AddList(IEnumerable<T> t);
 
         /// <summary>
         /// 删除对象
         /// </summary>
         /// <param name="t"></param>
         /// <returns></returns>
-        Task<bool> DeleteAsync(T t);
+       bool Delete(T t);
 
         /// <summary>
         /// 删除可迭代的对象
         /// </summary>
         /// <param name="t"></param>
         /// <returns></returns>
-        Task<bool> DeleteListAsync(IEnumerable<T> t);
+       bool DeleteList(IEnumerable<T> t);
 
         /// <summary>
         /// 更新对象
         /// </summary>
         /// <param name="t"></param>
         /// <returns></returns>
-        Task<bool> UpdateAsync(T t);
+       bool Update(T t);
 
         /// <summary>
         /// 更新可迭代的对象
         /// </summary>
         /// <param name="t"></param>
         /// <returns></returns>
-        Task<bool> UpdateListAsync(IEnumerable<T> t);
+       bool UpdateList(IEnumerable<T> t);
 
         /// <summary>
         /// 查询当前实体数据
@@ -84,20 +84,20 @@ namespace ZswBlog.IRepository
         IQueryable<T> GetModelsByPage<TType>(int pageSize, int pageIndex, bool isAsc, Expression<Func<T, TType>> orderByLambda, Expression<Func<T, bool>> whereLambda, out int total);
 
         /// <summary>
-        /// 
+        /// 分页获取对象列表
         /// </summary>
         /// <typeparam name="TType"></typeparam>
         /// <param name="pageSize"></param>
         /// <param name="pageIndex"></param>
         /// <param name="isAsc"></param>
         /// <returns></returns>
-        Task<PageEntity<T>> GetModelsByPageAsync<TType>(int pageSize, int pageIndex, bool isAsc, Expression<Func<T, TType>> orderByLambda, Expression<Func<T, bool>> whereLambda);
+        PageEntity<T> GetModelsByPage<TType>(int pageSize, int pageIndex, bool isAsc, Expression<Func<T, TType>> orderByLambda, Expression<Func<T, bool>> whereLambda);
 
         /// <summary>
         /// 根据条件获取实体数量
         /// </summary>
         /// <param name="whereLambda"></param>
         /// <returns></returns>
-        Task<int> GetModelsCountByConditionAsync(Expression<Func<T, bool>> whereLambda);
+        int GetModelsCountByCondition(Expression<Func<T, bool>> whereLambda);
     }
 }

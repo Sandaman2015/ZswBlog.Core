@@ -62,7 +62,7 @@ namespace ZswBlog.Services
                 if (user == null) return false;
                 t.location = await LocationHelper.GetLocation(t.ip);
                 t.isShow = true;
-                flag = await MessageRepository.AddAsync(t);
+                flag = MessageRepository.Add(t);
             }
             else
             {
@@ -80,7 +80,7 @@ namespace ZswBlog.Services
         public async Task<bool> RemoveEntityAsync(int tId)
         {
             var message = await MessageRepository.GetSingleModelAsync(a => a.id == tId);
-            return await MessageRepository.DeleteAsync(message);
+            return MessageRepository.Delete(message);
         }
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace ZswBlog.Services
             {
                 var messageTree = Mapper.Map<MessageTreeDTO>(item);
                 await ConvertMessageTree(messageTree);
-                var entities = await MessageRepository.GetMessagesRecursiveAsync(item.id);
+                var entities = MessageRepository.GetMessagesRecursive(item.id);
                 messageTree.children = Mapper.Map<List<MessageTreeDTO>>(entities.ToList());
                 messageTreeList.Add(messageTree);
             }
@@ -136,7 +136,7 @@ namespace ZswBlog.Services
 
         public async Task<List<MessageDTO>> GetMessageOnNearSaveAsync(int count)
         {
-            return await Task.Run(() => MessageRepository.GetMessageOnNearSaveAsync(count));
+            return await Task.Run(() => MessageRepository.GetMessageOnNearSave(count));
         }
 
         /// <summary>
@@ -154,13 +154,13 @@ namespace ZswBlog.Services
             });
         }
 
-        public async Task<bool> RemoveMessageByIdAsync(int tId)
+        public bool RemoveMessageById(int tId)
         {
             var data = new MessageEntity()
             {
                 id = tId
             };
-            return await MessageRepository.DeleteAsync(data);
+            return MessageRepository.Delete(data);
         }
     }
 }

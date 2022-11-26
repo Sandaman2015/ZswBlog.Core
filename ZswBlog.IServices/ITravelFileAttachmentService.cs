@@ -20,7 +20,7 @@ namespace ZswBlog.IServices
         /// </summary>
         /// <param name="travelId"></param>
         /// <returns></returns>
-        Task<bool> RemoveAllTravelRelationAsync(int travelId);
+        bool RemoveAllTravelRelation(int travelId);
         /// <summary>
         /// 根据文件编码删除所有关联
         /// </summary>

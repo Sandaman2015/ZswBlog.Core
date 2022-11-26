@@ -56,10 +56,10 @@ namespace ZswBlog.Core.Controllers
         [HttpPost]
         [Authorize]
         [FunctionDescription("后台添加时间线")]
-        public async Task<ActionResult<bool>> SaveTimeLine([FromBody]TimeLineEntity timeLine)
+        public ActionResult<bool> SaveTimeLine([FromBody] TimeLineEntity timeLine)
         {
             timeLine.createDate = DateTime.Now;
-            var flag = await _timeLineService.AddEntityAsync(timeLine);
+            var flag = _timeLineService.AddEntity(timeLine);
             return Ok(flag);
         }
 
@@ -72,9 +72,9 @@ namespace ZswBlog.Core.Controllers
         [HttpDelete]
         [Authorize]
         [FunctionDescription("后台删除时间线")]
-        public async Task<ActionResult<bool>> RemoveTimeLine([FromRoute] int id)
+        public ActionResult<bool> RemoveTimeLine([FromRoute] int id)
         {
-            var flag = await _timeLineService.RemoveEntityAsync(id);
+            var flag = _timeLineService.RemoveEntity(id);
             return Ok(flag);
         }
     }

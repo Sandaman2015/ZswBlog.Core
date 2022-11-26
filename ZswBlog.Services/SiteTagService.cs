@@ -46,24 +46,24 @@ namespace ZswBlog.Services
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="tId"></param>
         /// <returns></returns>
         public async Task<bool> RemoveEntity(int tId)
         {
             var siteTagEntity = await SiteTagRepository.GetSingleModelAsync(a => a.id == tId);
-            return await SiteTagRepository.DeleteAsync(siteTagEntity);
+            return SiteTagRepository.Delete(siteTagEntity);
         }
 
-        public async Task<int> GetAllSiteTagsCountAsync()
+        public int GetAllSiteTagsCount()
         {
-            return await SiteTagRepository.GetModelsCountByConditionAsync(a => a.isShow);
+            return SiteTagRepository.GetModelsCountByCondition(a => a.isShow);
         }
 
-        public async Task<bool> RemoveSiteTagById(SiteTagEntity tagEntity)
+        public bool RemoveSiteTagById(SiteTagEntity tagEntity)
         {
-            return await SiteTagRepository.DeleteAsync(tagEntity);
+            return SiteTagRepository.Delete(tagEntity);
         }
     }
 }

@@ -57,7 +57,7 @@
         public string district { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public int adcode { get; set; }
 

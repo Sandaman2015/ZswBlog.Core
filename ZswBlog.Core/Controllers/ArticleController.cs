@@ -52,10 +52,10 @@ namespace ZswBlog.Core.Controllers
         [Authorize]
         [HttpGet]
         [FunctionDescription("后台管理-分页获取文章列表")]
-        public async Task<ActionResult<PageDTO<ArticleDTO>>> GetArticleAllListByPage([FromQuery] int limit,
+        public ActionResult<PageDTO<ArticleDTO>> GetArticleAllListByPage([FromQuery] int limit,
             [FromQuery] int pageIndex, [FromQuery] int categoryId, string nickTitle)
         {
-            var articles = await _articleService.GetArticlesByPageAndIsShowAsync(limit, pageIndex, categoryId, false);
+            var articles = _articleService.GetArticlesByPageAndIsShow(limit, pageIndex, categoryId, false);
             return Ok(articles);
         }
 
@@ -76,13 +76,13 @@ namespace ZswBlog.Core.Controllers
             articleEntity.lastUpdateDate = DateTime.Now;
             articleEntity.textCount = replaceContent.Length;
             articleEntity.readTime = replaceContent.Length / 325;
-            var flag = await _articleService.UpdateEntityAsync(articleEntity);
+            var flag =  _articleService.UpdateEntity(articleEntity);
             //删除所有文章标签
-            await _articleTagService.RemoveAlreadyExistArticleTagAsync(article.id);
+             _articleTagService.RemoveAlreadyExistArticleTag(article.id);
             //遍历添加文章标签
             foreach (var id in article.tagIdList)
             {
-                await _articleTagService.AddEntityAsync(new ArticleTagEntity()
+                _articleTagService.AddEntity(new ArticleTagEntity()
                 {
                     articleId = articleEntity.id,
                     createDate = DateTime.Now,
@@ -103,7 +103,7 @@ namespace ZswBlog.Core.Controllers
         [Authorize]
         [HttpPost]
         [FunctionDescription("后台管理-保存文章")]
-        public async Task<ActionResult<bool>> SaveArticle(ArticleSaveQuery article)
+        public ActionResult<bool> SaveArticle(ArticleSaveQuery article)
         {
             var articleEntity = _mapper.Map<ArticleEntity>(article);
             var replaceContent = StringHelper.ReplaceTag(article.content, 99999);
@@ -114,11 +114,11 @@ namespace ZswBlog.Core.Controllers
             articleEntity.textCount = replaceContent.Length;
             articleEntity.readTime = replaceContent.Length / 325;
             articleEntity.operatorId = -1;
-            var flag = await _articleService.AddEntityAsync(articleEntity);
+            var flag = _articleService.AddEntity(articleEntity);
             //遍历添加文章标签
             foreach (var id in article.tagIdList)
             {
-                _articleTagService.AddEntityAsync(new ArticleTagEntity()
+                _articleTagService.AddEntity(new ArticleTagEntity()
                 {
                     articleId = articleEntity.id,
                     createDate = articleEntity.createDate,
@@ -143,7 +143,7 @@ namespace ZswBlog.Core.Controllers
             var flag = await _articleService.RemoveArticleAsync(id);
             return Ok(flag);
         }
-        
+
         /// <summary>
         /// 后台管理-禁用文章
         /// </summary>
@@ -159,10 +159,10 @@ namespace ZswBlog.Core.Controllers
             var articleDetail = await _articleService.GetArticleEntityByIdAsync(id);
             articleDetail.isShow = isShow;
             articleDetail.lastUpdateDate = DateTime.Now;
-            var flag = await _articleService.UpdateEntityAsync(articleDetail);
+            var flag = _articleService.UpdateEntity(articleDetail);
             return Ok(flag);
         }
-        
+
         /// <summary>
         /// 后台管理-获取文章详情
         /// </summary>
@@ -223,10 +223,10 @@ namespace ZswBlog.Core.Controllers
         [Route(template: "/api/article/get/page")]
         [HttpGet]
         [FunctionDescription("分页获取文章列表")]
-        public async Task<ActionResult<PageDTO<ArticleDTO>>> GetArticleListByPage([FromQuery] int limit,
-            [FromQuery] int pageIndex,[FromQuery] int categoryId)
+        public ActionResult<PageDTO<ArticleDTO>> GetArticleListByPage([FromQuery] int limit,
+            [FromQuery] int pageIndex, [FromQuery] int categoryId)
         {
-            var articles = await _articleService.GetArticlesByPageAndIsShowAsync(limit, pageIndex, categoryId, true);
+            var articles = _articleService.GetArticlesByPageAndIsShow(limit, pageIndex, categoryId, true);
             return Ok(articles);
         }
 

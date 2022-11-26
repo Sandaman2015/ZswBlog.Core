@@ -21,7 +21,7 @@ namespace ZswBlog.IServices
         /// <returns></returns>
         Task<List<AnnouncementDTO>> GetPushAnnouncementAsync();
         /// <summary>
-        /// 获取所有通知公告 
+        /// 获取所有通知公告
         /// </summary>
         /// <returns></returns>
         Task<List<AnnouncementDTO>> GetAllAnnouncementAsync();
@@ -38,6 +38,6 @@ namespace ZswBlog.IServices
         /// </summary>
         /// <param name="announcement"></param>
         /// <returns></returns>
-        Task<bool> RemoveAnnouncementByIdAsync(AnnouncementEntity announcement);
+        bool RemoveAnnouncementById(AnnouncementEntity announcement);
     }
 }

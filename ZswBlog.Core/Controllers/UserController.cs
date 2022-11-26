@@ -1,12 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
+using System.Web;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using NETCore.Encrypt;
 using ZswBlog.Common;
+using ZswBlog.Common.Util;
 using ZswBlog.Core.config;
 using ZswBlog.DTO;
 using ZswBlog.Entity;
@@ -25,6 +32,12 @@ namespace ZswBlog.Core.Controllers
         private readonly IQQUserInfoService _userInfoService;
 
         private readonly IMapper _mapper;
+        private readonly IConfiguration _configuration;
+        private static readonly ILogger Logger = LoggerFactory.Create(build =>
+        {
+            build.AddConsole(); // 用于控制台程序的输出
+            build.AddDebug(); // 用于VS调试，输出窗口的输出
+        }).CreateLogger("UserController");
 
         /// <summary>
         /// 默认构造函数
@@ -32,11 +45,13 @@ namespace ZswBlog.Core.Controllers
         /// <param name="userService"></param>
         /// <param name="mapper"></param>
         /// <param name="userInfoService"></param>
-        public UserController(IUserService userService, IMapper mapper, IQQUserInfoService userInfoService)
+        /// <param name="configuration">地址</param>
+        public UserController(IUserService userService, IMapper mapper, IQQUserInfoService userInfoService, IConfiguration configuration)
         {
             _userService = userService;
             _mapper = mapper;
             _userInfoService = userInfoService;
+            _configuration = configuration;
         }
 
         /// <summary>
@@ -70,7 +85,7 @@ namespace ZswBlog.Core.Controllers
             var userInfo = await _userService.GetUserByIdAsync(user.id);
             userInfo.email = user.email;
             user = _mapper.Map<UserEntity>(userInfo);
-            var flag = await _userService.UpdateEntityAsync(user);
+            var flag = _userService.UpdateEntity(user);
             return Ok(flag);
         }
 
@@ -94,6 +109,41 @@ namespace ZswBlog.Core.Controllers
         }
 
         /// <summary>
+        /// 获取登录的地址
+        /// </summary>
+        /// <param name="callBackUrl">回调地址</param>
+        /// <returns></returns>
+        [Route("/api/user/generate/qqurl")]
+        [HttpGet]
+        [FunctionDescription("QQ登录获取token")]
+        public string GenerateQQLoginUrl(string callBackUrl)
+        {
+            string baclUrl = RandomHelper.GetRandomString(8) + HttpUtility.UrlEncode(callBackUrl);
+            string redirectUrl = _configuration.GetSection("CallBackDomain").Value;
+            string clientId = _configuration.GetSection("ClientId").Value;
+            string mainUrl = String.Format("https://graph.qq.com/oauth2.0/authorize?client_id={0}&response_type=token&scope=all&redirect_uri={1}?statusCode={2}", clientId, redirectUrl, baclUrl);
+            return mainUrl;
+        }
+
+        /// <summary>
+        /// 获取qq登录信息
+        /// </summary>
+        /// <param name="statusCode">statusCode</param>
+        /// <param name="accessToken">token</param>
+        /// <returns></returns>
+        [Route("/api/user/parse/qqurl")]
+        [HttpGet]
+        [FunctionDescription("QQ登录获取信息")]
+        public async Task<ActionResult> ParseQQLoginUrl([FromQuery] string statusCode, [FromQuery] string accessToken)
+        {
+            string code = statusCode.Substring(0, 8);
+            string encryotStr = statusCode.Substring(8);
+            string callBackUrl = HttpUtility.UrlDecode(encryotStr);
+            Logger.LogInformation(String.Format("用户登录跳转地址：{0}", callBackUrl));
+            return await QQLoginByAccessToken(accessToken, callBackUrl);
+        }
+
+        /// <summary>
         /// 获取QQ登录用户信息
         /// </summary>
         /// <param name="accessToken">QQ的Token</param>
@@ -102,7 +152,7 @@ namespace ZswBlog.Core.Controllers
         [Route("/api/user/login/qq")]
         [HttpGet]
         [FunctionDescription("获取QQ登录用户信息")]
-        public async Task<ActionResult> QqLoginByAccessToken([FromQuery] string accessToken, string returnUrl)
+        public async Task<ActionResult> QQLoginByAccessToken([FromQuery] string accessToken, string returnUrl)
         {
             dynamic returnData;
             var jsonResult = "登录失败";
@@ -110,7 +160,7 @@ namespace ZswBlog.Core.Controllers
             if (userDto == null)
             {
                 jsonResult = "本次登录没有找到您的信息，不如刷新试试重新登录吧";
-                returnData = new {msg = jsonResult, url = returnUrl, code = 400};
+                returnData = new { msg = jsonResult, url = returnUrl, code = 400 };
             }
             else
             {
@@ -122,7 +172,7 @@ namespace ZswBlog.Core.Controllers
 
                 jsonResult = "登录成功！欢迎您：" + userDto.nickName;
                 returnData = new
-                    {msg = jsonResult, code = 200, user = userDto, userEmail = userDto.email, url = returnUrl};
+                { msg = jsonResult, code = 200, user = userDto, userEmail = userDto.email, url = returnUrl };
             }
 
             return Ok(returnData);
@@ -138,7 +188,7 @@ namespace ZswBlog.Core.Controllers
         [FunctionDescription("根据QQ的Token获取QQ用户信息")]
         public async Task<ActionResult<dynamic>> GetUserInfoByAccessToken()
         {
-            dynamic returnValue = new {url = "/admin/login", msg = "请重新登录！"};
+            dynamic returnValue = new { url = "/admin/login", msg = "请重新登录！" };
             var bearer = HttpContext.Request.Headers["Authorization"].FirstOrDefault();
             if (string.IsNullOrEmpty(bearer) || !bearer.Contains("Bearer"))
             {
