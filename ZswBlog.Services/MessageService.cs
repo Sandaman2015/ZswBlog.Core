@@ -60,7 +60,7 @@ namespace ZswBlog.Services
             {
                 // 判断用户是否为空
                 if (user == null) return false;
-                t.location = LocationHelper.GetLocation(t.ip);
+                t.location = await LocationHelper.GetLocation(t.ip);
                 t.isShow = true;
                 flag = await MessageRepository.AddAsync(t);
             }

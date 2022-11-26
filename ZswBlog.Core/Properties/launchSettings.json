@@ -1,17 +1,4 @@
 {
-  "iisSettings": {
-    "windowsAuthentication": false,
-    "anonymousAuthentication": true,
-    "iis": {
-      "applicationUrl": "http://localhost/ZswBlog.Core",
-      "sslPort": 0
-    },
-    "iisExpress": {
-      "applicationUrl": "http://localhost:8004",
-      "sslPort": 0
-    }
-  },
-  "$schema": "http://json.schemastore.org/launchsettings.json",
   "profiles": {
     "IIS Express": {
       "commandName": "Docker",
@@ -30,16 +17,19 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "applicationUrl": "http://localhost:5000"
+    }
+  },
+  "$schema": "http://json.schemastore.org/launchsettings.json",
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iis": {
+      "applicationUrl": "http://localhost/ZswBlog.Core",
+      "sslPort": 0
     },
-    "Docker": {
-      "commandName": "Project",
-      "launchUrl": "http://localhost:8004/swagger/index.html",
-      "environmentVariables": {
-        "ASPNETCORE_URLS": "http://+:8004",
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "publishAllPorts": false,
-      "useSSL": false
+    "iisExpress": {
+      "applicationUrl": "http://localhost:8004",
+      "sslPort": 0
     }
   }
 }

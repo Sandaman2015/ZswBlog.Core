@@ -49,7 +49,7 @@ namespace ZswBlog.Core.config
         {
             if (context.Connection.RemoteIpAddress != null)
             {
-                var ip = context.Connection.RemoteIpAddress.MapToIPv4();
+                var ip = context.Connection.RemoteIpAddress.ToString();
                 try
                 {
                     await _next(context);

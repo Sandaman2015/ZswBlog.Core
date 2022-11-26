@@ -20,11 +20,17 @@ namespace ZswBlog.Core.config
         /// 配置访问属性
         /// </summary>
         private IConfiguration Configuration { get; }
-
+        /// <summary>
+        /// 
+        /// </summary>
         public ConfigureAutofac()
         {
 
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="configuration"></param>
         public ConfigureAutofac(IConfiguration configuration)
         {
             Configuration = configuration;

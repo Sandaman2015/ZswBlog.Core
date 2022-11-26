@@ -33,8 +33,8 @@ namespace ZswBlog.Services
         public virtual async Task<UserDTO> GetUserByAccessTokenAsync(string accessToken)
         {
             var login = new QQLogin();
-            var openId = login.GetOpenID(accessToken);
-            var qqUserInfo = login.GetQQUserInfo(accessToken, openId);
+            var openId = await login.GetOpenID(accessToken);
+            var qqUserInfo = await login.GetQQUserInfo(accessToken, openId);
             if (qqUserInfo.Ret != 0 || !string.IsNullOrWhiteSpace(qqUserInfo.Msg)) return null;
             UserEntity user;
             var alreadyLoginUser = await GetQQUserInfoByOpenIdAsync(openId);

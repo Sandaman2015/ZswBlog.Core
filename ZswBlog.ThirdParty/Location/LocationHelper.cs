@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System.Text;
+using System.Threading.Tasks;
 using ZswBlog.Common.Util;
 
 namespace ZswBlog.ThirdParty.Location
@@ -14,12 +15,12 @@ namespace ZswBlog.ThirdParty.Location
         /// </summary>
         /// <param name="ip"></param>
         /// <returns></returns>
-        public static string GetLocation(string ip)
+        public static async Task<string> GetLocation(string ip)
         {
             var tencentApi = ConfigHelper.GetValue("TencentLocationApi");
             var locationKey = ConfigHelper.GetValue("LocationKey");
             var url = tencentApi + "?ip=" + ip + "&key=" + locationKey + "";
-            var jsonResult = RequestHelper.HttpGet(url, Encoding.UTF8);
+            var jsonResult = await RequestHelper.HttpGet(url, Encoding.UTF8);
             var location = JsonConvert.DeserializeObject<LocationModel>(jsonResult);
             string address;
             if (location.result == null)

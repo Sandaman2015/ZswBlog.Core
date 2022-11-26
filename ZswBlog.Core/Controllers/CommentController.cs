@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ZswBlog.Common;
 using ZswBlog.Core.config;
@@ -65,6 +66,8 @@ namespace ZswBlog.Core.Controllers
         {
             param.createDate = DateTime.Now;
             param.targetId ??= 0;
+            HttpContext context = this.HttpContext;
+            param.location = context.Connection.RemoteIpAddress.ToString();
             var flag = await _commentService.AddCommentAsync(param);
             // 发送邮件
             if (param.targetId == 0 || param.targetUserId == null) return Ok(flag);

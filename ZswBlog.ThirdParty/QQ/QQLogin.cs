@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Text;
+using System.Threading.Tasks;
 using System.Web;
 using ZswBlog.Common.Util;
 
@@ -46,11 +47,11 @@ namespace ZswBlog.ThirdParty
         /// </summary>
         /// <param name="url">Access Token请求地址</param>
         /// <returns>返回access_token</returns>
-        public string GetAccessToken(string url)
+        public async Task<string> GetAccessToken(string url)
         {
             try
             {
-                string data = RequestHelper.HttpGet(url, Encoding.UTF8);
+                string data = await RequestHelper.HttpGet(url, Encoding.UTF8);
                 //成功返回数据内容：access_token=FE04************************CCE2&expires_in=7776000&refresh_token=88E4************************BE14s
                 //失败情况和其他需求，自行根据文档返回码完善
                 string[] arr = data.Split('&');
@@ -68,13 +69,13 @@ namespace ZswBlog.ThirdParty
         /// </summary>
         /// <param name="access_token">获取到的access token</param>
         /// <returns>返回OpenID</returns>
-        public string GetOpenID(string access_token)
+        public async Task<string> GetOpenID(string access_token)
         {
             try
             {
                 string api = "/oauth2.0/me";
                 string url = string.Format("{0}{1}?access_token={2}", config.BaseUrl, api, access_token);
-                string data = RequestHelper.HttpGet(url, Encoding.UTF8);
+                string data = await RequestHelper.HttpGet(url, Encoding.UTF8);
                 //返回数据内容：callback( { "client_id":"YOUR_APPID","openid":"YOUR_OPENID"} );
                 int startIndex = data.IndexOf("(") + 1;
                 int endIndex = data.IndexOf(")");
@@ -94,14 +95,14 @@ namespace ZswBlog.ThirdParty
         /// <param name="access_token">获取到的access token</param>
         /// <param name="openid">用户的ID，与QQ号码一一对应。 </param>
         /// <returns>返回QQUserInfo</returns>
-        public QQUserInfo GetQQUserInfo(string access_token, string openid)
+        public async Task<QQUserInfo> GetQQUserInfo(string access_token, string openid)
         {
             try
             {
                 string api = "/user/get_user_info";
                 string url = string.Format("{0}{1}?access_token={2}&oauth_consumer_key={3}&openid={4}&format=json",
                     config.BaseUrl, api, access_token, config.AppKey, openid);
-                string data = RequestHelper.HttpGet(url, Encoding.UTF8);
+                string data = await RequestHelper.HttpGet(url, Encoding.UTF8);
                 return JsonConvert.DeserializeObject<QQUserInfo>(data);
             }
             catch

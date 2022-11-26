@@ -329,37 +329,6 @@
             目标用户
             </summary>
         </member>
-        <member name="T:ZswBlog.Entity.DbContext.ReadDbContext">
-            <summary>
-            读取数据库
-            </summary>
-        </member>
-        <member name="M:ZswBlog.Entity.DbContext.ReadDbContext.#ctor">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="M:ZswBlog.Entity.DbContext.ReadDbContext.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions)">
-            <summary>
-            
-            </summary>
-            <param name="options"></param>
-        </member>
-        <member name="T:ZswBlog.Entity.DbContext.WritleDbContext">
-            <summary>
-            写入数据库
-            </summary>
-        </member>
-        <member name="M:ZswBlog.Entity.DbContext.WritleDbContext.#ctor">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="M:ZswBlog.Entity.DbContext.WritleDbContext.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions{ZswBlog.Entity.DbContext.WritleDbContext})">
-            <summary>
-            
-            </summary>
-        </member>
         <member name="T:ZswBlog.Entity.DbContext.ZswBlogDbContext">
             <summary>
             

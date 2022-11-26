@@ -15,12 +15,11 @@ using ZswBlog.Core.config;
 using ZswBlog.Entity.DbContext;
 using ZswBlog.Common.Util;
 using System;
-using ZswBlog.Core.Controllers;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using Pomelo.EntityFrameworkCore.MySql.Storage;
+using Microsoft.AspNetCore.HttpOverrides;
 
 namespace ZswBlog.Core
 {
@@ -108,38 +107,17 @@ namespace ZswBlog.Core
             {
                 configure.JsonSerializerOptions.Converters.Add(new DatetimeJsonConverter());
             }).AddNewtonsoftJson(
-                // 
                 option => option.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore
             );
 
             //Mysql连接池
-            var readConnection = Configuration.GetConnectionString("ClusterMysqlConnection");
-            var writleConnection = Configuration.GetConnectionString("MasterMysqlConnection");
-            Logger.LogInformation($"读取数据库配置连接地址：{readConnection}");
-            Logger.LogInformation($"更新数据库配置连接地址：{writleConnection}");
-            //ServerVersion serverVersion1 = ServerVersion.AutoDetect(writleConnection);
-            //services.AddDbContext<WritleDbContext>(options => options.UseMySql(writleConnection, serverVersion1)
-            //.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking).UseLoggerFactory(LogFactory), ServiceLifetime.Scoped);
-
-            //ServerVersion serverVersion2 = ServerVersion.AutoDetect(readConnection);
-            //services.AddDbContext<ReadDbContext>(options => options.UseMySql(readConnection, serverVersion2)
-            //.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking).UseLoggerFactory(LogFactory), ServiceLifetime.Transient);
-
-            ServerVersion serverVersion3 = ServerVersion.AutoDetect(readConnection);
-            services.AddDbContext<ZswBlogDbContext>(options => options.UseMySql(readConnection, serverVersion3,
-                 builder =>
-                 {
-                     builder.EnableRetryOnFailure(
-                         maxRetryCount: 5,
-                         maxRetryDelay: TimeSpan.FromSeconds(30),
-                         errorNumbersToAdd: null);
-                 })
-            .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking).UseLoggerFactory(LogFactory)).AddTransient<ZswBlogDbContext>();
+            var masterConnection = Configuration.GetConnectionString("MasterMysqlConnection");
+            services.AddDbContext<ZswBlogDbContext>(options => options.UseMySQL(masterConnection));
 
             //初始化 RedisHelper
             var redisConnection = Configuration.GetConnectionString("RedisConnectionString");
-            Logger.LogInformation($"Redis配置连接地址：{redisConnection}");
             var csRedis = new CSRedis.CSRedisClient(redisConnection);
+
             RedisHelper.Initialization(csRedis);
             // 注册Swagger服务
             services.AddSwaggerGen(c =>
@@ -149,10 +127,10 @@ namespace ZswBlog.Core
                 {
                     Title = "ZswBlog",
                     Version = "v2",
-                    Description = "ZswBlog WebSite ASP.NET CORE WebApi",
+                    Description = "ZswBlog WebSite ASP.NET 7 WebApi",
                     Contact = new OpenApiContact
                     {
-                        Name = "Sandman",
+                        Name = "Sandaman",
                         Email = "sandaman2015@163.com"
                     }
                 });
@@ -180,7 +158,7 @@ namespace ZswBlog.Core
                 };
                 c.AddSecurityDefinition("bearerAuth", securityScheme);
             });
-            services.AddControllers().SetCompatibilityVersion(CompatibilityVersion.Latest);
+            services.AddControllers();//.SetCompatibilityVersion(CompatibilityVersion.Latest);
             // jwt 认证
             var jwtSettings = new JwtSettings();
             services.Configure<JwtSettings>(Configuration.GetSection("JwtSettings"));
@@ -241,6 +219,11 @@ namespace ZswBlog.Core
             app.UseAuthorization();
             //开启地址映射
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+            //获取IP地址
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
         }
 
         /// <summary>
