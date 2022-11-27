@@ -1,0 +1,14 @@
+{
+  "profiles": {
+    "Docker Compose": {
+      "commandName": "DockerCompose",
+      "commandVersion": "1.0",
+      "composeLaunchAction": "LaunchBrowser",
+      "composeLaunchServiceName": "zswblog.core",
+      "composeLaunchUrl": "{Scheme}://localhost:{ServicePort}/swagger/index.html",
+      "serviceActions": {
+        "zswblog.core": "StartDebugging"
+      }
+    }
+  }
+}

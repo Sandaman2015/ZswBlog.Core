@@ -14,69 +14,69 @@ namespace ZswBlog.Repository
 {
     public abstract class BaseRepository<T> : IBaseRepository<T> where T : class, new() //泛型约束必须是实体
     {
-        //private readonly WritleDbContext WritleDbContext = DbContextFactory.Create();
+        //private readonly DbContext DbContext = DbContextFactory.Create();
         //public ZswBlogContext _dbContext { get; set; }
 
         /// <summary>
         /// 采用属性注入的方式，共享单例操作上下文，而不通过DbFactory去创建
         /// </summary>
-        //public ZswBlogDbContext DbContext { get; set; }
+        public ZswBlogDbContext DbContext { get; set; }
 
-        public WritleDbContext WritleDbContext { get; set; }
+        //public DbContext DbContext { get; set; }
 
-        public ReadDbContext ReadDbContext { get; set; }
+        //public DbContext DbContext { get; set; }
 
         public virtual bool Add(T t)
         {
-            WritleDbContext.Set<T>().Add(t);
-            return WritleDbContext.SaveChanges() > 0;
+            DbContext.Set<T>().Add(t);
+            return DbContext.SaveChanges() > 0;
         }
 
         public virtual bool AddList(IEnumerable<T> t)
         {
-            WritleDbContext.Set<T>().AddRange(t);
-            return WritleDbContext.SaveChanges() > 0;
+            DbContext.Set<T>().AddRange(t);
+            return DbContext.SaveChanges() > 0;
         }
 
         public virtual bool Delete(T t)
         {
             //必须将给定实体附加到集的基础上下文中。也就是说，将实体以“未更改”的状态放置到上下文中，就好像从数据库读取了该实体一样。
-            WritleDbContext.Set<T>().Attach(t);
-            WritleDbContext.Set<T>().Remove(t);
-            return WritleDbContext.SaveChanges() > 0;
+            DbContext.Set<T>().Attach(t);
+            DbContext.Set<T>().Remove(t);
+            return DbContext.SaveChanges() > 0;
         }
 
 
         public virtual bool DeleteList(IEnumerable<T> t)
         {
-            WritleDbContext.Set<T>().RemoveRange(t);
-            return WritleDbContext.SaveChanges() > 0;
+            DbContext.Set<T>().RemoveRange(t);
+            return DbContext.SaveChanges() > 0;
         }
 
         public virtual bool Update(T t)
         {
-            WritleDbContext.Set<T>().Update(t);
-            return WritleDbContext.SaveChanges() > 0;
+            DbContext.Set<T>().Update(t);
+            return DbContext.SaveChanges() > 0;
         }
 
         public virtual bool UpdateList(IEnumerable<T> t)
         {
-            WritleDbContext.Set<IEnumerable<T>>().UpdateRange(new IEnumerable<T>[]
+            DbContext.Set<IEnumerable<T>>().UpdateRange(new IEnumerable<T>[]
         {
                 t
         });
-            return WritleDbContext.SaveChanges() > 0;
+            return DbContext.SaveChanges() > 0;
         }
 
         public virtual IQueryable<T> GetModels(Expression<Func<T, bool>> whereLambda)
         {
-            return ReadDbContext.Set<T>().Where(whereLambda);
+            return DbContext.Set<T>().Where(whereLambda);
         }
 
         public virtual  IQueryable<T> GetModelsByPage<TType>(int pageSize, int pageIndex, bool isAsc,
             Expression<Func<T, TType>> orderByLambda, Expression<Func<T, bool>> whereLambda, out int total)
         {
-            var result = ReadDbContext.Set<T>().Where(whereLambda);
+            var result = DbContext.Set<T>().Where(whereLambda);
             try
             {
                 total = result.Count();
@@ -91,19 +91,19 @@ namespace ZswBlog.Repository
 
         public virtual async Task<T> GetSingleModelAsync(Expression<Func<T, bool>> whereLambda)
         {
-            return await ReadDbContext.Set<T>().Where(whereLambda).FirstOrDefaultAsync<T>();
+            return await DbContext.Set<T>().Where(whereLambda).FirstOrDefaultAsync<T>();
         }
 
         public virtual int GetModelsCountByCondition(Expression<Func<T, bool>> whereLambda)
         {
             return whereLambda == null
-                ? ReadDbContext.Set<T>().Count()
-                : ReadDbContext.Set<T>().Where(whereLambda).Count();
+                ? DbContext.Set<T>().Count()
+                : DbContext.Set<T>().Where(whereLambda).Count();
         }
 
         public virtual PageEntity<T> GetModelsByPage<TType>(int pageSize, int pageIndex, bool isAsc, Expression<Func<T, TType>> orderByLambda, Expression<Func<T, bool>> whereLambda)
         {
-            var result = ReadDbContext.Set<T>().Where(whereLambda);
+            var result = DbContext.Set<T>().Where(whereLambda);
             var total = result.Count();
             var data = isAsc
                 ? result.OrderBy(orderByLambda).Skip((pageIndex - 1) * pageSize).Take(pageSize)

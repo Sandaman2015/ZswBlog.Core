@@ -4,15 +4,179 @@
         <name>ZswBlog.Core</name>
     </assembly>
     <members>
-        <member name="T:ZswBlog.Core.Controllers.ApiResultFilter">
+        <member name="T:ZswBlog.Core.config.ApiResultFilter">
             <summary>
             API接口返回类型
             </summary>
+        </member>
+        <member name="M:ZswBlog.Core.config.ApiResultFilter.OnResultExecuting(Microsoft.AspNetCore.Mvc.Filters.ResultExecutingContext)">
+            <summary>
+            结果返回
+            </summary>
+            <param name="context"></param>
+        </member>
+        <member name="T:ZswBlog.Core.config.BaseResponseMiddleware">
+            <summary>
+            错误反馈中间件
+            </summary>
+        </member>
+        <member name="F:ZswBlog.Core.config.BaseResponseMiddleware._actionLogService">
+            <summary>
+            日志记录服务
+            </summary>
+        </member>
+        <member name="M:ZswBlog.Core.config.BaseResponseMiddleware.#ctor(Microsoft.AspNetCore.Http.RequestDelegate,ZswBlog.IServices.IActionLogService)">
+            <summary>
+            默认构造函数
+            </summary>
+            <param name="next"></param>
+            <param name="actionLogService"></param>
+        </member>
+        <member name="M:ZswBlog.Core.config.BaseResponseMiddleware.Invoke(Microsoft.AspNetCore.Http.HttpContext)">
+            <summary>
+            调用方法
+            </summary>
+            <param name="context"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ZswBlog.Core.config.BaseResponseMiddleware.HandleExceptionAsync(Microsoft.AspNetCore.Http.HttpContext,System.Int32,System.String,System.String)">
+            <summary>
+            异常返回执行方法
+            </summary>
+            <param name="context"></param>
+            <param name="statusCode"></param>
+            <param name="message"></param>
+            <param name="ip"></param> 
+            <returns></returns>
+        </member>
+        <member name="T:ZswBlog.Core.config.ErrorHandlingExtensions">
+            <summary>
+            异常处理继承
+            </summary>
+        </member>
+        <member name="M:ZswBlog.Core.config.ErrorHandlingExtensions.UseErrorHandling(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
+            <summary>
+            扩展方法
+            </summary>
+            <param name="builder"></param>
+            <returns></returns>
+        </member>
+        <member name="T:ZswBlog.Core.config.ConfigureAutofac">
+            <summary>
+            AutoFacIOC配置类
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Core.config.ConfigureAutofac.Configuration">
+            <summary>
+            配置访问属性
+            </summary>
+        </member>
+        <member name="M:ZswBlog.Core.config.ConfigureAutofac.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:ZswBlog.Core.config.ConfigureAutofac.#ctor(Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            
+            </summary>
+            <param name="configuration"></param>
+        </member>
+        <member name="M:ZswBlog.Core.config.ConfigureAutofac.Load(Autofac.ContainerBuilder)">
+            <summary>
+            控制反转
+            </summary>
+            <param name="builder"></param>
+        </member>
+        <member name="T:ZswBlog.Core.config.JwtSettings">
+            <summary>
+            JWT密钥对象
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Core.config.JwtSettings.Issuer">
+            <summary>
+            证书颁发者
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Core.config.JwtSettings.Audience">
+            <summary>
+            允许使用的角色
+            </summary>
+        </member>
+        <member name="P:ZswBlog.Core.config.JwtSettings.SecretKey">
+            <summary>
+            加密字符串
+            </summary>
+        </member>
+        <member name="T:ZswBlog.Core.config.LogFilter">
+            <summary>
+            日志记录操作
+            </summary>
+        </member>
+        <member name="F:ZswBlog.Core.config.LogFilter._actionLogService">
+            <summary>
+            日志记录服务
+            </summary>
+        </member>
+        <member name="M:ZswBlog.Core.config.LogFilter.#ctor(ZswBlog.IServices.IActionLogService)">
+            <summary>
+            初始化日志记录框架
+            </summary>
+            <param name="actionLogService"></param>
+        </member>
+        <member name="M:ZswBlog.Core.config.LogFilter.OnActionExecuting(Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext)">
+            <summary>
+            日志记录
+            </summary>
+            <param name="context"></param>
+        </member>
+        <member name="M:ZswBlog.Core.config.LogFilter.IsThatAttribute``1(System.String,System.Type)">
+            <summary>
+            判断是否添加方法特性
+            </summary>
+            <param name="actionName">方法名称</param>
+            <param name="t">特性类型</param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="T:ZswBlog.Core.Controllers.ActionLogController">
+            <summary>
+            日志记录
+            </summary>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.ActionLogController.#ctor(ZswBlog.IServices.IActionLogService)">
+            <summary>
+            默认构造函数
+            </summary>
+            <param name="actionLogService"></param>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.ActionLogController.GetActionLogByPage(System.Int32,System.Int32,System.Int32,System.String)">
+            <summary>
+            分页获取操作日志
+            </summary>
+            <param name="limit">页码</param>
+            <param name="pageIndex">页数</param>
+            <param name="logType">日志类型</param>
+            <param name="dimTitle">模糊标题</param>
+            <returns></returns>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.ActionLogController.GetActionDetails(System.Int32)">
+            <summary>
+            获取操作日志详情
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
         </member>
         <member name="T:ZswBlog.Core.Controllers.AnnouncementController">
             <summary>
             通知公告
             </summary>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.AnnouncementController.#ctor(ZswBlog.IServices.IAnnouncementService)">
+            <summary>
+            默认构造函数
+            </summary>
+            <param name="announcementService"></param>
         </member>
         <member name="M:ZswBlog.Core.Controllers.AnnouncementController.GetAnnouncementsOnTop">
             <summary>
@@ -32,10 +196,92 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:ZswBlog.Core.Controllers.AnnouncementController.GetAnnouncementListByPage(System.Int32,System.Int32)">
+            <summary>
+            后台管理-分页获取通知公告列表
+            </summary>
+            <param name="limit">页码</param>
+            <param name="pageIndex">页数</param>
+            <returns></returns>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.AnnouncementController.SaveAnnouncement(ZswBlog.Entity.AnnouncementEntity)">
+            <summary>
+            添加通知公告对象
+            </summary>
+            <param name="entity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.AnnouncementController.RemoveAnnouncement(System.Int32)">
+            <summary>
+            根据主键删除通知公告
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
         <member name="T:ZswBlog.Core.Controllers.ArticleController">
             <summary>
             文章控制器
             </summary>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.ArticleController.#ctor(ZswBlog.IServices.IArticleService,AutoMapper.IMapper,ZswBlog.IServices.IArticleTagService)">
+            <summary>
+            默认构造函数
+            </summary>
+            <param name="articleService"></param>
+            <param name="mapper"></param>
+            <param name="articleTagService"></param>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.ArticleController.GetArticleAllListByPage(System.Int32,System.Int32,System.Int32,System.String)">
+            <summary>
+            后台管理-分页获取文章列表
+            </summary>
+            <param name="limit">页码</param>
+            <param name="pageIndex">页数</param>
+            <param name="categoryId">分类编码</param>
+            <param name="nickTitle">模糊查询</param>
+            <returns></returns>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.ArticleController.UpdateArticle(ZswBlog.Query.ArticleUpdateQuery)">
+            <summary>
+            后台管理-文章更新
+            </summary>
+            <param name="article">文章保存入参</param>
+            <returns></returns>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.ArticleController.SaveArticle(ZswBlog.Query.ArticleSaveQuery)">
+            <summary>
+            后台管理-保存文章
+            </summary>
+            <param name="article">文章更新入参</param>
+            <returns></returns>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.ArticleController.DeletedAdminArticleById(System.Int32)">
+            <summary>
+            后台管理-删除文章
+            </summary>
+            <param name="id">文章编码</param>
+            <returns></returns>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.ArticleController.DisabledAdminArticleById(System.Int32,System.Boolean)">
+            <summary>
+            后台管理-禁用文章
+            </summary>
+            <param name="id">文章编码</param>
+            <param name="isShow">禁用</param>
+            <returns></returns>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.ArticleController.GetAdminArticleById(System.Int32)">
+            <summary>
+            后台管理-获取文章详情
+            </summary>
+            <param name="id">文章编码</param>
+            <returns></returns>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.ArticleController.GetArticleListByCategory(System.Int32,System.Int32,System.Int32,System.String)">
+            <summary>
+            后台管理-类型获取文章列表分页
+            </summary>
+            <returns></returns>
         </member>
         <member name="M:ZswBlog.Core.Controllers.ArticleController.GetArticleById(System.Int32)">
             <summary>
@@ -44,19 +290,21 @@
             <param name="id">文章Id</param>
             <returns></returns>
         </member>
-        <member name="M:ZswBlog.Core.Controllers.ArticleController.GetArticleListByPage(System.Int32,System.Int32)">
+        <member name="M:ZswBlog.Core.Controllers.ArticleController.GetArticleListByPage(System.Int32,System.Int32,System.Int32,System.String)">
             <summary>
             分页获取文章列表
             </summary>
-            <param name="limit"></param>
-            <param name="pageIndex"></param>
+            <param name="limit">页码</param>
+            <param name="pageIndex">页数</param>
+            <param name="fuzzyTitle"></param>
+            <param name="categoryId">分类编码</param>
             <returns></returns>
         </member>
         <member name="M:ZswBlog.Core.Controllers.ArticleController.AddArticleLike(System.Int32)">
             <summary>
             文章添加喜爱数
             </summary>
-            <param name="articleId"></param>
+            <param name="articleId">文章编码</param>
             <returns></returns>
         </member>
         <member name="M:ZswBlog.Core.Controllers.ArticleController.GetArticleListByLikes">
@@ -77,16 +325,17 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:ZswBlog.Core.Controllers.ArticleController.GetArticleListByCategory(System.Int32,System.Int32,System.Int32)">
-            <summary>
-            根据文章类型分页获取文章列表
-            </summary>
-            <returns></returns>
-        </member>
         <member name="T:ZswBlog.Core.Controllers.AuthorizeController">
             <summary>
             Token分发
             </summary>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.AuthorizeController.#ctor(ZswBlog.IServices.IUserService,Microsoft.Extensions.Options.IOptions{ZswBlog.Core.config.JwtSettings})">
+            <summary>
+            默认构造函数
+            </summary>
+            <param name="userService"></param>
+            <param name="options"></param>
         </member>
         <member name="M:ZswBlog.Core.Controllers.AuthorizeController.GetToken(ZswBlog.Query.UserVerifyQuery)">
             <summary>
@@ -100,12 +349,18 @@
             文章分类控制器
             </summary>
         </member>
+        <member name="M:ZswBlog.Core.Controllers.CategoryController.#ctor(ZswBlog.IServices.ICategoryService)">
+            <summary>
+            默认构造函数
+            </summary>
+            <param name="categoryService"></param>
+        </member>
         <member name="M:ZswBlog.Core.Controllers.CategoryController.GetCategoryById(System.Int32)">
             <summary>
             根据类型Id获取类型详情
             </summary>
             <param name="id"></param>
-            <returns></returns> 
+            <returns></returns>
         </member>
         <member name="M:ZswBlog.Core.Controllers.CategoryController.GetAllCategory">
             <summary>
@@ -113,17 +368,38 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:ZswBlog.Core.Controllers.CategoryController.UpdateCategory(ZswBlog.Entity.CategoryEntity)">
+            <summary>
+            保存文章类型
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.CategoryController.RemoveCategory(System.Int32)">
+            <summary>
+            删除文章类型
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.CategoryController.SaveCategory(ZswBlog.Entity.CategoryEntity)">
+            <summary>
+            新增文章类型
+            </summary>
+            <param name="entity">保存实体</param>
+            <returns></returns>
+        </member>
         <member name="T:ZswBlog.Core.Controllers.CommentController">
             <summary>
             评论控制器
             </summary>
         </member>
-        <member name="M:ZswBlog.Core.Controllers.CommentController.#ctor(ZswBlog.IServices.ICommentService,ZswBlog.ThirdParty.Email.EmailHelper)">
+        <member name="M:ZswBlog.Core.Controllers.CommentController.#ctor(ZswBlog.IServices.ICommentService,ZswBlog.ThirdParty.Email.EmailHelper,AutoMapper.IMapper)">
             <summary>
-            
+            默认构造函数
             </summary>
             <param name="commentService"></param>
             <param name="emailHelper"></param>
+            <param name="mapper"></param>
         </member>
         <member name="M:ZswBlog.Core.Controllers.CommentController.GetCommentTreeListByPage(System.Int32,System.Int32,System.Int32)">
             <summary>
@@ -141,10 +417,42 @@
             <param name="param"></param>
             <returns></returns>
         </member>
+        <member name="M:ZswBlog.Core.Controllers.CommentController.GetCommentListByPage(System.Int32,System.Int32)">
+            <summary>
+            获取留言列表
+            </summary>
+            <param name="limit">获取数</param>
+            <param name="pageIndex">分页页码</param>
+            <returns></returns>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.CommentController.RemoveComment(System.Int32)">
+            <summary>
+            删除留言
+            </summary>
+            <param name="id">主键</param>
+            <returns></returns>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.CommentController.UpdateComment(System.Int32,System.Boolean)">
+            <summary>
+            更新评论
+            </summary>
+            <param name="id">主键</param>
+            <param name="isShow">是否显示</param>
+            <returns></returns>
+        </member>
         <member name="T:ZswBlog.Core.Controllers.CommonController">
             <summary>
             通用控制器
             </summary>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.CommonController.#ctor(ZswBlog.IServices.IMessageService,ZswBlog.IServices.IArticleService,ZswBlog.IServices.ISiteTagService,Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            默认构造函数
+            </summary>
+            <param name="messageService"></param>
+            <param name="articleService"></param>
+            <param name="tagService"></param>
+            <param name="configuration"></param>
         </member>
         <member name="M:ZswBlog.Core.Controllers.CommonController.GetMusicList">
             <summary>
@@ -158,9 +466,52 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:ZswBlog.Core.Controllers.CommonController.GetDetailsImagesConfig">
+            <summary>
+            获取详情页面的图片配置列表
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.CommonController.UpdateDetailsImagesConfig(System.Collections.Generic.List{ZswBlog.DTO.config.BaseConfigDTO})">
+            <summary>
+            更新详情页面的图片配置列表
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.CommonController.UpdateIllustrationImagesConfig(System.Collections.Generic.List{ZswBlog.DTO.config.BaseConfigDTO})">
+            <summary>
+            更新插图页面的图片配置列表
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.CommonController.UpdateIndexVideoOrImageConfig(ZswBlog.DTO.config.IndexVideoConfigDTO)">
+            <summary>
+            更新首页的配置详情
+            </summary>
+            <param name="data">配置详情</param>
+            <returns></returns>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.CommonController.GetIndexVideoOrImageConfig">
+            <summary>
+            获取首页的配置详情
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.CommonController.GetIllustrationImagesConfig">
+            <summary>
+            获取背景插图的配置列表
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:ZswBlog.Core.Controllers.CommonController.GetInitData">
             <summary>
             获取初始化页面数据
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.CommonController.GetVisit">
+            <summary>
+            获取浏览数
             </summary>
             <returns></returns>
         </member>
@@ -169,19 +520,41 @@
             附件控制器
             </summary>
         </member>
-        <member name="M:ZswBlog.Core.Controllers.FileAttachmentController.UploadImageList(System.Collections.Generic.List{Microsoft.AspNetCore.Http.IFormFile},System.Int32)">
+        <member name="M:ZswBlog.Core.Controllers.FileAttachmentController.#ctor(Microsoft.Extensions.Configuration.IConfiguration,ZswBlog.IServices.IFileAttachmentService)">
+            <summary>
+            默认构造函数
+            </summary>
+            <param name="configuration"></param>
+            <param name="fileAttachmentService"></param>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.FileAttachmentController.UploadImageList(System.Collections.Generic.List{Microsoft.AspNetCore.Http.IFormFile})">
             <summary>
             上传文件
             </summary>
             <param name="files"></param>
-            <param name="operatorId"></param>
             <returns></returns>
         </member>
-        <member name="M:ZswBlog.Core.Controllers.FileAttachmentController.DeleteImageList(System.String[])">
+        <member name="M:ZswBlog.Core.Controllers.FileAttachmentController.GetAllMutipartListByPage(ZswBlog.Query.PageQuery)">
+            <summary>
+            获取所有图片列表
+            </summary>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.FileAttachmentController.DeleteImageList(System.String,System.String,System.String)">
             <summary>
             删除图片列表
             </summary>
             <returns></returns>
+        </member>
+        <member name="T:ZswBlog.Core.Controllers.FriendLinkController">
+            <summary>
+            友情链接
+            </summary>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.FriendLinkController.#ctor(ZswBlog.IServices.IFriendLinkService)">
+            <summary>
+            默认构造函数
+            </summary>
+            <param name="friendLinkService"></param>
         </member>
         <member name="M:ZswBlog.Core.Controllers.FriendLinkController.GetFriendLinks">
             <summary>
@@ -196,10 +569,47 @@
             <param name="param"></param>
             <returns></returns>
         </member>
+        <member name="M:ZswBlog.Core.Controllers.FriendLinkController.GetAnnouncementListByPage(System.Int32,System.Int32)">
+            <summary>
+            后台管理-分页获取友情连接列表
+            </summary>
+            <param name="limit">页码</param>
+            <param name="pageIndex">页数</param>
+            <returns></returns>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.FriendLinkController.UpdateFriendLink(ZswBlog.Entity.FriendLinkEntity)">
+            <summary>
+            后台管理-友情连接更新
+            </summary>
+            <param name="entity">友情连接保存入参</param>
+            <returns></returns>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.FriendLinkController.RemoveFriendLink(System.Int32)">
+            <summary>
+            后台管理-友情连接删除
+            </summary>
+            <param name="id">友情连接主键</param>
+            <returns></returns>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.FriendLinkController.GetFriendLinkById(System.Int32)">
+            <summary>
+            获取友情连接详情
+            </summary>
+            <param name="id">主键</param>
+            <returns></returns>
+        </member>
         <member name="T:ZswBlog.Core.Controllers.MessageController">
             <summary>
             留言控制器
             </summary>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.MessageController.#ctor(ZswBlog.IServices.IMessageService,ZswBlog.ThirdParty.Email.EmailHelper,AutoMapper.IMapper)">
+            <summary>
+            默认构造函数
+            </summary>
+            <param name="messageService"></param>
+            <param name="emailHelper"></param>
+            <param name="mapper"></param>
         </member>
         <member name="M:ZswBlog.Core.Controllers.MessageController.GetMessageTreeListByPage(System.Int32,System.Int32)">
             <summary>
@@ -223,6 +633,40 @@
             <param name="param"></param>
             <returns></returns>
         </member>
+        <member name="M:ZswBlog.Core.Controllers.MessageController.GetMessageListByPage(System.Int32,System.Int32)">
+            <summary>
+            获取留言列表
+            </summary>
+            <param name="limit">获取数</param>
+            <param name="pageIndex">分页页码</param>
+            <returns></returns>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.MessageController.RemoveMessage(System.Int32)">
+            <summary>
+            删除留言
+            </summary>
+            <param name="id">主键</param>
+            <returns></returns>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.MessageController.UpdateMessage(System.Int32,System.Boolean)">
+            <summary>
+            更新留言
+            </summary>
+            <param name="id">主键</param>
+            <param name="isShow">是否显示</param>
+            <returns></returns>
+        </member>
+        <member name="T:ZswBlog.Core.Controllers.SiteTagController">
+            <summary>
+            本站标签
+            </summary>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.SiteTagController.#ctor(ZswBlog.IServices.ISiteTagService)">
+            <summary>
+            默认构造函数
+            </summary>
+            <param name="siteTagService"></param>
+        </member>
         <member name="M:ZswBlog.Core.Controllers.SiteTagController.GetAllSiteTagAsync">
             <summary>
             获取所有站点标签
@@ -233,8 +677,67 @@
             <summary>
             添加站点标签
             </summary>
-            <param name="prama"></param>
+            <param name="param">保存参数</param>
             <returns></returns>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.SiteTagController.RemoveSiteTag(System.Int32)">
+            <summary>
+            删除站点标签
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="T:ZswBlog.Core.Controllers.TagController">
+            <summary>
+            标签页
+            </summary>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.TagController.#ctor(ZswBlog.IServices.IArticleTagService,ZswBlog.IServices.ITagService)">
+            <summary>
+            默认构造函数
+            </summary>
+            <param name="articleTagService"></param>
+            <param name="tagService"></param>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.TagController.GetTagList">
+            <summary>
+            获取所有的文章标签
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.TagController.GetArticleListByPageAndTagId(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            分页获取根据Id单个标签下的文章
+            </summary>
+            <param name="limit">页码</param>
+            <param name="pageIndex">页数</param>
+            <param name="tagId">类型编码</param>
+            <returns></returns>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.TagController.SaveTag(ZswBlog.Entity.TagEntity)">
+            <summary>
+            保存文章标签
+            </summary>
+            <param name="tagEntity">标签对象</param>
+            <returns></returns>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.TagController.RemoveTag(System.Int32)">
+            <summary>
+            删除文章标签
+            </summary>
+            <param name="tagId">标签对象Id</param>
+            <returns></returns>
+        </member>
+        <member name="T:ZswBlog.Core.Controllers.TimeLineController">
+            <summary>
+            时间线
+            </summary>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.TimeLineController.#ctor(ZswBlog.IServices.ITimeLineService)">
+            <summary>
+            默认构造函数
+            </summary>
+            <param name="timeLineService"></param>
         </member>
         <member name="M:ZswBlog.Core.Controllers.TimeLineController.GetAllTimeLineAsync">
             <summary>
@@ -242,13 +745,90 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:ZswBlog.Core.Controllers.TimeLineController.SaveTimeLine(ZswBlog.Entity.TimeLineEntity)">
+            <summary>
+            后台添加时间线
+            </summary>
+            <param name="timeLine">时间线</param>
+            <returns></returns>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.TimeLineController.RemoveTimeLine(System.Int32)">
+            <summary>
+            后台删除时间线
+            </summary>
+            <param name="id">时间线id</param>
+            <returns></returns>
+        </member>
+        <member name="T:ZswBlog.Core.Controllers.TravelController">
+            <summary>
+            旅行分享
+            </summary>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.TravelController.#ctor(ZswBlog.IServices.ITravelService,AutoMapper.IMapper,ZswBlog.IServices.ITravelFileAttachmentService)">
+            <summary>
+            默认构造函数
+            </summary>
+            <param name="travelService"></param>
+            <param name="mapper"></param>
+            <param name="travelFileAttachmentService"></param>
+        </member>
         <member name="M:ZswBlog.Core.Controllers.TravelController.GetTravelsByPage(System.Int32,System.Int32)">
             <summary>
             分页获取旅行信息
             </summary>
-            <param name="limit"></param>
-            <param name="pageIndex"></param>
+            <param name="limit">页码</param>
+            <param name="pageIndex">页数</param>
             <returns></returns>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.TravelController.GetAdminTravelsByPage(System.Int32,System.Int32)">
+            <summary>
+            分页获取旅行信息
+            </summary>
+            <param name="limit">页码</param>
+            <param name="pageIndex">页数</param>
+            <returns></returns>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.TravelController.GetAdminTravel(System.Int32)">
+            <summary>
+            根据id获取分享详情
+            </summary>
+            <param name="id">分享详情</param>
+            <returns></returns>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.TravelController.SaveTralvel(ZswBlog.Query.TravelSaveQuery)">
+            <summary>
+            后台管理保存旅行分享
+            </summary>
+            <param name="query">保存对象</param>
+            <returns></returns>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.TravelController.UpdateTralvel(ZswBlog.Query.TravelSaveQuery)">
+            <summary>
+            后台管理更新旅行分享
+            </summary>
+            <param name="query">更新对象</param>
+            <returns></returns>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.TravelController.RremoveTralvel(System.Int32)">
+            <summary>
+            后台管理删除分享信息
+            </summary>
+            <param name="id">分享编码</param>
+            <returns></returns>
+        </member>
+        <member name="T:ZswBlog.Core.Controllers.UserController">
+            <summary>
+            用户
+            </summary>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.UserController.#ctor(ZswBlog.IServices.IUserService,AutoMapper.IMapper,ZswBlog.IServices.IQQUserInfoService,Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            默认构造函数
+            </summary>
+            <param name="userService"></param>
+            <param name="mapper"></param>
+            <param name="userInfoService"></param>
+            <param name="configuration">地址</param>
         </member>
         <member name="M:ZswBlog.Core.Controllers.UserController.GetUserOnNearLogin">
             <summary>
@@ -263,12 +843,37 @@
             <param name="user"></param>
             <returns></returns>
         </member>
+        <member name="M:ZswBlog.Core.Controllers.UserController.GetUserListByPage(System.Int32,System.Int32,System.String,System.Boolean)">
+            <summary>
+            后台管理-分页获取登陆人员列表
+            </summary>
+            <param name="pageIndex">页数</param>
+            <param name="pageSize">页码</param>
+            <param name="nickName">模糊昵称</param>
+            <param name="disabled">禁用</param>
+            <returns></returns>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.UserController.GenerateQQLoginUrl(System.String)">
+            <summary>
+            获取登录的地址
+            </summary>
+            <param name="callBackUrl">回调地址</param>
+            <returns></returns>
+        </member>
+        <member name="M:ZswBlog.Core.Controllers.UserController.ParseQQLoginUrl(System.String,System.String)">
+            <summary>
+            获取qq登录信息
+            </summary>
+            <param name="statusCode">statusCode</param>
+            <param name="accessToken">token</param>
+            <returns></returns>
+        </member>
         <member name="M:ZswBlog.Core.Controllers.UserController.QQLoginByAccessToken(System.String,System.String)">
             <summary>
             获取QQ登录用户信息
             </summary>
-            <param name="accessToken"></param>
-            <param name="returnUrl"></param>
+            <param name="accessToken">QQ的Token</param>
+            <param name="returnUrl">分页面跳转可以多带一个参数</param>
             <returns></returns>
         </member>
         <member name="M:ZswBlog.Core.Controllers.UserController.GetUserInfoByAccessToken">
@@ -276,22 +881,6 @@
             根据Token获取用户信息
             </summary>
             <returns></returns>
-        </member>
-        <member name="T:ZswBlog.Core.config.BaseResponseMiddlerware">
-            <summary>
-            错误反馈中间件
-            </summary>
-        </member>
-        <member name="T:ZswBlog.Core.config.ConfigureAutofac">
-            <summary>
-            AutoFacIOC配置类
-            </summary>
-        </member>
-        <member name="M:ZswBlog.Core.config.ConfigureAutofac.Load(Autofac.ContainerBuilder)">
-            <summary>
-            控制反转
-            </summary>
-            <param name="builder"></param>
         </member>
         <member name="T:ZswBlog.Core.Program">
             <summary>
@@ -327,9 +916,9 @@
             配置访问属性
             </summary>
         </member>
-        <member name="F:ZswBlog.Core.Startup._logFactory">
+        <member name="F:ZswBlog.Core.Startup.LogFactory">
             <summary>
-            日志工厂
+            此处日志用来配置数据库执行语句的
             </summary>
         </member>
         <member name="M:ZswBlog.Core.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
@@ -350,33 +939,6 @@
             依赖注入
             </summary>
             <param name="containerBuilder"></param>
-        </member>
-        <member name="T:ZswBlog.Web.Controllers.TagController">
-            <summary>
-            标签页
-            </summary>
-        </member>
-        <member name="M:ZswBlog.Web.Controllers.TagController.#ctor(ZswBlog.IServices.IArticleTagService,ZswBlog.IServices.ITagService)">
-            <summary>
-            
-            </summary>
-            <param name="articleTagService"></param>
-            <param name="tagService"></param>
-        </member>
-        <member name="M:ZswBlog.Web.Controllers.TagController.GetTagList">
-            <summary>
-            获取所有的文章标签
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:ZswBlog.Web.Controllers.TagController.GetArticleListByPageAndTagId(System.Int32,System.Int32,System.Int32)">
-            <summary>
-            获取根据Id单个标签下的文章
-            </summary>
-            <param name="limit"></param>
-            <param name="pageIndex"></param>
-            <param name="tagId"></param>
-            <returns></returns>
         </member>
     </members>
 </doc>

@@ -55,7 +55,7 @@ namespace ZswBlog.Core.Controllers
         public ActionResult<PageDTO<ArticleDTO>> GetArticleAllListByPage([FromQuery] int limit,
             [FromQuery] int pageIndex, [FromQuery] int categoryId, string nickTitle)
         {
-            var articles = _articleService.GetArticlesByPageAndIsShow(limit, pageIndex, categoryId, false);
+            var articles = _articleService.GetArticlesByPageAndIsShow(limit, pageIndex, categoryId, nickTitle, false);
             return Ok(articles);
         }
 
@@ -112,7 +112,7 @@ namespace ZswBlog.Core.Controllers
             articleEntity.visits = 0;
             articleEntity.createDate = DateTime.Now;
             articleEntity.textCount = replaceContent.Length;
-            articleEntity.readTime = replaceContent.Length / 325;
+            articleEntity.readTime = replaceContent.Length / 525;
             articleEntity.operatorId = -1;
             var flag = _articleService.AddEntity(articleEntity);
             //遍历添加文章标签
@@ -189,7 +189,7 @@ namespace ZswBlog.Core.Controllers
         public async Task<ActionResult<PageDTO<ArticleDTO>>> GetArticleListByCategory([FromQuery] int limit,
             [FromQuery] int pageIndex, [FromQuery] int categoryId, string dimTitle)
         {
-            var articles = await _articleService.GetArticleListByCategoryIdAsync(limit, pageIndex, categoryId, false, dimTitle);
+            var articles = await _articleService.GetArticleListByCategoryIdAsync(limit, pageIndex, categoryId, dimTitle, false);
             return Ok(articles);
         }
         /// <summary>
@@ -218,15 +218,16 @@ namespace ZswBlog.Core.Controllers
         /// </summary>
         /// <param name="limit">页码</param>
         /// <param name="pageIndex">页数</param>
+        /// <param name="fuzzyTitle"></param>
         /// <param name="categoryId">分类编码</param>
         /// <returns></returns>
         [Route(template: "/api/article/get/page")]
         [HttpGet]
         [FunctionDescription("分页获取文章列表")]
         public ActionResult<PageDTO<ArticleDTO>> GetArticleListByPage([FromQuery] int limit,
-            [FromQuery] int pageIndex, [FromQuery] int categoryId)
+            [FromQuery] int pageIndex, [FromQuery] int categoryId, string fuzzyTitle)
         {
-            var articles = _articleService.GetArticlesByPageAndIsShow(limit, pageIndex, categoryId, true);
+            var articles = _articleService.GetArticlesByPageAndIsShow(limit, pageIndex, categoryId, fuzzyTitle, true);
             return Ok(articles);
         }
 

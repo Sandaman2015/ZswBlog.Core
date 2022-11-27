@@ -31,14 +31,13 @@ namespace ZswBlog.Services
         /// <param name="isShow"></param>
         /// <param name="title"></param>
         /// <returns></returns>
-        public async Task<PageDTO<ArticleDTO>> GetArticleListByCategoryIdAsync(int limit, int pageIndex, int categoryId,
-            bool isShow, string title)
+        public async Task<PageDTO<ArticleDTO>> GetArticleListByCategoryIdAsync(int limit, int pageIndex, int categoryId, string fuzzyTitle, bool isShow)
         {
             Expression<Func<ArticleEntity, bool>> expression = t => true;
             if (isShow) expression = expression.And(ac => ac.isShow);
-            if (!string.IsNullOrEmpty(title))
+            if (!string.IsNullOrEmpty(fuzzyTitle))
             {
-                expression = expression.And(ac => ac.title.Contains(title));
+                expression = expression.And(ac => ac.title.Contains(fuzzyTitle));
             }
             if (categoryId > 0)
             {
@@ -147,10 +146,14 @@ namespace ZswBlog.Services
         /// <param name="pageIndex"></param>
         /// <param name="isShow"></param>
         /// <returns></returns>
-        public PageDTO<ArticleDTO> GetArticlesByPageAndIsShow(int limit, int pageIndex, int categoryId, bool isShow)
+        public PageDTO<ArticleDTO> GetArticlesByPageAndIsShow(int limit, int pageIndex, int categoryId,string fuzzyTitle , bool isShow)
         {
             PageEntity<ArticleEntity> articles;
             Expression<Func<ArticleEntity, bool>> expression = a => true;
+            if (!string.IsNullOrEmpty(fuzzyTitle))
+            {
+                expression = expression.And(a=> a.title.Contains(fuzzyTitle));
+            }
             if (categoryId != 0)
             {
                 expression = expression.And(a => a.categoryId == categoryId);

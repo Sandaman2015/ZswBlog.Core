@@ -42,6 +42,9 @@ namespace ZswBlog.ThirdParty.Music
             var url = BaseMusicUrl + ConfigHelper.GetValue("MusicBaseSite") + authKey;
             var jsonResult = await RequestHelper.HttpGet(url, Encoding.UTF8);
             var musicList = JsonConvert.DeserializeObject<MusicList>(jsonResult);
+            if (musicList == null) {
+                return new List<MusicDTO>();
+            }
             var musicDtOs = new List<MusicDTO>();
             var musicTracks = musicList.playlist.trackIds;
             //遍历歌单列表

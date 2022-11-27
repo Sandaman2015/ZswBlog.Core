@@ -81,7 +81,7 @@ namespace ZswBlog.Core.Controllers
             param.targetId ??= 0;
             param.targetUserId ??= 0;
             HttpContext context = this.HttpContext;
-            param.ip = context.Connection.RemoteIpAddress.ToString();
+            param.ip = context.Request.Headers["X-Forwarded-For"];
             var flag = await _messageService.AddMessageAsync(param);
             // 发送邮件
             if (param.targetId == 0 || param.targetUserId == null) return Ok(flag);

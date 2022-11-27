@@ -6,6 +6,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using ZswBlog.DTO;
 using ZswBlog.Entity;
+using ZswBlog.Entity.DbContext;
 using ZswBlog.IRepository;
 
 namespace ZswBlog.Repository
@@ -14,7 +15,7 @@ namespace ZswBlog.Repository
     {
         public override PageEntity<ArticleEntity> GetModelsByPage<TType>(int pageSize, int pageIndex, bool isAsc, Expression<Func<ArticleEntity, TType>> orderByLambda, Expression<Func<ArticleEntity, bool>> whereLambda)
         {
-            var result = ReadDbContext.Set<ArticleEntity>().Where(whereLambda);
+            var result = DbContext.Set<ArticleEntity>().Where(whereLambda);
             var total = result.Count();
             var data = isAsc
                 ? result.OrderBy(orderByLambda).Skip((pageIndex - 1) * pageSize).Take(pageSize).Include(a => a.category).Include(a => a.articleTags).ThenInclude(a => a.tag)

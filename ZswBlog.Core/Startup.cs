@@ -127,7 +127,7 @@ namespace ZswBlog.Core
                 {
                     Title = "ZswBlog",
                     Version = "v2",
-                    Description = "ZswBlog WebSite ASP.NET 7 WebApi",
+                    Description = "ZswBlog WebSite ASP.NET 6 WebApi",
                     Contact = new OpenApiContact
                     {
                         Name = "Sandaman",

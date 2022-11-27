@@ -49,12 +49,14 @@ namespace ZswBlog.Core.config
         {
             if (context.Connection.RemoteIpAddress != null)
             {
-                var ip = context.Connection.RemoteIpAddress.ToString();
+                var ip = context.Request.Headers["X-Forwarded-For"];
                 try
                 {
                     await _next(context);
                 }
-                catch (BusinessException ex) {
+                catch (BusinessException ex)
+                {
+                    Logger.LogError("异常堆栈：", ex);
                     ErrorLogToDataBase(ex.Message, ip.ToString(), context.Request.Path);
                     await HandleExceptionAsync(context, (int)ex.exModel.Code, ex.exModel.Message, ip.ToString());
                 }
@@ -65,6 +67,7 @@ namespace ZswBlog.Core.config
                     {
                         statusCode = 200;
                     }
+                    Logger.LogError("异常堆栈：", ex);
                     ErrorLogToDataBase(ex.Message, ip.ToString(), context.Request.Path);
                     await HandleExceptionAsync(context, statusCode, ex.Message, ip.ToString());
                 }

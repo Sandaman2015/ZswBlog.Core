@@ -21,7 +21,7 @@ namespace ZswBlog.IServices
         /// <param name="pageIndex">页数</param>
         /// <param name="isShow">选择是否显示</param>
         /// <returns></returns>
-        PageDTO<ArticleDTO> GetArticlesByPageAndIsShow(int limit, int pageIndex, int categoryId, bool isShow);
+        PageDTO<ArticleDTO> GetArticlesByPageAndIsShow(int limit, int pageIndex, int categoryId,string fuzzyTitle, bool isShow);
         /// <summary>
         /// 根据文章Id号获取文章
         /// </summary>
@@ -57,10 +57,11 @@ namespace ZswBlog.IServices
         /// <param name="limit"></param>
         /// <param name="pageIndex"></param>
         /// <param name="categoryId"></param>
+        /// <param name="fuzzyTitle"></param>
         /// <param name="isShow"></param>
         /// <param name="title"></param>
         /// <returns></returns>
-        Task<PageDTO<ArticleDTO>> GetArticleListByCategoryIdAsync(int limit, int pageIndex, int categoryId, bool isShow, string title);
+        Task<PageDTO<ArticleDTO>> GetArticleListByCategoryIdAsync(int limit, int pageIndex, int categoryId, string fuzzyTitle, bool isShow);
 
         /// <summary>
         /// 根据类型获取文章条数

@@ -67,7 +67,8 @@ namespace ZswBlog.Core.Controllers
             param.createDate = DateTime.Now;
             param.targetId ??= 0;
             HttpContext context = this.HttpContext;
-            param.location = context.Connection.RemoteIpAddress.ToString();
+            var ip = context.Request.Headers["X-Forwarded-For"];
+            param.location = ip;
             var flag = await _commentService.AddCommentAsync(param);
             // 发送邮件
             if (param.targetId == 0 || param.targetUserId == null) return Ok(flag);
