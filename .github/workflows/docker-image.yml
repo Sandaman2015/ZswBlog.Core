@@ -15,4 +15,4 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker image
-      run: ll && docker build . --file ./Dockerfile --tag zswblogcore:$(date +%s)
+      run: ll && docker build . --file dockerfile --tag zswblogcore:$(date +%s)
