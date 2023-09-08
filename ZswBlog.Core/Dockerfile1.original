@@ -1,33 +1,35 @@
-#See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
+#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
 EXPOSE 80
 
+#配置创建人
+MAINTAINER Sandaman2015@163.com
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["ZswBlog.Core/ZswBlog.Core.csproj", "ZswBlog.Core/"]
-COPY ["ZswBlog.Common/ZswBlog.Common.csproj", "ZswBlog.Common/"]
-COPY ["ZswBlog.DTO/ZswBlog.DTO.csproj", "ZswBlog.DTO/"]
-COPY ["ZswBlog.Entity/ZswBlog.Entity.csproj", "ZswBlog.Entity/"]
 COPY ["ZswBlog.Query/ZswBlog.Query.csproj", "ZswBlog.Query/"]
 COPY ["ZswBlog.IRepository/ZswBlog.IRepository.csproj", "ZswBlog.IRepository/"]
-COPY ["ZswBlog.IServices/ZswBlog.IServices.csproj", "ZswBlog.IServices/"]
-COPY ["ZswBlog.Repository/ZswBlog.Repository.csproj", "ZswBlog.Repository/"]
+COPY ["ZswBlog.DTO/ZswBlog.DTO.csproj", "ZswBlog.DTO/"]
+COPY ["ZswBlog.Entity/ZswBlog.Entity.csproj", "ZswBlog.Entity/"]
+COPY ["ZswBlog.Common/ZswBlog.Common.csproj", "ZswBlog.Common/"]
 COPY ["ZswBlog.Services/ZswBlog.Services.csproj", "ZswBlog.Services/"]
 COPY ["ZswBlog.ThirdParty/ZswBlog.ThirdParty.csproj", "ZswBlog.ThirdParty/"]
+COPY ["ZswBlog.IServices/ZswBlog.IServices.csproj", "ZswBlog.IServices/"]
+COPY ["ZswBlog.Repository/ZswBlog.Repository.csproj", "ZswBlog.Repository/"]
 RUN dotnet restore "ZswBlog.Core/ZswBlog.Core.csproj"
 COPY . .
 WORKDIR "/src/ZswBlog.Core"
 RUN dotnet build "ZswBlog.Core.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "ZswBlog.Core.csproj" -c Release -o /app/publish /p:UseAppHost=false
+COPY ["ZswBlog.Core/config", "/app/config"]
+RUN dotnet publish "ZswBlog.Core.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-
 #配置默认启动地址
 ENV ASPNETCORE_URLS=http://+:8004
 #配置为开发环境
