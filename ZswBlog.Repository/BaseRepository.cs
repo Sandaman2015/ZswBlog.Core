@@ -89,9 +89,9 @@ namespace ZswBlog.Repository
             }
         }
 
-        public virtual async Task<T> GetSingleModelAsync(Expression<Func<T, bool>> whereLambda)
+        public virtual T GetSingleModel(Expression<Func<T, bool>> whereLambda)
         {
-            return await DbContext.Set<T>().Where(whereLambda).FirstOrDefaultAsync<T>();
+            return  DbContext.Set<T>().Where(whereLambda).FirstOrDefault<T>();
         }
 
         public virtual int GetModelsCountByCondition(Expression<Func<T, bool>> whereLambda)

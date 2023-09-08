@@ -24,7 +24,11 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<FileAttachmentEntity> GetAttachmentByIdAsync(int id)
         {
-            return await FileAttachmentRepository.GetSingleModelAsync(a => a.id == id);
+            return await Task.Run(() =>
+            {
+                return FileAttachmentRepository.GetSingleModel(a => a.id == id);
+            });
+            
         }
 
         public async Task<PageDTO<FileAttachmentEntity>> GetFileAttachmentListByPageAsync(int pageIndex, int pageSize)
@@ -40,8 +44,11 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<string> GetFilePathByIdAsync(int id)
         {
-            var file = await FileAttachmentRepository.GetSingleModelAsync(a => a.id == id);
-            return file.path;
+            return await Task.Run(() =>
+            {
+                var file = FileAttachmentRepository.GetSingleModel(a => a.id == id);
+                return file.path;
+            });
         }
 
         public virtual async Task<bool> RemoveAllRelationByAttachmentName(string imgName)

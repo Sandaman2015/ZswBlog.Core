@@ -49,7 +49,11 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<ActionLogEntity> GetActionLogById(int id)
         {
-            return await ActionLogRepository.GetSingleModelAsync(a => a.id == id);
+            return await Task.Run(() =>
+            {
+                return ActionLogRepository.GetSingleModel(a => a.id == id);
+            });
+            
         }
     }
 }

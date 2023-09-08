@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Formats.Asn1;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -18,6 +19,7 @@ using ZswBlog.Core.config;
 using ZswBlog.DTO;
 using ZswBlog.Entity;
 using ZswBlog.IServices;
+using ZswBlog.ThirdParty;
 
 namespace ZswBlog.Core.Controllers
 {
@@ -33,6 +35,8 @@ namespace ZswBlog.Core.Controllers
 
         private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
+
+        private static QQLogin qQLogin = new QQLogin();
         private static readonly ILogger Logger = LoggerFactory.Create(build =>
         {
             build.AddConsole(); // 用于控制台程序的输出
@@ -111,70 +115,81 @@ namespace ZswBlog.Core.Controllers
         /// <summary>
         /// 获取登录的地址
         /// </summary>
-        /// <param name="callBackUrl">回调地址</param>
         /// <returns></returns>
         [Route("/api/user/generate/qqurl")]
         [HttpGet]
         [FunctionDescription("QQ登录获取token")]
-        public string GenerateQQLoginUrl(string callBackUrl)
+        public Dictionary<string, object> GenerateQQLoginUrl(string requestPath)
         {
-            string baclUrl = RandomHelper.GetRandomString(8) + HttpUtility.UrlEncode(callBackUrl);
-            string redirectUrl = _configuration.GetSection("CallBackDomain").Value;
-            string clientId = _configuration.GetSection("ClientId").Value;
-            string mainUrl = String.Format("https://graph.qq.com/oauth2.0/authorize?client_id={0}&response_type=token&scope=all&redirect_uri={1}?statusCode={2}", clientId, redirectUrl, baclUrl);
-            return mainUrl;
+            string generateUrl = qQLogin.GetAuthCodeUrl(out string state);
+            //存储关系到redis中
+            RedisHelper.Set("QQLogin:LoginKey:" + state, requestPath, 600);
+            RedisHelper.Set("QQLogin:RequestFlag:" + state, true, 600);
+            Dictionary<string, object> dict = new Dictionary<string, object>();
+            dict.Add("state", state);
+            dict.Add("generateUrl", generateUrl);
+            dict.Add("requestFlag", true);
+            dict.Add("expireIn", DateTime.Now.AddMinutes(8));
+            return dict;
         }
 
         /// <summary>
-        /// 获取qq登录信息
+        /// QQ授权登录回调
         /// </summary>
-        /// <param name="statusCode">statusCode</param>
-        /// <param name="accessToken">token</param>
         /// <returns></returns>
-        [Route("/api/user/parse/qqurl")]
+        [Route("api/front/user/login/qq/callback")]
         [HttpGet]
-        [FunctionDescription("QQ登录获取信息")]
-        public async Task<ActionResult> ParseQQLoginUrl([FromQuery] string statusCode, [FromQuery] string accessToken)
+        [FunctionDescription("QQ授权登录回调")]
+        public async Task<ActionResult> QQLoginCallBack([FromQuery] string state, [FromQuery] string code, [FromQuery] string redirect)
         {
-            string code = statusCode.Substring(0, 8);
-            string encryotStr = statusCode.Substring(8);
-            string callBackUrl = HttpUtility.UrlDecode(encryotStr);
-            Logger.LogInformation(String.Format("用户登录跳转地址：{0}", callBackUrl));
-            return await QQLoginByAccessToken(accessToken, callBackUrl);
+            string requestPath = await RedisHelper.GetAsync("QQLogin:LoginKey:" + state);
+            string url = qQLogin.GetAccessTokenUrl(code, requestPath);
+            string accessToken = await qQLogin.GetAccessToken(url);
+            UserDTO userDto = await _userInfoService.GetUserByAccessTokenAsync(accessToken);
+            await RedisHelper.SetAsync("QQLogin:LoginUserInfo:" + state, userDto, 60 * 24 * 7);
+            //存储关系到redis中
+            redirect = await RedisHelper.GetAsync("QQLogin:LoginKey:" + state);
+            return Redirect(redirect);
         }
 
         /// <summary>
-        /// 获取QQ登录用户信息
+        /// 轮训获取QQ登录用户信息
         /// </summary>
-        /// <param name="accessToken">QQ的Token</param>
-        /// <param name="returnUrl">分页面跳转可以多带一个参数</param>
+        /// <param name="state"></param>
         /// <returns></returns>
         [Route("/api/user/login/qq")]
         [HttpGet]
         [FunctionDescription("获取QQ登录用户信息")]
-        public async Task<ActionResult> QQLoginByAccessToken([FromQuery] string accessToken, string returnUrl)
+        public async Task<ActionResult> QQLoginCheck([FromQuery] string state)
         {
-            dynamic returnData;
-            var jsonResult = "登录失败";
-            var userDto = await _userInfoService.GetUserByAccessTokenAsync(accessToken);
-            if (userDto == null)
+            dynamic returnData = new { code = 200 };
+            bool userInfoGetFlag = true;
+            while (userInfoGetFlag)
             {
-                jsonResult = "本次登录没有找到您的信息，不如刷新试试重新登录吧";
-                returnData = new { msg = jsonResult, url = returnUrl, code = 400 };
-            }
-            else
-            {
-                var user = await RedisHelper.GetAsync<UserDTO>("ZswBlog:UserInfo:" + userDto.id);
-                if (user == null)
+                bool loginRequestFlag = await RedisHelper.GetAsync<bool>("QQLogin:RequestFlag:" + state);
+                if (loginRequestFlag)
                 {
-                    RedisHelper.SetAsync("ZswBlog:UserInfo:" + userDto.id, userDto, 60 * 60 * 6);
+                    UserDTO userDto = await RedisHelper.GetAsync<UserDTO>("QQLogin:LoginUserInfo:" + state);
+                    if (userDto != null)
+                    {
+                        var jsonResult = "登录成功！欢迎您：" + userDto.nickName;
+                        returnData = new { msg = jsonResult, code = 200, user = userDto, userEmail = userDto.email };
+                        userInfoGetFlag = false;
+                    }
+                }else
+                {
+                    var jsonResult = "登录超时，请重试！";
+                    //尝试获取一次用户信息，如果有则代表用户并未退出
+                    UserDTO userDto = await RedisHelper.GetAsync<UserDTO>("QQLogin:LoginUserInfo:" + state);
+                    if (userDto != null)
+                    {
+                        jsonResult = "登录成功！欢迎您：" + userDto.nickName;
+                        returnData = new { msg = jsonResult, code = 200, user = userDto, userEmail = userDto.email };
+                        return Ok(returnData);
+                    }
+                    returnData = new { msg = jsonResult, code = 200 };
                 }
-
-                jsonResult = "登录成功！欢迎您：" + userDto.nickName;
-                returnData = new
-                { msg = jsonResult, code = 200, user = userDto, userEmail = userDto.email, url = returnUrl };
             }
-
             return Ok(returnData);
         }
 

@@ -17,10 +17,10 @@ namespace ZswBlog.ThirdParty
         /// <param name="callback">回调函数名称</param>
         /// <param name="state">client端的状态值。用于第三方应用防止CSRF攻击，成功授权后回调时会原样带回。请务必严格按照流程检查用户与state参数状态的绑定。</param>
         /// <returns>返回Authorization Code请求地址</returns>
-        public string GetAuthCodeUrl(string callback, out string state)
+        public string GetAuthCodeUrl(out string state)
         {
             string api = "/oauth2.0/authorize";
-            string callbackUrl = HttpUtility.UrlEncode(config.Domain + callback);//指向回调域名
+            string callbackUrl = HttpUtility.UrlEncode(config.Domain);//指向回调域名
             state = RandomHelper.GetRandomString(16);
             string url = string.Format("{0}{1}?response_type=code&client_id={2}&redirect_uri={3}&state={4}",
                 config.BaseUrl, api, config.AppKey, callbackUrl, state);

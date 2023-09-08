@@ -35,8 +35,11 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<FriendLinkDTO> GetFriendLinkByIdAsync(int tId)
         {
-            var friendLink = await FriendLinkRepository.GetSingleModelAsync(a => a.id == tId);
-            return Mapper.Map<FriendLinkDTO>(friendLink);
+            return await Task.Run(() =>
+            {
+                var friendLink = FriendLinkRepository.GetSingleModel(a => a.id == tId);
+                return Mapper.Map<FriendLinkDTO>(friendLink);
+            });
         }
 
         public async Task<PageDTO<FriendLinkDTO>> GetFriendLinkListByPageAsync(int limit, int pageIndex)

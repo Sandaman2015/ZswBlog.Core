@@ -66,6 +66,7 @@ namespace ZswBlog.Core.Controllers
         {
             param.createDate = DateTime.Now;
             param.targetId ??= 0;
+            param.targetUserId ??= 0;
             HttpContext context = this.HttpContext;
             var ip = context.Request.Headers["X-Forwarded-For"];
             param.location = ip;

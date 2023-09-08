@@ -19,13 +19,18 @@ namespace ZswBlog.Services
 
         public async Task<List<FileAttachmentEntity>> GetTravelFileListByTravelId(int travelId)
         {
-            var travelImgList =  travelFileAttachmentRepository.GetModels(a => a.travelId == travelId);
-            var imgList = new List<FileAttachmentEntity>();
-            foreach (var item in travelImgList) {
-                FileAttachmentEntity fileAttachment = await fileAttachmentRepository.GetSingleModelAsync(a => a.id == item.fileAttachmentId);
-                imgList.Add(fileAttachment);
-            }
-            return imgList;
+            return await Task.Run(() =>
+            {
+                var travelImgList = travelFileAttachmentRepository.GetModels(a => a.travelId == travelId);
+                var imgList = new List<FileAttachmentEntity>();
+                foreach (var item in travelImgList)
+                {
+                    FileAttachmentEntity fileAttachment = fileAttachmentRepository.GetSingleModel(a => a.id == item.fileAttachmentId);
+                    imgList.Add(fileAttachment);
+                }
+                return imgList;
+            });
+            
         }
 
         public virtual async Task<bool> RemoveAllFileRelationAsync(int fileAttachmentId)

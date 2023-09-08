@@ -34,8 +34,11 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<TagDTO> GetTagByIdAsync(int tagId)
         {
-            var tag = await TagRepository.GetSingleModelAsync(a => a.id == tagId);
-            return Mapper.Map<TagDTO>(tag);
+            return await Task.Run(() =>
+            {
+                var tag = TagRepository.GetSingleModel(a => a.id == tagId);
+                return Mapper.Map<TagDTO>(tag);
+            });
         }
 
         public bool RemoveTagById(int id)

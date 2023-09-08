@@ -52,8 +52,11 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<bool> RemoveEntity(int tId)
         {
-            var siteTagEntity = await SiteTagRepository.GetSingleModelAsync(a => a.id == tId);
-            return SiteTagRepository.Delete(siteTagEntity);
+            return await Task.Run(() =>
+            {
+                var siteTagEntity = SiteTagRepository.GetSingleModel(a => a.id == tId);
+                return SiteTagRepository.Delete(siteTagEntity);
+            });
         }
 
         public int GetAllSiteTagsCount()

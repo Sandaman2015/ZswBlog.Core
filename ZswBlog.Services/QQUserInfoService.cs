@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using NETCore.Encrypt;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using ZswBlog.Common.Exception;
 using ZswBlog.DTO;
@@ -22,7 +23,11 @@ namespace ZswBlog.Services
 
         public async Task<QQUserInfoEntity> GetQQUserInfoByOpenIdAsync(string openId)
         {
-            return await UserInfoRepository.GetSingleModelAsync(a => a.openId == openId);
+            return await Task.Run(() =>
+            {
+                return UserInfoRepository.GetSingleModel(a => a.openId == openId);
+            });
+            
         }
 
         /// <summary>
@@ -32,11 +37,13 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public virtual async Task<UserDTO> GetUserByAccessTokenAsync(string accessToken)
         {
-            var login = new QQLogin();
+            UserEntity user;
+            QQLogin login =  new QQLogin();
             var openId = await login.GetOpenID(accessToken);
             var qqUserInfo = await login.GetQQUserInfo(accessToken, openId);
-            if (qqUserInfo.Ret != 0 || !string.IsNullOrWhiteSpace(qqUserInfo.Msg)) return null;
-            UserEntity user;
+            if (qqUserInfo.Ret != 0 || !string.IsNullOrWhiteSpace(qqUserInfo.Msg)) {
+                return new UserDTO();
+            }
             var alreadyLoginUser = await GetQQUserInfoByOpenIdAsync(openId);
             //判断是否存在重复登陆且已经注册的用户
             if (alreadyLoginUser == null)

@@ -38,8 +38,12 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<CategoryDTO> GetCategoryByIdAsync(int tId)
         {
-            var category = await CategoryRepository.GetSingleModelAsync(c => c.id == tId);
-            return Mapper.Map<CategoryDTO>(category);
+            return await Task.Run(() =>
+            {
+                var category = CategoryRepository.GetSingleModel(c => c.id == tId);
+                return Mapper.Map<CategoryDTO>(category);
+            });
+            
         }
         /// <summary>
         /// 根据编码删除分类

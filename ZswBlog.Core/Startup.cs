@@ -2,7 +2,6 @@ using Autofac;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -112,7 +111,9 @@ namespace ZswBlog.Core
 
             //Mysql连接池
             var masterConnection = Configuration.GetConnectionString("MasterMysqlConnection");
-            services.AddDbContext<ZswBlogDbContext>(options => options.UseMySQL(masterConnection));
+            services.AddDbContextPool<ZswBlogDbContext>(options => {
+                options.UseMySql(masterConnection, new MySqlServerVersion(new Version())).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking); ;
+            });
 
             //初始化 RedisHelper
             var redisConnection = Configuration.GetConnectionString("RedisConnectionString");

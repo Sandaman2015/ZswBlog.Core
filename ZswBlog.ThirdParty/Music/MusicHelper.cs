@@ -7,6 +7,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using ZswBlog.Common.Util;
 using ZswBlog.Common.Exception;
+using System.Text.Json.Nodes;
+using ZswBlog.ThirdParty.Email;
 
 namespace ZswBlog.ThirdParty.Music
 {
@@ -28,21 +30,89 @@ namespace ZswBlog.ThirdParty.Music
             MusicPassword = ConfigHelper.GetValue("MusicPassword");
         }
 
+        private static async Task<string> MusicEmailPasswordLogin()
+        {
+            string response = null;
+            //登录
+            try
+            {
+                var cloudMusicLogin = string.Format(BaseMusicUrl + "/login?email={0}&password={1}", MusicLoginName, MusicPassword);
+                response = await RequestHelper.HttpGet(cloudMusicLogin, Encoding.UTF8);
+                JsonObject keyValues = (JsonObject)JsonObject.Parse(response);
+                var key = keyValues["code"].ToString();
+                if (key != "200") {
+                    await MusicQRLogin();
+                }
+            }
+            catch (Exception ex)
+            {
+               await  MusicQRLogin();
+            }
+            return response;
+        }
+
+
+        private static async Task<string> MusicQRLogin()
+        {
+            string response = null;
+            //切换二维码登录
+            var qrKey = string.Format(BaseMusicUrl + "/login/qr/key");
+            response = await RequestHelper.HttpGet(qrKey, Encoding.UTF8);
+            JsonObject keyValues = (JsonObject)JsonObject.Parse(response);
+            var key = keyValues["data"]["unikey"].ToString();
+            var scanQr = string.Format(BaseMusicUrl + "/login/qr/create?key={0}&qrimg=1", key);
+            response = await RequestHelper.HttpGet(scanQr, Encoding.UTF8);
+            JsonObject qrImgValues = (JsonObject)JsonObject.Parse(response);
+            var qrImg = qrImgValues["data"]["qrimg"].ToString();
+            //发送二维码到邮箱
+            bool sendOk = EmailHelper.SendMusicLoginQRCode(qrImg);
+            if (sendOk)
+            {
+                //循环请求接口回调结果
+                var flag = true;
+                while (flag)
+                {
+                    var qrLoginStatus = string.Format(BaseMusicUrl + "/login/qr/check?key={0}", key);
+                    response = await RequestHelper.HttpGet(qrLoginStatus, Encoding.UTF8);
+                    JsonObject loginStatus = (JsonObject)JsonObject.Parse(response);
+                    if (loginStatus["cookie"] != null)
+                    {
+                        response = loginStatus["cookie"].ToString();
+                        await RedisHelper.SetAsync("music_cookie", response, 604800);
+                        flag = false;
+                        EmailHelper.MusicLoginConfirm();
+                    }
+                }
+            }
+            else
+            {
+                await MusicEmailPasswordLogin();
+            }
+            return response;
+        }
+
         public static async Task<List<MusicDTO>> GetMusicListByCount(int count)
         {
-            //登录详情
-            var cloudMusicLogin = string.Format(BaseMusicUrl + "/login?email={0}&password={1}", MusicLoginName, MusicPassword);
-            var loginDetail = await RequestHelper.HttpGet(cloudMusicLogin, Encoding.UTF8);
-            MusicLoginDetails details = JsonConvert.DeserializeObject<MusicLoginDetails>(loginDetail);
-            if (details == null)
+            string cookie = null;
+            string jsonResult = null;
+            string authKey = null;
+            try
             {
-                throw new BusinessException("网易云登录请求失败", 401);
+                cookie = await RedisHelper.GetAsync("music_cookie");
+                authKey = "&cookie=" + cookie;
+                var url = BaseMusicUrl + ConfigHelper.GetValue("MusicBaseSite") + authKey;
+                jsonResult = await RequestHelper.HttpGet(url, Encoding.UTF8);
             }
-            var authKey = "&cookie=" + details.cookie;
-            var url = BaseMusicUrl + ConfigHelper.GetValue("MusicBaseSite") + authKey;
-            var jsonResult = await RequestHelper.HttpGet(url, Encoding.UTF8);
+            catch (Exception ex)
+            {
+                cookie = await MusicEmailPasswordLogin();
+                authKey = "&cookie=" + cookie;
+                var url = BaseMusicUrl + ConfigHelper.GetValue("MusicBaseSite") + authKey;
+                jsonResult = await RequestHelper.HttpGet(url, Encoding.UTF8);
+            }
             var musicList = JsonConvert.DeserializeObject<MusicList>(jsonResult);
-            if (musicList == null) {
+            if (musicList == null)
+            {
                 return new List<MusicDTO>();
             }
             var musicDtOs = new List<MusicDTO>();

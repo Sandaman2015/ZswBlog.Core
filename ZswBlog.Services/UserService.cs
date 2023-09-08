@@ -33,19 +33,25 @@ namespace ZswBlog.Services
         public async Task<UserDTO> GetUserByOpenIdAsync(string openId)
         {
             var infoEntity = await UserQqInfoService.GetQQUserInfoByOpenIdAsync(openId);
-            var user = await Repository.GetSingleModelAsync(a => a.id == infoEntity.userId);
+            var user = UserRepository.GetSingleModel(a => a.id == infoEntity.userId);
             return infoEntity != null ? Mapper.Map<UserDTO>(user) : null;
         }
 
         public async Task<UserDTO> GetUserByIdAsync(int id)
         {
-            var user = await Repository.GetSingleModelAsync(a => a.id == id);
-            return Mapper.Map<UserDTO>(user);
+            return await Task.Run(() =>
+            {
+                var user =  UserRepository.GetSingleModel(a => a.id == id);
+                return Mapper.Map<UserDTO>(user);
+            });
         }
 
         public async Task<UserEntity> GetUserByConditionAsync(Expression<Func<UserEntity, bool>> whereLambda)
         {
-            return await Repository.GetSingleModelAsync(whereLambda);
+            return await Task.Run(() =>
+            {
+                return UserRepository.GetSingleModel(whereLambda);
+            });
         }
 
         /// <summary>
@@ -99,7 +105,7 @@ namespace ZswBlog.Services
 
             return await Task.Run(() =>
             {
-                var users = Repository.GetModels(a => a.id != 0);
+                var users = UserRepository.GetModels(a => a.id != 0);
                 return Mapper.Map<List<UserDTO>>(users.OrderByDescending(a => a.createDate).Take(count).ToList());
             });
         }
@@ -117,11 +123,12 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<UserEntity> ValidatePasswordAsync(string userName, string password)
         {
-            password = EncryptProvider.Base64Encrypt(password);
-            password = EncryptProvider.Md5(password);
-            var userEntity =
-                await UserRepository.GetSingleModelAsync(a => a.loginName == userName && a.password == password);
-            return userEntity;
+            return await Task.Run(() => { 
+                password = EncryptProvider.Base64Encrypt(password);
+                password = EncryptProvider.Md5(password);
+                var userEntity =  UserRepository.GetSingleModel(a => a.loginName == userName && a.password == password);
+                return userEntity;
+            });
         }
 
         /// <summary>

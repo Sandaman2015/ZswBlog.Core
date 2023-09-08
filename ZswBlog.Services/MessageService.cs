@@ -27,8 +27,11 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<MessageDTO> GetMessageByIdAsync(int messageId)
         {
-            var message = await MessageRepository.GetSingleModelAsync(a => a.id == messageId);
-            return Mapper.Map<MessageDTO>(message);
+            return await Task.Run(() =>
+            {
+                var message = MessageRepository.GetSingleModel(a => a.id == messageId);
+                return Mapper.Map<MessageDTO>(message);
+            });
         }
 
         /// <summary>
@@ -79,8 +82,11 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<bool> RemoveEntityAsync(int tId)
         {
-            var message = await MessageRepository.GetSingleModelAsync(a => a.id == tId);
-            return MessageRepository.Delete(message);
+            return await Task.Run(() =>
+            {
+                var message = MessageRepository.GetSingleModel(a => a.id == tId);
+                return MessageRepository.Delete(message);
+            });
         }
 
         /// <summary>

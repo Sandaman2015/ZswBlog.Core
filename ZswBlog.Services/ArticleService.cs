@@ -68,8 +68,7 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<List<ArticleDTO>> GetArticlesByDimTitleAsync(string dimTitle, bool isShow)
         {
-            var articles = ArticleRepository.GetModels(a =>
-                    a.title.Contains(dimTitle) && isShow ? a.isShow == true : a.id > 0).Include(c => c.category);
+            var articles = ArticleRepository.GetModels(a => a.title.Contains(dimTitle)).Include(c => c.category);
             var articleDtoList = Mapper.Map<List<ArticleDTO>>(articles.ToList().Where(a => a.isShow));
             foreach (var articleDto in articleDtoList)
             {
@@ -92,11 +91,11 @@ namespace ZswBlog.Services
             ArticleEntity article;
             if (isShow)
             {
-                article = await ArticleRepository.GetSingleModelAsync(a => a.id == articleId && a.isShow);
+                article = ArticleRepository.GetSingleModel(a => a.id == articleId && a.isShow);
             }
             else
             {
-                article = await ArticleRepository.GetSingleModelAsync(a => a.id == articleId);
+                article = ArticleRepository.GetSingleModel(a => a.id == articleId);
             }
 
             if (article == null)
@@ -113,8 +112,11 @@ namespace ZswBlog.Services
 
         public async Task<ArticleEntity> GetArticleEntityByIdAsync(int articleId)
         {
-            var articleEntity = await ArticleRepository.GetSingleModelAsync(a => a.id == articleId);
-            return articleEntity;
+            return await Task.Run(() =>
+            {
+                return ArticleRepository.GetSingleModel(a => a.id == articleId);
+            });
+            
         }
 
         /// <summary>
@@ -134,9 +136,13 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<bool> AddArticleLikeAsync(int articleId)
         {
-            var article = await ArticleRepository.GetSingleModelAsync(a => a.id == articleId);
-            article.like += 1;
-            return ArticleRepository.Update(article);
+            return await Task.Run(() =>
+            {
+                var article =  ArticleRepository.GetSingleModel(a => a.id == articleId);
+                article.like += 1;
+                return ArticleRepository.Update(article);
+            });
+            
         }
 
         /// <summary>
@@ -243,8 +249,12 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<bool> RemoveArticleAsync(int tId)
         {
-            var article = await ArticleRepository.GetSingleModelAsync(a => a.id == tId);
-            return Repository.Delete(article);
+            return await Task.Run(() =>
+            {
+                var article = ArticleRepository.GetSingleModel(a => a.id == tId);
+                return Repository.Delete(article);
+            });
+            
         }
 
         /// <summary>

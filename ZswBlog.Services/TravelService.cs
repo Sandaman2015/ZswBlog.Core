@@ -37,7 +37,7 @@ namespace ZswBlog.Services
 
         public async Task<TravelDTO> GetTravelByIdAsync(int tId)
         {
-            var travel = await TravelRepository.GetSingleModelAsync(t => t.id == tId);
+            var travel = TravelRepository.GetSingleModel(t => t.id == tId);
             TravelDTO travelDTO =  Mapper.Map<TravelDTO>(travel);
             List<FileAttachmentEntity> fileAttachments = await _travelFileAttachmentService.GetTravelFileListByTravelId(travel.id);
             travelDTO.imgList = Mapper.Map<List<FileAttachmentDTO>>(fileAttachments);

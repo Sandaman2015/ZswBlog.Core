@@ -61,7 +61,7 @@ namespace ZswBlog.IRepository
         /// </summary>
         /// <param name="whereLambda"></param>
         /// <returns></returns>
-        Task<T> GetSingleModelAsync(Expression<Func<T, bool>> whereLambda);
+        T GetSingleModel(Expression<Func<T, bool>> whereLambda);
 
         /// <summary>
         /// 查询数据

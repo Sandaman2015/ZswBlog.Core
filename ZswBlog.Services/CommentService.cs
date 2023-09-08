@@ -25,8 +25,12 @@ namespace ZswBlog.Services
         /// <returns></returns>
         public async Task<CommentDTO> GetCommentByIdAsync(int commentId)
         {
-            var comment = await Repository.GetSingleModelAsync(a => a.id == commentId);
-            return Mapper.Map<CommentDTO>(comment);
+            return await Task.Run(() =>
+            {
+                var comment = Repository.GetSingleModel(a => a.id == commentId);
+                return Mapper.Map<CommentDTO>(comment);
+            });
+            
         }
 
         /// <summary>
@@ -38,7 +42,7 @@ namespace ZswBlog.Services
             return await Task.Run(() =>
             {
                 var comments = Repository.GetModelsByPage(limit, pageIndex, false, (a => a.id),
-                    (a => a.id != 0), out var pageCount).Include(a => a.user).Include(a => a.targetUser);
+                    (a => a.isShow), out var pageCount).Include(a => a.user).Include(a => a.targetUser);
                 var commentDtOs = Mapper.Map<List<CommentDTO>>(comments.ToList());
                 return new PageDTO<CommentDTO>(pageIndex, limit, pageCount, commentDtOs);
             });
